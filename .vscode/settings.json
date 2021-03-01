@@ -1,0 +1,35 @@
+{
+	"files.exclude": {
+		"**/.git": true,
+		"**/.svn": true,
+		"**/.hg": true,
+		"**/CVS": true,
+		"**/.DS_Store": true,
+		"**/*.o": true,
+		"**/*.exe": true,
+	},
+	"discord.enabled": true,
+	"files.associations": {
+		"*.COBOL*": "cobol",
+		"*.COB*": "cobol",
+		"*.COBCOPY*": "cobol",
+		"*.COPYBOOK*": "cobol",
+		"*.COPY*": "cobol",
+		"*.PL1*": "pl1",
+		"*.PLI*": "pl1",
+		"*.INC*": "pl1",
+		"*.INCLUDE*": "pl1",
+		"*.JCL*": "jcl",
+		"*.ASM*": "hlasm",
+		"*.ASSEMBLE*": "hlasm",
+		"*.HLASM*": "hlasm",
+		"*.HLA*": "hlasm",
+		"*.x": "csharp",
+		"*.snd": "csharp",
+		"*.sand": "csharp",
+		"*.sn": "csharp",
+		"*.bl": "perl6",
+		"applet.h": "c",
+		"sprite3d.h": "c"
+	}
+}
