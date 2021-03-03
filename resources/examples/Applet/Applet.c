@@ -2,15 +2,14 @@
 
 void OnAppletUpdate()
 {
-    /* Update */
+    while(IsAppletAlive())
+    {
+        BeginDrawing();
+            ClearBackground(RAYWHITE);
+        EndDrawing();
+    }
 }
 
-void OnAppletRender()
-{
-    BeginDrawing();
-        ClearBackground(RAYWHITE);
-    EndDrawing();
-}
 
 int main(void)
 {
