@@ -21,4 +21,4 @@ typedef struct Sphere
 void DrawCircle2D(Circle circle);
 // Draw 3D Circle
 // Named mz_ because raylib function of DrawCircle3D();
-void DrawSphere(Sphere circle);
+void mz_DrawCircle3D(Sphere circle);
