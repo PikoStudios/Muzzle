@@ -1,5 +1,6 @@
 #pragma once
-
+// Implement RLGL
+#define RLGL_IMPLEMENTATION
 typedef enum GRAPHICS_BACKEND
 {
     BACKEND_RAYLIB,
