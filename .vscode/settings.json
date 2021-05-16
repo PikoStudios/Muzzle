@@ -29,6 +29,8 @@
 		"*.sn": "csharp",
 		"*.bl": "perl6",
 		"applet.h": "c",
-		"sprite3d.h": "c"
+		"sprite3d.h": "c",
+		"*.m": "c",
+		"rectangle.h": "c"
 	}
 }

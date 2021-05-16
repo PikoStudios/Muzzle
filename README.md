@@ -1,6 +1,10 @@
 ![Muzzle Logo](https://github.com/PikoStudios/Muzzle/blob/main/.github/assests/muzzle.png?raw=true)
 
-**This is a W.I.P Branch**
+**This is a W.I.P Branch and may not be stable**
+
+### Redesigned Functions:
+ - 
+
 
 [Discord Server](https://discord.gg/Rw2FdYw5dK) | [Twitter](https://twitter.com/piko_studios)
 ***
