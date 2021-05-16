@@ -2,12 +2,8 @@
 
 void begin_drawing()
 {
-#ifdef MUZZLE_RAYLIB
-    BeginDrawing();
-#else
-    rlClearScreenBuffers();
-    rlLoadIdentity();
-#endif
+    rlClearScreenBuffers(); // may not be needed???
+    BeginDrawing(); // Need to use raylib because we would need CORE which is not exposed
 }
 void end_drawing()
 {
