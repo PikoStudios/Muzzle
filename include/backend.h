@@ -1,4 +1,14 @@
 #pragma once
+// everything includes this..
+
+#ifdef MUZZLE_ALLOW_BUFFER_HIGH
+    #define MAX_BUFFERS 8
+    #define BUFFER_LENGTH 2048
+#else
+    #define MAX_BUFFERS 4
+    #define BUFFER_LENGTH 1024
+#endif
+
 // Implement RLGL
 #define RLGL_IMPLEMENTATION
 typedef enum GRAPHICS_BACKEND
