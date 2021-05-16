@@ -26,8 +26,7 @@ void OnAppletUpdate()
 {
     while (IsAppletAlive())
     {
-        begin_drawing();
-            clear_screen(WHITE);
+        begin_drawing(COLOR_WHITE);
         end_drawing();
     }
 }
