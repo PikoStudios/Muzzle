@@ -15,6 +15,32 @@ Muzzle is a Open-Source C99 Game Framework with support for many graphics backen
  - RLGL + Raylib (OpenGL Legacy like wrapper for Modern OpenGL)
  - SDL2 (TODO)
 
+## Example:
+```c
+#include <Muzzle.h>
+#define SCREEN_WIDTH 1280
+#define SCREEN_HEIGHT 720
+#define TARGET_FPS 60
+
+void OnAppletUpdate()
+{
+    while (IsAppletAlive())
+    {
+        begin_drawing();
+            clear_screen(WHITE);
+        end_drawing();
+    }
+}
+
+int main(void)
+{
+    Applet myApplet = InitializeApplet(SCREEN_WIDTH, SCREEN_HEIGHT, TARGET_FPS, "Muzzle - Window");
+    StartApplet(&myApplet);
+
+    QuitMuzzle();
+    return 0;
+}
+```
  
 ## Features
 ***Please wait for more details soon on this topic***

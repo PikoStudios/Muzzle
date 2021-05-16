@@ -13,4 +13,4 @@ typedef struct Applet
 
 void StartApplet(Applet *self);
 
-Applet InitalizeApplet(const int WIDTH, const int HEIGHT, const int TARGET_FPS, const char* WindowTitle);
+Applet InitializeApplet(const int WIDTH, const int HEIGHT, const int TARGET_FPS, const char* WindowTitle);
