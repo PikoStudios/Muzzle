@@ -2,9 +2,8 @@
 
 void begin_drawing(tint color_drawn)
 {
-    rlClearScreenBuffers(); // may not be needed???
-    rlLoadIdentity();
-    //BeginDrawing(); // Need to use raylib because we would need CORE which is not exposed
+    //rlLoadIdentity();
+    BeginDrawing(); // Need to use raylib because we would need CORE which is not exposed
 }
 void end_drawing()
 {
@@ -20,4 +19,5 @@ void clear_screen(tint color_drawn)
     float a = (float)(color_drawn.a) / 255;
 
     rlClearColor(r, g, b, a);
+    rlClearScreenBuffers();
 }
