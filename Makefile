@@ -375,11 +375,11 @@ endif
 all:
 	$(MAKE) $(MAKEFILE_PARAMS)
 
-MUZZLE_SRC_PATHS = $(MUZZLE_PATH)/src/*.c
+MUZZLE_SRC_PATHS = $(MUZZLE_PATH)/src $(MUZZLE_PATH)/src
 
 # Project target defined by PROJECT_NAME
 $(PROJECT_NAME): $(OBJS)
-	$(CC) Applet.c $(MUZZLE_SRC_PATHS) -o $(PROJECT_NAME)$(EXT) $(CFLAGS) $(INCLUDE_PATHS) $(LDFLAGS) $(LDLIBS) -D$(PLATFORM)
+	$(CC) Applet.c $(MUZZLE_SRC_PATHS) -o build/$(PROJECT_NAME)$(EXT) $(CFLAGS) $(INCLUDE_PATHS) $(LDFLAGS) $(LDLIBS) -D$(PLATFORM)
 
 # Compile source files
 # NOTE: This pattern will compile every module defined on $(OBJS)

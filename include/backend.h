@@ -1,4 +1,5 @@
-#pragma once
+#ifndef MUZZLE_BACKEND_H
+#define MUZZLE_BACKEND_H
 // everything includes this..
 
 #ifdef MUZZLE_ALLOW_BUFFER_HIGH
@@ -9,8 +10,7 @@
     #define BUFFER_LENGTH 1024
 #endif
 
-// Implement RLGL
-#define RLGL_IMPLEMENTATION
+
 typedef enum GRAPHICS_BACKEND
 {
     BACKEND_RAYLIB,
@@ -21,9 +21,14 @@ typedef enum GRAPHICS_BACKEND
 
 // Graphics Backend
 GRAPHICS_BACKEND CURRENT_GRAPHICS_BACKEND = BACKEND_RLGL;
-// Include all the Backends
+
 #include "rlgl.h"
-#include "raylib.h"
+// Was having some issues with raylib's include guards.. So i created another include gaurd for it
+#ifndef MUZZLE_BACKEND_RAYLIB_H
+#define MUZZLE_BACKEND_RAYLIB_H
+    #include "raylib.h"
+#endif
+
 #ifdef MUZZLE_RAYLIB
     CURRENT_GRAPHICS_BACKEND = BACKEND_RAYLIB;
 #endif
@@ -34,3 +39,5 @@ GRAPHICS_BACKEND CURRENT_GRAPHICS_BACKEND = BACKEND_RLGL;
 //#ifdef MUZZLE_MINIGFX
 //    exit(-1);
 //#endif
+
+#endif
