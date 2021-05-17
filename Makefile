@@ -252,7 +252,7 @@ endif
 
 # Define include paths for required headers
 # NOTE: Several external required libraries (stb and others)
-INCLUDE_PATHS = -I. -I$(RAYLIB_PATH)/src -I$(RAYLIB_PATH)/src/external -I$(MUZZLE_PATH)/include
+INCLUDE_PATHS = -I. -I$(RAYLIB_PATH)/src -I$(RAYLIB_PATH)/src/external -I$(MUZZLE_PATH)/include 
 
 # Define additional directories containing required header files
 ifeq ($(PLATFORM),PLATFORM_RPI)

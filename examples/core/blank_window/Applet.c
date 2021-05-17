@@ -1,16 +1,18 @@
 // #define MUUZZLE_RAYLIB <--- to use the raylib backend. For this example we are just going to be using the RLGL backend
-#include "../../../include/Muzzle.h"
+#include <Muzzle.h>
+#include <stdio.h>
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720
 #define TARGET_FPS 60 // You can set this to 0 if you dont want a fps lock
 
 void OnAppletUpdate()
 {
-    tint white = {255,255,255,255};
+    tint my_color = {184, 213, 238, 255};
 
     while (IsAppletAlive())
     {
-        begin_drawing(white);
+        begin_drawing();
+         clear_screen(my_color); // currently does not work :(
         end_drawing();
     }
     

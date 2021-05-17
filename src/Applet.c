@@ -11,8 +11,8 @@ Applet InitializeApplet(const int WIDTH, const int HEIGHT, const int TARGET_FPS,
 {
     return (Applet)
     {
-        .height = (int)(WIDTH),
-        .width = (int)(HEIGHT),
+        .height = (int)(HEIGHT),
+        .width = (int)(WIDTH),
         .WindowTitle = (char*)(WindowTitle),
         .targetFPS = (int)(TARGET_FPS),
     };

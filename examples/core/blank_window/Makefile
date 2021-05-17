@@ -375,7 +375,7 @@ endif
 all:
 	$(MAKE) $(MAKEFILE_PARAMS)
 
-MUZZLE_SRC_PATHS = $(MUZZLE_PATH)/src $(MUZZLE_PATH)/src
+MUZZLE_SRC_PATHS = $(MUZZLE_PATH)/src/*.c
 
 # Project target defined by PROJECT_NAME
 $(PROJECT_NAME): $(OBJS)

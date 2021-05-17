@@ -34,6 +34,7 @@
 		"rectangle.h": "c",
 		"backend.h": "c",
 		"rlgl.h": "c",
-		"raylib.h": "c"
+		"raylib.h": "c",
+		"drawing.h": "c"
 	}
 }
