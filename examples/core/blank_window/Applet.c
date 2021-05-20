@@ -12,7 +12,7 @@ void OnAppletUpdate()
     while (IsAppletAlive())
     {
         begin_drawing();
-         clear_screen(my_color); // currently does not work :(
+            clear_screen(my_color); // currently does not work :(
         end_drawing();
     }
     

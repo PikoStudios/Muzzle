@@ -35,6 +35,10 @@
 		"backend.h": "c",
 		"rlgl.h": "c",
 		"raylib.h": "c",
-		"drawing.h": "c"
+		"drawing.h": "c",
+		"muzzle.h": "c",
+		"vector.h": "c",
+		"sprite2d.h": "c",
+		"tint.h": "c"
 	}
 }
