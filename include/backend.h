@@ -10,20 +10,18 @@
     #define BUFFER_LENGTH 1024
 #endif
 
-
-
-#include "rlgl.h"
-// Was having some issues with raylib's include guards.. So i created another include gaurd for it
-#ifndef MUZZLE_BACKEND_RAYLIB_H
-#define MUZZLE_BACKEND_RAYLIB_H
-    #include "raylib.h"
+// include backend code:
+#define RLGL_IMPLEMENTATION
+#define RLGL_STANDALONE
+#ifdef MUZZLE_SUPPORT_RLGL_TRACELOG
+    #define RLGL_SUPPORT_TRACELOG
 #endif
-//#ifdef MUZZLE_SDL2
-//    CURRENT_GRAPHICS_BACKEND = BACKEND_SDL2;
-//#endif
+#include "rlgl.h"
 
-//#ifdef MUZZLE_MINIGFX
-//    exit(-1);
-//#endif
+#if defined(__EMSCRIPTEN__)
+    #define GLFW_INCLUDE_ES2
+#endif
+
+#include "../deps/glfw/include/GLFW/glfw3.h"
 
 #endif
