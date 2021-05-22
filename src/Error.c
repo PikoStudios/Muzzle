@@ -2,7 +2,7 @@
 
 static void muzzle_error(int error, const char *desc) 
 {
-    /* code */
+    fprintf(stderr, "%s", desc);
 }
 void log_status(StatusTypes type, const char *status)
 {

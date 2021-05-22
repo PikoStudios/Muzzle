@@ -22,10 +22,7 @@ internal error function
 int error
 const char *desc
 */
-static void muzzle_error(int error, const char *desc)
-{
-    fprintf(stderr, "%s", desc);
-}
+static void muzzle_error(int error, const char *desc);
 /*
 void log_status
 Log Status
