@@ -1,6 +1,6 @@
 #include "core/Loop.h"
 
-bool IsAppletAlive()
+bool IsAppletAlive(MUZZLE_WINDOW window)
 {
-    return !WindowShouldClose();
+    return !glfwWindowShouldClose(window);
 }

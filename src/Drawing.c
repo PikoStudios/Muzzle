@@ -1,14 +1,13 @@
 #include "core/Drawing.h"
 
-void begin_drawing(tint color_drawn)
+void begin_drawing()
 {
-    //rlLoadIdentity();
-    BeginDrawing(); // Need to use raylib because we would need CORE which is not exposed
+    rlClearScreenBuffers();
 }
-void end_drawing()
+void end_drawing(MUZZLE_WINDOW window)
 {
-    // we need to use raylib EndDrawing because raylib handles the window so we need the buffers to be swapped by raylib
-    EndDrawing();
+    glfwSwapBuffers(window);
+    glfwPollEvents();
 }
 
 void clear_screen(tint color_drawn)

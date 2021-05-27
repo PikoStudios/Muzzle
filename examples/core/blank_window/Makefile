@@ -29,6 +29,8 @@ RAYLIB_VERSION     ?= 3.0.0
 RAYLIB_API_VERSION ?= 300
 RAYLIB_PATH        ?= ..\..
 MUZZLE_PATH        ?= C:/Users/coolg/muzzle-backend-branch
+GLFW_LIB           ?= C:/Users/coolg/muzzle-backend-branch/deps/glfw/lib
+
 
 # Define compiler path on Windows
 COMPILER_PATH      ?= C:/raylib/mingw/bin
@@ -298,14 +300,14 @@ ifeq ($(PLATFORM),PLATFORM_DESKTOP)
     ifeq ($(PLATFORM_OS),WINDOWS)
         # Libraries for Windows desktop compilation
         # NOTE: WinMM library required to set high-res timer resolution
-        LDLIBS = -lraylib -lopengl32 -lgdi32 -lwinmm
+        LDLIBS = -lglfw3 -lopengl32 -lgdi32 #-lwinmm 
         # Required for physac examples
         #LDLIBS += -static -lpthread
     endif
     ifeq ($(PLATFORM_OS),LINUX)
         # Libraries for Debian GNU/Linux desktop compiling
         # NOTE: Required packages: libegl1-mesa-dev
-        LDLIBS = -lraylib -lGL -lm -lpthread -ldl -lrt
+        LDLIBS = -lglfw3 -lGL -lm -lpthread -ldl -lrt
         
         # On X11 requires also below libraries
         LDLIBS += -lX11
@@ -324,7 +326,7 @@ ifeq ($(PLATFORM),PLATFORM_DESKTOP)
     ifeq ($(PLATFORM_OS),OSX)
         # Libraries for OSX 10.9 desktop compiling
         # NOTE: Required packages: libopenal-dev libegl1-mesa-dev
-        LDLIBS = -lraylib -framework OpenGL -framework OpenAL -framework Cocoa
+        LDLIBS = -lraylib -lglfw3 -framework OpenGL -framework OpenAL -framework Cocoa
     endif
     ifeq ($(PLATFORM_OS),BSD)
         # Libraries for FreeBSD, OpenBSD, NetBSD, DragonFly desktop compiling

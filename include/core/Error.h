@@ -16,13 +16,13 @@ typedef enum StatusTypes
 
 
 /* 
-static void muzzle_error
+void muzzle_error
 internal error function
 ========================
 int error
 const char *desc
 */
-static void muzzle_error(int error, const char *desc);
+void muzzle_error(int error, const char *desc);
 /*
 void log_status
 Log Status

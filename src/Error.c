@@ -1,6 +1,6 @@
 #include "core/Error.h"
 
-static void muzzle_error(int error, const char *desc) 
+void muzzle_error(int error, const char *desc) 
 {
     fprintf(stderr, "%s", desc);
 }

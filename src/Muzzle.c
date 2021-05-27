@@ -1,8 +1,10 @@
 #include "Muzzle.h"
 
 
-void QuitMuzzle()
+void QuitMuzzle(MUZZLE_WINDOW window)
 {
-    CloseWindow();
+    rlglClose();
+    glfwDestroyWindow(window);
+    glfwTerminate();
 }
 
