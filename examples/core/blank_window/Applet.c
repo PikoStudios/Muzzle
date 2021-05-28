@@ -5,7 +5,7 @@
 #define SCREEN_HEIGHT 720
 #define TARGET_FPS 60 // You can set this to 0 if you dont want a fps lock
 
-void OnAppletUpdate()
+void OnAppletUpdate(Applet *applet)
 {
     tint my_color = {184, 213, 238, 255};
 
@@ -13,7 +13,7 @@ void OnAppletUpdate()
     {
         begin_drawing();
             clear_screen(my_color); // currently does not work :(
-        end_drawing();
+        end_drawing(applet);
     }
     
 }
@@ -23,6 +23,6 @@ int main(void)
     Applet blank_window = InitializeApplet(SCREEN_WIDTH, SCREEN_HEIGHT, TARGET_FPS, "Muzzle [core] - Blank Window");
     StartApplet(&blank_window);
 
-    QuitMuzzle();
+    QuitMuzzle(blank_window);
     return 0;
 }
