@@ -16,14 +16,23 @@
 #endif
 
 #include <stdbool.h>
-#define GRAPHICS_API_OPENGL_33
-#define RLGL_IMPLEMENTATION
-#define RLGL_STANDALONE
-#include "rlgl.h"
 
-#include "../deps/glfw/include/GLFW/glfw3.h"
+#ifndef MUZZLE_GRAPHICS_LIB
+#define MUZZLE_GRAPHICS_LIB
 
-typedef GLFWwindow* MUZZLE_WINDOW;
+    #define GRAPHICS_API_OPENGL_33
+    
+    #define RLGL_IMPLEMENTATION
+    #define RLGL_STANDALONE
+    #include "rlgl.h"
+
+    #include "../deps/glfw/include/GLFW/glfw3.h"
+
+    typedef GLFWwindow* MUZZLE_WINDOW;
+
+#else
+    #error Muzzle's Graphics Libraries were already included.
+#endif
 
 #ifdef MUZZLE_ALLOW_TRACELOG
     #define RLGL_SUPPORT_TRACELOG

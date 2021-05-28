@@ -42,6 +42,8 @@
 		"tint.h": "c",
 		"callback.h": "c",
 		"error.h": "c",
-		"stdbool.h": "c"
-	}
+		"stdbool.h": "c",
+		"circle.h": "c"
+	},
+	"C_Cpp.dimInactiveRegions": true
 }

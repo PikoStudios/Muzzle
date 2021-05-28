@@ -1,10 +1,10 @@
 #include "Muzzle.h"
 
 
-void QuitMuzzle(MUZZLE_WINDOW window)
+void QuitMuzzle(Applet applet)
 {
     rlglClose();
-    glfwDestroyWindow(window);
+    glfwDestroyWindow(applet.window_handle);
     glfwTerminate();
 }
 

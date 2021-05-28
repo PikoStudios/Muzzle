@@ -4,9 +4,9 @@ void begin_drawing()
 {
     rlClearScreenBuffers();
 }
-void end_drawing(MUZZLE_WINDOW window)
+void end_drawing(Applet *applet)
 {
-    glfwSwapBuffers(window);
+    glfwSwapBuffers(applet->window_handle);
     glfwPollEvents();
 }
 

@@ -8,6 +8,6 @@
 #include "shapes/Rectangle.h"
 #include <stdlib.h>
 
-void QuitMuzzle();
+void QuitMuzzle(Applet applet);
 
 

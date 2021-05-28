@@ -3,7 +3,7 @@
 
 void StartApplet(Applet *self)
 {
-    OnAppletUpdate();
+    OnAppletUpdate(self);
 }
 
 Applet InitializeApplet(const int WIDTH, const int HEIGHT, const int TARGET_FPS, const char* WINDOW_TITLE)
