@@ -12,9 +12,9 @@ Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TI
     glfwSetErrorCallback(muzzle_error);
     // Initialize GLFW
     if(!glfwInit()) 
-        log_status(FATAL_ERROR,"GLFW3 Could not Initialize, POINT OF FAILURE:\n\tMuzzle.Applet.InitializeApplet.glfwInit()\n");
+        log_status(FATAL_ERROR,"GLFW3 Could not Initialize, POINT OF FAILURE:\n\tMuzzle.Applet.InitializeApplet.glfwInit()");
     else 
-        log_status(SUCCESS, "GLFW3 Initialized Successfully\n");
+        log_status(SUCCESS, "GLFW3 Initialized Successfully");
 
     
 
@@ -28,10 +28,10 @@ Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TI
     if (!buf.window_handle)
     {
         glfwTerminate();
-        log_status(FATAL_ERROR, "GLFW3 Could not Create the Window, POINT OF FAILURE:\n\tMuzzle.Applet.InitializeApplet.glfwCreateWindow()\n");
+        log_status(FATAL_ERROR, "GLFW3 Could not Create the Window, POINT OF FAILURE:\n\tMuzzle.Applet.InitializeApplet.glfwCreateWindow()");
     }
     else
-        log_status(SUCCESS, "Window Created Succesfully\n");
+        log_status(SUCCESS, "Window Created Succesfully");
 
     
 

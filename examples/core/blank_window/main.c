@@ -8,7 +8,7 @@ Applet blank_window;
 
 void OnAppletUpdate()
 {
-    tint my_color = {35, 35, 142, 1};
+    tint my_color = {84, 84, 84, 255};
 
     while (!glfwWindowShouldClose(blank_window.window_handle))
     {

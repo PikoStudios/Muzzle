@@ -1,3 +1,0 @@
-C:/Users/coolg/muzzle-backend-branch/examples/core/blank_window/build/CMakeFiles/edit_cache.dir
-C:/Users/coolg/muzzle-backend-branch/examples/core/blank_window/build/CMakeFiles/main.dir
-C:/Users/coolg/muzzle-backend-branch/examples/core/blank_window/build/CMakeFiles/rebuild_cache.dir
