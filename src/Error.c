@@ -9,26 +9,28 @@ void log_status(StatusTypes type, const char *status)
     switch (type)
     {
     case FATAL_ERROR:
-        fprintf(stderr, "\e[0;31m\e[4;31m[FATAL] :: %s", status);
+        fprintf(stderr, "\e[0;31m\e[4;31m[FATAL] :: %s\n", status);
         exit(-1);
         break;
     case WARNING:
-        printf("\e[0;33m\e[4;33m[WARNING] :: %s", status);
+        printf("\e[0;33m\e[4;33m[WARNING] :: %s\n", status);
         break;
 
     case ERROR:
-        fprintf(stderr, "\e[0;31m\e[4;31m[ERROR] :: %s", status);
+        fprintf(stderr, "\e[0;31m\e[4;31m[ERROR] :: %s\n", status);
         break;
 
     case SUCCESS:
-        printf("\e[0;32m\e[4;32m[SUCCESS] :: %s", status);
+        printf("\e[0;32m\e[4;32m[SUCCESS] :: %s\n", status);
         break;
 
     case INFO:
-        printf("\e[0;34m\e[4;34m[INFO] :: %s", status);
+        printf("\e[0;34m\e[4;34m[INFO] :: %s\n", status);
         break;
 
     default:
+        printf("Funny Enough. There was a unknown error when logging this status.\nIt may of been a fatal error. So because of that to be safe, we are going to still exit the application\n Sorry!! lol please report this at the github repo for Muzzle");
+        exit(-1);
         break;
     }
     

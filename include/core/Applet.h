@@ -3,17 +3,15 @@
 #include "Error.h"
 #include "callback.h"
 #include "../backend.h"
-#define DISABLE_VSYNC 0
 
 
 typedef struct Applet
 {
     int width, height;
     char* WindowTitle;
-    int targetFPS;
     GLFWwindow *window_handle;
 } Applet;
 
 void StartApplet(Applet *self);
 
-Applet InitializeApplet(const int WIDTH, const int HEIGHT, const int TARGET_FPS, const char* WindowTitle);
+Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TITLE, int RESIZEABLE, int VSYNC);

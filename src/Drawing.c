@@ -2,12 +2,15 @@
 
 void begin_drawing()
 {
-    rlClearScreenBuffers();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glLoadIdentity();
 }
 void end_drawing(Applet *applet)
 {
     glfwSwapBuffers(applet->window_handle);
     glfwPollEvents();
+
+    glFlush();
 }
 
 void clear_screen(tint color_drawn)
@@ -17,6 +20,5 @@ void clear_screen(tint color_drawn)
     float b = (float)(color_drawn.b) / 255;
     float a = (float)(color_drawn.a) / 255;
 
-    rlClearColor(r, g, b, a);
-    rlClearScreenBuffers();
+    glClearColor(r, g, b, a);
 }

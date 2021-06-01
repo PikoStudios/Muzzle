@@ -6,48 +6,67 @@ void StartApplet(Applet *self)
     OnAppletUpdate(self);
 }
 
-Applet InitializeApplet(const int WIDTH, const int HEIGHT, const int TARGET_FPS, const char* WINDOW_TITLE)
+// Applet applet = InitializeApplet(800,800,"Test App", NULL, NULL);
+Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TITLE, int RESIZEABLE, int VSYNC)
 {
     glfwSetErrorCallback(muzzle_error);
     // Initialize GLFW
     if(!glfwInit()) 
-        log_status(FATAL_ERROR,"GLFW3 Could not Initialize, POINT OF FAILURE:\n\tMuzzle.Applet.InitializeApplet.glfwInit()");
+        log_status(FATAL_ERROR,"GLFW3 Could not Initialize, POINT OF FAILURE:\n\tMuzzle.Applet.InitializeApplet.glfwInit()\n");
     else 
-        log_status(SUCCESS, "GLFW3 Initialized Successfully");
+        log_status(SUCCESS, "GLFW3 Initialized Successfully\n");
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,4);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-#if defined(__APPLE__)
-    glfwWindowHint( GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE );
-#endif
+    
 
     // creating a sepreate applet struct, could just return the values. but, dont want to so i dont have to create a GLFWwindow *buffer
     Applet buf;
     buf.height = (int)(HEIGHT);
     buf.width = (int)(WIDTH);
     buf.WindowTitle = (char*)(WINDOW_TITLE);
-    buf.targetFPS = (int)(TARGET_FPS);
     buf.window_handle = glfwCreateWindow(WIDTH, HEIGHT, WINDOW_TITLE, NULL, NULL);
 
     if (!buf.window_handle)
     {
         glfwTerminate();
-        log_status(FATAL_ERROR, "GLFW3 Could not Create the Window, POINT OF FAILURE:\n\tMuzzle.Applet.InitializeApplet.glfwCreateWindow()");
+        log_status(FATAL_ERROR, "GLFW3 Could not Create the Window, POINT OF FAILURE:\n\tMuzzle.Applet.InitializeApplet.glfwCreateWindow()\n");
     }
     else
-        log_status(SUCCESS, "Window Created Succesfully");
+        log_status(SUCCESS, "Window Created Succesfully\n");
+
+    
 
     //glfwSetWindowPos(buf.window_handle)
     glfwSetKeyCallback(buf.window_handle, callback_key);
+    glfwSetErrorCallback(muzzle_error);
     glfwMakeContextCurrent(buf.window_handle);
-    glfwSwapInterval(0);
 
-    rlLoadExtensions(glfwGetProcAddress);
-    rlglInit(WIDTH, HEIGHT);
 
-    rlViewport(0,0, WIDTH, HEIGHT);
-    rlLoadIdentity();
+    if (VSYNC == MUZZLE_TRUE) glfwSwapInterval(1);
+    else glfwSwapInterval(0);
+
+    if (RESIZEABLE == MUZZLE_TRUE) glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+    else glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+
+    glfwSetWindowPos(buf.window_handle, 230,230);
+
+    
+    // NOTE: MAYBE: Instead of doing glViewport width height. Maybe get the actual framebuffer size and pass throught that?
+
+    glViewport(0,0, WIDTH, HEIGHT);
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // quickly clear the screen with white 
+
+    glEnable(GL_BLEND); // for transperency
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(0, WIDTH, HEIGHT, 0, 0, 1);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
     return buf;
 }
 
