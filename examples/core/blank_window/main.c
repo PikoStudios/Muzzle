@@ -1,13 +1,4 @@
-![Muzzle Logo](https://github.com/PikoStudios/Muzzle/blob/main/.github/assests/muzzle.png?raw=true)
-
-
-
-[Discord Server](https://discord.gg/Rw2FdYw5dK) | [Twitter](https://twitter.com/piko_studios)
-***
-Muzzle is a Open-Source C99 Game Framework
-
-## Example:
-```c
+// #define MUUZZLE_RAYLIB <--- to use the raylib backend. For this example we are just going to be using the RLGL backend
 #include <Muzzle.h>
 #include <stdio.h>
 #define SCREEN_WIDTH 1280
@@ -36,15 +27,3 @@ int main(void)
     QuitMuzzle(blank_window);
     return 0;
 }
-
-```
- 
-## Features
-* Creating a Window
-* Clearing the Screen
-* Drawing Rectangle
-** dont worry thats not all, im just a little lazy to type them all**
-
-
-## How to build
-A CMake file to build with will be avaliable soon

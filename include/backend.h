@@ -1,25 +1,23 @@
 #pragma once
 
-typedef enum GRAPHICS_BACKEND
-{
-    BACKEND_RAYLIB,
-    BACKEND_RLGL,
-    BACKEND_SDL2,
-} GRAPHICS_BACKEND;
-
-
-// Graphics Backend
-GRAPHICS_BACKEND CURRENT_GRAPHICS_BACKEND = BACKEND_RAYLIB;
-// Include all the Backends
-#include "rlgl.h"
-#include "raylib.h"
-#ifdef MUZZLE_RLGL
-    CURRENT_GRAPHICS_BACKEND = BACKEND_RLGL;
-#endif
-#ifdef MUZZLE_SDL2
-    CURRENT_GRAPHICS_BACKEND = BACKEND_SDL2;
+#if defined(__EMSCRIPTEN__)
+    #define GLFW_INCLUDE_ES2
 #endif
 
-//#ifdef MUZZLE_MINIGFX
-//    exit(-1);
-//#endif
+
+#ifdef MUZZLE_ALLOW_BUFFER_HIGH
+    #define MAX_BUFFERS 8
+    #define BUFFER_LENGTH 2048
+#else
+    #define MAX_BUFFERS 4
+    #define BUFFER_LENGTH 1024
+#endif
+
+#define MUZZLE_FALSE 0
+#define MUZZLE_TRUE 1
+
+#include "../deps/glfw/include/GLFW/glfw3.h"
+
+
+
+typedef GLFWwindow* MUZZLE_WINDOW;
