@@ -1,1 +1,0 @@
-  -LC:/Users/coolg/muzzle-backend-branch/examples/core/blank_window/../../../deps/glfw/lib  -lglfw3 -lopengl32 -lgdi32 -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 
