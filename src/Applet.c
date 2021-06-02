@@ -41,7 +41,11 @@ Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TI
     glfwMakeContextCurrent(buf.window_handle);
 
 
-    if (VSYNC == MUZZLE_TRUE) glfwSwapInterval(1);
+    if (VSYNC == MUZZLE_TRUE)
+    {
+        log_status(INFO, "Enabled VSync");
+        glfwSwapInterval(1);
+    } 
     else glfwSwapInterval(0);
 
     if (RESIZEABLE == MUZZLE_TRUE) glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);

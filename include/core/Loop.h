@@ -3,4 +3,4 @@
 #include "../backend.h"
 // Render and Update game here
 void OnAppletUpdate();
-bool IsAppletAlive();
+bool keep_applet(MUZZLE_WINDOW window);
