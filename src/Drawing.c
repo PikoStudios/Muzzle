@@ -22,3 +22,14 @@ void clear_screen(tint color_drawn)
 
     glClearColor(r, g, b, a);
 }
+
+void update_viewport(Applet *applet, int w, int h)
+{
+    glfwGetWindowSize(applet->window_handle, &w,&h);
+    if (applet->height != h || applet->width != w)
+    {
+        applet->height = h;
+        applet->width = w;
+        glViewport(0,0,applet->width, applet->height);
+    }
+}

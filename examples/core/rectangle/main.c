@@ -9,11 +9,13 @@ Applet blank_window;
 void OnAppletUpdate()
 {
     tint my_color = {84, 84, 84, 255};
+    tint white = {255,255,255,255};
 
     while (keep_applet(blank_window.window_handle))
     {
         begin_drawing();
             clear_screen(my_color);
+            draw_rectangle(50,50,120,120,white);
         end_drawing(&blank_window);
     }
     
