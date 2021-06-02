@@ -47,4 +47,18 @@ int main(void)
 
 
 ## How to build
-A CMake file to build with will be avaliable soon
+There is a CMakeLists.txt avaliable (It May not work on linux)
+
+If you do not want to use CMake
+Here is how it can be done with gcc
+
+Linux:
+```
+$ gcc main.c -I[Muzzle Install path] -L[Path to folder with GLFW3 Lib Files] -lGl -lglfw -lm
+```
+
+Windows + MinGW:
+```
+$ gcc main.c -I[Muzzle Install path] -L[Path to folder with GLFW3 Lib Files] -lglfw3 -lopengl32 -lgdi32 -o main.exe
+```
+
