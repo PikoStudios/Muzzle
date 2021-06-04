@@ -1,4 +1,3 @@
-// #define MUUZZLE_RAYLIB <--- to use the raylib backend. For this example we are just going to be using the RLGL backend
 #include <Muzzle.h>
 #include <stdio.h>
 #define SCREEN_WIDTH 1280
@@ -26,7 +25,7 @@ void OnAppletUpdate()
 
 int main(void)
 {
-    blank_window = InitializeApplet(SCREEN_WIDTH, SCREEN_HEIGHT, "Muzzle [CORE] - Blank Window", MUZZLE_FALSE, MUZZLE_TRUE);
+    blank_window = InitializeApplet(SCREEN_WIDTH, SCREEN_HEIGHT, "Muzzle [CORE] - Circle", MUZZLE_FALSE, MUZZLE_TRUE);
     StartApplet(&blank_window);
 
     QuitMuzzle(blank_window);
