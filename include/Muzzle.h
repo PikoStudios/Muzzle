@@ -7,6 +7,7 @@
 #include "core/tint.h"
 #include "shapes/Rectangle.h"
 #include "shapes/Circle.h"
+#include "core/Input.h"
 #include <stdlib.h>
 
 void QuitMuzzle(Applet applet);
