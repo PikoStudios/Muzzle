@@ -1,4 +1,3 @@
-// #define MUUZZLE_RAYLIB <--- to use the raylib backend. For this example we are just going to be using the RLGL backend
 #include <Muzzle.h>
 #include <stdio.h>
 #define SCREEN_WIDTH 1280
