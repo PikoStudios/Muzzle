@@ -3,7 +3,7 @@
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720
 
-Applet blank_window;
+Applet pong;
 
 void OnAppletUpdate()
 {
@@ -11,22 +11,22 @@ void OnAppletUpdate()
     tint white = {255,255,255,255};
 
     int update_width, update_height;
-    while (keep_applet(blank_window.window_handle))
+    while (keep_applet(pong.window_handle))
     {
-        update_viewport(&blank_window, update_width, update_height); // <-- required so opengl knows the new size and where to draw to
+        update_viewport(&pong, update_width, update_height); // <-- required so opengl knows the new size and where to draw to
         begin_drawing();
             clear_screen(my_color);
             draw_rectangle(50,50,120,120,white);
-        end_drawing(&blank_window);
+        end_drawing(&pong);
     }
     
 }
 
 int main(void)
 {
-    blank_window = InitializeApplet(SCREEN_WIDTH, SCREEN_HEIGHT, "Muzzle [CORE] - Resizing Windows", MUZZLE_TRUE, MUZZLE_FALSE);
-    StartApplet(&blank_window);
+    pong = InitializeApplet(SCREEN_WIDTH, SCREEN_HEIGHT, "Muzzle [CORE] - Resizing Windows", MUZZLE_TRUE, MUZZLE_FALSE);
+    StartApplet(&pong);
 
-    QuitMuzzle(blank_window);
+    QuitMuzzle(pong);
     return 0;
 }
