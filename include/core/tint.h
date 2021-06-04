@@ -1,20 +1,10 @@
 #pragma once
 
-#ifdef MUZZLE_RAYLIB
+
+
 /*
 Muzzle tint (Color, RGBA)
 ===================
-Raylib Backend
------------------
-unsigned char r,g,b,a
-*/
-typedef Color tint;
-#else
-/*
-Muzzle tint (Color, RGBA)
-===================
-RLGL Backend
----------------
 unsigned int r,g,b,a
 */
 typedef struct tint
@@ -24,6 +14,11 @@ typedef struct tint
     unsigned int b;
     unsigned int a;
 } tint;
-#endif
 
+tint rgb(unsigned int red,unsigned int green,unsigned int blue,unsigned int alpha);
 
+#define WHITE       (tint){255,255,255,255}
+#define GRAY        (tint){84, 84, 84, 255}
+#define YELLOW      (tint){255,255,51,255}
+#define USAF_BLUE   (tint){0,48,143,255}
+#define BLACK       (tint){0,0,0,255}
