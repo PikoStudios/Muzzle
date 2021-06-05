@@ -15,6 +15,7 @@ void OnAppletUpdate()
             clear_screen(my_color);
 
             if (key_down(&pong, KEY_A)) log_status(INFO, "A was pressed");
+            if (mouse_down(&pong, MOUSE_LEFT)) log_status(INFO, "Left mouse was pressed");
         end_drawing(&pong);
     }
     
