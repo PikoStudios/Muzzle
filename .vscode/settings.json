@@ -44,7 +44,8 @@
 		"error.h": "c",
 		"stdbool.h": "c",
 		"circle.h": "c",
-		"loop.h": "c"
+		"loop.h": "c",
+		"sprite.h": "c"
 	},
 	"C_Cpp.dimInactiveRegions": true
 }
