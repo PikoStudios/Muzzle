@@ -19,6 +19,7 @@ ${mz_source_dir}/Rectangle.c
 ${mz_source_dir}/tint.c
 ${mz_source_dir}/Circle.c
 ${mz_source_dir}/Input.c
+${mz_source_dir}/Sprite.c
 )
 
 
