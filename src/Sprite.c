@@ -54,8 +54,8 @@ void draw_sprite(sprite *data, int x, int y, float scale, float rotation, tint c
             glNormal3f(0.0f, 0.0f, 1.0f);
             glTexCoord2f(0.0f, 0.0f);glVertex2f(0.0f,0.0f);
             glTexCoord2f(1.0f, 0.0f);glVertex2f(data->width,0.0f);
-            glTexCoord2f(1.0f, 0.0f);glVertex2f(data->width,data->height);
-            glTexCoord2f(0.0f, 0.0f);glVertex2f(0.0f,data->height);
+            glTexCoord2f(1.0f, 1.0f);glVertex2f(data->width,data->height);
+            glTexCoord2f(0.0f, 1.0f);glVertex2f(0.0f,data->height);
         glEnd();
     glPopMatrix();
 
