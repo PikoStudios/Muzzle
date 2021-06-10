@@ -2,4 +2,10 @@
 Here are some examples using Muzzle
 
 ## How to compile
-***Please Wait for more info***
+Easiest way
+Cmake && Powershell (powershell is now cross-platform)
+
+```
+$ cd example
+$ .\run.ps1
+```

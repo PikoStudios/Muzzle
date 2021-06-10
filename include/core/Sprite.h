@@ -1,6 +1,10 @@
 #pragma once
 #include "../backend.h"
+#ifdef MUZZLE_SUPPORT_SPRITES
+    #define STB_IMAGE_IMPLEMENTATION
+#endif
 #include "../../deps/stb/stb_image.h"
+
 #include "Error.h"
 #include "tint.h"
 #include "vector.h"
