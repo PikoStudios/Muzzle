@@ -13,6 +13,11 @@ typedef enum StatusTypes
     SUCCESS,
     INFO,
 } StatusTypes;
+typedef enum ErrorResult
+{
+    FAILED,
+    WORKED
+} ErrorResult;
 
 
 /* 

@@ -47,7 +47,10 @@
 		"loop.h": "c",
 		"sprite.h": "c",
 		"stb_image.h": "c",
-		"stdio.h": "c"
+		"stdio.h": "c",
+		"hash_map": "cpp",
+		"hash_set": "cpp",
+		"algorithm": "cpp"
 	},
 	"C_Cpp.dimInactiveRegions": true
 }

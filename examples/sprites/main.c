@@ -1,5 +1,4 @@
 #define MUZZLE_SUPPORT_SPRITES
-//#define MUZZLE_VERBOSE
 #include <Muzzle.h>
 #include <stdio.h>
 #define SCREEN_WIDTH 1280
@@ -13,7 +12,7 @@ void OnAppletUpdate()
     sprite spr = load_sprite("../muzzle.png"); // Upload sprite into GPU
     // If using CMake, add ../ because the exe is in the build folder
     
-    
+
     while (keep_applet(sprite_rendering.window_handle))
     {
         begin_drawing();
