@@ -50,7 +50,8 @@
 		"stdio.h": "c",
 		"hash_map": "cpp",
 		"hash_set": "cpp",
-		"algorithm": "cpp"
+		"algorithm": "cpp",
+		"animation.h": "c"
 	},
 	"C_Cpp.dimInactiveRegions": true
 }

@@ -4,6 +4,7 @@
 #include "vector.h"
 #include "Error.h"
 #include "tint.h"
+#include "time.h"
 
 typedef struct animation
 {
@@ -31,7 +32,7 @@ animation load_animation(const char** locations, int size, vec2 position);
 * @param color_drawn Color drawn over sprite [White for no extra color]
 * @return Nothing
 */
-void play_animation(animation* data, int target_fps, float scale, float rotation, tint color_drawn);
+void play_animation(animation* data, long target_fps, float scale, float rotation, tint color_drawn);
 /*
 * unload_animation - Unloads a Animation
 * @param data A pointer to a animation struct
