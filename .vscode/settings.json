@@ -51,7 +51,12 @@
 		"hash_map": "cpp",
 		"hash_set": "cpp",
 		"algorithm": "cpp",
-		"animation.h": "c"
+		"animation.h": "c",
+		"text.h": "c",
+		"fontstash.h": "c",
+		"glfontstash.h": "c",
+		"stb_truetype.h": "c",
+		"input.h": "c"
 	},
 	"C_Cpp.dimInactiveRegions": true
 }

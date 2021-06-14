@@ -6,7 +6,6 @@ void StartApplet(Applet *self)
     OnAppletUpdate(self);
 }
 
-// Applet applet = InitializeApplet(800,800,"Test App", NULL, NULL);
 Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TITLE, int RESIZEABLE, int VSYNC)
 {
     glfwSetErrorCallback(muzzle_error);

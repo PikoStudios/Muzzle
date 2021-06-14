@@ -4,7 +4,6 @@
     #define STB_IMAGE_IMPLEMENTATION
 #endif
 #include "../../deps/stb/stb_image.h"
-
 #include "Error.h"
 #include "tint.h"
 #include "vector.h"

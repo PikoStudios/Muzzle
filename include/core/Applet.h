@@ -12,6 +12,19 @@ typedef struct Applet
     GLFWwindow *window_handle;
 } Applet;
 
+/*
+* StartApplet - Start a Applet
+* @param self Pointer to Applet
+*/
 void StartApplet(Applet *self);
 
+/*
+* InitializeApplet - Create a new Applet
+* @param WIDTH Width of Screen
+* @param HEIGHT Height of Screen
+* @param WINDOW_TITLE Title of the Window
+* @param RESIZEABLE Ignore this, Just set to MUZZLE_FALSE
+* @param VSYNC Toggle VSync, If set to MUZZLE_FALSE Muzzle will try to use as much of the GPU and CPU that it can use
+* @return Applet
+*/
 Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TITLE, int RESIZEABLE, int VSYNC);
