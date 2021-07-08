@@ -6,7 +6,7 @@ sprite load_sprite(const char *filepath)
 
     unsigned char *data = stbi_load(filepath, &w, &h, &bpp, 4);
 
-    if (data == NULL) log_status(ERROR, "Failed to load sprite");
+    if (data == NULL) log_status(STATUS_ERROR, "Failed to load sprite");
 
     GLuint id;
     glGenTextures(1, &id);
@@ -22,7 +22,7 @@ sprite load_sprite(const char *filepath)
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 
 #ifdef MUZZLE_VERBOSE
-    log_status(SUCCESS, "Loaded Sprite into GPU");
+    log_status(STATUS_SUCCESS, "Loaded Sprite into GPU");
 #endif
 
     stbi_image_free(data);
@@ -41,7 +41,7 @@ sprite load_sprite(const char *filepath)
 
 //     unsigned char *data = stbi_load(filepath, &w, &h, &bpp, 4);
 
-//     if (data == NULL) log_status(ERROR, "Failed to load sprite");
+//     if (data == NULL) log_status(STATUS_ERROR, "Failed to load sprite");
 
 //     GLuint id;
 //     glGenTextures(1, &id);
@@ -57,7 +57,7 @@ sprite load_sprite(const char *filepath)
 //     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 
 // #ifdef MUZZLE_VERBOSE
-//     log_status(SUCCESS, "Loaded Sprite into GPU");
+//     log_status(STATUS_SUCCESS, "Loaded Sprite into GPU");
 // #endif
 
 //     stbi_image_free(data);

@@ -8,23 +8,23 @@ void log_status(StatusTypes type, const char *status)
 {
     switch (type)
     {
-    case FATAL_ERROR:
+    case STATUS_FATAL_ERROR:
         fprintf(stderr, "\e[0;31m\e[4;31m[FATAL] :: %s\n", status);
         exit(-1);
         break;
-    case WARNING:
+    case STATUS_WARNING:
         printf("\e[0;33m\e[4;33m[WARNING] :: %s\n", status);
         break;
 
-    case ERROR:
+    case STATUS_ERROR:
         fprintf(stderr, "\e[0;31m\e[4;31m[ERROR] :: %s\n", status);
         break;
 
-    case SUCCESS:
+    case STATUS_SUCCESS:
         printf("\e[0;32m\e[4;32m[SUCCESS] :: %s\n", status);
         break;
 
-    case INFO:
+    case STATUS_INFO:
         printf("\e[0;34m\e[4;34m[INFO] :: %s\n", status);
         break;
 

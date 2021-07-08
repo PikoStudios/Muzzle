@@ -1,12 +1,12 @@
 #include "core/Text.h"
 
-font load_font(const char* filepath, font_manager* manager)
+font load_font(const char* filepath, font_manager* manager, const char* name)
 {
-    font fn = fonsAddFont(manager, "font", filepath);
+   int fn = fonsAddFont(manager, name, filepath);
 
     if (fn == -1)
     {
-        log_status(FATAL_ERROR, "Failed to load Font :: Point of Failure\n\tMUZZLE::TEXT::LOAD_FONT");
+        log_status(STATUS_FATAL_ERROR, "Failed to load Font :: Point of Failure\n\tMUZZLE::TEXT::LOAD_FONT");
     }
 
     return fn;

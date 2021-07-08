@@ -3,9 +3,9 @@
 
 void QuitMuzzle(Applet applet)
 {
-    log_status(INFO, "Closing Window");
+    log_status(STATUS_INFO, "Closing Window");
     glfwDestroyWindow(applet.window_handle);
-    log_status(INFO, "Terminating OpenGL Context");
+    log_status(STATUS_INFO, "Terminating OpenGL Context");
     glfwTerminate();
 }
 

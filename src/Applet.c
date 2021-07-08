@@ -11,9 +11,9 @@ Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TI
     glfwSetErrorCallback(muzzle_error);
     // Initialize GLFW
     if(!glfwInit()) 
-        log_status(FATAL_ERROR,"GLFW3 Could not Initialize, POINT OF FAILURE:\n\tMuzzle.Applet.InitializeApplet.glfwInit()");
+        log_status(STATUS_FATAL_ERROR,"GLFW3 Could not Initialize, POINT OF FAILURE:\n\tMuzzle.Applet.InitializeApplet.glfwInit()");
     else 
-        log_status(SUCCESS, "GLFW3 Initialized Successfully");
+        log_status(STATUS_SUCCESS, "GLFW3 Initialized Successfully");
 
     
 
@@ -27,10 +27,10 @@ Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TI
     if (!buf.window_handle)
     {
         glfwTerminate();
-        log_status(FATAL_ERROR, "GLFW3 Could not Create the Window, POINT OF FAILURE:\n\tMuzzle.Applet.InitializeApplet.glfwCreateWindow()");
+        log_status(STATUS_FATAL_ERROR, "GLFW3 Could not Create the Window, POINT OF FAILURE:\n\tMuzzle.Applet.InitializeApplet.glfwCreateWindow()");
     }
     else
-        log_status(SUCCESS, "Window Created Succesfully");
+        log_status(STATUS_SUCCESS, "Window Created Succesfully");
 
     
 
@@ -42,7 +42,7 @@ Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TI
 
     if (VSYNC == MUZZLE_TRUE)
     {
-        log_status(INFO, "Enabled VSync");
+        log_status(STATUS_INFO, "Enabled VSync");
         glfwSwapInterval(1);
     } 
     else glfwSwapInterval(0);

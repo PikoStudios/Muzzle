@@ -5,13 +5,13 @@
 typedef enum StatusTypes
 {
     // warning that does not affect the application much
-    WARNING,
+    STATUS_WARNING,
     // Error that affects the application, but does not crash it
-    ERROR,
+    STATUS_ERROR,
     // Error that forces the application to CTD (Crash To Desktop)
-    FATAL_ERROR,
-    SUCCESS,
-    INFO,
+    STATUS_FATAL_ERROR,
+    STATUS_SUCCESS,
+    STATUS_INFO,
 } StatusTypes;
 typedef enum ErrorResult
 {
