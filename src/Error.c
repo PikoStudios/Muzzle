@@ -9,23 +9,23 @@ void log_status(StatusTypes type, const char *status)
     switch (type)
     {
     case STATUS_FATAL_ERROR:
-        fprintf(stderr, "\e[0;31m\e[4;31m[FATAL] :: %s\n", status);
+        fprintf(stderr, "\e[0;31m\e[4;31m[FATAL] :: %s\n\e[0m", status);
         exit(-1);
         break;
     case STATUS_WARNING:
-        printf("\e[0;33m\e[4;33m[WARNING] :: %s\n", status);
+        printf("\e[0;33m\e[4;33m[WARNING] :: %s\n\e[0m", status);
         break;
 
     case STATUS_ERROR:
-        fprintf(stderr, "\e[0;31m\e[4;31m[ERROR] :: %s\n", status);
+        fprintf(stderr, "\e[0;31m\e[4;31m[ERROR] :: %s\n\e[0m", status);
         break;
 
     case STATUS_SUCCESS:
-        printf("\e[0;32m\e[4;32m[SUCCESS] :: %s\n", status);
+        printf("\e[0;32m\e[4;32m[SUCCESS] :: %s\n\e[0m", status);
         break;
 
     case STATUS_INFO:
-        printf("\e[0;34m\e[4;34m[INFO] :: %s\n", status);
+        printf("\e[0;34m\e[4;34m[INFO] :: %s\n\e[0m", status);
         break;
 
     default:
