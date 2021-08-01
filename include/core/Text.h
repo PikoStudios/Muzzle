@@ -5,8 +5,10 @@
 #endif
 
 
-
+#include <stdio.h>					// malloc, free, fopen, fclose, ftell, fseek, fread
+#include <string.h>					// memset
 #include "../deps/fontstash/fontstash.h"
+#include "../backend.h"
 #include "../deps/fontstash/glfontstash.h"
 #include "Error.h"
 #include "tint.h"
