@@ -28,7 +28,7 @@ void OnAppletUpdate()
     };
 
     rectangle player = {
-        .height = 25,
+        .height = 50,
         .width = 25,
         .x = 25,
         .y = 25
@@ -40,7 +40,7 @@ void OnAppletUpdate()
         if (check_collision_point_rec((vec2){.x=ball.x, .y=ball.y}, player)) log_status(STATUS_INFO, "collision!");
 
         if (key_down(&applet, KEY_W)) player.y -= 5;
-        if (key_down(&applet, KEY_S)) ball.y += 5;
+        if (key_down(&applet, KEY_S)) player.y += 5;
 
         begin_drawing();
             clear_screen(BLACK);
