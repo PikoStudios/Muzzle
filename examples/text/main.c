@@ -8,7 +8,7 @@ Applet text;
 
 void OnAppletUpdate()
 {
-    font roboto = load_font("../roboto.ttf", "font2");
+    font roboto = load_font("../roboto.ttf", "roboto");
 
     while (keep_applet(text.window_handle))
     {
