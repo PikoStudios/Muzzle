@@ -8,15 +8,13 @@ Applet text;
 
 void OnAppletUpdate()
 {
-    tint my_color = {84, 84, 84, 255};
-    font_manager* manager;
-    font roboto = load_font("../roboto.ttf", manager, "font");
+    font roboto = load_font("../roboto.ttf", "font2");
 
     while (keep_applet(text.window_handle))
     {
         begin_drawing();
-            clear_screen(my_color);
-            draw_text(roboto, "Hello, world!", 30.0f, 30.0f, 12, WHITE, manager);
+            clear_screen(GRAY);
+            //draw_text(roboto, "Hello, world!", 30.0f, 30.0f, 12, WHITE);
         end_drawing(&text);
     }
     

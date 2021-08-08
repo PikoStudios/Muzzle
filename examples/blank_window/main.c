@@ -4,26 +4,25 @@
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720
 
-Applet pong;
+Applet applet;
 
 void OnAppletUpdate()
 {
-    tint my_color = {84, 84, 84, 255};
 
-    while (keep_applet(pong.window_handle))
+    while (keep_applet(applet.window_handle))
     {
         begin_drawing();
-            clear_screen(my_color);
-        end_drawing(&pong);
+            clear_screen(GRAY);
+        end_drawing(&applet);
     }
     
 }
 
 int main(void)
 {
-    pong = InitializeApplet(SCREEN_WIDTH, SCREEN_HEIGHT, "Muzzle [CORE] - Blank Window", MUZZLE_FALSE, MUZZLE_FALSE);
-    StartApplet(&pong);
+    applet = InitializeApplet(SCREEN_WIDTH, SCREEN_HEIGHT, "Muzzle [CORE] - Blank Window", MUZZLE_FALSE, MUZZLE_FALSE);
+    StartApplet(&applet);
 
-    QuitMuzzle(pong);
+    QuitMuzzle(applet);
     return 0;
 }
