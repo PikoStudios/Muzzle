@@ -14,7 +14,7 @@ void OnAppletUpdate()
     {
         begin_drawing();
             clear_screen(GRAY);
-            //draw_text(roboto, "Hello, world!", 30.0f, 30.0f, 12, WHITE);
+            draw_text(roboto, "Hello, world!", 30.0f, 30.0f, 50, WHITE);
         end_drawing(&text);
     }
     

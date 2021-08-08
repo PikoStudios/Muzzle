@@ -2,7 +2,7 @@
 
 font load_font_fs(const char* filepath, font_manager* manager, const char* name)
 {
-   int fn = fonsAddFont(manager, name, filepath);
+    int fn = fonsAddFont(manager, name, filepath);
 
     if (fn == -1)
     {
@@ -14,7 +14,8 @@ font load_font_fs(const char* filepath, font_manager* manager, const char* name)
 
 font load_font(const char* filepath, const char* name)
 {
-   int fn = fonsAddFont(__fons_context, name, filepath);
+    if (!__fons_initialized) __fons_context = glfonsCreate(512, 512, FONS_ZERO_TOPLEFT);
+    int fn = fonsAddFont(__fons_context, name, filepath);
 
 
     if (fn == -1)
@@ -36,6 +37,7 @@ void draw_text(font font_used, const char *text, float x, float y, float font_si
     fonsSetColor(__fons_context, col);
     fonsDrawText(__fons_context, x, y+font_size-6, text, NULL);
 }
+
 void draw_text_vec2(font font_used, const char *text, vec2 pos, float font_size, tint color_drawn)
 {
     draw_text(font_used, text, pos.x, pos.y, font_size, color_drawn);
