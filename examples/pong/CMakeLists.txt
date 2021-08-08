@@ -20,8 +20,9 @@ ${mz_source_dir}/tint.c
 ${mz_source_dir}/Circle.c
 ${mz_source_dir}/Input.c
 ${mz_source_dir}/Sprite.c
+${mz_source_dir}/Text.c
 )
 
 
-add_executable(main main.c ${mz_source})
+add_executable(main src/main.c ${mz_source})
 TARGET_LINK_LIBRARIES(main glfw3 opengl32 gdi32)

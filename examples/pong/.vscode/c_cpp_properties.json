@@ -1,0 +1,13 @@
+{
+    "configurations": [
+        {
+            "name": "pong",
+            "intelliSenseMode": "gcc-x86",
+            "cStandard": "c99",
+            "includePath": [
+                "${workspaceRoot}/../../include"
+            ]
+        }
+    ],
+    "version": 4
+}

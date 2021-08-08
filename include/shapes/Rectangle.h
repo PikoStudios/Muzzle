@@ -15,8 +15,8 @@ float height
 */
 typedef struct rectangle
 {
-    float X;
-    float Y;
+    float x;
+    float y;
     float width;
     float height;
 } rectangle;
