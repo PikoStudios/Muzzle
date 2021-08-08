@@ -15,9 +15,20 @@
 #include "vector.h"
 
 typedef FONScontext font_manager;
+static FONScontext* __fons_context;
 
 typedef int font;
 
-font load_font(const char* filepath, font_manager* manager, const char* name);
-void draw_text(font font_used, const char *text, float x, float y, float font_size, tint color_drawn, font_manager* manager);
-void draw_text_vec2(font font_used, const char *text, vec2 pos, float font_size, tint color_drawn, font_manager* manager);
+// Load Font
+font load_font(const char* filepath, const char* name);
+// Load Font to a Font Manager
+font load_font_fs(const char* filepath, font_manager* manager, const char* name);
+
+// Draw Text
+void draw_text(font font_used, const char *text, float x, float y, float font_size, tint color_drawn);
+void draw_text_vec2(font font_used, const char *text, vec2 pos, float font_size, tint color_drawn);
+
+
+void draw_text_fs(font font_used, const char *text, float x, float y, float font_size, tint color_drawn, font_manager* manager);
+void draw_text_vec2_fs(font font_used, const char *text, vec2 pos, float font_size, tint color_drawn, font_manager* manager);
+font_manager* get_engine_font_manager();
