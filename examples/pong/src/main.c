@@ -5,6 +5,7 @@
 #include <stdbool.h>
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720
+#define EMPTY_STRING ""
 
 Applet applet;
 
@@ -75,15 +76,14 @@ void OnAppletUpdate()
         .y = player2.y
     };
 
-    font p2sp = load_font("font.ttf", "p2sp");
-    char buf_p1[1024] = "";
-    char buf_p2[1024] = "";
+    font p2sp = load_font("../font.ttf", "p2sp");
+    char buf_p1[1024] = EMPTY_STRING;
+    char buf_p2[1024] = EMPTY_STRING;
 
 
 
     while (keep_applet(applet.window_handle))
     {
-        //if (paused && key_down(&applet, KEY_SPACE)) paused = 0;
 
         sprintf(buf_p1, "%i", p1);
         sprintf(buf_p2, "%i", p2);
