@@ -75,8 +75,7 @@ void OnAppletUpdate()
         .y = player2.y
     };
 
-    sprite line = load_sprite("C:/Users/coolg/repos/Muzzle/examples/pong/line.png");
-    font p2sp = load_font("C:/Users/coolg/repos/Muzzle/examples/pong/font.ttf", "p2sp");
+    font p2sp = load_font("font.ttf", "p2sp");
     char buf_p1[1024] = "";
     char buf_p2[1024] = "";
 
@@ -232,8 +231,6 @@ void OnAppletUpdate()
         end_drawing(&applet);
 
     }
-
-    unload_sprite(&line);
     
 }
 
