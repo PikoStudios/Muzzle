@@ -1,6 +1,7 @@
 #pragma once
 #include "Applet.h"
 #include "../backend.h"
+#include "vector.h"
 
 enum _MouseInput
 {

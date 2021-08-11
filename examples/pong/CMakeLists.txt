@@ -8,6 +8,7 @@ set(mz_source_dir "../../src")
 #could use aux_source_directory() but its better to list each file to ensure new files are compiled
 #https://stackoverflow.com/a/25077976/10415312
 
+
 set(mz_source
 ${mz_source_dir}/Applet.c
 ${mz_source_dir}/callback.c

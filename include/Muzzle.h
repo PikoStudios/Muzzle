@@ -16,6 +16,5 @@
 #include "core/Input.h"
 #include <stdlib.h>
 
+
 void QuitMuzzle(Applet applet);
-
-

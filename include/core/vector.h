@@ -18,7 +18,7 @@ typedef struct vec2_d
 {
     double x;
     double y;
-};
+} vec2_d;
 
 // Vector3 with doubles
 typedef struct vec3_d
@@ -26,4 +26,4 @@ typedef struct vec3_d
     double x;
     double y;
     double z;
-} vec3;
+} vec3_d;
