@@ -15,7 +15,6 @@
 #include "vector.h"
 
 typedef FONScontext font_manager;
-static FONScontext* __fons_context;
 static int __fons_initialized = 0;
 
 typedef struct font

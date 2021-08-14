@@ -30,12 +30,12 @@ void draw_text(font font_used, const char *text, float x, float y, float font_si
 {
     unsigned int col = glfonsRGBA(color_drawn.r, color_drawn.g, color_drawn.b, color_drawn.a);
 
-    fonsClearState(__fons_context);
-    fonsSetFont(__fons_context, font_used.fn);
+    fonsClearState(font_used.context);
+    fonsSetFont(font_used.context, font_used.fn);
 
-    fonsSetSize(__fons_context, font_size);
-    fonsSetColor(__fons_context, col);
-    fonsDrawText(__fons_context, x, y+font_size-6, text, NULL);
+    fonsSetSize(font_used.context, font_size);
+    fonsSetColor(font_used.context, col);
+    fonsDrawText(font_used.context, x, y+font_size-6, text, NULL);
 }
 
 void draw_text_vec2(font font_used, const char *text, vec2 pos, float font_size, tint color_drawn)
@@ -59,9 +59,4 @@ void draw_text_fs(font font_used, const char *text, float x, float y, float font
 void draw_text_vec2_fs(font font_used, const char *text, vec2 pos, float font_size, tint color_drawn, font_manager* manager)
 {
     draw_text_fs(font_used, text, pos.x, pos.y, font_size, color_drawn, manager);
-}
-
-font_manager* get_engine_font_manager()
-{
-    return __fons_context;
 }
