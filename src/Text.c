@@ -9,13 +9,13 @@ font load_font_fs(const char* filepath, font_manager* manager, const char* name)
         log_status(STATUS_FATAL_ERROR, "Failed to load Font :: Point of Failure\n\tMUZZLE::TEXT::LOAD_FONT");
     }
 
-    return fn;
+    return (font) {fn, manager};
 }
 
 font load_font(const char* filepath, const char* name)
 {
-    if (!__fons_initialized) __fons_context = glfonsCreate(512, 512, FONS_ZERO_TOPLEFT);
-    int fn = fonsAddFont(__fons_context, name, filepath);
+    FONScontext* context = glfonsCreate(512, 512, FONS_ZERO_TOPLEFT);
+    int fn = fonsAddFont(context, name, filepath);
 
 
     if (fn == -1)
@@ -23,7 +23,7 @@ font load_font(const char* filepath, const char* name)
         log_status(STATUS_FATAL_ERROR, "Failed to load Font :: Point of Failure\n\tMUZZLE::TEXT::LOAD_FONT");
     }
 
-    return fn;
+    return (font) {fn, context};
 }
 
 void draw_text(font font_used, const char *text, float x, float y, float font_size, tint color_drawn)
@@ -31,7 +31,7 @@ void draw_text(font font_used, const char *text, float x, float y, float font_si
     unsigned int col = glfonsRGBA(color_drawn.r, color_drawn.g, color_drawn.b, color_drawn.a);
 
     fonsClearState(__fons_context);
-    fonsSetFont(__fons_context, font_used);
+    fonsSetFont(__fons_context, font_used.fn);
 
     fonsSetSize(__fons_context, font_size);
     fonsSetColor(__fons_context, col);
@@ -49,7 +49,7 @@ void draw_text_fs(font font_used, const char *text, float x, float y, float font
     unsigned int col = glfonsRGBA(color_drawn.r, color_drawn.g, color_drawn.b, color_drawn.a);
 
     fonsClearState(manager);
-    fonsSetFont(manager, font_used);
+    fonsSetFont(manager, font_used.fn);
 
     fonsSetSize(manager, font_size);
     fonsSetColor(manager, col);

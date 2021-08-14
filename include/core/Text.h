@@ -18,7 +18,11 @@ typedef FONScontext font_manager;
 static FONScontext* __fons_context;
 static int __fons_initialized = 0;
 
-typedef int font;
+typedef struct font
+{
+    int fn;
+    FONScontext* context;
+} font;
 
 // Load Font
 font load_font(const char* filepath, const char* name);
