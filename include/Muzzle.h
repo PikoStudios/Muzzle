@@ -16,11 +16,4 @@
 #include "core/Input.h"
 #include <stdlib.h>
 
-#ifdef _cplusplus
-    #define __QMF_TYPE extern "C" void
-#else
-    #define __QMF_TYPE void
-#endif
-
-
-__QMF_TYPE QuitMuzzle(Applet applet);
+void QuitMuzzle(Applet applet);

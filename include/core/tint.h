@@ -1,8 +1,6 @@
 #pragma once
 
-#ifdef _cplusplus
-    extern "C" {
-#endif
+#define RGBA(r,g,b,a) (tint){r,g,b,a}
 
 
 /*
@@ -18,6 +16,7 @@ typedef struct tint
     unsigned int a;
 } tint;
 
+// still here to not break old code
 tint rgb(unsigned int red,unsigned int green,unsigned int blue,unsigned int alpha);
 
 #define WHITE       (tint){255,255,255,255}
@@ -32,7 +31,3 @@ tint rgb(unsigned int red,unsigned int green,unsigned int blue,unsigned int alph
 #define YELLOW      (tint){255,255,51,255}
 #define USAF_BLUE   (tint){0,48,143,255}
 #define BLACK       (tint){0,0,0,255}
-
-#ifdef _cplusplus
-}
-#endif

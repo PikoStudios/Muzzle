@@ -3,10 +3,6 @@
 #include "../backend.h"
 #include "vector.h"
 
-#ifdef _cplusplus
-    extern "C" {
-#endif
-
 enum _MouseInput
 {
     MOUSE_LEFT = 0,
@@ -122,7 +118,3 @@ int mouse_up(Applet *applet, MouseInput button);
 int mouse_down(Applet *applet, MouseInput button);
 // int mouse_pressed(Applet *applet, MouseInput key);
 // int mouse_released(Applet *applet,  MouseInput key);
-
-#ifdef _cplusplus
-}
-#endif

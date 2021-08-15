@@ -1,9 +1,5 @@
 #pragma once
 
-#ifdef _cplusplus
-    extern "C" {
-#endif
-
 typedef struct vec2
 {
     float x;
@@ -31,8 +27,3 @@ typedef struct vec3_d
     double y;
     double z;
 } vec3_d;
-
-
-#ifdef _cplusplus
-}
-#endif
