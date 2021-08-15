@@ -3,6 +3,9 @@
 #include "../core/tint.h"
 #include "../core/vector.h"
 
+#ifdef _cplusplus
+    extern "C" {
+#endif
 
 
 /* 
@@ -46,4 +49,6 @@ tint color_drawn
 */
 void draw_rectangle_vec2(vec2 pos, vec2 size, tint color_drawn);
 
-
+#ifdef _cplusplus
+}
+#endif

@@ -3,6 +3,7 @@
 animation load_animation(const char** locations, int size, vec2 position)
 {
     sprite** sprites = malloc(sizeof(sprite*) * size);
+
     if (sprites == NULL)
     {
         log_status(STATUS_FATAL_ERROR, "Failed to Allocate Enough Memory for Sprites :: Point of Failure\n\tMUZZLE::ANIMATION::LOAD_ANIMATION::SPRITES::MALLOC");

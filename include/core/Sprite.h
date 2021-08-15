@@ -8,6 +8,10 @@
 #include "tint.h"
 #include "vector.h"
 
+#ifdef _cplusplus
+    extern "C" {
+#endif
+
 struct _mz_sprite
 {
     unsigned int sprite_id;
@@ -27,3 +31,8 @@ sprite *load_sprite_ptr(const char *filepath);
 void unload_sprite(sprite *data);
 void draw_sprite(sprite *data, int x, int y, float scale, float rotation, tint color_drawn);
 void draw_sprite_vec2(sprite *data, vec2 pos, float scale, float rotation, tint color_drawn);
+
+
+#ifdef _cplusplus
+}
+#endif

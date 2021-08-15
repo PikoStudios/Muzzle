@@ -14,7 +14,9 @@ typedef struct animation
     vec2 position;
 } animation;
 
-
+#ifdef _cplusplus
+    extern "C" {
+#endif
 
 /*
 * load_animation - Creates a animation struct
@@ -39,5 +41,10 @@ void play_animation(animation* data, long target_fps, float scale, float rotatio
 * @return Nothing
 */
 void unload_animation(animation* data);
+
+
+#ifdef _cplusplus
+}
+#endif
 
 

@@ -2,6 +2,10 @@
 #include <stdio.h> // required for fprintf()
 #include <stdlib.h> // required for exit() and stderr
 
+#ifdef _cplusplus
+    extern "C" {
+#endif
+
 typedef enum StatusTypes
 {
     // warning that does not affect the application much
@@ -36,3 +40,7 @@ StatusTypes type
 const char *status
 */
 void log_status(StatusTypes type, const char *status);
+
+#ifdef _cplusplus
+}
+#endif

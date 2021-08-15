@@ -4,6 +4,10 @@
 #include "callback.h"
 #include "../backend.h"
 
+#ifdef _cplusplus
+    extern "C" {
+#endif
+
 
 typedef struct Applet
 {
@@ -28,3 +32,7 @@ void StartApplet(Applet *self);
 * @return Applet
 */
 Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TITLE, int RESIZEABLE, int VSYNC);
+
+#ifdef _cplusplus
+}
+#endif

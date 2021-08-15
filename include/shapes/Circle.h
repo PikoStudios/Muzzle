@@ -5,6 +5,10 @@
 #include "../core/vector.h"
 #include "../core/tint.h"
 
+#ifdef _cplusplus
+    extern "C" {
+#endif
+
 struct _mz_circle
 {
     int x,y;
@@ -47,3 +51,7 @@ float radius,
 tint color_drawn
 */
 void draw_circle_vec2(vec2 pos, float radius, tint color_drawn);
+
+#ifdef _cplusplus
+}
+#endif

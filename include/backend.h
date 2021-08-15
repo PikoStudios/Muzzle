@@ -18,6 +18,4 @@
 
 #include "../deps/glfw/include/GLFW/glfw3.h"
 
-
-
 typedef GLFWwindow* MUZZLE_WINDOW;
