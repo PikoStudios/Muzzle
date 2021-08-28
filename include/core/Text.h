@@ -17,6 +17,8 @@
 typedef FONScontext font_manager;
 static int __fons_initialized = 0;
 
+static char __char_f_buffer[BUFFER_LENGTH];
+
 typedef struct font
 {
     int fn;
@@ -32,7 +34,9 @@ font load_font_fs(const char* filepath, font_manager* manager, const char* name)
 void draw_text(font font_used, const char *text, float x, float y, float font_size, tint color_drawn);
 void draw_text_vec2(font font_used, const char *text, vec2 pos, float font_size, tint color_drawn);
 
+const char char_f(const char* text);
+
+const char get_engine_char_f_buffer();
 
 void draw_text_fs(font font_used, const char *text, float x, float y, float font_size, tint color_drawn, font_manager* manager);
 void draw_text_vec2_fs(font font_used, const char *text, vec2 pos, float font_size, tint color_drawn, font_manager* manager);
-font_manager* get_engine_font_manager();

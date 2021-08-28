@@ -60,3 +60,14 @@ void draw_text_vec2_fs(font font_used, const char *text, vec2 pos, float font_si
 {
     draw_text_fs(font_used, text, pos.x, pos.y, font_size, color_drawn, manager);
 }
+
+const char char_f(const char* text)
+{
+    sprintf(__char_f_buffer, text);
+    return __char_f_buffer;
+}
+
+const char get_engine_char_f_buffer()
+{
+    return __char_f_buffer;
+}
