@@ -47,10 +47,7 @@ Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TI
     } 
     else glfwSwapInterval(0);
 
-// TODO: REMOVE THIS IF STATEMENT. NOT REQUIRED
-
-    if (RESIZEABLE == MUZZLE_TRUE) glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
-    else glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+    glfwSetWindowAttrib(buf.window_handle, GLFW_RESIZABLE, RESIZEABLE);
 
     glfwSetWindowPos(buf.window_handle, 230,230);
 
