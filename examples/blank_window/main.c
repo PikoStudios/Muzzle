@@ -20,7 +20,7 @@ void OnAppletUpdate()
 
 int main(void)
 {
-    applet = InitializeApplet(SCREEN_WIDTH, SCREEN_HEIGHT, "Muzzle [CORE] - Blank Window", MUZZLE_FALSE, MUZZLE_FALSE);
+    applet = InitializeApplet(SCREEN_WIDTH, SCREEN_HEIGHT, "Muzzle [CORE] - Blank Window", MUZZLE_FALSE, MUZZLE_TRUE);
     StartApplet(&applet);
 
     QuitMuzzle(applet);
