@@ -22,3 +22,8 @@ void draw_circle_vec2(vec2 pos, float radius, tint color_drawn)
 {
     draw_circle((int)(pos.x), (int)(pos.y), radius, color_drawn);
 }
+
+void draw_circle_t(vec2 pos, float radius, tint color_drawn)
+{
+    draw_circle((int)pos.x, (int)pos.y, radius, color_drawn);
+}

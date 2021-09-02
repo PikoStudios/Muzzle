@@ -1,4 +1,5 @@
 #pragma once
+#include "error.h"
 
 #define RGBA(r,g,b,a) (tint){r,g,b,a}
 
