@@ -33,3 +33,11 @@ void update_viewport(Applet *applet, int w, int h)
         glViewport(0,0,applet->width, applet->height);
     }
 }
+
+void update_viewport_lite(Applet *applet, int w, int h)
+{
+    glfwGetWindowSize(applet->window_handle, &w, &h);
+    applet->width = w;
+    applet->height = h;
+    glViewport(0,0, applet->width, applet->height);
+}
