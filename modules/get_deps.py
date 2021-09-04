@@ -1,7 +1,7 @@
 import subprocess
 import platform
 
-def main():
+def main() -> None :
     if (platform.system() == 'Windows'):
         print(f"OS: Windows {platform.release()} {platform.version()}")
         print("Compiling GLFW")
