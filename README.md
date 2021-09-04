@@ -17,12 +17,10 @@ Applet blank_window;
 
 void OnAppletUpdate()
 {
-    tint my_color = {35, 35, 142, 1};
-
-    while (!glfwWindowShouldClose(blank_window.window_handle))
+    while (keep_applet(blank_window.window_handle))
     {
         begin_drawing();
-            clear_screen(my_color); 
+            clear_screen(GRAY);
         end_drawing(&blank_window);
     }
     
@@ -30,7 +28,7 @@ void OnAppletUpdate()
 
 int main(void)
 {
-    blank_window = InitializeApplet(SCREEN_WIDTH, SCREEN_HEIGHT, "Muzzle [CORE] - Blank Window", MUZZLE_FALSE, MUZZLE_FALSE);
+    blank_window = InitializeApplet(SCREEN_WIDTH, SCREEN_HEIGHT, "Muzzle [CORE] - Blank Window", MUZZLE_FALSE, MUZZLE_TRUE);
     StartApplet(&blank_window);
 
     QuitMuzzle(blank_window);
@@ -43,7 +41,13 @@ int main(void)
 * Creating a Window
 * Clearing the Screen
 * Drawing Rectangle
-** dont worry thats not all, im just a little lazy to type them all**
+* Keyboard Input
+* Mouse Input
+* Sprite Rendering
+* Drawing Circle
+* Loop
+* Text Rendering
+* Font Loading
 
 
 ## How to build
@@ -61,4 +65,3 @@ Windows + MinGW:
 ```
 $ gcc main.c -I[Muzzle Install path] -L[Path to folder with GLFW3 Lib Files] -lglfw3 -lopengl32 -lgdi32 -o main.exe
 ```
-
