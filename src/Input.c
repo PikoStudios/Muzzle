@@ -38,3 +38,20 @@ double get_mouse_y(Applet* applet)
 {
     return get_mouse_posititon(applet).y;
 }
+
+vec2 get_mouse_position_vec2(Applet* applet)
+{
+    vec2 buf;
+    glfwGetCursorPos(applet->window_handle, &buf.x, &buf.y);
+    return buf;
+}
+
+float get_mouse_xf(Applet* applet)
+{
+    return get_mouse_position_vec2(applet).x;
+}
+
+float get_mouse_yf(Applet* applet)
+{
+    return get_mouse_position_vec2(applet).y;
+}

@@ -118,3 +118,13 @@ int mouse_up(Applet *applet, MouseInput button);
 int mouse_down(Applet *applet, MouseInput button);
 // int mouse_pressed(Applet *applet, MouseInput key);
 // int mouse_released(Applet *applet,  MouseInput key);
+
+vec2_d get_mouse_posititon(Applet* applet);
+
+double get_mouse_x(Applet* applet);
+double get_mouse_y(Applet* applet);
+
+vec2 get_mouse_position_vec2(Applet* applet);
+
+float get_mouse_xf(Applet* applet);
+float get_mouse_yf(Applet* applet);
