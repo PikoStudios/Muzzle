@@ -17,7 +17,7 @@ Do you want to contribute to the Muzzle Game Framework? <br /> Please read this 
 Muzzle follows PascalCase and snake_case.
 
 **When to follow PascalCase** <br>
-PascalCase Should only be followed for Initialization/Exiting functions. For example, the code to show a blank window:
+PascalCase Should only be followed for Initialization/Exiting functions and types. For example, the code to show a blank window:
 ```c
 #define MUZZLE_DEPS
 #include <Muzzle.h>
