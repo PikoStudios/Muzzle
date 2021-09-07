@@ -10,7 +10,7 @@ Do you want to contribute to the Muzzle Game Framework? <br /> Please read this 
 * `Other` - Of course this list is not the only stuff you can contibute to. These are just suggestions
 
 ## Resources
-[Naming Scheme]()
+[Naming Scheme](https://github.com/PikoStudios/Muzzle/blob/main/CONTRIBUTING.md#naming-scheme)
 
 ## Naming Scheme
 ***
