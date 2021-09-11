@@ -36,7 +36,5 @@ void draw_text_vec2(font font_used, const char *text, vec2 pos, float font_size,
 
 const char char_f(const char* text);
 
-const char get_engine_char_f_buffer();
-
 void draw_text_fs(font font_used, const char *text, float x, float y, float font_size, tint color_drawn, font_manager* manager);
 void draw_text_vec2_fs(font font_used, const char *text, vec2 pos, float font_size, tint color_drawn, font_manager* manager);
