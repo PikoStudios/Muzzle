@@ -3,6 +3,8 @@
 
 
 [Discord Server](https://discord.gg/Rw2FdYw5dK) | [Twitter](https://twitter.com/piko_studios)
+
+![Discord](https://img.shields.io/discord/784899614410670090?color=%23AAA62C&label=PikoStudios%20Discord%20Server&style=flat-square)
 ***
 Muzzle is a Open-Source C99 Game Framework
 
