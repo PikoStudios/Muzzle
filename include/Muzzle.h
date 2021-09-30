@@ -5,6 +5,10 @@
     #include "windows.h"
 #endif
 
+#ifdef MZ_DEPS_COLLISION
+    #include "collision/mz_collision.h"
+#endif
+
 #include "core/Applet.h"
 #include "core/vector.h"
 #include "core/Drawing.h"
