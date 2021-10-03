@@ -30,12 +30,13 @@ typedef struct collision_manager
     int updates;
 } collision_manager;
 
+typedef sr_ray2 ray2;
+
 void begin_collision_manager(collision_manager* manager);
 void end_collision_manager(collision_manager* manager);
 
-void move_and_slide(collision_manager* manager);
+void move_and_slide(rectangle *recs, int recs_length, vec2 hitbox, vec2 *velocity, vec2 *pos, collision_manager* manager);
 
-#define MZ_DEPS_COLLISION
 #ifdef MZ_DEPS_COLLISION
 
 void begin_collision_manager(collision_manager* manager)
