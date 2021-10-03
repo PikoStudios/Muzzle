@@ -34,9 +34,6 @@ typedef struct collision_manager
 void begin_collision_manager(collision_manager* manager);
 void end_collision_manager(collision_manager* manager);
 
-
-#define MZ_DEPS_COLLISION
-
 #ifdef MZ_DEPS_COLLISION
 
 void begin_collision_manager(collision_manager* manager)
