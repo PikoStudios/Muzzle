@@ -26,14 +26,16 @@ typedef struct collision_manager
     double now;
 
     double fps;
-
-    int frames;
+    
     int updates;
 } collision_manager;
 
 void begin_collision_manager(collision_manager* manager);
 void end_collision_manager(collision_manager* manager);
 
+void move_and_slide(collision_manager* manager);
+
+#define MZ_DEPS_COLLISION
 #ifdef MZ_DEPS_COLLISION
 
 void begin_collision_manager(collision_manager* manager)
@@ -51,11 +53,20 @@ void end_collision_manager(collision_manager* manager)
 
 #ifdef MZ_COLLISION_VERBOSE
         fflush(stdout);
-        printf("Collision FPS: %f, Collision Updates: %f, Collision FPS Lock: %f\r", manager->frames, manager->updates, manager->fps);
+        printf("Collision Updates: %f, Collision FPS Lock: %f\r", manager->updates, manager->fps);
 #endif
 
         manager->updates = 0;
-        manager->frames = 0;
+    }
+}
+
+void move_and_slide(rectangle *recs, int recs_length, vec2 hitbox, vec2 *velocity, vec2 *pos, collision_manager* manager)
+{
+    while (manager->delta >= 1.0)
+    {
+        sr_move_and_slide(recs, recs_length, hitbox, velocity, pos, manager->delta);
+        manager->updates++;
+        manager->delta--;
     }
 }
 
