@@ -43,6 +43,7 @@ elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     TARGET_LINK_LIBRARIES(main glfw Gl m)
 
 else ()
+# Default to Unix
     message(STATUS "Checking OS - not found (Unix)")
     TARGET_LINK_LIBRARIES(main glfw Gl m)
 endif ()
