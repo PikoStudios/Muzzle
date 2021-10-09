@@ -25,6 +25,9 @@ jobs:
       
     - name: Install libxinerama-dev
       run: sudo apt-get install -y libxinerama-dev
+      
+    - name: Install libxcursor-dev
+      run: sudo apt-get install -y libxcursor-dev
     
     - name: Create Build Folder for GLFW
       working-directory: deps/glfw
