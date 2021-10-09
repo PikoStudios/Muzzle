@@ -51,7 +51,7 @@ jobs:
 
     - name: Build blank_window
       working-directory: examples/blank_window
-      run: cmake ..
+      run: cmake .
       
     - name: Run Make
       working-directory: examples/blank_window
