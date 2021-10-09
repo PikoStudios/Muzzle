@@ -16,6 +16,10 @@
 #define MUZZLE_FALSE 0
 #define MUZZLE_TRUE 1
 
-#include "../deps/glfw/include/GLFW/glfw3.h"
+#ifdef MZ_DEPS_USE_GLOBAL
+    #include <GLFW/glfw3.h>
+#else
+    #include "../deps/glfw/include/GLFW/glfw3.h"
+#endif
 
 typedef GLFWwindow* MUZZLE_WINDOW;
