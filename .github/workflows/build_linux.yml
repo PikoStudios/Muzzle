@@ -28,7 +28,10 @@ jobs:
       
     - name: Install libxcursor-dev
       run: sudo apt-get install -y libxcursor-dev
-    
+      
+    - name: Install libxi-dev
+      run: sudo apt-get install -y libxi-dev
+      
     - name: Create Build Folder for GLFW
       working-directory: deps/glfw
       run: mkdir build
