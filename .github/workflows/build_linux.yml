@@ -20,17 +20,8 @@ jobs:
       with:
           submodules: recursive
           
-    - name: Install libxrandr-dev
-      run: sudo apt-get install -y libxrandr-dev
-      
-    - name: Install libxinerama-dev
-      run: sudo apt-get install -y libxinerama-dev
-      
-    - name: Install libxcursor-dev
-      run: sudo apt-get install -y libxcursor-dev
-      
-    - name: Install libxi-dev
-      run: sudo apt-get install -y libxi-dev
+    - name: Install deps
+      run: sudo apt-get install -y mesa-common-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev
       
     - name: Create Build Folder for GLFW
       working-directory: deps/glfw
