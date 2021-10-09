@@ -46,7 +46,7 @@ jobs:
       
     - name: Install GLFW
       working-directory: deps/glfw/build
-      run: make install
+      run: sudo make install
       
 
     - name: Build blank_window
