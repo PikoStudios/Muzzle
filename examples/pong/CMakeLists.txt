@@ -11,6 +11,8 @@ set(mz_source_dir ${MUZZLE_ROOT}/src)
 #could use aux_source_directory() but its better to list each file to ensure new files are compiled
 #https://stackoverflow.com/a/25077976/10415312
 
+set(GLFW_LINUX_NAME glfw)
+
 set(mz_source
 ${mz_source_dir}/Applet.c
 ${mz_source_dir}/callback.c
@@ -40,10 +42,10 @@ elseif (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 
 elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     message(STATUS "Checking OS - found (Linux)")
-    TARGET_LINK_LIBRARIES(main glfw GL m)
+    TARGET_LINK_LIBRARIES(main ${GLFW_LINUX_NAME} GL m)
 
 else ()
 # Default to Unix
     message(STATUS "Checking OS - not found (Unix)")
-    TARGET_LINK_LIBRARIES(main glfw GL m)
+    TARGET_LINK_LIBRARIES(main ${GLFW_LINUX_NAME} GL m)
 endif ()
