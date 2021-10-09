@@ -1,3 +1,4 @@
+#define MUZZLE_DEPS
 #include <Muzzle.h>
 #include <stdio.h>
 #define SCREEN_WIDTH 1280
