@@ -40,7 +40,7 @@ jobs:
       run: sudo make install
       
     - name: Show GLFW
-      working-directory: deps/glfw/build
+      working-directory: deps/glfw/lib
       run: ls
       
 
