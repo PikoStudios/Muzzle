@@ -56,7 +56,8 @@
 		"fontstash.h": "c",
 		"glfontstash.h": "c",
 		"stb_truetype.h": "c",
-		"input.h": "c"
+		"input.h": "c",
+		"glfw3.h": "c"
 	},
 	"C_Cpp.dimInactiveRegions": true
 }
