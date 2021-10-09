@@ -39,6 +39,10 @@ jobs:
       working-directory: deps/glfw/build
       run: sudo make install
       
+    - name: Show GLFW
+      working-directory: deps/glfw/build
+      run: ls
+      
 
     - name: Build blank_window
       working-directory: examples/blank_window
