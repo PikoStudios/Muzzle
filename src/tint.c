@@ -1,13 +1,17 @@
 #include "core/tint.h"
 
-// rgb() IS A DEPRECATED FUNCTION, INSTEAD USE THE RGBA() MACRO
-tint rgb(unsigned int red,unsigned int green,unsigned int blue,unsigned int alpha)
+
+tint hex_to_rgb(unsigned int hex[6], unsigned int alpha)
 {
+    unsigned int r = hex[0] + hex[1];
+    unsigned int b = hex[2] + hex[3];
+    unsigned int g = hex[4] + hex[5];
+
     return (tint)
     {
-        .r = red,
-        .g = green,
-        .b = blue,
+        .r = r,
+        .g = g,
+        .b = b,
         .a = alpha
     };
 }

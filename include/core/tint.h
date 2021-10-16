@@ -17,8 +17,7 @@ typedef struct tint
     unsigned int a;
 } tint;
 
-// still here to not break old code
-tint rgb(unsigned int red,unsigned int green,unsigned int blue,unsigned int alpha);
+tint hex_to_rgb(unsigned int hex[6], unsigned int alpha);
 
 #define WHITE       (tint){255,255,255,255}
 #define GRAY        (tint){84, 84, 84, 255}

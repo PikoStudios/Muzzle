@@ -13,6 +13,7 @@ typedef enum StatusTypes
     STATUS_SUCCESS,
     STATUS_INFO,
 } StatusTypes;
+
 typedef enum ErrorResult
 {
     FAILED,
