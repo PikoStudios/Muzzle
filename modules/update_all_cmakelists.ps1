@@ -1,7 +1,7 @@
 $base = "..\CMakeLists.txt"
 $example_dir = "..\examples"
 
-$examples = "..\examples\blank_window\", "..\examples\circle\", "..\examples\collision\", "..\examples\input\", "..\examples\moveable_square\", "..\examples\pong\", "..\examples\rectangle\", "..\examples\resizing\", "..\examples\sprites\", "..\examples\text\"
+$examples = "..\examples\blank_window\", "..\examples\circle\", "..\examples\collision\", "..\examples\input\", "..\examples\moveable_square\", "..\examples\pong\", "..\examples\rectangle\", "..\examples\resizing\", "..\examples\sprites\", "..\examples\text\", "..\examples\hex_to_rgb\"
 
 Remove-Item -Path $example_dir\*\CMakeLists.txt -Verbose
 
