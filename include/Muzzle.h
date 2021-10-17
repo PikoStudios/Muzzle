@@ -18,6 +18,7 @@
 #include "shapes/Circle.h"
 #include "core/Text.h"
 #include "core/Input.h"
+#include "core/Time.h"
 #include <stdlib.h>
 
 void QuitMuzzle(Applet applet);
