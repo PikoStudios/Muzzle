@@ -1,0 +1,59 @@
+Detecting CXX compiler ABI info failed to compile with the following output:
+Change Dir: C:/Users/coolg/repos/Muzzle/examples/hex_to_rgb/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:\raylib\mingw\bin\mingw32-make.exe cmTC_d374f/fast && C:/raylib/mingw/bin/mingw32-make  -f CMakeFiles\cmTC_d374f.dir\build.make CMakeFiles/cmTC_d374f.dir/build
+mingw32-make[1]: Entering directory 'C:/Users/coolg/repos/Muzzle/examples/hex_to_rgb/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_d374f.dir/CMakeCXXCompilerABI.cpp.o
+C:\devkitPro\msys2\usr\bin\g++.exe   -v -o CMakeFiles\cmTC_d374f.dir\CMakeCXXCompilerABI.cpp.o -c "C:\Program Files\CMake\share\cmake-3.19\Modules\CMakeCXXCompilerABI.cpp"
+Using built-in specs.
+COLLECT_GCC=/opt/devkitpro/msys2/usr/bin/g++
+Target: x86_64-pc-msys
+Configured with: /c/_/S/gcc/src/gcc-10.2.0/configure --build=x86_64-pc-msys --prefix=/usr --libexecdir=/usr/lib --enable-bootstrap --enable-shared --enable-shared-libgcc --enable-static --enable-version-specific-runtime-libs --with-arch=x86-64 --with-tune=generic --disable-multilib --enable-__cxa_atexit --with-dwarf2 --enable-languages=c,c++,fortran,lto --enable-graphite --enable-threads=posix --enable-libatomic --enable-libgomp --disable-libitm --enable-libquadmath --enable-libquadmath-support --disable-libssp --disable-win32-registry --disable-symvers --with-gnu-ld --with-gnu-as --disable-isl-version-check --enable-checking=release --without-libiconv-prefix --without-libintl-prefix --with-system-zlib --enable-linker-build-id --with-default-libstdcxx-abi=gcc4-compatible --enable-libstdcxx-filesystem-ts
+Thread model: posix
+Supported LTO compression algorithms: zlib
+gcc version 10.2.0 (GCC) 
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles\cmTC_d374f.dir\CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+ /opt/devkitpro/msys2/usr/bin/../lib/gcc/x86_64-pc-msys/10.2.0/cc1plus.exe -quiet -v -iprefix /opt/devkitpro/msys2/usr/bin/../lib/gcc/x86_64-pc-msys/10.2.0/ -idirafter /opt/devkitpro/msys2/usr/bin/../lib/gcc/x86_64-pc-msys/10.2.0/../../../../lib/../include/w32api -idirafter /opt/devkitpro/msys2/usr/bin/../lib/gcc/../../include/w32api C:\Program Files\CMake\share\cmake-3.19\Modules\CMakeCXXCompilerABI.cpp -quiet -dumpbase C:\Program Files\CMake\share\cmake-3.19\Modules\CMakeCXXCompilerABI.cpp -mtune=generic -march=x86-64 -auxbase-strip CMakeFiles\cmTC_d374f.dir\CMakeCXXCompilerABI.cpp.o -version -o /home/coolg/AppData/Local/Temp/cc0B2aCV.s
+GNU C++14 (GCC) version 10.2.0 (x86_64-pc-msys)
+	compiled by GNU C version 10.2.0, GMP version 6.2.0, MPFR version 4.1.0, MPC version 1.1.0, isl version isl-0.22.1-GMP
+
+warning: GMP header version 6.2.0 differs from library version 6.2.1.
+warning: MPC header version 1.1.0 differs from library version 1.2.1.
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+ignoring nonexistent directory "/opt/devkitpro/msys2/usr/bin/../lib/gcc/x86_64-pc-msys/10.2.0/../../../../x86_64-pc-msys/include"
+ignoring duplicate directory "/opt/devkitpro/msys2/usr/bin/../lib/gcc/../../lib/gcc/x86_64-pc-msys/10.2.0/include/c++"
+ignoring duplicate directory "/opt/devkitpro/msys2/usr/bin/../lib/gcc/../../lib/gcc/x86_64-pc-msys/10.2.0/include/c++/x86_64-pc-msys"
+ignoring duplicate directory "/opt/devkitpro/msys2/usr/bin/../lib/gcc/../../lib/gcc/x86_64-pc-msys/10.2.0/include/c++/backward"
+ignoring duplicate directory "/opt/devkitpro/msys2/usr/bin/../lib/gcc/../../lib/gcc/x86_64-pc-msys/10.2.0/include"
+ignoring nonexistent directory "/usr/local/include"
+ignoring duplicate directory "/opt/devkitpro/msys2/usr/bin/../lib/gcc/../../lib/gcc/x86_64-pc-msys/10.2.0/include-fixed"
+ignoring nonexistent directory "/opt/devkitpro/msys2/usr/bin/../lib/gcc/../../lib/gcc/x86_64-pc-msys/10.2.0/../../../../x86_64-pc-msys/include"
+ignoring duplicate directory "/opt/devkitpro/msys2/usr/bin/../lib/gcc/../../include/w32api"
+#include "..." search starts here:
+#include <...> search starts here:
+ /opt/devkitpro/msys2/usr/bin/../lib/gcc/x86_64-pc-msys/10.2.0/include/c++
+ /opt/devkitpro/msys2/usr/bin/../lib/gcc/x86_64-pc-msys/10.2.0/include/c++/x86_64-pc-msys
+ /opt/devkitpro/msys2/usr/bin/../lib/gcc/x86_64-pc-msys/10.2.0/include/c++/backward
+ /opt/devkitpro/msys2/usr/bin/../lib/gcc/x86_64-pc-msys/10.2.0/include
+ /opt/devkitpro/msys2/usr/bin/../lib/gcc/x86_64-pc-msys/10.2.0/include-fixed
+ /usr/include
+ /opt/devkitpro/msys2/usr/bin/../lib/gcc/x86_64-pc-msys/10.2.0/../../../../lib/../include/w32api
+End of search list.
+GNU C++14 (GCC) version 10.2.0 (x86_64-pc-msys)
+	compiled by GNU C version 10.2.0, GMP version 6.2.0, MPFR version 4.1.0, MPC version 1.1.0, isl version isl-0.22.1-GMP
+
+warning: GMP header version 6.2.0 differs from library version 6.2.1.
+warning: MPC header version 1.1.0 differs from library version 1.2.1.
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+Compiler executable checksum: 0944e27bf3250bb1140b30cee6787cf9
+C:\Program Files\CMake\share\cmake-3.19\Modules\CMakeCXXCompilerABI.cpp:5:10: fatal error: CMakeCompilerABI.h: No such file or directory
+    5 | #include "CMakeCompilerABI.h"
+      |          ^~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+mingw32-make[1]: *** [CMakeFiles\cmTC_d374f.dir\build.make:84: CMakeFiles/cmTC_d374f.dir/CMakeCXXCompilerABI.cpp.o] Error 1
+mingw32-make[1]: Leaving directory 'C:/Users/coolg/repos/Muzzle/examples/hex_to_rgb/build/CMakeFiles/CMakeTmp'
+mingw32-make: *** [Makefile:139: cmTC_d374f/fast] Error 2
+
+
+
+

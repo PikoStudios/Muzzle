@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.18)
 
 project(Muzzle)
-set(MUZZLE_ROOT "../Muzzle")
+set(MUZZLE_ROOT "../..")
 set(MUZZLE_LIB_FOLDER ${MUZZLE_ROOT}/deps)
 
 INCLUDE_DIRECTORIES(${MUZZLE_ROOT}/include)
@@ -26,7 +26,7 @@ ${mz_source_dir}/Sprite.c
 ${mz_source_dir}/Text.c
 )
 
-add_executable(main ../Muzzle/examples/blank_window/main.c ${mz_source})
+add_executable(main main.c ${mz_source})
 
 message(STATUS "Checking OS")
 
