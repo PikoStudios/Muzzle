@@ -57,7 +57,8 @@
 		"glfontstash.h": "c",
 		"stb_truetype.h": "c",
 		"input.h": "c",
-		"glfw3.h": "c"
+		"glfw3.h": "c",
+		"sr_resolve.h": "c"
 	},
 	"C_Cpp.dimInactiveRegions": true
 }

@@ -22,4 +22,10 @@
     #include "../deps/glfw/include/GLFW/glfw3.h"
 #endif
 
+#ifdef __cplusplus
+    #define __MZ_TYPE_WRAPPER(x) x
+#else
+    #define __MZ_TYPE_WRAPPER(x) (x)
+#endif
+
 typedef GLFWwindow* MUZZLE_WINDOW;
