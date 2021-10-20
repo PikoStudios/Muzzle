@@ -1,6 +1,6 @@
 [submodule "deps/glfw"]
 	path = deps/glfw
 	url = https://github.com/glfw/glfw
-[submodule "_sr_resolve_muzzle"]
-	path = deps/sr_resolve_pks
+[submodule "muzzle_sr_resolve"]
+	path = deps/sr_resolve
 	url = https://github.com/pikostudios/sr_resolve_muzzle

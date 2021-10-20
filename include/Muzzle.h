@@ -9,6 +9,10 @@
     #include "collision/mz_collision.h"
 #endif
 
+#ifdef MUZZLE_DEPS
+    #define MZ_MATH_IMPLEMENTION
+#endif
+
 #include "core/Applet.h"
 #include "core/vector.h"
 #include "core/Drawing.h"
