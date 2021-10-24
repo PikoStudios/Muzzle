@@ -32,8 +32,11 @@ add_executable(main main.c ${mz_source})
 message(STATUS "Checking OS")
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-    message(STATUS "Checking OS - found (Darwin/MacOS)")
-    message(FATAL_ERROR "Darwin/MacOS are not yet supported in this CMakeLists.txt, if you know how to compile this project with CMake on Darwin/MacOS. Submit a Github Issue")
+    #message(STATUS "Checking OS - found (Darwin/MacOS)")
+    #message(FATAL_ERROR "Darwin/MacOS are not yet supported in this CMakeLists.txt, if you know how to compile this project with CMake on Darwin/MacOS. Submit a Github Issue")
+    
+    
+    TARGET_LINK_LIBRARIES()
 
 elseif (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     message(STATUS "Checking OS - found (WIN32)")

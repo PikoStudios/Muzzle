@@ -23,9 +23,9 @@
 #endif
 
 #ifdef __cplusplus
-    #define __MZ_TYPE_WRAPPER(x) x
+    #define MZ_LITERAL(x) x
 #else
-    #define __MZ_TYPE_WRAPPER(x) (x)
+    #define MZ_LITERAL(x) (x)
 #endif
 
 typedef GLFWwindow* MUZZLE_WINDOW;
