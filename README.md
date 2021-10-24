@@ -53,17 +53,10 @@ int main(void)
 
 
 ## How to build
-There is a CMakeLists.txt avaliable (It May not work on linux)
 
-If you do not want to use CMake
-Here is how it can be done with gcc
+Step 1: Install all submodules <br />
+You can do this by typing `git submodule init` and then `git submodule update`
 
-Linux:
-```
-$ gcc main.c -I[Muzzle Install path] -L[Path to folder with GLFW3 Lib Files] -lGl -lglfw -lm
-```
+Step 2: Build GLFW or get library files from pre-compiled binaries
 
-Windows + MinGW:
-```
-$ gcc main.c -I[Muzzle Install path] -L[Path to folder with GLFW3 Lib Files] -lglfw3 -lopengl32 -lgdi32 -o main.exe
-```
+Step 3: go into an example, and run cmake
