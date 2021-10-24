@@ -32,11 +32,10 @@ add_executable(main main.c ${mz_source})
 message(STATUS "Checking OS")
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-    #message(STATUS "Checking OS - found (Darwin/MacOS)")
-    #message(FATAL_ERROR "Darwin/MacOS are not yet supported in this CMakeLists.txt, if you know how to compile this project with CMake on Darwin/MacOS. Submit a Github Issue")
+    message(STATUS "Checking OS - found (Darwin/MacOS)")
+    message(WARNING "Checking OS - warning (Darwin/MacOS support in this CMakeLists.txt is very limited)")
     
-    
-    TARGET_LINK_LIBRARIES()
+    TARGET_LINK_LIBRARIES(main glfw CoreVideo OpenGL IOKit Cocoa Carbon)
 
 elseif (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     message(STATUS "Checking OS - found (WIN32)")
