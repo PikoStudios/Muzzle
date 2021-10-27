@@ -102,4 +102,25 @@ void draw_sprite_vec2(sprite *data, vec2 pos, float scale, float rotation, tint 
 {
     draw_sprite(data, (int)(pos.x), (int)(pos.y), scale, rotation, color_drawn);
 }
-// TODO: maybe add a function to draw a piece of a sprite????
+
+void draw_sprite_portion(sprite* data, rectangle rec, vec2 pos, tint color_drawn)
+{
+    glEnable(GL_TEXTURE_2D);
+    
+    glBindTexture(GL_TEXTURE_2D, data->sprite_id);
+
+    glPushMatrix();
+        glTranslatef(pos.x, pos.y, 0);
+
+        glBegin(GL_QUADS);
+            glColor4ub(color_drawn.r, color_drawn.g, color_drawn.b, color_drawn.a);
+            glNormal3f(0.0f, 0.0f, 0.0f);
+            glTexCoord2f((float)(rec.x / data->width), (float)(rec.y / data->height)); glVertex2f(0.0f, 0.0f);
+            glTexCoord2f((float)((rec.x + rec.width) / data->width), (float)(rec.y / data->height)); glVertex2f(rec.width, 0.0f);
+            glTexCoord2f((float)((rec.x + rec.width) / data->width), (float)((rec.y + rec.height) / data->height)); glVertex2f(rec.width, rec.height);
+            glTexCoord2f((float)(rec.x / data->width), (float)((rec.y + rec.height) / data->height)); glVertex2f(0.0f, rec.height);
+        glEnd();
+    glPopMatrix();
+
+    glDisable(GL_TEXTURE_2D);
+}
