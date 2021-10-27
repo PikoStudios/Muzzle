@@ -2,7 +2,11 @@
 #include "error.h"
 #include "../backend.h"
 
-#define RGBA(r,g,b,a) (tint){r,g,b,a}
+#ifdef __cplusplus
+    #define RGBA(r,g,b,a) tint{r,g,b,a}
+#else
+    #define RGBA(r,g,b,a) (tint){r,g,b,a}
+#endif
 
 
 /*
