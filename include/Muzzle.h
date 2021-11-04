@@ -9,10 +9,6 @@
     #include "collision/mz_collision.h"
 #endif
 
-#ifdef MZ_DEPS_AUDIO || MZ_INCLUDE_ALL_EXTRAS
-    #include "audio/mz_audio.h"
-#endif
-
 #ifdef MUZZLE_DEPS
     #define MZ_MATH_IMPLEMENTION
 #endif
