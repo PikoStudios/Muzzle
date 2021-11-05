@@ -31,4 +31,3 @@
 #include <stdlib.h>
 
 void QuitMuzzle(Applet applet);
-void mz_sleep(int ms);
