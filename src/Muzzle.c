@@ -9,3 +9,12 @@ void QuitMuzzle(Applet applet)
     glfwTerminate();
 }
 
+void mz_sleep(int ms)
+{
+    #ifdef _WIN32
+        Sleep(ms);
+    #elif __unix__ || __APPLE__
+        struct __time_spec x = (struct __time_spec x) { 0, ms * 1000000};
+        nanosleep(&x, NULL);
+    #endif
+}

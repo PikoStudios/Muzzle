@@ -5,6 +5,10 @@
     #include "windows.h"
 #endif
 
+#ifdef __unix__ || __APPLE__
+    #include <unistd.h> // nanosleep
+#endif
+
 #ifdef MZ_DEPS_COLLISION || MZ_INCLUDE_ALL_EXTRAS
     #include "collision/mz_collision.h"
 #endif
@@ -14,6 +18,7 @@
 #endif
 
 #include "core/Applet.h"
+#include "core/Audio.h"
 #include "core/vector.h"
 #include "core/Drawing.h"
 #include "core/tint.h"
@@ -26,3 +31,4 @@
 #include <stdlib.h>
 
 void QuitMuzzle(Applet applet);
+void mz_sleep(int ms);

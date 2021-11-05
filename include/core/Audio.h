@@ -5,6 +5,7 @@
 #endif
 
 #include "../deps/cute_sound/cute_sound.h"
+#include <time.h>
 
 #define DEFAULT_PLAY_FREQUENCY_HZ 44100
 #define DEFAULT_BUFFERED_SAMPLES 15
@@ -27,3 +28,5 @@ audio_context* initialize_audio_context(unsigned play_freq_hz, int buffered_samp
 audio load_audio_wav(const char* filepath);
 void play_audio(audio_context* ctx, audio* sound);
 void unload_audio(audio* sound);
+
+// TODO: Look into cs_sleep(); and implement it in Muzzle.h
