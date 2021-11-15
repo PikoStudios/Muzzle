@@ -108,6 +108,10 @@ enum _KeyInput
 typedef enum _MouseInput MouseInput;
 typedef enum _KeyInput KeyInput;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 
 int key_up(Applet *applet, KeyInput key);
 int key_down(Applet *applet, KeyInput key);
@@ -128,3 +132,7 @@ vec2 get_mouse_position_vec2(Applet* applet);
 
 float get_mouse_xf(Applet* applet);
 float get_mouse_yf(Applet* applet);
+
+#ifdef __cplusplus
+}
+#endif

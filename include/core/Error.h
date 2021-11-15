@@ -21,6 +21,11 @@ typedef enum ErrorResult
 } ErrorResult;
 
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 /* 
 void muzzle_error
 internal error function
@@ -37,3 +42,7 @@ StatusTypes type
 const char *status
 */
 void log_status(StatusTypes type, const char *status);
+
+#ifdef __cplusplus
+}
+#endif

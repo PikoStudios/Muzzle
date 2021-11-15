@@ -9,6 +9,11 @@
 #endif
 
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 /*
 Muzzle tint (Color, RGBA)
 ===================
@@ -36,3 +41,8 @@ tint hex_to_rgb(unsigned int hex[6], unsigned int alpha);
 #define YELLOW     MZ_LITERAL(tint){255,255,51,255}
 #define USAF_BLUE  MZ_LITERAL(tint){0,48,143,255}
 #define BLACK      MZ_LITERAL(tint){0,0,0,255}
+
+
+#ifdef __cplusplus
+}
+#endif

@@ -60,7 +60,8 @@
 		"glfw3.h": "c",
 		"sr_resolve.h": "c",
 		"cute_sound.h": "c",
-		"unistd.h": "c"
+		"unistd.h": "c",
+		"audio.h": "c"
 	},
 	"C_Cpp.dimInactiveRegions": true
 }

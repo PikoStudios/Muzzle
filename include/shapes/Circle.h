@@ -19,6 +19,12 @@ float radius;
 */
 typedef struct _mz_circle circle;
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 /* 
 Muzzle draw_circle()
 ======================
@@ -47,3 +53,7 @@ float radius,
 tint color_drawn
 */
 void draw_circle_vec2(vec2 pos, float radius, tint color_drawn);
+
+#ifdef __cplusplus
+}
+#endif

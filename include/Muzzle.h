@@ -1,15 +1,6 @@
 #pragma once
 
-#ifdef _WIN32
-    // Include WinAPI if on windows. Required for MultiByteToWideChar
-    #include "windows.h"
-#endif
-
-#ifdef __unix__ || __APPLE__
-    #include <unistd.h> // nanosleep
-#endif
-
-#ifdef MZ_DEPS_COLLISION || MZ_INCLUDE_ALL_EXTRAS
+#ifdef MZ_DEPS_COLLISION
     #include "collision/mz_collision.h"
 #endif
 
@@ -18,7 +9,11 @@
 #endif
 
 #include "core/Applet.h"
-#include "core/Audio.h"
+
+#ifndef MZ_EXCLUDE_AUDIO
+    #include "core/Audio.h"
+#endif
+
 #include "core/vector.h"
 #include "core/Drawing.h"
 #include "core/tint.h"

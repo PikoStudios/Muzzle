@@ -30,6 +30,8 @@ ${mz_source_dir}/Audio.c
 
 add_executable(main main.c ${mz_source})
 
+set(AUDIO_FORCING_SDL2 0) # Set this value to 1, to link against SDL2 in all OS Configs (Not Supported Yet)
+
 message(STATUS "Checking OS")
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
@@ -40,7 +42,7 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
 elseif (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     message(STATUS "Checking OS - found (WIN32)")
-    TARGET_LINK_LIBRARIES(main glfw3 opengl32 gdi32)
+    TARGET_LINK_LIBRARIES(main glfw3 opengl32 gdi32 Dsound)
 
 elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     message(STATUS "Checking OS - found (Linux)")

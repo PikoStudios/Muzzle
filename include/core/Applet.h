@@ -11,6 +11,11 @@ typedef struct Applet
     GLFWwindow *window_handle;
 } Applet;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 /*
 * StartApplet - Start a Applet
 * @param self Pointer to Applet
@@ -27,3 +32,7 @@ void StartApplet(Applet *self);
 * @return Applet
 */
 Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TITLE, int RESIZEABLE, int VSYNC);
+
+#ifdef __cplusplus
+}
+#endif
