@@ -19,6 +19,11 @@ typedef struct rectangle
     float height;
 } rectangle;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 /* 
 Muzzle draw_rectangle()
 ======================
@@ -43,3 +48,7 @@ vec2 pos, size
 tint color_drawn
 */
 void draw_rectangle_vec2(vec2 pos, vec2 size, tint color_drawn);
+
+#ifdef __cplusplus
+}
+#endif

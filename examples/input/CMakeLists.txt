@@ -25,6 +25,7 @@ ${mz_source_dir}/Input.c
 ${mz_source_dir}/Sprite.c
 ${mz_source_dir}/Text.c
 ${mz_source_dir}/Time.c
+${mz_source_dir}/Audio.c
 )
 
 add_executable(main main.c ${mz_source})

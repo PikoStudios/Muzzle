@@ -14,6 +14,11 @@
 #include "tint.h"
 #include "vector.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 typedef FONScontext font_manager;
 static int __fons_initialized = 0;
 
@@ -34,3 +39,7 @@ void draw_text_vec2(font font_used, const char *text, vec2 pos, float font_size,
 
 void draw_text_fs(font font_used, const char *text, float x, float y, float font_size, tint color_drawn, font_manager* manager);
 void draw_text_vec2_fs(font font_used, const char *text, vec2 pos, float font_size, tint color_drawn, font_manager* manager);
+
+#ifdef __cplusplus
+}
+#endif
