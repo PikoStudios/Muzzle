@@ -14,6 +14,8 @@ float mz_math_clamp(float val, float min, float max);
 //    return x > max ? max : x;
 //}
 
+float mz_math_clamp_then_boost(float val, float min, float max, float booster);
+
 float mz_math_lerp(float start, float end, float amount);
 //{
 //    return start + amount * (end - start);
@@ -36,6 +38,13 @@ float mz_math_clamp(float val, float min, float max)
     float x = val < min ? min : val;
     return x > max ? max : x;
 }
+
+float mz_math_clamp_then_boost(float val, float min, float max, float booster)
+{
+    float x = val < min ? min + booster : val;
+    return x > max ? max : x;
+}
+
 
 float mz_math_lerp(float start, float end, float amount)
 {
