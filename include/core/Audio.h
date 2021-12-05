@@ -43,10 +43,12 @@ extern "C" {
 
 audio load_audio_wav(const char* filepath);
 void play_audio(audio_context* ctx, audio* sound);
-void unload_audio(audio* sound);
 
 void mix_audio_context(audio_context* ctx);
 void spawn_mix_thread(audio_context* ctx);
+
+void unload_audio(audio* sound);
+void unload_audio_context(audio_context* ctx);
 
 // TODO: Look into cs_sleep(); and implement it in Muzzle.h
 

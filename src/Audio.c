@@ -1,3 +1,4 @@
+#include <core/Audio.h>
 #include "core/Audio.h"
 
 #ifdef _WIN32
@@ -39,12 +40,17 @@ audio load_audio_wav(const char* filepath)
 
 void play_audio(audio_context* ctx, audio* sound)
 {
-    cs_insert_sound(ctx, &sound->sound);
+    if (cs_insert_sound(ctx, &sound->sound) == 0) log_status(STATUS_ERROR, "Unable to insert audio into context (aka, unable to play audio)");
 }
 
 void unload_audio(audio* sound)
 {
     cs_free_sound(&sound->loaded);
+}
+
+void unload_audio_context(audio_context* ctx)
+{
+    cs_shutdown_context(&ctx);
 }
 
 void mix_audio_context(audio_context* ctx)
