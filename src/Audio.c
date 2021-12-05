@@ -1,4 +1,3 @@
-#include <core/Audio.h>
 #include "core/Audio.h"
 
 #ifdef _WIN32
@@ -50,7 +49,7 @@ void unload_audio(audio* sound)
 
 void unload_audio_context(audio_context* ctx)
 {
-    cs_shutdown_context(&ctx);
+    cs_shutdown_context(ctx);
 }
 
 void mix_audio_context(audio_context* ctx)
