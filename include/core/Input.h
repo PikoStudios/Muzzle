@@ -3,6 +3,11 @@
 #include "../backend.h"
 #include "vector.h"
 
+#define INPUT_GAMEPAD_BUTTONS 15
+#define INPUT_GAMEPAD_AXES 6
+
+typedef GLFWgamepadstate gamepad_state;
+
 enum _MouseInput
 {
     MOUSE_LEFT = 0,
@@ -104,9 +109,37 @@ enum _KeyInput
     KEY_KB_MENU         = 348,
 };
 
+enum _Gamepads
+{
+    GAMEPAD_1 = 0,
+    GAMEPAD_2,
+    GAMEPAD_3,
+    GAMEPAD_4,
+    GAMEPAD_5,
+    GAMEPAD_6,
+    GAMEPAD_7,
+    GAMEPAD_8,
+    GAMEPAD_9,
+    GAMEPAD_10,
+    GAMEPAD_11,
+    GAMEPAD_12,
+    GAMEPAD_13,
+    GAMEPAD_14,
+    GAMEPAD_15,
+    GAMEPAD_16,
+};
+
+struct _gamepad
+{
+    int pad;
+    gamepad_state state;
+};
+
 
 typedef enum _MouseInput MouseInput;
 typedef enum _KeyInput KeyInput;
+typedef enum _Gamepads Gamepads;
+typedef struct _gamepad gamepad;
 
 #ifdef __cplusplus
 extern "C" {
@@ -115,13 +148,9 @@ extern "C" {
 
 int key_up(Applet *applet, KeyInput key);
 int key_down(Applet *applet, KeyInput key);
-// int key_pressed(Applet *applet, KeyInput key);
-// int key_released(Applet *applet, KeyInput key);
 
 int mouse_up(Applet *applet, MouseInput button);
 int mouse_down(Applet *applet, MouseInput button);
-// int mouse_pressed(Applet *applet, MouseInput key);
-// int mouse_released(Applet *applet,  MouseInput key);
 
 vec2_d get_mouse_posititon(Applet* applet);
 
@@ -132,6 +161,12 @@ vec2 get_mouse_position_vec2(Applet* applet);
 
 float get_mouse_xf(Applet* applet);
 float get_mouse_yf(Applet* applet);
+
+inline int is_gamepad_online(int pad);
+inline const char* get_gamepad_name(int pad);
+
+void get_gamepad_state(gamepad* pad);
+
 
 #ifdef __cplusplus
 }
