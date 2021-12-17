@@ -61,7 +61,11 @@
 		"sr_resolve.h": "c",
 		"cute_sound.h": "c",
 		"unistd.h": "c",
-		"audio.h": "c"
+		"audio.h": "c",
+		"assert.h": "c",
+		"stdlib.h": "c",
+		"cstdlib": "c",
+		"time.h": "c"
 	},
 	"C_Cpp.dimInactiveRegions": true
 }

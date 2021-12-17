@@ -18,6 +18,19 @@
     #define MUZZLE_SHARED_VARIABLE_ARRAY_SIZE 5
 #endif
 
+#ifdef _WIN32
+    #define MUZZLE_INTERNAL_DEBUG_ASSERT_HANDLE_FAILURE(x) \
+    MessageBoxA(NULL, x, "Muzzle Assert Failure", 0x00000000L); \
+    *(int*)0=0; // Trigger Sigfault
+#else
+    #define MUZZLE_INTERNAL_DEBUG_ASSERT_HANDLE_FAILURE(x) \
+    fprintf(stderr, "Muzzle Assert Failure: %s", x); \
+    *(int*)0=0; // Trigger Sigfault
+#endif
+
+
+#define MUZZLE_DEBUG_ASSERT(x, message) ((x) ? (void)(0) : MUZZLE_INTERNAL_DEBUG_ASSERT_HANDLE_FAILURE(message))
+
 static void* __muzzle_shared_variable_array[MUZZLE_SHARED_VARIABLE_ARRAY_SIZE];
 
 #include "core/vector.h"
