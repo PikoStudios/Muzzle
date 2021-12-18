@@ -65,7 +65,21 @@
 		"assert.h": "c",
 		"stdlib.h": "c",
 		"cstdlib": "c",
-		"time.h": "c"
+		"time.h": "c",
+		"*.t": "c",
+		"*.tcc": "c",
+		"functional": "c",
+		"optional": "c",
+		"fstream": "c",
+		"iomanip": "c",
+		"istream": "c",
+		"ostream": "c",
+		"sstream": "c",
+		"stdexcept": "c",
+		"streambuf": "c",
+		"type_traits": "c",
+		"typeinfo": "c",
+		"utility": "c"
 	},
 	"C_Cpp.dimInactiveRegions": true
 }
