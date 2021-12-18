@@ -162,8 +162,8 @@ vec2 get_mouse_position_vec2(Applet* applet);
 float get_mouse_xf(Applet* applet);
 float get_mouse_yf(Applet* applet);
 
-inline int is_gamepad_online(int pad);
-inline const char* get_gamepad_name(int pad);
+int is_gamepad_online(int pad);
+const char* get_gamepad_name(int pad);
 
 void get_gamepad_state(gamepad* pad);
 

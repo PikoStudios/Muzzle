@@ -26,6 +26,7 @@ ${mz_source_dir}/Sprite.c
 ${mz_source_dir}/Text.c
 ${mz_source_dir}/Time.c
 ${mz_source_dir}/Audio.c
+${mz_source_dir}/Line.c
 )
 
 add_executable(main main.c ${mz_source})
@@ -40,7 +41,7 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
 elseif (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     message(STATUS "Checking OS - found (WIN32)")
-    TARGET_LINK_LIBRARIES(main glfw3 opengl32 gdi32)
+    TARGET_LINK_LIBRARIES(main glfw3 opengl32 gdi32 DSound)
 
 elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     message(STATUS "Checking OS - found (Linux)")

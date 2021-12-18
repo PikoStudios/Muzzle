@@ -39,6 +39,7 @@ static void* __muzzle_shared_variable_array[MUZZLE_SHARED_VARIABLE_ARRAY_SIZE];
 #include "core/Sprite.h"
 #include "shapes/Rectangle.h"
 #include "shapes/Circle.h"
+#include "shapes/Line.h"
 #include "core/Text.h"
 #include "core/Input.h"
 #include "core/Time.h"

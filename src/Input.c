@@ -56,12 +56,12 @@ float get_mouse_yf(Applet* applet)
     return get_mouse_position_vec2(applet).y;
 }
 
-inline int is_gamepad_online(int pad)
+int is_gamepad_online(int pad)
 {
     return glfwJoystickPresent(pad);
 }
 
-inline const char* get_gamepad_name(int pad)
+const char* get_gamepad_name(int pad)
 {
     return glfwGetGamepadName(pad);
 }
