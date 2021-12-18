@@ -7,8 +7,19 @@
 
 #include "../deps/cute_sound/cute_sound.h"
 #include "../backend.h"
+#ifdef _WIN32
+    #define GLFW_EXPOSE_NATIVE_WIN32
+#elif __linux__
+    #ifndef MUZZLE_FORCE_WAYLAND
+        #define GLFW_EXPOSE_NATIVE_X11
+    #else
+        #define GLFW_EXPOSE_NATIVE_WAYLAND
+    #endif
+#elif __APPLE__
+    #define GLFW_EXPOSE_NATIVE_COCOA
+#endif
 
-#define GLFW_EXPOSE_NATIVE_WIN32
+
 #include "../deps/glfw/include/GLFW/glfw3native.h"
 
 #include <stdio.h>
@@ -33,12 +44,7 @@ typedef struct audio
 extern "C" {
 #endif
 
-
-#ifdef _WIN32
-    audio_context* initialize_audio_context(Applet *applet, unsigned play_freq_hz, int buffered_samples, int playing_pool_count);
-#else
-    audio_context* initialize_audio_context(unsigned play_freq_hz, int buffered_samples, int playing_pool_count);
-#endif
+audio_context* initialize_audio_context(Applet *applet, unsigned play_freq_hz, int buffered_samples, int playing_pool_count);
 
 
 audio load_audio_wav(const char* filepath);

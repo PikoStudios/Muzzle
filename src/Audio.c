@@ -1,23 +1,23 @@
 #include "core/Audio.h"
 
+audio_context* initialize_audio_context(Applet *applet, unsigned play_freq_hz, int buffered_samples, int playing_pool_count)
+{
 #ifdef _WIN32
-    audio_context* initialize_audio_context(Applet *applet, unsigned play_freq_hz, int buffered_samples, int playing_pool_count)
-    {
-        void* win = glfwGetWin32Window(applet->window_handle);
-        cs_context_t* buffer = cs_make_context(win, play_freq_hz, buffered_samples, playing_pool_count, NULL);
-        //cs_spawn_mix_thread(buffer);
-
-        return buffer;
-    }
-#else
-    audio_context* initialize_audio_context(unsigned play_freq_hz, int buffered_samples, int playing_pool_count)
-    {
-        cs_context_t* buffer = cs_make_context(NULL, play_freq_hz, buffered_samples, playing_pool_count, NULL);
-        //cs_spawn_mix_thread(buffer);
-
-        return buffer;
-    }
+    void* win = glfwGetWin32Window(applet->window_handle);
+#elif __linux__
+    #ifndef MUZZLE_FORCE_WAYLAND
+        void* win = glfwGetX11Window(applet->window_handle);
+    #else
+        void* win = glfwGetWaylandWindow(applet->window_handle);
+    #endif
+#elif __APPLE__
+    void* win = glfwGetCocoaWindow(applet->window_handle);
 #endif
+    cs_context_t* buffer = cs_make_context(win, play_freq_hz, buffered_samples, playing_pool_count, NULL);
+    
+
+    return buffer;
+}
 
 
 audio load_audio_wav(const char* filepath)
