@@ -27,13 +27,6 @@
     #include "windows.h"
 #endif
 
-//#ifdef __unix__
-//    #include <X11/Xlib.h>
-//    #include <X11/Xutil.h>
-//	#include <X11/Xos.h>
-//    #define MZ_AUDIO_FORCE_X11
-//#endif
-
 #ifdef __cplusplus
     #define MZ_LITERAL(x) x
 #else

@@ -31,8 +31,6 @@
 
 #define MUZZLE_DEBUG_ASSERT(x, message) ((x) ? (void)(0) : MUZZLE_INTERNAL_DEBUG_ASSERT_HANDLE_FAILURE(message))
 
-static void* __muzzle_shared_variable_array[MUZZLE_SHARED_VARIABLE_ARRAY_SIZE];
-
 #include "core/vector.h"
 #include "core/Drawing.h"
 #include "core/tint.h"
@@ -46,7 +44,3 @@ static void* __muzzle_shared_variable_array[MUZZLE_SHARED_VARIABLE_ARRAY_SIZE];
 #include <stdlib.h>
 
 void QuitMuzzle(Applet applet);
-
-void create_shared_variable(void* variable, int index);
-void remove_shared_variable(int index);
-void* get_shared_variable(int index);
