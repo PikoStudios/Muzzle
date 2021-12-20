@@ -22,6 +22,8 @@
     #include "../deps/glfw/include/GLFW/glfw3.h"
 #endif
 
+#include "../deps/glad/include/glad/glad.h"
+
 #ifdef _WIN32
     // Include WinAPI if on windows. Required for MultiByteToWideChar
     #include "windows.h"
