@@ -8,9 +8,11 @@ void StartApplet(Applet *self)
 
 Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TITLE, int RESIZEABLE, int VSYNC)
 {
+#ifdef MUZZLE_DANGEROUS_USE_MODERN_GRAPHICS_PIPELINE
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+#endif
 
     glfwSetErrorCallback(muzzle_error);
     // Initialize GLFW
@@ -72,6 +74,10 @@ Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TI
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+
+#ifdef MUZZLE_DANGEROUS_USE_MODERN_GRAPHICS_PIPELINE
+    gladLoadGL();
+#endif
 
     return buf;
 }

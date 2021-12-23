@@ -24,6 +24,10 @@
 
 #include "../deps/glad/include/glad/glad.h"
 
+#ifdef MUZZLE_DANGEROUS_USE_MODERN_GRAPHICS_PIPELINE
+    #include "../deps/glad/include/glad/glad.h"
+#endif
+
 #ifdef _WIN32
     // Include WinAPI if on windows. Required for MultiByteToWideChar
     #include "windows.h"

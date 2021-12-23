@@ -79,7 +79,8 @@
 		"streambuf": "c",
 		"type_traits": "c",
 		"typeinfo": "c",
-		"utility": "c"
+		"utility": "c",
+		"shaders.h": "c"
 	},
 	"C_Cpp.dimInactiveRegions": true
 }
