@@ -4,6 +4,10 @@
 #include "callback.h"
 #include "../backend.h"
 
+#ifdef MUZZLE_DANGEROUS_USE_MODERN_GRAPHICS_PIPELINE
+    #include "../modern_pipeline/Renderer.h"
+#endif
+
 typedef struct Applet
 {
     int width, height;

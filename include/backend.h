@@ -13,6 +13,24 @@
     #define BUFFER_LENGTH 1024
 #endif
 
+#include <stdlib.h>
+
+#ifndef MZ_MALLOC
+    #define MZ_MALLOC(size)         malloc(size)
+#endif
+
+#ifndef MZ_CALLOC
+    #define MZ_CALLOC(num, size)    calloc(num, size)
+#endif
+
+#ifndef MZ_FREE
+    #define MZ_FREE(ptr)            free(ptr)
+#endif
+
+#ifndef MZ_REALLOC
+    #define MZ_REALLOC(ptr, size)   realloc(ptr, size)
+#endif
+
 #define MUZZLE_FALSE 0
 #define MUZZLE_TRUE 1
 

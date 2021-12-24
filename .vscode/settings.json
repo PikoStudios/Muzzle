@@ -80,7 +80,8 @@
 		"type_traits": "c",
 		"typeinfo": "c",
 		"utility": "c",
-		"shaders.h": "c"
+		"shaders.h": "c",
+		"renderer.h": "c"
 	},
 	"C_Cpp.dimInactiveRegions": true
 }
