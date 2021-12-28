@@ -1,6 +1,6 @@
 #include "modern_pipeline/Renderer.h"
 
-void start_mz_renderer()
+void start_renderer()
 {
     __internal_renderer.vas = 1;
     __internal_renderer.va = MZ_CALLOC(1, sizeof(unsigned int*));
@@ -23,13 +23,13 @@ void unload_renderer()
 {
     for (int i = 0; i < __internal_renderer.vas; i++)
     {
-        MZ_FREE(__internal_renderer.va[i]);
+        (!__internal_renderer.va[i] == NULL) ? MZ_FREE(__internal_renderer.va[i]) : NULL;
     }
     MZ_FREE(__internal_renderer.va);
 
     for (int i = 0; i < __internal_renderer.vbs; i++)
     {
-        MZ_FREE(__internal_renderer.vb[i]);
+        (!__internal_renderer.vb[i] == NULL) ? MZ_FREE(__internal_renderer.vb[i]) : NULL;
     }
     MZ_FREE(__internal_renderer.vb);
 }
