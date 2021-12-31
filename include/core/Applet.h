@@ -13,6 +13,7 @@ typedef struct Applet
     int width, height;
     char* WindowTitle;
     GLFWwindow *window_handle;
+    // TODO: When modern pipeline is merged, add Renderer to Applet (no global renderer please)
 } Applet;
 
 #ifdef __cplusplus

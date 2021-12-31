@@ -12,8 +12,6 @@ Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TI
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-    __internal_create_mz_renderer();
 #endif
 
     glfwSetErrorCallback(muzzle_error);
