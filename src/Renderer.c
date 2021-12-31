@@ -1,35 +1,35 @@
 #include "modern_pipeline/Renderer.h"
 
-void start_renderer()
+void start_renderer(renderer* renderer)
 {
-    __internal_renderer.vas = 1;
-    __internal_renderer.va = MZ_CALLOC(1, sizeof(unsigned int*));
+    renderer->vas = 1;
+    renderer->va = MZ_CALLOC(1, sizeof(unsigned int*));
 
-    if (__internal_renderer.va == NULL)
+    if (renderer->va == NULL)
         log_status(STATUS_FATAL_ERROR, "Failed to allocate enough memory for renderer [VA] (DANGEROUS MODERN PIPELINE ENABLED)");
     
-    __internal_renderer.va[0] = NULL;
+    renderer->va[0] = NULL;
 
-    __internal_renderer.vbs = 1;
-    __internal_renderer.vb = MZ_CALLOC(1, sizeof(unsigned int*));
+    renderer->vbs = 1;
+    renderer->vb = MZ_CALLOC(1, sizeof(unsigned int*));
 
-    if (__internal_renderer.vb == NULL)
+    if (renderer->vb == NULL)
         log_status(STATUS_FATAL_ERROR, "Failed to allocate enough memory for renderer [VB] (DANGEROUS MODERN PIPELINE ENABLED)");
 
-    __internal_renderer.vb[0] = NULL;
+    renderer->vb[0] = NULL;
 }
 
-void unload_renderer()
+void unload_renderer(renderer* renderer)
 {
-    for (int i = 0; i < __internal_renderer.vas; i++)
+    for (int i = 0; i < renderer->vas; i++)
     {
-        (!__internal_renderer.va[i] == NULL) ? MZ_FREE(__internal_renderer.va[i]) : NULL;
+        (!renderer->va[i] == NULL) ? MZ_FREE(renderer->va[i]) : NULL;
     }
-    MZ_FREE(__internal_renderer.va);
+    MZ_FREE(renderer->va);
 
-    for (int i = 0; i < __internal_renderer.vbs; i++)
+    for (int i = 0; i < renderer->vbs; i++)
     {
-        (!__internal_renderer.vb[i] == NULL) ? MZ_FREE(__internal_renderer.vb[i]) : NULL;
+        (!renderer->vb[i] == NULL) ? MZ_FREE(renderer->vb[i]) : NULL;
     }
-    MZ_FREE(__internal_renderer.vb);
+    MZ_FREE(renderer->vb);
 }

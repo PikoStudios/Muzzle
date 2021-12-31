@@ -3,7 +3,7 @@
 #include "../core/Error.h"
 #include <stdlib.h>
 
-struct __internal_mz_renderer
+struct _mz_renderer
 {
     unsigned int **va;
     unsigned int **vb;
@@ -12,7 +12,7 @@ struct __internal_mz_renderer
     size_t vbs;
 };
 
-struct __internal_mz_renderer __internal_renderer;
+typedef struct _mz_renderer renderer;
 
-void start_renderer();
-void unload_renderer(); // TODO: Handle this in ExitMuzzle() when merging modern pipeline -> legacy
+void start_renderer(renderer* renderer);
+void unload_renderer(renderer* renderer); // TODO: Handle this in ExitMuzzle() when merging modern pipeline -> legacy
