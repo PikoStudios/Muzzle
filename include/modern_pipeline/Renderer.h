@@ -7,22 +7,34 @@
 
 // TODO: Create all the object types
 
+static struct _mz_queue_object
+{
+    void *object;
+    int type;
+    int draw_type;
+    size_t components;
+    int type_value;
+    size_t size;
+};
+
+typedef struct _mz_queue_object queue_object;
+
 struct _mz_renderer
 {
     unsigned int **va;
     unsigned int **vb;
     
-    void **queue;
+    queue_object **queue;
 
     size_t vas;
     size_t vbs;
     size_t qs;
 };
 
-
-typedef struct _mz_renderer renderer;
+typedef struct _mz_renderer renderer; 
 
 void start_renderer(renderer* renderer);
 void unload_renderer(renderer* renderer); // TODO: Handle this in ExitMuzzle() when merging modern pipeline -> legacy
 
-void add_to_renderer(renderer* renderer, void* object);
+void add_to_renderer(renderer* renderer, void* object, int type, int draw_type);
+void queue_renderer(renderer* renderer);

@@ -103,6 +103,10 @@ void queue_renderer(renderer* renderer)
         }
 
         glBufferData(renderer->queue[i]->type, sizeof(renderer->queue[i]->object), renderer->queue[i]->object, renderer->queue[i]->draw_type);
+        glVertexAttribPointer(0, renderer->queue[i]->components, renderer->queue[i]->type_value, GL_FALSE, renderer->queue[i]->size, NULL);
     }
-    
+
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
 }

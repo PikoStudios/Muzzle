@@ -81,7 +81,8 @@
 		"typeinfo": "c",
 		"utility": "c",
 		"shaders.h": "c",
-		"renderer.h": "c"
+		"renderer.h": "c",
+		"array": "c"
 	},
 	"C_Cpp.dimInactiveRegions": true
 }
