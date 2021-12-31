@@ -28,7 +28,7 @@ shader create_default_vertex_shader()
 
 shader create_default_fragment_shader(tint color_drawn)
 {
-    const char* source;
+    const char source[SHADER_SOURCE_SIZE];
     sprintf(source, "#version 330 core\n""out vec4 FragColor;\n""\n""void main()\n""{\n"
     "FragColor = vec4(%.1ff, %.1ff, %.1ff, %.1ff);\n""}\n", color_drawn.r / 255, color_drawn.g / 255, color_drawn.b / 255, color_drawn.a / 255);
 

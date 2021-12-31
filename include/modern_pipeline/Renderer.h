@@ -3,6 +3,8 @@
 #include "../core/Error.h"
 #include <stdlib.h>
 
+#define ERROR_MSG_SIZE 1123 // 1024 + 99
+
 // TODO: Create all the object types
 
 struct _mz_renderer
@@ -23,4 +25,4 @@ typedef struct _mz_renderer renderer;
 void start_renderer(renderer* renderer);
 void unload_renderer(renderer* renderer); // TODO: Handle this in ExitMuzzle() when merging modern pipeline -> legacy
 
-void add_to_renderer(void* object);
+void add_to_renderer(renderer* renderer, void* object);

@@ -43,7 +43,7 @@
 // TODO: When modern pipeline is usable, remember to remove this line
 #include "../deps/glad/include/glad/glad.h"
 
-#define MUZZLE_NULL (void*)(1);
+#define MUZZLE_NULL (void*)(1)
 
 #ifdef MUZZLE_DANGEROUS_USE_MODERN_GRAPHICS_PIPELINE
     #include "../deps/glad/include/glad/glad.h"

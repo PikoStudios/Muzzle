@@ -27,7 +27,7 @@ void start_renderer(renderer* renderer)
     renderer->queue[0] = MZ_MALLOC(sizeof(void*));
 
     if (renderer->queue[0] == NULL)
-        log_status(STATUS_FATAL_ERROR, "Failed to allocate enough memory renderer queue [slot 0] (DANGEROUS MODERN PIPELINE ENABLED)");
+        log_status(STATUS_FATAL_ERROR, "Failed to allocate enough memory for renderer queue [slot 0] (DANGEROUS MODERN PIPELINE ENABLED)");
 
     renderer->queue[0] = MUZZLE_NULL;
 }
@@ -51,4 +51,32 @@ void unload_renderer(renderer* renderer)
         MZ_FREE(renderer->queue[i]);
     }
     MZ_FREE(renderer->queue);
+}
+
+void add_to_renderer(renderer* renderer, void* object)
+{
+    if (renderer->queue[0] == MUZZLE_NULL)
+    {
+        renderer->queue[0] = object;
+        return;
+    }
+
+    size_t new = renderer->qs;
+
+    renderer->qs++;
+    renderer->queue = MZ_REALLOC(renderer->queue, sizeof(void*) * renderer->qs);
+
+    if (renderer->queue == NULL)
+        log_status(STATUS_FATAL_ERROR, "Failed to reallocate enough memory for renderer queue (DANGEROUS MODERN PIPELINE ENABLED)");
+
+    renderer->queue[new] = MZ_MALLOC(sizeof(void*));
+
+    if (renderer->queue[new] == NULL)
+    {
+        char msg[ERROR_MSG_SIZE];
+        sprintf(msg, "Failed to allocate enough memory for renderer queue [slot %d] ((DANGEROUS MODERN PIPELINE ENABLED)");
+        log_status(STATUS_FATAL_ERROR, msg);
+    }
+
+    renderer->queue[new] = object;
 }
