@@ -36,5 +36,5 @@ typedef struct _mz_renderer renderer;
 void start_renderer(renderer* renderer);
 void unload_renderer(renderer* renderer); // TODO: Handle this in ExitMuzzle() when merging modern pipeline -> legacy
 
-void add_to_renderer(renderer* renderer, void* object, int type, int draw_type);
+void add_to_renderer(renderer* renderer, void* object, int type, int draw_type, size_t components, int type_value, size_t size);
 void queue_renderer(renderer* renderer);

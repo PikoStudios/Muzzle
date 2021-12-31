@@ -53,7 +53,7 @@ void unload_renderer(renderer* renderer)
     MZ_FREE(renderer->queue);
 }
 
-void add_to_renderer(renderer* renderer, void* object, int type, int draw_type)
+void add_to_renderer(renderer* renderer, void* object, int type, int draw_type, size_t components, int type_value, size_t size)
 {
     if (renderer->queue[0] == MUZZLE_NULL)
     {
@@ -81,6 +81,9 @@ void add_to_renderer(renderer* renderer, void* object, int type, int draw_type)
     renderer->queue[new]->draw_type = draw_type;
     renderer->queue[new]->type = type;
     renderer->queue[new]->object = object;
+    renderer->queue[new]->type_value = type_value;
+    renderer->queue[new]->components = components;
+    renderer->queue[new]->size = size;
 }
 
 // STREAM NOTE: Done off stream
