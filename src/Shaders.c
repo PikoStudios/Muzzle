@@ -28,7 +28,7 @@ shader create_default_vertex_shader()
 
 shader create_default_fragment_shader(tint color_drawn)
 {
-    const char source[SHADER_SOURCE_SIZE];
+    const char source[FRAGMENT_SHADER_SOURCE_SIZE];
     sprintf(source, "#version 330 core\n""out vec4 FragColor;\n""\n""void main()\n""{\n"
     "FragColor = vec4(%.1ff, %.1ff, %.1ff, %.1ff);\n""}\n", color_drawn.r / 255, color_drawn.g / 255, color_drawn.b / 255, color_drawn.a / 255);
 
@@ -38,10 +38,25 @@ shader create_default_fragment_shader(tint color_drawn)
 shader create_shader(shader_type type, const char* source)
 {
     shader buf;
-    glCreateProgram(type);
+    buf = glCreateShader(type);
 
     glShaderSource(buf, 1, &source, NULL);
     glCompileShader(buf);
+
+#ifndef MZ_DONT_GET_SHADER_RESULT
+
+    int result;
+    char log[SHADER_RESULT_LOG_SIZE];
+
+    glGetShaderiv(buf, GL_COMPILE_STATUS, &result);
+
+    if (!result)
+    {
+        glGetShaderInfoLog(buf, SHADER_RESULT_LOG_SIZE, NULL, log);
+        log_status(STATUS_ERROR, "Failed to create shader");
+    }
+
+#endif
 
     return buf;
 }

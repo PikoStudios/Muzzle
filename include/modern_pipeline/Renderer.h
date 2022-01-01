@@ -21,13 +21,13 @@ typedef struct _mz_queue_object queue_object;
 
 struct _mz_renderer
 {
-    unsigned int **va;
-    unsigned int **vb;
+    unsigned int **varray;
+    unsigned int **buffer;
     
     queue_object **queue;
 
-    size_t vas;
-    size_t vbs;
+    size_t varray_s;
+    size_t bs;
     size_t qs;
 };
 

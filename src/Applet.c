@@ -82,3 +82,11 @@ Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TI
     return buf;
 }
 
+#ifdef MUZZLE_DANGEROUS_USE_MODERN_GRAPHICS_PIPELINE
+
+static inline void set_main_renderer(Applet* self, renderer* renderer)
+{
+    self->renderer = renderer;
+}
+
+#endif
