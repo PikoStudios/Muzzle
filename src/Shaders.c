@@ -53,7 +53,11 @@ shader create_shader(shader_type type, const char* source)
     if (!result)
     {
         glGetShaderInfoLog(buf, SHADER_RESULT_LOG_SIZE, NULL, log);
-        log_status(STATUS_ERROR, "Failed to create shader");
+	
+	char output[SHADER_RESULT_BUFFER_SIZE];
+	sprintf(output, "Failed to create shader\nReason: %s", output);
+        
+	log_status(STATUS_ERROR, output);
     }
 
 #endif

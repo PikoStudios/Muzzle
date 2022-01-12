@@ -29,7 +29,6 @@ extern "C" {
 
 
 sprite load_sprite(const char *filepath);
-sprite *load_sprite_ptr(const char *filepath);
 void unload_sprite(sprite *data);
 void draw_sprite(sprite *data, int x, int y, float scale, float rotation, tint color_drawn);
 void draw_sprite_vec2(sprite *data, vec2 pos, float scale, float rotation, tint color_drawn);

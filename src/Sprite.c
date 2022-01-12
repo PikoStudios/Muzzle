@@ -35,41 +35,6 @@ sprite load_sprite(const char *filepath)
     };
 }
 
-// sprite *load_sprite_ptr(const char *filepath)
-// {
-//     int w,h,bpp;
-
-//     unsigned char *data = stbi_load(filepath, &w, &h, &bpp, 4);
-
-//     if (data == NULL) log_status(STATUS_ERROR, "Failed to load sprite");
-
-//     GLuint id;
-//     glGenTextures(1, &id);
-//     glBindTexture(GL_TEXTURE_2D, id);
-
-
-//     // Make texture repeat on axis, and add filter for pixel-perfect drawing
-//     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);    
-//     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);     
-//     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-//     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-//     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-
-// #ifdef MUZZLE_VERBOSE
-//     log_status(STATUS_SUCCESS, "Loaded Sprite into GPU");
-// #endif
-
-//     stbi_image_free(data);
-
-//     return (sprite *)
-//     {
-//         .sprite_id = id,
-//         .width = w,
-//         .height = h,
-//     };
-// }
-
 void unload_sprite(sprite *data)
 {
     glDeleteTextures(1, &data->sprite_id);

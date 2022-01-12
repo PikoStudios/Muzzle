@@ -59,7 +59,6 @@ Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TI
 
     
     // NOTE: MAYBE: Instead of doing glViewport width height. Maybe get the actual framebuffer size and pass throught that?
-
     glViewport(0,0, WIDTH, HEIGHT);
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -83,6 +82,8 @@ Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TI
 }
 
 #ifdef MUZZLE_DANGEROUS_USE_MODERN_GRAPHICS_PIPELINE
+
+// TODO: revise this function
 
 static inline void set_main_renderer(Applet* self, renderer* renderer)
 {

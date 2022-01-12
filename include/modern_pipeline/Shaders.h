@@ -5,6 +5,7 @@
 
 #define FRAGMENT_SHADER_SOURCE_SIZE 512
 #define SHADER_RESULT_LOG_SIZE 512
+#define SHADER_RESULT_BUFFER_SIZE 1024
 
 static const char* __internal_muzzle_defaults_shader_vertex_shader_source = "#version 330 core\n"
 "layout (location = 0) in vec3 aPos;\n"
