@@ -43,7 +43,7 @@ void draw_blurred_text(font font_used, const char *text, float x, float y, float
     fonsSetSize(font_used.context, font_size);
     fonsSetColor(font_used.context, col);
     fonsSetSpacing(font_used.context, 5.f);
-    fonsSetBlur(fs, intensity);
+    fonsSetBlur(font_used.context, intensity);
     fonsDrawText(font_used.context, x, y+font_size-6, text, NULL);
 }
 
@@ -58,7 +58,7 @@ void draw_shadow_text(font font_used, const char *text, float x, float y, tint s
     fonsSetSize(font_used.context, font_size);
     fonsSetColor(font_used.context, shadowcol);
     fonsSetSpacing(font_used.context, .0f);
-    fonsSetBlur(fs, intensity);
+    fonsSetBlur(font_used.context, intensity);
     fonsDrawText(font_used.context, x, y+font_size-6, text, NULL);
 
     fonsSetColor(font_used.context, textcol);

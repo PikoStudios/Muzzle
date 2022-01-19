@@ -27,7 +27,7 @@ typedef struct tint
     unsigned int a;
 } tint;
 
-tint hex_to_rgb(unsigned int hex[6], unsigned int alpha);
+tint hex_to_rgb(unsigned int hex, unsigned int alpha);
 
 #define WHITE      MZ_LITERAL(tint){255,255,255,255}
 #define GRAY       MZ_LITERAL(tint){84, 84, 84, 255}

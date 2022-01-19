@@ -8,7 +8,7 @@ Applet applet;
 
 void OnAppletUpdate()
 {
-    unsigned int hex[6] = {0xF, 0xF, 0x0, 0x0, 0x0, 0x0};
+    unsigned int hex = 0xFF0000;
     tint color = hex_to_rgb(hex, 255);
     while (keep_applet(applet.window_handle))
     {
