@@ -43,7 +43,8 @@
 #define MUZZLE_NULL (void*)(1)
 
 #ifdef MUZZLE_DANGEROUS_USE_MODERN_GRAPHICS_PIPELINE
-    #include "../deps/glad/include/glad/glad.h"
+    #define GRAPHICS_API_OPENGL_33
+    #include "../deps/rlgl/rlgl.h"
 #endif
 
 #ifdef _WIN32
