@@ -32,7 +32,7 @@ shader_def load_as_shader_definition(const char* vs_filepath, const char* fs_fil
     }
 
     fseek(file, 0, SEEK_END);
-    int size = ftell(file);
+    size = ftell(file);
     fseek(file, 0, SEEK_SET);
 
     char* fs_buffer = malloc(sizeof(char) * (size + 1));
