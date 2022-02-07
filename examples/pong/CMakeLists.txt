@@ -29,7 +29,7 @@ ${mz_source_dir}/Audio.c
 ${mz_source_dir}/Line.c
 )
 
-add_executable(main main.c ${mz_source})
+add_executable(main src/main.c ${mz_source})
 
 message(STATUS "Checking OS")
 
