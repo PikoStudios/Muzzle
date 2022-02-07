@@ -42,7 +42,7 @@ SOFTWARE.
 
 Modifications:
 
-Line 134-145
+Line 133-134
 All RL_MALLOC,RL_FREE,RL_REALLOC, RL_CALLOC to RLGL_MALLOC,RLGL_FREE,RLGL_REALLOC,RLGL_CALLOC
 Added __internal_rlgl_get_data_structure function
 Line 741

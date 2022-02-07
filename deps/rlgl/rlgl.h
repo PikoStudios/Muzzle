@@ -130,19 +130,8 @@
     #define TRACELOGD(...) (void)0
 #endif
 
-// Allow custom memory allocators
-#ifndef RLGL_MALLOC
-    #define RLGL_MALLOC(sz)     malloc(sz)
-#endif
-#ifndef RLGL_CALLOC
-    #define RLGL_CALLOC(n,sz)   calloc(n,sz)
-#endif
-#ifndef RLGL_REALLOC
-    #define RLGL_REALLOC(n,sz)  realloc(n,sz)
-#endif
-#ifndef RLGL_FREE
-    #define RLGL_FREE(p)        free(p)
-#endif
+#define __MEMORY_CREATE_RLGL_MIRRORS__
+#include "../../include/memory.h"
 
 // Security check in case no GRAPHICS_API_OPENGL_* defined
 #if !defined(GRAPHICS_API_OPENGL_11) && \
