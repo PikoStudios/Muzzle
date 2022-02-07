@@ -1,4 +1,6 @@
 #define MUZZLE_DEPS
+#define MZ_EXCLUDE_AUDIO
+
 #include <Muzzle.h>
 #include <stdio.h>
 #include <math.h>
@@ -6,9 +8,14 @@
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720
 #define EMPTY_STRING ""
-
+// #define GAME_OVER NULL
 Applet applet;
 
+
+
+
+
+bool isGameOver;
 bool check_collision_point_rec(vec2 point, rectangle rec)
 {
     if ((point.x >= rec.x) && (point.x <= (rec.x + rec.width)) && (point.y >= rec.y) && (point.y <= (rec.y + rec.height))) return true;
@@ -37,6 +44,11 @@ enum players
 
 void OnAppletUpdate()
 {
+
+
+    // while(isGameOver) {
+    //     draw_text()
+    // }
     circle ball = {
         .radius = 5,
         .x = SCREEN_WIDTH / 2,
@@ -75,13 +87,9 @@ void OnAppletUpdate()
         .x = player2.x,
         .y = player2.y
     };
-
     font p2sp = load_font("../font.ttf", "p2sp");
     char buf_p1[1024] = EMPTY_STRING;
     char buf_p2[1024] = EMPTY_STRING;
-
-
-
     while (keep_applet(applet.window_handle))
     {
 
@@ -135,6 +143,7 @@ void OnAppletUpdate()
 
             if (ball.x < player.x || ball.x > player2.x) 
             {
+                 isGameOver = true;
                 p2++;
                 ball.x = SCREEN_WIDTH / 2;
                 switch (ball_direction_y)
@@ -185,6 +194,8 @@ void OnAppletUpdate()
 
             if (ball.x < player.x  || ball.x > player2.x) 
             {
+
+                isGameOver = true;
                 p1++;
                 ball.x = SCREEN_WIDTH / 2;
                 switch (ball_direction_y)
@@ -221,7 +232,9 @@ void OnAppletUpdate()
             clear_screen(BLACK);
             draw_text(p2sp, buf_p1, p1_point_counter_position.x, p1_point_counter_position.y + 650, 35, WHITE);
             draw_text(p2sp, buf_p2, p2_point_counter_position.x, p2_point_counter_position.y + 650, 35, WHITE);
-
+            if(isGameOver) {
+                draw_text(p2sp, "Game Over", SCREEN_WIDTH / 2 -190, SCREEN_HEIGHT / 2 + 300, 35, WHITE);
+            }
             //if (paused) draw_text(p2sp, "Press Space", SCREEN_WIDTH / 2 - 15, 10, 20, WHITE);
 
             draw_rectangle_rec(player, WHITE);
