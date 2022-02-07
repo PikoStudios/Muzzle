@@ -27,3 +27,7 @@
 #define mzColor4f       glColor4f
 
 #endif
+
+#define mzColour4ub     mzColor4ub
+#define mzColour3f      mzColor3f
+#define mzColour4f      mzColor4f

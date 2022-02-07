@@ -1,39 +1,32 @@
 #pragma once
 #include "../backend.h"
 #include "../core/tint.h"
+#include "../core/Error.h"
 #include "stdio.h"
 
-#define FRAGMENT_SHADER_SOURCE_SIZE 512
-#define SHADER_RESULT_LOG_SIZE 512
-#define SHADER_RESULT_BUFFER_SIZE 1024
-
-static const char* __internal_muzzle_defaults_shader_vertex_shader_source = "#version 330 core\n"
-"layout (location = 0) in vec3 aPos;\n"
-"void main()\n"
-"{\n"
-"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-"}\0";
+#define USE_DEFAULT_SHADER ((void*)(0))
 
 enum _mz_shader_type
 {
-    VERTEX_SHADER = 0x8B31,
-    FRAGMENT_SHADER = 0x8B30
+    SHADER_VERTEX,
+    SHADER_FRAGMENT
 };
 
-typedef unsigned int shader;
-typedef unsigned int shader_context;
+struct _mz_shader_def
+{
+    const char* vertex;
+    const char* fragment;
+}
+
 typedef enum _mz_shader_type shader_type;
+typedef struct _mz_shader_def shader_def;
+typedef unsigned int shader;
 
+// Remember to free it :))
+shader_def load_as_shader_definition(const char* vs_filepath, const char* fs_filepath);
+void unload_shader_definition(shader_def* definition);
 
-shader_context create_shader_context();
-
-void link_shader(shader_context context, shader shader);
-void link_shader_context(shader_context context);
-
-void use_shaders(shader_context context);
-
-shader create_default_vertex_shader();
-shader create_default_fragment_shader(tint color_drawn);
-shader create_shader(shader_type type, const char* source);
-
+shader create_shader(shader_def* definition);
 void unload_shader(shader shader);
+
+void enable_shader(shader shader);

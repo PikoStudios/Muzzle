@@ -1,71 +1,87 @@
 #include "modern_pipeline/Shaders.h"
 
-
-shader_context create_shader_context()
+shader_def load_as_shader_definition(const char* vs_filepath, const char* fs_filepath)
 {
-    return glCreateProgram();
-}
-
-void link_shader(shader_context context, shader shader)
-{
-    glAttachShader(context, shader);
-}
-
-void link_shader_context(shader_context context)
-{
-    glLinkProgram(context);
-}
-
-void use_shaders(shader_context context)
-{
-    glUseProgram(context);
-}
-
-shader create_default_vertex_shader()
-{
-    return create_shader(VERTEX_SHADER, &__internal_muzzle_defaults_shader_vertex_shader_source);
-}
-
-shader create_default_fragment_shader(tint color_drawn)
-{
-    const char source[FRAGMENT_SHADER_SOURCE_SIZE];
-    sprintf(source, "#version 330 core\n""out vec4 FragColor;\n""\n""void main()\n""{\n"
-    "FragColor = vec4(%.1ff, %.1ff, %.1ff, %.1ff);\n""}\n", color_drawn.r / 255, color_drawn.g / 255, color_drawn.b / 255, color_drawn.a / 255);
-
-    return create_shader(FRAGMENT_SHADER, &source);
-}
-
-shader create_shader(shader_type type, const char* source)
-{
-    shader buf;
-    buf = glCreateShader(type);
-
-    glShaderSource(buf, 1, &source, NULL);
-    glCompileShader(buf);
-
-#ifndef MZ_DONT_GET_SHADER_RESULT
-
-    int result;
-    char log[SHADER_RESULT_LOG_SIZE];
-
-    glGetShaderiv(buf, GL_COMPILE_STATUS, &result);
-
-    if (!result)
+    FILE *file = fopen(vs_filepath, "r");
+    if (!file)
     {
-        glGetShaderInfoLog(buf, SHADER_RESULT_LOG_SIZE, NULL, log);
-	
-	    char output[SHADER_RESULT_BUFFER_SIZE];
-	    sprintf(output, "Failed to create shader\nReason: %s", output);
-            
-	    log_status(STATUS_ERROR, output);
+        log_status(STATUS_ERROR, "Could not load vertex file");
+        return (shader_def){0};
     }
 
-#endif
+    fseek(file, 0, SEEK_END);
+    int size = ftell(file);
+    fseek(file, 0, SEEK_SET);
 
-    return buf;
+    char* vs_buffer = malloc(sizeof(char) * (size + 1));
+    if (!vs_buffer)
+    {
+        log_status(STATUS_ERROR, "Could not allocate memory for vertex file");
+        return (shader_def){0};
+    }
+
+    fread(vs_buffer, 1, size, file);
+    vs_buffer[size] = 0;
+    fclose(file);
+
+    file = fopen(fs_filepath, "r");
+    if (!file)
+    {
+        log_status(STATUS_ERROR, "Could not load fragment file");
+        return (shader_def){0};
+    }
+
+    fseek(file, 0, SEEK_END);
+    int size = ftell(file);
+    fseek(file, 0, SEEK_SET);
+
+    char* fs_buffer = malloc(sizeof(char) * (size + 1));
+    if (!fs_buffer)
+    {
+        log_status(STATUS_ERROR, "Could not allocate memory for fragment file");
+        return (shader_def){0};
+    }
+
+    fread(fs_buffer, 1, size, file);
+    fs_buffer[size] = 0;
+    fclose(file);
+
+    return (shader_def)
+    {
+        fs_buffer,
+        vs_buffer
+    };
 }
 
+void unload_shader_definition(shader_def* definition)
+{
+    free(definition->fragment);
+    free(definition->vertex);
+}
+
+shader create_shader(shader_def* definition)
+{
+    #ifdef MUZZLE_DANGEROUS_USE_MODERN_GRAPHICS_PIPELINE
+        return rlLoadShaderCode(definition->vertex, definition->fragment);
+    #else
+        log_status(STATUS_ERROR, "Shaders are only supported on the modern renderer");
+    #endif
+}
 void unload_shader(shader shader)
 {
-    glDeleteShader(shader);
+    #ifdef MUZZLE_DANGEROUS_USE_MODERN_GRAPHICS_PIPELINE
+        rlUnloadShaderProgram(shader);
+    #else
+        log_status(STATUS_ERROR, "Shaders are only supported on the modern renderer");
+    #endif
+}
+
+// TODO: Finish this or else
+void enable_shader(shader shader)
+{
+    #ifdef MUZZLE_DANGEROUS_USE_MODERN_GRAPHICS_PIPELINE
+        rlUnloadShaderProgram(shader);
+    #else
+        log_status(STATUS_ERROR, "Shaders are only supported on the modern renderer");
+    #endif
 }
