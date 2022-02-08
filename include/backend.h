@@ -27,6 +27,8 @@
 
 #define MUZZLE_NULL (void*)(1)
 
+
+#define MUZZLE_DANGEROUS_USE_MODERN_GRAPHICS_PIPELINE
 #ifdef MUZZLE_DANGEROUS_USE_MODERN_GRAPHICS_PIPELINE
     #define GRAPHICS_API_OPENGL_33
     #include "../deps/rlgl/rlgl.h"
