@@ -3,12 +3,12 @@
 // thickness is not supported on all GPUs
 void draw_line(vec2 point1, vec2 point2, float thickness, tint color_drawn)
 {
-    glBegin(GL_LINES);
+    mzBegin(GL_LINES);
         glLineWidth(thickness);
-        glColor4ub(color_drawn.r, color_drawn.g, color_drawn.b, color_drawn.a);
-        glVertex2f(point1.x, point1.y);
-        glVertex2f(point2.x, point2.y);
-    glEnd();
+        mzColor4ub(color_drawn.r, color_drawn.g, color_drawn.b, color_drawn.a);
+        mzVertex2f(point1.x, point1.y);
+        mzVertex2f(point2.x, point2.y);
+    mzEnd();
 }
 
 void draw_line_type(line data, tint color_drawn)
