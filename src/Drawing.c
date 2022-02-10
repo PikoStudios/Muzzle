@@ -7,6 +7,10 @@ void begin_drawing()
 }
 void end_drawing(Applet *applet)
 {
+    #ifdef MUZZLE_DANGEROUS_USE_MODERN_GRAPHICS_PIPELINE
+        rlDrawRenderBatchActive();
+    #endif
+    
     glfwSwapBuffers(applet->window_handle);
     glfwPollEvents();
 
