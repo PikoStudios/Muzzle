@@ -15,6 +15,7 @@
 
 #include <stdlib.h>
 #include "memory.h"
+#include "MuzzleGL.h"
 
 #define MUZZLE_FALSE 0
 #define MUZZLE_TRUE 1
