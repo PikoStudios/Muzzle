@@ -1,5 +1,9 @@
+#define MUZZLE_DEPS
+#define MUZZLE_DANGEROUS_USE_MODERN_GRAPHICS_PIPELINE
+
 #include <Muzzle.h>
 #include <stdio.h>
+
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720
 

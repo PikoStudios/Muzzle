@@ -27,6 +27,6 @@ void draw_rectangle_vec2(vec2 pos, vec2 size, tint color_drawn)
         mzVertex2f(pos.x, pos.y);
         mzVertex2f(pos.x + size.x, pos.y);
         mzVertex2f(pos.x + size.x, pos.y + size.y);
-        mzVertex2f(pos.x, pos.y + size.y);lor_drawn.r, color_drawn.g, color_drawn.b, color_drawn.a);
+        mzVertex2f(pos.x, pos.y + size.y);
     mzEnd();
 }

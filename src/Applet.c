@@ -80,8 +80,11 @@ Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TI
         data->State.modelview = rlMatrixIdentity();
         data->State.currentMatrix = &data->State.modelview;
     
+        
+    #else
+        log_status(STATUS_WARNING, "not using modern renderer");
     #endif
-
+    
     // NOTE: MAYBE: Instead of doing glViewport width height. Maybe get the actual framebuffer size and pass throught that?
     glViewport(0,0, WIDTH, HEIGHT);
 
@@ -100,14 +103,3 @@ Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TI
 
     return buf;
 }
-
-#ifdef MUZZLE_DANGEROUS_USE_MODERN_GRAPHICS_PIPELINE
-
-// TODO: revise this function
-
-static inline void set_main_renderer(Applet* self, renderer* renderer)
-{
-    self->renderer = renderer;
-}
-
-#endif

@@ -28,9 +28,8 @@
 
 #define MUZZLE_NULL (void*)(1)
 
-
-#define MUZZLE_DANGEROUS_USE_MODERN_GRAPHICS_PIPELINE
 #ifdef MUZZLE_DANGEROUS_USE_MODERN_GRAPHICS_PIPELINE
+    #warning "egg? (if you see this you are using the modern renderer)"
     #define GRAPHICS_API_OPENGL_33
     #include "../deps/rlgl/rlgl.h"
 #endif

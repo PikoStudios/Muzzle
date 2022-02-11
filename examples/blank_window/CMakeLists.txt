@@ -3,6 +3,9 @@ cmake_minimum_required(VERSION 3.18)
 project(Muzzle)
 set(MUZZLE_ROOT "../..")
 set(MUZZLE_LIB_FOLDER ${MUZZLE_ROOT}/deps)
+set(GLAD_SOURCE ${MUZZLE_LIB_FOLDER}/glad/src/glad.c)
+
+set(USE_MODERN_RENDERER TRUE) # Set to true when using modern renderer
 
 INCLUDE_DIRECTORIES(${MUZZLE_ROOT}/include)
 LINK_DIRECTORIES(${MUZZLE_LIB_FOLDER}/glfw/lib)
@@ -29,7 +32,18 @@ ${mz_source_dir}/Audio.c
 ${mz_source_dir}/Line.c
 )
 
-add_executable(main main.c ${mz_source})
+message(STATUS "Checking renderer")
+
+if (${USE_MODERN_RENDERER} MATCHES TRUE)
+    message(STATUS "Checking renderer - found (modern)")
+    add_executable(main main.c  ${mz_source})
+
+else()
+    # Default to legacy
+    message(STATUS "Checking renderer - default (legacy)")
+    add_executable(main main.c ${GLAD_SOURCE} ${mz_source})
+
+endif()
 
 message(STATUS "Checking OS")
 
