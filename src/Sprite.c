@@ -58,7 +58,7 @@ void draw_sprite(sprite *data, int x, int y, float scale, float rotation, tint c
             mzTexCoord2f(1.0f, 1.0f);glVertex2f(data->width,data->height);
             mzTexCoord2f(0.0f, 1.0f);glVertex2f(0.0f,data->height);
         mzEnd();
-    glPopMatrix();
+    mzPopMatrix();
 
     glDisable(GL_TEXTURE_2D);
 }
