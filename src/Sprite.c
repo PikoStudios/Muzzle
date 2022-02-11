@@ -45,19 +45,19 @@ void draw_sprite(sprite *data, int x, int y, float scale, float rotation, tint c
 
     glBindTexture(GL_TEXTURE_2D, data->sprite_id);
 
-    glPushMatrix();
-        glTranslatef(x,y,0);
-        glScalef(scale, scale, 1.0f);
-        glRotatef(rotation, 0,0,1.0f);
+    mzPushMatrix();
+        mzTranslatef(x,y,0);
+        mzScalef(scale, scale, 1.0f);
+        mzRotatef(rotation, 0,0,1.0f);
 
-        glBegin(GL_QUADS);
-            glColor4ub(color_drawn.r,color_drawn.g,color_drawn.b,color_drawn.a);
-            glNormal3f(0.0f, 0.0f, 1.0f);
-            glTexCoord2f(0.0f, 0.0f);glVertex2f(0.0f,0.0f);
-            glTexCoord2f(1.0f, 0.0f);glVertex2f(data->width,0.0f);
-            glTexCoord2f(1.0f, 1.0f);glVertex2f(data->width,data->height);
-            glTexCoord2f(0.0f, 1.0f);glVertex2f(0.0f,data->height);
-        glEnd();
+        mzBegin(GL_QUADS);
+            mzColor4ub(color_drawn.r,color_drawn.g,color_drawn.b,color_drawn.a);
+            mzNormal3f(0.0f, 0.0f, 1.0f);
+            mzTexCoord2f(0.0f, 0.0f);glVertex2f(0.0f,0.0f);
+            mzTexCoord2f(1.0f, 0.0f);glVertex2f(data->width,0.0f);
+            mzTexCoord2f(1.0f, 1.0f);glVertex2f(data->width,data->height);
+            mzTexCoord2f(0.0f, 1.0f);glVertex2f(0.0f,data->height);
+        mzEnd();
     glPopMatrix();
 
     glDisable(GL_TEXTURE_2D);

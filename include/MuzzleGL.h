@@ -12,6 +12,11 @@
 #define mzColor4ub      rlColor4ub
 #define mzColor3f       rlColor3f
 #define mzColor4f       rlColor4f
+#define mzPushMatrix    rlPushMatrix
+#define mzPopMatrix     rlPopMatrix
+#define mzTranslatef    rlTranslatef
+#define mzScalef        rlScalef
+#define mzRotatef       rlRotatef
 
 #else
 
@@ -25,6 +30,11 @@
 #define mzColor4ub      glColor4ub
 #define mzColor3f       glColor3f
 #define mzColor4f       glColor4f
+#define mzPushMatrix    glPushMatrix
+#define mzPopMatrix     glPopMatrix
+#define mzTranslatef    glTranslatef
+#define mzScalef        glScalef
+#define mzRotatef       glRotatef
 
 // bri'sh versions
 
