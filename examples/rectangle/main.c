@@ -1,5 +1,5 @@
 #define MUZZLE_DEPS
-#define MUZZLE_DANGEROUS_USE_MODERN_GRAPHICS_PIPELINE
+#define MUZZLE_USE_MODERN_RENDERER
 
 #include <Muzzle.h>
 #include <stdio.h>
