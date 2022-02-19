@@ -1,6 +1,6 @@
 #pragma once
 
-#ifdef MUZZLE_DANGEROUS_USE_MODERN_GRAPHICS_PIPELINE
+#ifdef MUZZLE_USE_MODERN_RENDERER
 
 #define mzBegin         rlBegin
 #define mzEnd           rlEnd
@@ -42,4 +42,4 @@
 #define mzColour3f      mzColor3f
 #define mzColour4f      mzColor4f
 
-#endif
+#endif // MUZZLE_USE_MODERN_RENDERER

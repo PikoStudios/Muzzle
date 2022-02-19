@@ -7,7 +7,7 @@ void begin_drawing()
 }
 void end_drawing(Applet *applet)
 {
-    #ifdef MUZZLE_DANGEROUS_USE_MODERN_GRAPHICS_PIPELINE
+    #ifdef INTERNAL_MODERN_RENDERER_USAGE
         rlDrawRenderBatchActive();
     #endif
     

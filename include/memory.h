@@ -21,9 +21,7 @@
     #define MZ_REALLOC(ptr, size)   realloc(ptr, size)
 #endif
 
-#ifdef __MEMORY_CREATE_RLGL_MIRRORS__
-    #define RLGL_MALLOC                 MZ_MALLOC
-    #define RLGL_CALLOC                 MZ_CALLOC
-    #define RLGL_FREE                   MZ_FREE
-    #define RLGL_REALLOC                MZ_REALLOC
-#endif
+#define RLGL_MALLOC                 MZ_MALLOC
+#define RLGL_CALLOC                 MZ_CALLOC
+#define RLGL_FREE                   MZ_FREE
+#define RLGL_REALLOC                MZ_REALLOC

@@ -3,7 +3,7 @@
 
 void QuitMuzzle(Applet applet)
 {
-    #ifdef MUZZLE_DANGEROUS_USE_MODERN_GRAPHICS_PIPELINE
+    #ifdef MUZZLE_USE_MODERN_RENDERER
         log_status(STATUS_INFO, "Closing Modern Renderer Context");
         rlglClose();
     #endif

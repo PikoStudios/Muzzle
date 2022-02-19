@@ -130,8 +130,14 @@
     #define TRACELOGD(...) (void)0
 #endif
 
-#define __MEMORY_CREATE_RLGL_MIRRORS__
 #include "../../include/memory.h"
+
+// Added by PikoStudios
+
+#ifndef GL_RGB565
+    #define GL_RGB565 0x8D62
+#endif
+
 
 // Security check in case no GRAPHICS_API_OPENGL_* defined
 #if !defined(GRAPHICS_API_OPENGL_11) && \
@@ -749,6 +755,7 @@ RLAPI void rlLoadDrawQuad(void);     // Load and draw a quad
 #include <stdlib.h>                     // Required for: malloc(), free()
 #include <string.h>                     // Required for: strcmp(), strlen() [Used in rlglInit(), on extensions loading]
 #include <math.h>                       // Required for: sqrtf(), sinf(), cosf(), floor(), log()
+#include "../../include/MuzzleMath.h"   // Required for; DEG2RAD, RAD2DEG, PI
 
 //----------------------------------------------------------------------------------
 // Defines and Macros
@@ -1968,7 +1975,8 @@ void rlLoadExtensions(void *loader)
 #if defined(GRAPHICS_API_OPENGL_33)     // Also defined for GRAPHICS_API_OPENGL_21
     // NOTE: glad is generated and contains only required OpenGL 3.3 Core extensions (and lower versions)
     #if !defined(__APPLE__)
-        if (gladLoadGL((GLADloadfunc)loader) == 0) TRACELOG(RL_LOG_WARNING, "GLAD: Cannot load OpenGL extensions");
+        // Modified by PikoStudios to fix GLADloadfunc not found
+        if (gladLoadGL() == 0) TRACELOG(RL_LOG_WARNING, "GLAD: Cannot load OpenGL extensions");
         else TRACELOG(RL_LOG_INFO, "GLAD: OpenGL extensions loaded successfully");
     #endif
 
@@ -1999,9 +2007,13 @@ void rlLoadExtensions(void *loader)
     if (GLAD_GL_ARB_shader_storage_buffer_object) RLGL.ExtSupported.ssbo = true;
     #endif
     #if !defined(__APPLE__)
-    // NOTE: With GLAD, we can check if an extension is supported using the GLAD_GL_xxx booleans
-    if (GLAD_GL_EXT_texture_compression_s3tc) RLGL.ExtSupported.texCompDXT = true;  // Texture compression: DXT
-    if (GLAD_GL_ARB_ES3_compatibility) RLGL.ExtSupported.texCompETC2 = true;        // Texture compression: ETC2/EAC
+
+    // Modified by PikoStudios
+    // TODO: Add Extension support later
+
+    //// NOTE: With GLAD, we can check if an extension is supported using the GLAD_GL_xxx booleans
+    //if (GLAD_GL_EXT_texture_compression_s3tc) RLGL.ExtSupported.texCompDXT = true;  // Texture compression: DXT
+    //if (GLAD_GL_ARB_ES3_compatibility) RLGL.ExtSupported.texCompETC2 = true;        // Texture compression: ETC2/EAC
     #endif
 #endif  // GRAPHICS_API_OPENGL_33
 

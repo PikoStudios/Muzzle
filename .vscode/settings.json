@@ -83,7 +83,8 @@
 		"shaders.h": "c",
 		"renderer.h": "c",
 		"array": "c",
-		"memory.h": "c"
+		"memory.h": "c",
+		"glad.h": "c"
 	},
 	"C_Cpp.dimInactiveRegions": true
 }

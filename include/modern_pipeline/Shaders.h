@@ -2,7 +2,7 @@
 #include "../backend.h"
 #include "../core/tint.h"
 #include "../core/Error.h"
-#include "stdio.h"
+#include <stdio.h>
 
 #define USE_DEFAULT_SHADER ((void*)(0))
 
@@ -30,15 +30,15 @@ enum _mz_shader_type
 
 struct _mz_shader_def
 {
-    const char* vertex;
-    const char* fragment;
-}
+    char* vertex;
+    char* fragment;
+};
 
 struct _mz_shader
 {
     int *locations;
     unsigned int id;
-}
+};
 
 typedef enum _mz_shader_type shader_type;
 typedef struct _mz_shader_def shader_def;

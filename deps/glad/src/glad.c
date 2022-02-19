@@ -22,7 +22,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <glad/glad.h>
+#include "../include/glad/glad.h"
 
 static void* get_proc(const char *namez);
 
@@ -155,6 +155,7 @@ int gladLoadGL(void) {
 
     return status;
 }
+
 
 struct gladGLversionStruct GLVersion = { 0, 0 };
 

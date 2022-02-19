@@ -8,10 +8,12 @@ void StartApplet(Applet *self)
 
 Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TITLE, int RESIZEABLE, int VSYNC)
 {
-#ifdef MUZZLE_DANGEROUS_USE_MODERN_GRAPHICS_PIPELINE
+#ifdef MUZZLE_USE_MODERN_RENDERER
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+    printf("fuck");
 #endif
 
     glfwSetErrorCallback(muzzle_error);
@@ -57,7 +59,7 @@ Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TI
 
     glfwSetWindowPos(buf.window_handle, 230,230);
 
-    #ifdef MUZZLE_DANGEROUS_USE_MODERN_GRAPHICS_PIPELINE
+    #ifdef MUZZLE_USE_MODERN_RENDERER
         rlLoadExtensions(glfwGetProcAddress);
         void* data = __internal_rlgl_get_data_structure();
 
@@ -79,10 +81,8 @@ Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TI
         data->State.projection = rlMatrixIdentity();
         data->State.modelview = rlMatrixIdentity();
         data->State.currentMatrix = &data->State.modelview;
-    
-        
-    #else
-        log_status(STATUS_WARNING, "not using modern renderer");
+
+        log_status(STATUS_SUCCESS, "Modern Renderer Initialized Successfully");
     #endif
     
     // NOTE: MAYBE: Instead of doing glViewport width height. Maybe get the actual framebuffer size and pass throught that?

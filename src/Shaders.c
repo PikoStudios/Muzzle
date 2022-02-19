@@ -61,7 +61,7 @@ void unload_shader_definition(shader_def* definition)
 
 shader create_shader(shader_def* definition)
 {
-    #ifdef MUZZLE_DANGEROUS_USE_MODERN_GRAPHICS_PIPELINE
+    #ifdef MUZZLE_USE_MODERN_RENDERER
         unsigned int id = rlLoadShaderCode(definition->vertex, definition->fragment);
         int *locations = MZ_CALLOC(RL_MAX_SHADER_LOCATIONS, sizeof(int));
 
@@ -100,7 +100,7 @@ shader create_shader(shader_def* definition)
 }
 void unload_shader(shader* shader)
 {
-    #ifdef MUZZLE_DANGEROUS_USE_MODERN_GRAPHICS_PIPELINE
+    #ifdef MUZZLE_USE_MODERN_RENDERER
         void* data = __internal_rlgl_get_data_structure();
         if (shader->id != rlGetShaderIdDefault())
         {
@@ -115,7 +115,7 @@ void unload_shader(shader* shader)
 // TODO: Finish this or else
 void enable_shader(shader* shader)
 {
-    #ifdef MUZZLE_DANGEROUS_USE_MODERN_GRAPHICS_PIPELINE
+    #ifdef MUZZLE_USE_MODERN_RENDERER
         rlSetShader(shader->id, shader->locations);
     #else
         log_status(STATUS_ERROR, "Shaders are only supported on the modern renderer");

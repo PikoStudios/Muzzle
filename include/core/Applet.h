@@ -16,7 +16,7 @@ typedef struct Applet
     GLFWwindow *handle;
 #endif
 } Applet;
-
+    
 #ifdef __cplusplus
 extern "C" {
 #endif
