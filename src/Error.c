@@ -35,3 +35,8 @@ void log_status(StatusTypes type, const char *status)
     }
     
 }
+void log_fatal(const char* status, const char* func_name)
+{
+    fprintf(stderr, "\e[0;31m\e[4;31m[FATAL][FUNCTION \"%s\"] :: %s\n\e[0m", func_name, status);
+    exit(-1);
+}
