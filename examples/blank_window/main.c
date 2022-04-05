@@ -1,5 +1,5 @@
-#define MUZZLE_DEPS
 #define MUZZLE_USE_MODERN_RENDERER
+#define MUZZLE_DEPS
 #include <Muzzle.h>
 #include <stdio.h>
 #define SCREEN_WIDTH 1280
