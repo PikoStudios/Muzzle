@@ -1,4 +1,6 @@
 #pragma once
+#ifndef MUZZLE_USE_MODERN_RENDERER
+
 #ifdef MUZZLE_DEPS
     #define FONTSTASH_IMPLEMENTATION
     #define GLFONTSTASH_IMPLEMENTATION
@@ -7,8 +9,8 @@
 
 #include <stdio.h>					// malloc, free, fopen, fclose, ftell, fseek, fread
 #include <string.h>					// memset
-#include "../deps/fontstash/fontstash.h"
 #include "../backend.h"
+#include "../deps/fontstash/fontstash.h"
 #include "../deps/fontstash/glfontstash.h"
 #include "Error.h"
 #include "tint.h"
@@ -59,4 +61,5 @@ void draw_shadow_text_vec2(font font_used, const char *text, vec2 position, tint
 
 #ifdef __cplusplus
 }
+#endif
 #endif

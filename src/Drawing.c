@@ -7,6 +7,10 @@ void begin_drawing()
 }
 void end_drawing(Applet *applet)
 {
+    #ifdef INTERNAL_MODERN_RENDERER_USAGE
+        rlDrawRenderBatchActive();
+    #endif
+    
     glfwSwapBuffers(applet->window_handle);
     glfwPollEvents();
 

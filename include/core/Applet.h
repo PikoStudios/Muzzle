@@ -4,44 +4,18 @@
 #include "callback.h"
 #include "../backend.h"
 
-#ifdef MUZZLE_DANGEROUS_USE_MODERN_GRAPHICS_PIPELINE
-    #include "../modern_pipeline/Renderer.h"
-#endif
-
 typedef struct Applet
 {
     int width, height;
-#ifndef MUZZLE_DANGEROUS_NEW_APPLET_MEMBER_NAMES
     char* WindowTitle;
     GLFWwindow *window_handle;
-#else
-#error "Undefine \"MUZZLE_DANGEROUS_NEW_APPLET_MEMBER_NAMES\" due to new applet member names not being supported by Muzzle API"
-    char* title;
-    GLFWwindow *handle;
-#endif
-
-#ifdef MUZZLE_DANGEROUS_USE_MODERN_GRAPHICS_PIPELINE
-#warning "New Modern Graphics Pipeline is very unstable and not completed and/or usable yet"
-    renderer* renderer;
-#endif
 } Applet;
-
+    
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 
-#ifdef MUZZLE_DANGEROUS_USE_MODERN_GRAPHICS_PIPELINE
-
-/*
-* set_main_renderer - Set main renderer
-* @param self Pointer to applet
-* @param renderer Pointer to Renderer
-*/
-
-static inline void set_main_renderer(Applet* self, renderer* renderer);
-
-#endif
 
 /*
 * StartApplet - Start a Applet

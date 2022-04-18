@@ -1,5 +1,7 @@
 #pragma once
 
+#include "backend.h"
+
 #ifdef MZ_DEPS_COLLISION
     #include "collision/mz_collision.h"
 #endif
@@ -18,19 +20,13 @@
     #define MUZZLE_SHARED_VARIABLE_ARRAY_SIZE 5
 #endif
 
-#ifdef _WIN32
-    #define MUZZLE_INTERNAL_DEBUG_ASSERT_HANDLE_FAILURE(x) \
-    MessageBoxA(NULL, x, "Muzzle Assert Failure", 0x00000000L); \
-    *(int*)0=0; // Trigger Sigfault
-#else
-    #define MUZZLE_INTERNAL_DEBUG_ASSERT_HANDLE_FAILURE(x) \
-    fprintf(stderr, "Muzzle Assert Failure: %s", x); \
-    *(int*)0=0; // Trigger Sigfault
-#endif
+#define MUZZLE_INTERNAL_DEBUG_ASSERT_HANDLE_FAILURE(x) fprintf(stderr, "Muzzle Assert Failure: %s", x); *(int*)0=0;
 
 
 #define MUZZLE_DEBUG_ASSERT(x, message) ((x) ? (void)(0) : MUZZLE_INTERNAL_DEBUG_ASSERT_HANDLE_FAILURE(message))
 
+
+#include "MuzzleGL.h"
 #include "core/vector.h"
 #include "core/Drawing.h"
 #include "core/tint.h"

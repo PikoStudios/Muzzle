@@ -14,25 +14,19 @@
 #endif
 
 #include <stdlib.h>
-
-#ifndef MZ_MALLOC
-    #define MZ_MALLOC(size)         malloc(size)
-#endif
-
-#ifndef MZ_CALLOC
-    #define MZ_CALLOC(num, size)    calloc(num, size)
-#endif
-
-#ifndef MZ_FREE
-    #define MZ_FREE(ptr)            free(ptr)
-#endif
-
-#ifndef MZ_REALLOC
-    #define MZ_REALLOC(ptr, size)   realloc(ptr, size)
-#endif
+#include "memory.h"
+#include "MuzzleGL.h"
 
 #define MUZZLE_FALSE 0
 #define MUZZLE_TRUE 1
+
+#ifdef MUZZLE_USE_MODERN_RENDERER
+    #define RLGL_IMPLEMENTATION
+    #define GRAPHICS_API_OPENGL_33
+    #include "../deps/rlgl/rlgl.h"
+
+    #include "modern_pipeline/Shaders.h"
+#endif
 
 #ifdef MZ_DEPS_USE_GLOBAL
     #include <GLFW/glfw3.h>
@@ -41,10 +35,6 @@
 #endif
 
 #define MUZZLE_NULL (void*)(1)
-
-#ifdef MUZZLE_DANGEROUS_USE_MODERN_GRAPHICS_PIPELINE
-    #include "../deps/glad/include/glad/glad.h"
-#endif
 
 #ifdef _WIN32
     // Include WinAPI if on windows. Required for MultiByteToWideChar

@@ -42,6 +42,14 @@ StatusTypes type
 const char *status
 */
 void log_status(StatusTypes type, const char *status);
+/*
+void log_fatal
+Log Fatal Staus
+=============
+const char *status
+const char *func_name
+*/
+void log_fatal(const char* status, const char* func_name);
 
 #ifdef __cplusplus
 }

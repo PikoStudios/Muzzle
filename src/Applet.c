@@ -8,10 +8,12 @@ void StartApplet(Applet *self)
 
 Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TITLE, int RESIZEABLE, int VSYNC)
 {
-#ifdef MUZZLE_DANGEROUS_USE_MODERN_GRAPHICS_PIPELINE
+#ifdef MUZZLE_USE_MODERN_RENDERER
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+    log_status(STATUS_WARNING, "Using Modern Renderer");
 #endif
 
     glfwSetErrorCallback(muzzle_error);
@@ -57,6 +59,31 @@ Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TI
 
     glfwSetWindowPos(buf.window_handle, 230,230);
 
+    #ifdef MUZZLE_USE_MODERN_RENDERER
+        rlLoadExtensions(glfwGetProcAddress);
+        void* data = __internal_rlgl_get_data_structure();
+
+        // NOTE: MAYBE: Create default white texture???
+
+        rlLoadShaderDefault();
+        data->State.currentShaderId = data->State.defaultShaderId;
+        data->State.currentShaderLocs = data->State.defaultShaderLocs;
+        
+        data->defaultBranch = rlLoadRenderBatch(RL_DEFAULT_BATCH_BUFFERS, RL_DEFAULT_BATCH_BUFFER_ELEMENTS);
+        data->currentBatch = &data->defaultBatch;
+
+        for (int i = 0; i < RL_MAX_MATRIX_STACK_SIZE; i++)
+        {
+            data->State.stack[i] = rlMatrixIdentity();
+        }
+
+        data->State.transform = rlMatrixIdentity();
+        data->State.projection = rlMatrixIdentity();
+        data->State.modelview = rlMatrixIdentity();
+        data->State.currentMatrix = &data->State.modelview;
+
+        log_status(STATUS_SUCCESS, "Modern Renderer Initialized Successfully");
+    #endif
     
     // NOTE: MAYBE: Instead of doing glViewport width height. Maybe get the actual framebuffer size and pass throught that?
     glViewport(0,0, WIDTH, HEIGHT);
@@ -74,20 +101,5 @@ Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TI
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-#ifdef MUZZLE_DANGEROUS_USE_MODERN_GRAPHICS_PIPELINE
-    gladLoadGL();
-#endif
-
     return buf;
 }
-
-#ifdef MUZZLE_DANGEROUS_USE_MODERN_GRAPHICS_PIPELINE
-
-// TODO: revise this function
-
-static inline void set_main_renderer(Applet* self, renderer* renderer)
-{
-    self->renderer = renderer;
-}
-
-#endif
