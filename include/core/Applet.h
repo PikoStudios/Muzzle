@@ -7,14 +7,8 @@
 typedef struct Applet
 {
     int width, height;
-#ifndef MUZZLE_DANGEROUS_NEW_APPLET_MEMBER_NAMES
     char* WindowTitle;
     GLFWwindow *window_handle;
-#else
-#error "Undefine \"MUZZLE_DANGEROUS_NEW_APPLET_MEMBER_NAMES\" due to new applet member names not being supported by Muzzle API"
-    char* title;
-    GLFWwindow *handle;
-#endif
 } Applet;
     
 #ifdef __cplusplus

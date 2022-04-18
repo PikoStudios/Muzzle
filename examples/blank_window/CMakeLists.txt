@@ -26,7 +26,7 @@ ${mz_source_dir}/tint.c
 ${mz_source_dir}/Circle.c
 ${mz_source_dir}/Input.c
 ${mz_source_dir}/Sprite.c
-${mz_source_dir}/Text.c
+
 ${mz_source_dir}/Time.c
 ${mz_source_dir}/Audio.c
 ${mz_source_dir}/Line.c
@@ -36,12 +36,12 @@ message(STATUS "Checking renderer")
 
 if (${USE_MODERN_RENDERER} MATCHES TRUE)
     message(STATUS "Checking renderer - found (modern)")
-    add_executable(main main.c  ${mz_source})
+    add_executable(main main.c ${GLAD_SOURCE} ${mz_source})
 
 else()
     # Default to legacy
     message(STATUS "Checking renderer - default (legacy)")
-    add_executable(main main.c ${GLAD_SOURCE} ${mz_source})
+    add_executable(main main.c ${mz_source})
 
 endif()
 

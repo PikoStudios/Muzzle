@@ -84,7 +84,8 @@
 		"renderer.h": "c",
 		"array": "c",
 		"memory.h": "c",
-		"glad.h": "c"
+		"glad.h": "c",
+		"muzzlegl.h": "c"
 	},
 	"C_Cpp.dimInactiveRegions": true
 }

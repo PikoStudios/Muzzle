@@ -13,7 +13,7 @@ Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TI
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    printf("fuck");
+    log_status(STATUS_WARNING, "Using Modern Renderer");
 #endif
 
     glfwSetErrorCallback(muzzle_error);

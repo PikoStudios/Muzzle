@@ -1,4 +1,6 @@
 #pragma once
+#ifndef MUZZLE_USE_MODERN_RENDERER
+
 #ifdef MUZZLE_DEPS
     #define FONTSTASH_IMPLEMENTATION
     #define GLFONTSTASH_IMPLEMENTATION
@@ -59,4 +61,5 @@ void draw_shadow_text_vec2(font font_used, const char *text, vec2 position, tint
 
 #ifdef __cplusplus
 }
+#endif
 #endif
