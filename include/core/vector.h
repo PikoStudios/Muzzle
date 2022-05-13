@@ -27,3 +27,18 @@ typedef struct vec3_d
     double y;
     double z;
 } vec3_d;
+
+// Vector2 with ints
+typedef struct vec2_i
+{
+    int x;
+    int y;
+} vec2_i;
+
+// Vector2 with ints
+typedef struct vec3_i
+{
+    int x;
+    int y;
+    int z;
+} vec3_i;

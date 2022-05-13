@@ -27,6 +27,60 @@ void clear_screen(tint color_drawn)
     glClearColor(r, g, b, a);
 }
 
+vec2 get_window_scale_dpi(Applet* applet)
+{
+    vec2 scale = (vec2){ 1.0f, 1.0f };
+    vec2 dpi = (vec2){ 1.0f, 1.0f };
+
+    vec2 window_pos = {0};
+    glfwGetWindowPos(applet->window_handle, &window_pos.x, &window_pos.y);
+
+    int monitor_count = 0;
+    GLFWmonitor** monitors = glfwGetMonitors(&monitor_count);
+
+    for (int i = 0; i < count; i++)
+    {
+        glfwGetMonitorContentScale(monitors[i], &window_pos.x, &window_pos.y);
+        
+        int x, y, width, height;
+
+        if ((windowPos.x >= xpos) && (windowPos.x < xpos + width) && (windowPos.y >= ypos) && (windowPos.y < ypos + height))
+        {
+            scale.x = x;
+            scale.y = y;
+            break;
+        }
+    }
+    
+    return scale;
+}
+
+void begin_scissor(Applet* applet, int flag_highdpi, int x, int y, int width, int height)
+{
+    vec2 scale = get_window_scale_dpi(applet);
+    glEnable(GL_SCISSOR_TEST);
+
+#ifdef __APPLE__
+    int win_width, win_height;
+    glfwGetWindowSize(applet->window_handle, &width, &height);
+
+    glScissor((int)(x * scale.x), (int)(win_width * scale.y - (((y + height) * scale.y))), (int)(width * scale.x), (int)(height * scale.y));
+#else
+    if (flag_highdpi) glScissor((int)(x * scale.x), (int)(applet->height - (y + height) * scale.y), (int)(width * scale.x), (int)(height * scale.y));
+    else glScissor(x, applet->height - (y + height), width, height);
+#endif
+}
+
+void begin_scissor_vec2(Applet* applet, int flag_highdpi, vec2_i pos, vec2_i size)
+{
+    begin_scissor(applet, flag_highdpi, pos.x, pos.y, size.x, size.y);
+}
+
+void end_scissor()
+{
+    glDisable(GL_SCISSOR_TEST);
+}
+
 void update_viewport(Applet *applet, int w, int h)
 {
     glfwGetWindowSize(applet->window_handle, &w,&h);
