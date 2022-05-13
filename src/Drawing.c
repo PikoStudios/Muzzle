@@ -43,8 +43,9 @@ vec2 get_window_scale_dpi(Applet* applet)
         glfwGetMonitorContentScale(monitors[i], &window_pos.x, &window_pos.y);
         
         int x, y, width, height;
+        glfwGetMonitorWorkarea(monitors[i], &x, &y, &width, &height);
 
-        if ((windowPos.x >= xpos) && (windowPos.x < xpos + width) && (windowPos.y >= ypos) && (windowPos.y < ypos + height))
+        if ((windowPos.x >= x) && (windowPos.x < x + width) && (windowPos.y >= y) && (windowPos.y < y + height))
         {
             scale.x = x;
             scale.y = y;
