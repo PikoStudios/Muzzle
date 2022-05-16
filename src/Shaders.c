@@ -92,7 +92,7 @@ shader create_shader(shader_def* definition)
             locations[RL_SHADER_LOC_MAP_NORMAL] =           rlGetLocationUniform(id, MZ_SHADER_SAMPLER2D_NAME_TEXTURE2);
         }
 
-        return (shader) { id, locations };
+        return (shader) { locations, id };
     #else
         log_status(STATUS_ERROR, "Shaders are only supported on the modern renderer");
         return (shader){0};
