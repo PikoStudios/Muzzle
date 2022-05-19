@@ -85,7 +85,10 @@
 		"array": "c",
 		"memory.h": "c",
 		"glad.h": "c",
-		"muzzlegl.h": "c"
+		"muzzlegl.h": "c",
+		"math.h": "c",
+		"cmath": "c",
+		"complex": "c"
 	},
 	"C_Cpp.dimInactiveRegions": true
 }
