@@ -90,7 +90,7 @@ float mz_math_remap(float val, float input_start, float input_end, float output_
 
 float** mz_math_quadratic_formula_array(float a, float b, float c)
 {
-    float[2] res;
+    float res[2];
     float sqroot_val = sqrt((b*b) - (4 * a * c));
 
     res[0] = (-b + sqroot_val) / (2 * a);
@@ -101,14 +101,14 @@ float** mz_math_quadratic_formula_array(float a, float b, float c)
 
 MZ_MATH_VECTOR2 mz_math_quadratic_formula_vec2(float a, float b, float c)
 {
-    float[2] res = mz_math_quadratic_formula_array(a,b,c);
+    float res[2] = mz_math_quadratic_formula_array(a,b,c);
 
     return (MZ_MATH_VECTOR2){.x = res[0], .y = res[1]};
 }
 
 double** mz_math_quadratic_formula_array_double(double a, double b, double c)
 {
-    double[2] res;
+    double res[2];
     double sqroot_val = sqrt((b*b) - (4 * a * c));
 
     res[0] = (-b + sqroot_val) / (2 * a);
@@ -119,37 +119,37 @@ double** mz_math_quadratic_formula_array_double(double a, double b, double c)
 
 MZ_MATH_VECTOR2_DOUBLE mz_math_quadratic_formula_vec2_d(double a, double b, double c)
 {
-    double[2] res = mz_math_quadratic_formula_array_double(a,b,c);
+    double res[2] = mz_math_quadratic_formula_array_double(a,b,c);
 
-    return (MZ_MATH_VECTOR2_D){.x = res[0], .y = res[1]};
+    return (MZ_MATH_VECTOR2_DOUBLE){.x = res[0], .y = res[1]};
 }
 
 double** mz_math_true_sqroot(double val)
 {
     double sq = sqrt(val);
-    double[] res = {sq, -sq};
+    double res[] = {sq, -sq};
 
     return res;
 }
 
-MZ_MATH_VECTOR2_D mz_math_true_sqroot_vec2_d(double val)
+MZ_MATH_VECTOR2_DOUBLE mz_math_true_sqroot_vec2_d(double val)
 {
-    double[2] res = mz_math_true_sqroot(val);
+    double res[2] = mz_math_true_sqroot(val);
 
-    return (MZ_MATH_VECTOR2_D){.x = res[0], .y = res[1]};
+    return (MZ_MATH_VECTOR2_DOUBLE){.x = res[0], .y = res[1]};
 }
 
 float** mz_math_true_sqroot_float(float val)
 {
     float sq = sqrtf(val);
-    float[] res = {sq, -sq};
+    float res[] = {sq, -sq};
 
     return res;
 }
 
 MZ_MATH_VECTOR2 mz_math_true_sqroot_vec2(float val)
 {
-    float[2] = mz_math_true_sqroot_float(val);
+    float res[2] = mz_math_true_sqroot_float(val);
 
     return (MZ_MATH_VECTOR2){.x = res[0], .y = res[1]};
 }
