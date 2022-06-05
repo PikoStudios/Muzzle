@@ -33,19 +33,19 @@ vec2 get_window_scale_dpi(Applet* applet)
     vec2 dpi = (vec2){ 1.0f, 1.0f };
 
     vec2 window_pos = {0};
-    glfwGetWindowPos(applet->window_handle, &window_pos.x, &window_pos.y);
+    glfwGetWindowPos(applet->window_handle, (int*)(&window_pos.x), (int*)(&window_pos.y));
 
     int monitor_count = 0;
     GLFWmonitor** monitors = glfwGetMonitors(&monitor_count);
 
-    for (int i = 0; i < count; i++)
+    for (int i = 0; i < monitor_count; i++)
     {
         glfwGetMonitorContentScale(monitors[i], &window_pos.x, &window_pos.y);
         
         int x, y, width, height;
         glfwGetMonitorWorkarea(monitors[i], &x, &y, &width, &height);
 
-        if ((windowPos.x >= x) && (windowPos.x < x + width) && (windowPos.y >= y) && (windowPos.y < y + height))
+        if ((window_pos.x >= x) && (window_pos.x < x + width) && (window_pos.y >= y) && (window_pos.y < y + height))
         {
             scale.x = x;
             scale.y = y;
