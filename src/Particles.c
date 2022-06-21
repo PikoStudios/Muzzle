@@ -1,28 +1,10 @@
 #include "core/Particles.h"
 
-void spawn_particle(particle_descriptor *descriptor)
+void update_particle(particle* obj)
 {
-    descriptor->array[descriptor->count - 1]->draw = descriptor->copier;
-    descriptor->array[descriptor->count - 1]->lifespan = descriptor->lifespan;
+    obj->velocity = (vec2){ obj->velocity.x + obj->acceleration.x, obj->velocity.y + obj->acceleration.y };
+    obj->position = (vec2){ obj->position.x + obj->velocity.x, obj->position.y + obj->velocity.y };
+    obj->lifespan -= obj->slasher_amount;
 
-    descriptor->array[descriptor->count - 1]->color_drawn = descriptor->color_drawn;
-    descriptor->array[descriptor->count - 1]->timer = 0.f;
-}
-
-void update_particle(particle_descriptor *descriptor)
-{
-    for (int i = 0; i < descriptor->count; i++)
-    {
-        if (descriptor->array[i]->timer >= descriptor->array[i]->lifespan) descriptor->array[i] = NULL;
-        else descriptor->update(descriptor->array[i]);
-    }   
-}
-
-void draw_particle(particle_descriptor *descriptor)
-{
-    for (int i = 0; i < descriptor->count; i++)
-    {
-        if (!descriptor->array[i] == NULL) descriptor->draw(descriptor->array[i]);
-        else return;
-    }
+    if (obj->lifespan <= 0.0f) obj->dead = MUZZLE_TRUE;
 }

@@ -1,38 +1,22 @@
 #pragma once
 #include "../backend.h"
+#include "vector.h"
 #include "tint.h"
 
-#include "../shapes/Rectangle.h"
-#include "../shapes/Circle.h"
-#include "Sprite.h"
+// Low-Level Barebones Particle System
 
 struct _mz_particle
 {
-    tint color_drawn;
-    float lifespan;
+    vec2 position;
+    vec2 velocity;
+    vec2 acceleration;
 
-    float timer;
-    void* draw;
+    float lifespan;
+    int dead;
+
+    float slasher_amount; // How much to slash off the lifespan every update
 };
 
 typedef struct _mz_particle particle;
 
-struct _mz_particle_descriptor
-{
-    tint color_drawn;
-    float lifespan;
-
-    void (*update)(particle*);
-    void (*draw)(particle*);
-
-    void* copier;
-
-    size_t count;
-    particle** array;
-};
-
-typedef struct _mz_particle_descriptor particle_descriptor;
-
-void spawn_particle(particle_descriptor *descriptor);
-void update_particle(particle_descriptor *descriptor);
-void draw_particle(particle_descriptor *descriptor);
+void update_particle(particle* obj);
