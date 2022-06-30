@@ -6,7 +6,7 @@
 extern "C" {
 #endif
 
-void callback_key(GLFWwindow *handle, int key, int scan_code, int action, int mods);
+MZ_API void callback_key(GLFWwindow *handle, int key, int scan_code, int action, int mods);
 
 #ifdef __cplusplus
 }

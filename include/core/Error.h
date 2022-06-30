@@ -33,7 +33,7 @@ internal error function
 int error
 const char *desc
 */
-void muzzle_error(int error, const char *desc);
+MZ_API void muzzle_error(int error, const char *desc);
 /*
 void log_status
 Log Status
@@ -41,7 +41,7 @@ Log Status
 StatusTypes type
 const char *status
 */
-void log_status(StatusTypes type, const char *status);
+MZ_API void log_status(StatusTypes type, const char *status);
 /*
 void log_fatal
 Log Fatal Staus
@@ -49,7 +49,7 @@ Log Fatal Staus
 const char *status
 const char *func_name
 */
-void log_fatal(const char* status, const char* func_name);
+MZ_API void log_fatal(const char* status, const char* func_name);
 
 #ifdef __cplusplus
 }

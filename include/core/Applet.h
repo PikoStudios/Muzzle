@@ -21,7 +21,7 @@ extern "C" {
 * StartApplet - Start a Applet
 * @param self Pointer to Applet
 */
-void StartApplet(Applet *self);
+MZ_API void StartApplet(Applet *self);
 
 /*
 * InitializeApplet - Create a new Applet
@@ -32,7 +32,7 @@ void StartApplet(Applet *self);
 * @param VSYNC Toggle VSync, If set to MUZZLE_FALSE Muzzle will try to use as much of the GPU and CPU that it can use
 * @return Applet
 */
-Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TITLE, int RESIZEABLE, int VSYNC);
+MZ_API Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TITLE, int RESIZEABLE, int VSYNC);
 
 #ifdef __cplusplus
 }

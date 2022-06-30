@@ -25,7 +25,7 @@ extern "C" {
 * @param size The amount of sprites [offset -1] 10 sprites :: size is 9
 * @return A animation struct
 */
-animation load_animation(const char** locations, int size, vec2 position);
+MZ_API animation load_animation(const char** locations, int size, vec2 position);
 /*
 * play_animation - Plays a animation
 * @param data A pointer to a animation struct
@@ -35,13 +35,13 @@ animation load_animation(const char** locations, int size, vec2 position);
 * @param color_drawn Color drawn over sprite [White for no extra color]
 * @return Nothing
 */
-void play_animation(animation* data, long target_fps, float scale, float rotation, tint color_drawn);
+MZ_API void play_animation(animation* data, long target_fps, float scale, float rotation, tint color_drawn);
 /*
 * unload_animation - Unloads a Animation
 * @param data A pointer to a animation struct
 * @return Nothing
 */
-void unload_animation(animation* data);
+MZ_API void unload_animation(animation* data);
 
 
 #ifdef __cplusplus

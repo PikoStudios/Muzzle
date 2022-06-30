@@ -6,10 +6,10 @@ extern "C" {
 #endif
 
 
-void update_delta_time();
+MZ_API void update_delta_time();
 
-double get_delta_time();
-float get_delta_time_float();
+MZ_API double get_delta_time();
+MZ_API float get_delta_time_float();
 
 #ifdef __cplusplus
 }

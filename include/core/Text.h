@@ -32,7 +32,7 @@ typedef struct font
 } font;
 
 // Load Font
-font load_font(const char* filepath, const char* name);
+MZ_API font load_font(const char* filepath, const char* name);
 
 
 /*
@@ -50,14 +50,14 @@ font load_font(const char* filepath, const char* name);
 
 
 // Draw Text
-void draw_text(font font_used, const char *text, float x, float y, float font_size, tint color_drawn);
-void draw_text_vec2(font font_used, const char *text, vec2 pos, float font_size, tint color_drawn);
+MZ_API void draw_text(font font_used, const char *text, float x, float y, float font_size, tint color_drawn);
+MZ_API void draw_text_vec2(font font_used, const char *text, vec2 pos, float font_size, tint color_drawn);
 
-void draw_blurred_text(font font_used, const char *text, float x, float y, float intensity, float font_size, tint color_drawn);
-void draw_shadow_text(font font_used, const char *text, float x, float y, tint shadow_color, float intensity, float font_size, tint color_drawn);
+MZ_API void draw_blurred_text(font font_used, const char *text, float x, float y, float intensity, float font_size, tint color_drawn);
+MZ_API void draw_shadow_text(font font_used, const char *text, float x, float y, tint shadow_color, float intensity, float font_size, tint color_drawn);
 
-void draw_blurred_text_vec2(font font_used, const char *text, vec2 position, float intensity, float font_size, tint color_drawn);
-void draw_shadow_text_vec2(font font_used, const char *text, vec2 position, tint shadow_color, float intensity, float font_size, tint color_drawn);
+MZ_API void draw_blurred_text_vec2(font font_used, const char *text, vec2 position, float intensity, float font_size, tint color_drawn);
+MZ_API void draw_shadow_text_vec2(font font_used, const char *text, vec2 position, tint shadow_color, float intensity, float font_size, tint color_drawn);
 
 #ifdef __cplusplus
 }

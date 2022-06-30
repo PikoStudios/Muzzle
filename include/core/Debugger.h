@@ -25,4 +25,4 @@ typedef struct debugger
     const char* debugger_name;
 } debugger;
 
-void trigger_debugger(const char* msg, debugger* self, int debug_type);
+MZ_API void trigger_debugger(const char* msg, debugger* self, int debug_type);

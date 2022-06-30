@@ -146,26 +146,26 @@ extern "C" {
 #endif
 
 
-int key_up(Applet *applet, KeyInput key);
-int key_down(Applet *applet, KeyInput key);
+MZ_API int key_up(Applet *applet, KeyInput key);
+MZ_API int key_down(Applet *applet, KeyInput key);
 
-int mouse_up(Applet *applet, MouseInput button);
-int mouse_down(Applet *applet, MouseInput button);
+MZ_API int mouse_up(Applet *applet, MouseInput button);
+MZ_API int mouse_down(Applet *applet, MouseInput button);
 
-vec2_d get_mouse_posititon(Applet* applet);
+MZ_API vec2_d get_mouse_posititon(Applet* applet);
 
-double get_mouse_x(Applet* applet);
-double get_mouse_y(Applet* applet);
+MZ_API double get_mouse_x(Applet* applet);
+MZ_API double get_mouse_y(Applet* applet);
 
-vec2 get_mouse_position_vec2(Applet* applet);
+MZ_API vec2 get_mouse_position_vec2(Applet* applet);
 
-float get_mouse_xf(Applet* applet);
-float get_mouse_yf(Applet* applet);
+MZ_API float get_mouse_xf(Applet* applet);
+MZ_API float get_mouse_yf(Applet* applet);
 
-int is_gamepad_online(int pad);
-const char* get_gamepad_name(int pad);
+MZ_API int is_gamepad_online(int pad);
+MZ_API const char* get_gamepad_name(int pad);
 
-void get_gamepad_state(gamepad* pad);
+MZ_API void get_gamepad_state(gamepad* pad);
 
 
 #ifdef __cplusplus

@@ -39,6 +39,16 @@
 #ifdef _WIN32
     // Include WinAPI if on windows. Required for MultiByteToWideChar
     #include "windows.h"
+
+    #ifdef BUILD_LIBTYPE_SHARED
+        #define MZ_API __declspec(dllexport)
+    #elif defined(USE_LIBTYPE_SHARED)
+        #define MZ_API __declspec(dllimport)
+    #endif
+#endif
+
+#ifndef MZ_API
+    #define MZ_API
 #endif
 
 #ifdef __cplusplus

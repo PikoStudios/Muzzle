@@ -21,5 +21,5 @@ struct _mz_particle
 
 typedef struct _mz_particle particle;
 
-void update_particle(particle* obj);
-void update_particle_delta(particle* obj, float delta); // Will decrease lifespan every second
+MZ_API void update_particle(particle* obj);
+MZ_API void update_particle_delta(particle* obj, float delta); // Will decrease lifespan every second

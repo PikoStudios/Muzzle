@@ -39,4 +39,4 @@
 #include "core/Time.h"
 #include <stdlib.h>
 
-void QuitMuzzle(Applet applet);
+MZ_API void QuitMuzzle(Applet applet);

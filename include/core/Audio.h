@@ -44,17 +44,17 @@ typedef struct audio
 extern "C" {
 #endif
 
-audio_context* initialize_audio_context(Applet *applet, unsigned play_freq_hz, int buffered_samples, int playing_pool_count);
+MZ_API audio_context* initialize_audio_context(Applet *applet, unsigned play_freq_hz, int buffered_samples, int playing_pool_count);
 
 
-audio load_audio_wav(const char* filepath);
-void play_audio(audio_context* ctx, audio* sound);
+MZ_API audio load_audio_wav(const char* filepath);
+MZ_API void play_audio(audio_context* ctx, audio* sound);
 
-void mix_audio_context(audio_context* ctx);
-void spawn_mix_thread(audio_context* ctx);
+MZ_API void mix_audio_context(audio_context* ctx);
+MZ_API void spawn_mix_thread(audio_context* ctx);
 
-void unload_audio(audio* sound);
-void unload_audio_context(audio_context* ctx);
+MZ_API void unload_audio(audio* sound);
+MZ_API void unload_audio_context(audio_context* ctx);
 
 // TODO: Look into cs_sleep(); and implement it in Muzzle.h
 

@@ -5,11 +5,11 @@
 
 
 
-void OnAppletUpdate();
+MZ_API void OnAppletUpdate();
 
 #ifdef __cplusplus
-extern "C" bool keep_applet(MUZZLE_WINDOW window);
+extern "C" MZ_API bool keep_applet(MUZZLE_WINDOW window);
 #else
-bool keep_applet(MUZZLE_WINDOW window);
+MZ_API bool keep_applet(MUZZLE_WINDOW window);
 #endif
 
