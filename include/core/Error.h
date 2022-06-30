@@ -1,6 +1,7 @@
 #pragma once
 #include <stdio.h> // required for fprintf()
 #include <stdlib.h> // required for exit() and stderr
+#include "../backend.h" // Required for MZ_API
 
 typedef enum StatusTypes
 {
