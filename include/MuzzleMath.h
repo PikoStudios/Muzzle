@@ -63,35 +63,35 @@ MZ_API float mz_math_remap(float val, float input_start, float input_end, float 
 
 #ifdef MZ_MATH_IMPLEMENTION
 
-MZ_API float mz_math_clamp(float val, float min, float max)
+float mz_math_clamp(float val, float min, float max)
 {
     float x = val < min ? min : val;
     return x > max ? max : x;
 }
 
-MZ_API mz_math_clamp_then_boost(float val, float min, float max, float booster)
+float mz_math_clamp_then_boost(float val, float min, float max, float booster)
 {
     float x = val < min ? min + booster : val;
     return x > max ? max : x;
 }
 
 
-MZ_API float mz_math_lerp(float start, float end, float amount)
+float mz_math_lerp(float start, float end, float amount)
 {
     return start + amount * (end - start);
 }
 
-MZ_API float mz_math_normalize(float val, float start, float end)
+float mz_math_normalize(float val, float start, float end)
 {
     return (val - start) / (end - start);
 }
 
-MZ_API float mz_math_remap(float val, float input_start, float input_end, float output_start, float output_end)
+float mz_math_remap(float val, float input_start, float input_end, float output_start, float output_end)
 {
     return (val - input_start) / (input_end - input_start) * (output_end - output_start) + output_start;
 }
 
-//MZ_API float** mz_math_quadratic_formula_array(float a, float b, float c)
+//float** mz_math_quadratic_formula_array(float a, float b, float c)
 //{
 //    float** res;
 //    float sqroot_val = sqrt((b*b) - (4 * a * c));
@@ -102,14 +102,14 @@ MZ_API float mz_math_remap(float val, float input_start, float input_end, float 
 //    return res;
 //}
 //
-//MZ_API MZ_MATH_VECTOR2 mz_math_quadratic_formula_vec2(float a, float b, float c)
+//MZ_MATH_VECTOR2 mz_math_quadratic_formula_vec2(float a, float b, float c)
 //{
 //    float** res = mz_math_quadratic_formula_array(a,b,c);
 //
 //    return (MZ_MATH_VECTOR2){.x = *res[0], .y = *res[1]};
 //}
 //
-//MZ_API double** mz_math_quadratic_formula_array_double(double a, double b, double c)
+//double** mz_math_quadratic_formula_array_double(double a, double b, double c)
 //{
 //    double** res;
 //    double sqroot_val = sqrt((b*b) - (4 * a * c));
@@ -120,14 +120,14 @@ MZ_API float mz_math_remap(float val, float input_start, float input_end, float 
 //    return res;   
 //}
 //
-//MZ_API MZ_MATH_VECTOR2_DOUBLE mz_math_quadratic_formula_vec2_d(double a, double b, double c)
+//MZ_MATH_VECTOR2_DOUBLE mz_math_quadratic_formula_vec2_d(double a, double b, double c)
 //{
 //    double** res = mz_math_quadratic_formula_array_double(a,b,c);
 //
 //    return (MZ_MATH_VECTOR2_DOUBLE){.x = *res[0], .y = *res[1]};
 //}
 //
-//MZ_API double** mz_math_true_sqroot(double val)
+//double** mz_math_true_sqroot(double val)
 //{
 //    double sq = sqrt(val);
 //    double** res{sq, -sq};
@@ -135,14 +135,14 @@ MZ_API float mz_math_remap(float val, float input_start, float input_end, float 
 //    return res;
 //}
 //
-//MZ_API MZ_MATH_VECTOR2_DOUBLE mz_math_true_sqroot_vec2_d(double val)
+//MZ_MATH_VECTOR2_DOUBLE mz_math_true_sqroot_vec2_d(double val)
 //{
 //    double** res = mz_math_true_sqroot(val);
 //
 //    return (MZ_MATH_VECTOR2_DOUBLE){.x = *res[0], .y = *res[1]};
 //}
 //
-//MZ_API float** mz_math_true_sqroot_float(float val)
+//float** mz_math_true_sqroot_float(float val)
 //{
 //    float sq = sqrtf(val);
 //    float** res = {sq, -sq};
@@ -150,7 +150,7 @@ MZ_API float mz_math_remap(float val, float input_start, float input_end, float 
 //    return res;
 //}
 //
-//MZ_API MZ_MATH_VECTOR2 mz_math_true_sqroot_vec2(float val)
+//MZ_MATH_VECTOR2 mz_math_true_sqroot_vec2(float val)
 //{
 //    float** res = mz_math_true_sqroot_float(val);
 //

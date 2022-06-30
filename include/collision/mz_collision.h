@@ -23,16 +23,16 @@
 typedef sr_ray2 mz_collision_ray2;
 
 
-float mz_collision_length(vec2 v);
+MZ_API float mz_collision_length(vec2 v);
 
-vec2 mz_collision_scale(vec2 v, float scale);
-vec2 mz_collision_divide(vec2 v1, vec2 v2);
-vec2 mz_collision_multiply(vec2 v1, vec2 v2);
-vec2 mz_collision_normalize(vec2 v);
+MZ_API vec2 mz_collision_scale(vec2 v, float scale);
+MZ_API vec2 mz_collision_divide(vec2 v1, vec2 v2);
+MZ_API vec2 mz_collision_multiply(vec2 v1, vec2 v2);
+MZ_API vec2 mz_collision_normalize(vec2 v);
 
 
-vec2 mz_collision_sub(vec2 v1, vec2 v2);
-vec2 mz_collision_add(vec2 v1, vec2 v2);
+MZ_API vec2 mz_collision_sub(vec2 v1, vec2 v2);
+MZ_API vec2 mz_collision_add(vec2 v1, vec2 v2);
 
 #ifdef MZ_DEPS_COLLISION
 

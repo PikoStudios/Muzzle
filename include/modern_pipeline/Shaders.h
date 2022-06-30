@@ -45,10 +45,10 @@ typedef struct _mz_shader_def shader_def;
 typedef struct _mz_shader shader;
 
 // Remember to free it :))
-shader_def load_as_shader_definition(const char* vs_filepath, const char* fs_filepath);
-void unload_shader_definition(shader_def* definition);
+MZ_API shader_def load_as_shader_definition(const char* vs_filepath, const char* fs_filepath);
+MZ_API void unload_shader_definition(shader_def* definition);
 
-shader create_shader(shader_def* definition);
-void unload_shader(shader* shader);
+MZ_API shader create_shader(shader_def* definition);
+MZ_API void unload_shader(shader* shader);
 
-void enable_shader(shader* shader);
+MZ_API void enable_shader(shader* shader);

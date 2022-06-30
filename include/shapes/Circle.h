@@ -33,7 +33,7 @@ int x,y
 float radius
 tint color_drawn
 */
-void draw_circle(int x, int y, float radius, tint color_drawn);
+MZ_API void draw_circle(int x, int y, float radius, tint color_drawn);
 
 /* 
 Muzzle draw_circle_type()
@@ -42,7 +42,7 @@ Draw a circle to the screen
 circle data
 tint color_drawn
 */
-void draw_circle_type(circle data, tint color_drawn);
+MZ_API void draw_circle_type(circle data, tint color_drawn);
 
 /* 
 Muzzle draw_circle()
@@ -52,7 +52,7 @@ vec2 pos
 float radius,
 tint color_drawn
 */
-void draw_circle_vec2(vec2 pos, float radius, tint color_drawn);
+MZ_API void draw_circle_vec2(vec2 pos, float radius, tint color_drawn);
 
 #ifdef __cplusplus
 }
