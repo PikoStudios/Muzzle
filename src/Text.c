@@ -15,6 +15,11 @@ font load_font(const char* filepath, const char* name)
     return (font) {fn, context};
 }
 
+MZ_API void unload_font(font font_used)
+{
+    glfonsDelete(font_used.context);
+}
+
 void draw_text(font font_used, const char *text, float x, float y, float font_size, tint color_drawn)
 {
     unsigned int col = glfonsRGBA(color_drawn.r, color_drawn.g, color_drawn.b, color_drawn.a);

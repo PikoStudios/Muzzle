@@ -33,6 +33,7 @@ typedef struct font
 
 // Load Font
 MZ_API font load_font(const char* filepath, const char* name);
+MZ_API void unload_font(font font_used);
 
 
 /*

@@ -130,7 +130,7 @@ float mz_math_remap(float val, float input_start, float input_end, float output_
 //double** mz_math_true_sqroot(double val)
 //{
 //    double sq = sqrt(val);
-//    double** res{sq, -sq};
+//    double** res = {sq, -sq};
 //
 //    return res;
 //}
