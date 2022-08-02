@@ -60,6 +60,10 @@ MZ_API void draw_shadow_text(font font_used, const char *text, float x, float y,
 MZ_API void draw_blurred_text_vec2(font font_used, const char *text, vec2 position, float intensity, float font_size, tint color_drawn);
 MZ_API void draw_shadow_text_vec2(font font_used, const char *text, vec2 position, tint shadow_color, float intensity, float font_size, tint color_drawn);
 
+// Get Text Data
+MZ_API int get_text_codepoint(const char* text, int* bytes_processed);
+MZ_API vec2 get_text_size(font font_used, const char* text, float font_size);
+
 #ifdef __cplusplus
 }
 #endif

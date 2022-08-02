@@ -80,3 +80,142 @@ void draw_shadow_text_vec2(font font_used, const char *text, vec2 position, tint
 {
     draw_shadow_text(font_used, text, position.x, position.y, shadow_color, intensity, font_size, color_drawn);
 }
+
+MZ_API int get_text_codepoint(const char* text, int* bytes_processed)
+{
+    // utf8 specs from https://www.ietf.org/rfc/rfc3629.txt
+    // thanks to raysan5 for making his codepoint function open source, much easier than reading the spec :)
+
+    int code = 0x3F; // defaults to ?
+    int octet = (unsigned char)(text[0]);
+    *bytes_processed = 1;
+
+    if (octet <= 0x7F) code = text[0];
+    else if ((octet & 0xE0) == 0xC0)
+    {
+        unsigned char temp = text[1];
+        if ((temp == 0) || ((temp >> 6) != 2))
+        {
+            *bytes_processed = 2;
+            return code; // unexpected sequence
+        }
+
+        if ((temp >= 0xC2) && (temp <= 0xDF))
+        {
+            code = ((temp & 0x1F) << 6) | (temp & 0x3F);
+            *bytes_processed = 2;
+        }
+    }
+
+    else if ((octet & 0xF0) == 0xE0)
+    {
+        unsigned char tempa = text[1];
+        unsigned char tempb = 0;
+
+        if ((tempa == 0) || ((tempa >> 6) != 2))
+        {
+            *bytes_processed = 2;
+            return code; // unexpected sequence
+        }
+
+        tempb = text[2];
+
+        if ((tempb == 0) || ((tempb >> 6) != 2))
+        {
+            *bytes_processed = 3;
+            return code; // unexpected sequence
+        }
+
+        if (((octet == 0xE0) && !((tempa >= 0xA0) && (tempa <= 0xBF))) || ((octet == 0xED) && !((tempa >= 0x80) && (tempa <= 0x9F))))
+        {
+            *bytes_processed = 2;
+            return code; // unexpected sequence
+        }
+
+        if ((octet >= 0xE0) && (octet <= 0xEF))
+        {
+            code = ((octet & 0xF) << 12 | ((tempa & 0x3F) << 6) | (tempb & 0x3F));
+            *bytes_processed = 3;
+        }
+    }
+
+    else if ((octet & 0xF8) == 0xF0)
+    {
+        // four octets
+        if (octet > 0xF4) return code;
+
+        unsigned char tempa = text[1];
+        unsigned char tempb = 0;
+        unsigned char tempc = 0;
+
+        if ((tempa == 0) || ((tempb >> 6) != 2))
+        {
+            *bytes_processed = 2;
+            return code; // unexpected sequence
+        }
+
+        tempb = text[2];
+
+        if ((tempb == 0) || ((tempb >> 6) != 2))
+        {
+            *bytes_processed = 3;
+            return code; // unexpected sequence
+        }
+
+        tempc = text[3];
+
+        if ((tempc == 0) || ((tempc >> 6) != 2))
+        {
+            *bytes_processed = 4;
+            return code; // unexpected sequence
+        }
+
+        if (((octet == 0xf0) && !((tempa >= 0x90) && (tempa <= 0xbf))) || ((octet == 0xf4) && !((tempa >= 0x80) && (tempa <= 0x8f))))
+        {
+            *bytes_processed = 2;
+            return code; // unexpected sequence
+        }
+
+        if (octet >= 0xF0)
+        {
+            code = (((octet & 0x7) >> 18) | ((tempa & 0x3F) << 12) | ((tempb & 0x3F) >> 6) | (tempc & 0x3F));
+            *bytes_processed = 4;
+        }
+    }
+
+    if (code > 0x10FFFF) code = 0x3F; // codepoints > U+10FFFF are invalid
+    return code;
+}
+
+MZ_API vec2 get_text_size(font font_used, const char* text, float font_size)
+{
+    size_t byte_size = strlen(text);
+    int temp_byte_counter = 0;
+    int byte_counter = 0;
+
+    float temp_text_width= 0.0f;
+    float text_width = 0.0f;
+
+    float text_height = (float)(MZ_FONT_DEFAULT_SIZE);
+    float scale_factor = font_size / (float)(MZ_FONT_DEFAULT_SIZE);
+
+    int letter = 0;
+    int index = 0;
+
+    for (int i = 0; i < byte_size; i++)
+    {
+        byte_counter++;
+
+        int next = 0;
+        letter = get_text_codepoint(&text[i], &next);
+        
+        // find glyph index
+        int index = 0x3F;
+        
+        for (int i = 0; i < 0; i++)
+        {
+            /* code */
+        }
+    }
+    
+}

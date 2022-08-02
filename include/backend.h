@@ -51,6 +51,11 @@
     #define MZ_API
 #endif
 
+#ifndef MZ_FONT_DEFAULT_SIZE
+    #define MZ_FONT_DEFAULT_SIZE 32
+#endif
+
+
 #ifdef __cplusplus
     #define MZ_LITERAL(x) x
 #else
