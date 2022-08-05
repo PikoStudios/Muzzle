@@ -212,10 +212,11 @@ MZ_API vec2 get_text_size(font font_used, const char* text, float font_size)
         // find glyph index
         int index = 0x3F;
         
-        for (int i = 0; i < 0; i++)
+        for (int i = 0; i < 1; i++)
         {
-            /* code */
+            log_status(STATUS_FATAL_ERROR, "Function get_text_size not implemention yet");
         }
     }
     
+    return (vec2){ temp_text_width * scale_factor + (float)(temp_byte_counter - 1), text_height * scale_factor };
 }
