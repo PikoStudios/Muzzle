@@ -6,15 +6,16 @@ void StartApplet(Applet *self)
     OnAppletUpdate(self);
 }
 
-Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TITLE, int RESIZEABLE, int VSYNC)
+Applet initialize_applet_pro(const int WIDTH, const int HEIGHT, const char* WINDOW_TITLE, int RESIZEABLE, int VSYNC, int PIPELINE)
 {
-#ifdef MUZZLE_USE_MODERN_RENDERER
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    if (PIPELINE)
+    {
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    log_status(STATUS_WARNING, "Using Modern Renderer");
-#endif
+        log_status(STATUS_WANING, "Using Moden Pipeline");
+    }
 
     glfwSetErrorCallback(muzzle_error);
     // Initialize GLFW
@@ -59,9 +60,10 @@ Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TI
 
     glfwSetWindowPos(buf.window_handle, 230,230);
 
-    #ifdef MUZZLE_USE_MODERN_RENDERER
+    if (PIPELINE)
+    {
         rlLoadExtensions(glfwGetProcAddress);
-        void* data = __internal_rlgl_get_data_structure();
+        rlglData* data = __internal_rlgl_get_data_structure();
 
         // NOTE: MAYBE: Create default white texture???
 
@@ -82,8 +84,8 @@ Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TI
         data->State.modelview = rlMatrixIdentity();
         data->State.currentMatrix = &data->State.modelview;
 
-        log_status(STATUS_SUCCESS, "Modern Renderer Initialized Successfully");
-    #endif
+        log_status(STATUS_SUCCESS, "Modern Pipeline Initialized Successfully");
+    }
     
     // NOTE: MAYBE: Instead of doing glViewport width height. Maybe get the actual framebuffer size and pass throught that?
     glViewport(0,0, WIDTH, HEIGHT);
@@ -102,4 +104,14 @@ Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TI
     glLoadIdentity();
 
     return buf;
+}
+
+Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TITLE, int RESIZEABLE, int VSYNC)
+{
+    initialize_applet_pro(WIDTH, HEIGHT, WINDOW_TITLE, RESIZEABLE, VSYNC, 0);
+}
+
+Applet InitializeAppletModern(const int WIDTH, const int HEIGHT, const char* WINDOW_TITLE, int RESIZEABLE, int VSYNC)
+{
+    initialize_applet_pro(WIDTH, HEIGHT,WINDOW_TITLE, RESIZEABLE, VSYNC, 1);
 }
