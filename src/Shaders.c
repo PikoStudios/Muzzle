@@ -95,16 +95,12 @@ shader create_shader(shader_def* definition)
 }
 void unload_shader(shader* shader)
 {
-    #ifdef MUZZLE_USE_MODERN_RENDERER
-        void* data = __internal_rlgl_get_data_structure();
-        if (shader->id != rlGetShaderIdDefault())
-        {
-            rlUnloadShaderProgram(shader->id);
-            MZ_FREE(shader->locations);
-        }
-    #else
-        log_status(STATUS_ERROR, "Shaders are only supported on the modern renderer");
-    #endif
+    rlglData* data = __internal_rlgl_get_data_structure();
+    if (shader->id != rlGetShaderIdDefault())
+    {
+        rlUnloadShaderProgram(shader->id);
+        MZ_FREE(shader->locations);
+    }
 }
 
 // TODO: Finish this or else
