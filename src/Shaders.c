@@ -91,24 +91,24 @@ shader create_shader(shader_def* definition)
         locations[RL_SHADER_LOC_MAP_NORMAL] =           rlGetLocationUniform(id, MZ_SHADER_SAMPLER2D_NAME_TEXTURE2);
     }
 
+    log_status(STATUS_INFO, "Shader initalized");
     return (shader) { locations, id };
 }
 void unload_shader(shader* shader)
 {
-    rlglData* data = __internal_rlgl_get_data_structure();
     if (shader->id != rlGetShaderIdDefault())
     {
         rlUnloadShaderProgram(shader->id);
         MZ_FREE(shader->locations);
     }
+
+    log_status(STATUS_SUCCESS, "Unloaded shader");
 }
 
 // TODO: Finish this or else
 void enable_shader(shader* shader)
 {
-    #ifdef MUZZLE_USE_MODERN_RENDERER
-        rlSetShader(shader->id, shader->locations);
-    #else
-        log_status(STATUS_ERROR, "Shaders are only supported on the modern renderer");
-    #endif
+    
+    rlSetShader(shader->id, shader->locations);
+    log_status(STATUS_INFO, "Enabled shader");
 }
