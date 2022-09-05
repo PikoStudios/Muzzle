@@ -17,6 +17,7 @@
 
     #define MZ_MATH_VECTOR2 vec2
     #define MZ_MATH_VECTOR2_DOUBLE vec2_d
+    #define MZ_API
 #else
     typedef struct mz_math_vec2
     {
