@@ -37,7 +37,7 @@ void draw_text_vec2(font font_used, const char *text, vec2 pos, float font_size,
     draw_text(font_used, text, pos.x, pos.y, font_size, color_drawn);
 }
 
-MZ_API void draw_text_center(font font_used, const char* text, float x, float y, float font_size, tint color_drawn)
+void draw_text_center(font font_used, const char* text, float x, float y, float font_size, tint color_drawn)
 {
     unsigned int col = glfonsRGBA(color_drawn.r, color_drawn.g, color_drawn.b, color_drawn.a);
 
@@ -50,7 +50,10 @@ MZ_API void draw_text_center(font font_used, const char* text, float x, float y,
     fonsDrawText(font_used.context, x, y+font_size-6, text, NULL);
 }
 
-MZ_API void draw_text_center_vec2(font font_used, const char* text, float x, float y, float font_size, tint color_drawn);
+void draw_text_center_vec2(font font_used, const char* text, float x, float y, float font_size, tint color_drawn)
+{
+    draw_text_center(font_used, text, pos.x, pos.y, font_size, color_drawn);
+}
 
 
 void draw_blurred_text(font font_used, const char *text, float x, float y, float intensity, float font_size, tint color_drawn)
