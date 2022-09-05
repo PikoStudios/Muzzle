@@ -50,7 +50,7 @@ void draw_text_center(font font_used, const char* text, float x, float y, float 
     fonsDrawText(font_used.context, x, y+font_size-6, text, NULL);
 }
 
-void draw_text_center_vec2(font font_used, const char* text, float x, float y, float font_size, tint color_drawn)
+void draw_text_center_vec2(font font_used, const char* text, vec2 pos, float font_size, tint color_drawn)
 {
     draw_text_center(font_used, text, pos.x, pos.y, font_size, color_drawn);
 }
