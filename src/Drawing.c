@@ -5,6 +5,7 @@ void begin_drawing()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
 }
+
 void end_drawing(Applet *applet)
 {
     #ifdef INTERNAL_MODERN_RENDERER_USAGE
