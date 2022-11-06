@@ -13,5 +13,5 @@ tint hex_to_rgb(unsigned int hex, unsigned int alpha)
         .g = g,
         .b = b,
         .a = alpha
-    }
+    };
 }

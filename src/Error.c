@@ -2,7 +2,7 @@
 
 void muzzle_error(int error, const char *desc) 
 {
-    fprintf(stderr, "%s", desc);
+    fprintf(stderr, "Internal Error (GLFW3): %s", desc);
 }
 void log_status(StatusTypes type, const char *status)
 {
