@@ -1,6 +1,6 @@
 #pragma once
 
-#ifndef MUZZLE_RETAIN_LEGACY
+#ifdef MUZZLE_RLGL
 
 #define mzBegin         rlBegin
 #define mzEnd           rlEnd

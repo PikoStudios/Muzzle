@@ -1,4 +1,3 @@
-#define MUZZLE_USE_MODERN_RENDERER
 #define MUZZLE_DEPS
 #include <Muzzle.h>
 #include <stdio.h>
@@ -21,7 +20,7 @@ void OnAppletUpdate()
 
 int main(void)
 {
-    applet = InitializeApplet(SCREEN_WIDTH, SCREEN_HEIGHT, "Muzzle [CORE] - Blank Window", MUZZLE_FALSE, MUZZLE_FALSE);
+    applet = InitializeAppletModern(SCREEN_WIDTH, SCREEN_HEIGHT, "Muzzle [CORE] - Blank Window", MUZZLE_FALSE, MUZZLE_FALSE);
     StartApplet(&applet);
 
     QuitMuzzle(applet);
