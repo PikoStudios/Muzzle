@@ -88,5 +88,5 @@ void draw_sprite_portion(sprite* data, rectangle rec, vec2 pos, tint color_drawn
         mzEnd();
     mzPopMatrix();
 
-    mzDisable(GL_TEXTURE_2D);
+    glDisable(GL_TEXTURE_2D);
 }
