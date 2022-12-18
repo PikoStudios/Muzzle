@@ -1,6 +1,6 @@
 #pragma once
 
-#ifdef MUZZLE_USE_MODERN_RENDERER
+#ifndef MUZZLE_RETAIN_LEGACY
 
 #define mzBegin         rlBegin
 #define mzEnd           rlEnd

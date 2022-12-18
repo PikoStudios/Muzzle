@@ -20,13 +20,10 @@
 #define MUZZLE_FALSE 0
 #define MUZZLE_TRUE 1
 
-#ifdef MUZZLE_USE_MODERN_RENDERER
-    #define RLGL_IMPLEMENTATION
-    #define GRAPHICS_API_OPENGL_33
-    #include "../deps/rlgl/rlgl.h"
-
-    #include "modern_pipeline/Shaders.h"
-#endif
+#define RLGL_IMPLEMENTATION
+#define GRAPHICS_API_OPENGL_33
+#include "../deps/rlgl/rlgl.h"
+#include "modern_pipeline/Shaders.h"
 
 #ifdef MZ_DEPS_USE_GLOBAL
     #include <GLFW/glfw3.h>

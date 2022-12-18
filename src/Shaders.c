@@ -2,6 +2,7 @@
 
 shader_def load_as_shader_definition(const char* vs_filepath, const char* fs_filepath)
 {
+    // Load vertex shader
     FILE *file = fopen(vs_filepath, "r");
     if (!file)
     {
@@ -10,20 +11,16 @@ shader_def load_as_shader_definition(const char* vs_filepath, const char* fs_fil
     }
 
     fseek(file, 0, SEEK_END);
-    int size = ftell(file);
+    const int filesize = ftell(file);
     fseek(file, 0, SEEK_SET);
 
-    char* vs_buffer = malloc(sizeof(char) * (size + 1));
-    if (!vs_buffer)
-    {
-        log_status(STATUS_ERROR, "Could not allocate memory for vertex file");
-        return (shader_def){0};
-    }
+    char* vs_buffer[filesize + 1];
 
     fread(vs_buffer, 1, size, file);
-    vs_buffer[size] = 0;
+    vs_buffer[filesize] = '\0';
     fclose(file);
 
+    // Load fragment shader
     file = fopen(fs_filepath, "r");
     if (!file)
     {
@@ -32,18 +29,13 @@ shader_def load_as_shader_definition(const char* vs_filepath, const char* fs_fil
     }
 
     fseek(file, 0, SEEK_END);
-    size = ftell(file);
+    filesize = ftell(file);
     fseek(file, 0, SEEK_SET);
 
-    char* fs_buffer = malloc(sizeof(char) * (size + 1));
-    if (!fs_buffer)
-    {
-        log_status(STATUS_ERROR, "Could not allocate memory for fragment file");
-        return (shader_def){0};
-    }
+    char* fs_buffer[filesize + 1];
 
     fread(fs_buffer, 1, size, file);
-    fs_buffer[size] = 0;
+    fs_buffer[filesize] = '\0';
     fclose(file);
 
     return (shader_def)
@@ -51,12 +43,6 @@ shader_def load_as_shader_definition(const char* vs_filepath, const char* fs_fil
         fs_buffer,
         vs_buffer
     };
-}
-
-void unload_shader_definition(shader_def* definition)
-{
-    MZ_FREE(definition->fragment);
-    MZ_FREE(definition->vertex);
 }
 
 shader create_shader(shader_def* definition)
