@@ -20,11 +20,8 @@
     #define MUZZLE_SHARED_VARIABLE_ARRAY_SIZE 5
 #endif
 
-// Deprecated Macro, see MZ_ASSERT
-#define MUZZLE_INTERNAL_DEBUG_ASSERT_HANDLE_FAILURE(x) fprintf(stderr, "Muzzle Assert Failure: %s", x); *(int*)0=0;
-#define MUZZLE_DEBUG_ASSERT(x, message) ((x) ? (void)(0) : MUZZLE_INTERNAL_DEBUG_ASSERT_HANDLE_FAILURE(message))
-
-#define MZ_ASSERT(condition, msg) if ((condition) == 0) { \
+#define MZ_ASSERT(condition, msg) if ((condition) == 0) \
+{ \
 fprintf(stderr, "Assertion '%s' failed, more info: %s", #condition, msg); \
 exit(-1); \
 }
