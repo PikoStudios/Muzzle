@@ -43,6 +43,7 @@ exit(-1); \
 #include "core/Text.h"
 #include "core/Input.h"
 #include "core/Time.h"
+#include "modern_pipeline/Shaders.h"
 #include <stdlib.h>
 
 MZ_API void QuitMuzzle(Applet applet);

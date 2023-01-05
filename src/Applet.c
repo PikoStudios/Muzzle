@@ -6,16 +6,15 @@ void StartApplet(Applet *self)
     OnAppletUpdate(self);
 }
 
-Applet initialize_applet_pro(const int WIDTH, const int HEIGHT, const char* WINDOW_TITLE, int RESIZEABLE, int VSYNC, int PIPELINE)
+Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TITLE, int RESIZEABLE, int VSYNC)
 {
-    //if (PIPELINE)
-    //{
-    //    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    //    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    //    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-//
-    //    log_status(STATUS_WARNING, "Using Modern Pipeline");
-    //}
+    #ifndef MUZZLE_RETAIN_LEGACY
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+        log_status(STATUS_WARNING, "Using Modern Pipeline");
+    #endif
 
     glfwSetErrorCallback(muzzle_error);
     // Initialize GLFW
@@ -48,6 +47,10 @@ Applet initialize_applet_pro(const int WIDTH, const int HEIGHT, const char* WIND
     glfwSetErrorCallback(muzzle_error);
     glfwMakeContextCurrent(buf.window_handle);
 
+    #ifndef MUZZLE_RETAIN_LEGACY
+        if (!gladLoadGLLoader((GLADloadproc)(glfwGetProcAddress))) log_status(STATUS_FATAL_ERROR, "GLAD could not initialize, POINT OF FAILURE:\n\tMuzzle.Applet.InitializeApplet.gladLoadGLLoader()");
+    #endif
+
 
     if (VSYNC == MUZZLE_TRUE)
     {
@@ -60,33 +63,6 @@ Applet initialize_applet_pro(const int WIDTH, const int HEIGHT, const char* WIND
 
     glfwSetWindowPos(buf.window_handle, 230,230);
 
-    //if (PIPELINE)
-    //{
-    //    rlLoadExtensions(glfwGetProcAddress);
-    //    rlglData* data = __internal_rlgl_get_data_structure();
-//
-    //    // NOTE: MAYBE: Create default white texture???
-//
-    //    rlLoadShaderDefault();
-    //    data->State.currentShaderId = data->State.defaultShaderId;
-    //    data->State.currentShaderLocs = data->State.defaultShaderLocs;
-    //    
-    //    data->defaultBranch = rlLoadRenderBatch(RL_DEFAULT_BATCH_BUFFERS, RL_DEFAULT_BATCH_BUFFER_ELEMENTS);
-    //    data->currentBatch = &data->defaultBatch;
-//
-    //    for (int i = 0; i < RL_MAX_MATRIX_STACK_SIZE; i++)
-    //    {
-    //        data->State.stack[i] = rlMatrixIdentity();
-    //    }
-//
-    //    data->State.transform = rlMatrixIdentity();
-    //    data->State.projection = rlMatrixIdentity();
-    //    data->State.modelview = rlMatrixIdentity();
-    //    data->State.currentMatrix = &data->State.modelview;
-//
-    //    log_status(STATUS_SUCCESS, "Modern Pipeline Initialized Successfully");
-    //}
-    
     // NOTE: MAYBE: Instead of doing glViewport width height. Maybe get the actual framebuffer size and pass throught that?
     glViewport(0,0, WIDTH, HEIGHT);
 
@@ -104,14 +80,4 @@ Applet initialize_applet_pro(const int WIDTH, const int HEIGHT, const char* WIND
     glLoadIdentity();
 
     return buf;
-}
-
-Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TITLE, int RESIZEABLE, int VSYNC)
-{
-    return initialize_applet_pro(WIDTH, HEIGHT, WINDOW_TITLE, RESIZEABLE, VSYNC, 0);
-}
-
-Applet InitializeAppletModern(const int WIDTH, const int HEIGHT, const char* WINDOW_TITLE, int RESIZEABLE, int VSYNC)
-{
-    return initialize_applet_pro(WIDTH, HEIGHT,WINDOW_TITLE, RESIZEABLE, VSYNC, 1);
 }

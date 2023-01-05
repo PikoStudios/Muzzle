@@ -3,50 +3,25 @@
 #include "../core/tint.h"
 #include "../core/Error.h"
 #include <stdio.h>
-
-#define USE_DEFAULT_SHADER ((void*)(0))
-
-#define MZ_SHADER_ATTRIB_NAME_POSITION     "vertexPosition"
-#define MZ_SHADER_ATTRIB_NAME_TEXCOORD     "vertexTexCoord"
-#define MZ_SHADER_ATTRIB_NAME_NORMAL       "vertexNormal"
-#define MZ_SHADER_ATTRIB_NAME_COLOR        "vertexColor"
-#define MZ_SHADER_ATTRIB_NAME_TANGENT      "vertexTangent"
-#define MZ_SHADER_ATTRIB_NAME_TEXCOORD2    "vertexTexCoord2"
-#define MZ_SHADER_UNIFORM_NAME_MVP         "mvp"
-#define MZ_SHADER_UNIFORM_NAME_VIEW        "matView"
-#define MZ_SHADER_UNIFORM_NAME_PROJECTION  "matProjection"
-#define MZ_SHADER_UNIFORM_NAME_MODEL       "matModel"
-#define MZ_SHADER_UNIFORM_NAME_NORMAL      "matNormal"
-#define MZ_SHADER_UNIFORM_NAME_COLOR       "colDiffuse"
-#define MZ_SHADER_SAMPLER2D_NAME_TEXTURE0  "texture0"
-#define MZ_SHADER_SAMPLER2D_NAME_TEXTURE1  "texture1"
-#define MZ_SHADER_SAMPLER2D_NAME_TEXTURE2  "texture2"
+#include <stdlib.h>
 
 enum _mz_shader_type
 {
-    SHADER_VERTEX,
-    SHADER_FRAGMENT
-};
-
-struct _mz_shader_def
-{
-    char* vertex;
-    char* fragment;
-};
-
-struct _mz_shader
-{
-    int *locations;
-    unsigned int id;
+    SHADER_FRAGMENT = GL_FRAGMENT_SHADER,
+    SHADER_VERTEX = GL_VERTEX_SHADER,
+    SHADER_TESS_CONTROL = GL_TESS_CONTROL_SHADER,
+    SHADER_TESS_EVALUATION = GL_TESS_EVALUATION_SHADER,
+    SHADER_GEOMETRY = GL_GEOMETRY_SHADER,
+    SHADER_COMPUTE = GL_COMPUTE_SHADER,
 };
 
 typedef enum _mz_shader_type shader_type;
-typedef struct _mz_shader_def shader_def;
-typedef struct _mz_shader shader;
+typedef GLuint shader;
+typedef GLuint shader_program;
 
-MZ_API shader_def load_as_shader_definition(const char* vs_filepath, const char* fs_filepath);
+MZ_API shader load_shader(shader_type type, const char* filepath);
+MZ_API shader_program link_shader(shader vertex, shader fragment);
 
-MZ_API shader create_shader(shader_def* definition);
-MZ_API void unload_shader(shader* shader);
-
-MZ_API void enable_shader(shader* shader);
+MZ_API void load_shader_program(shader_program shader);
+MZ_API void unload_shader_program(shader_program shader);
+MZ_API void clear_shader_program();

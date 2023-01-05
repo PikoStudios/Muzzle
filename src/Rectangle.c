@@ -1,7 +1,8 @@
 #include "shapes/Rectangle.h"
 
 void draw_rectangle(int x, int y, int width, int height, tint color_drawn)
-{ 
+{
+
     mzBegin(GL_QUADS);
         mzColor4ub(color_drawn.r, color_drawn.g, color_drawn.b, color_drawn.a);
         mzVertex2i(x, y);
