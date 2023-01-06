@@ -4,4 +4,4 @@ cmake .. -G "MinGW Makefiles" -DCMAKE_C_COMPILER=C:/raylib/mingw/bin/gcc.exe -DC
 C:\raylib\mingw\bin\mingw32-make.exe
 .\main.exe
 cd ..
-rm .\build\a
+rm .\build\
