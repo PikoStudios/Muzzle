@@ -8,13 +8,13 @@ void StartApplet(Applet *self)
 
 Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TITLE, int RESIZEABLE, int VSYNC)
 {
-    //#ifndef MUZZLE_RETAIN_LEGACY
-        //glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-        //glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-        //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    #ifndef MUZZLE_RETAIN_LEGACY
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-        //log_status(STATUS_WARNING, "Using Modern Pipeline");
-    //#endif
+        log_status(STATUS_WARNING, "Using Modern Pipeline");
+    #endif
 
     glfwSetErrorCallback(muzzle_error);
     // Initialize GLFW
@@ -47,9 +47,9 @@ Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TI
     glfwSetErrorCallback(muzzle_error);
     glfwMakeContextCurrent(buf.window_handle);
 
-    //#ifndef MUZZLE_RETAIN_LEGACY
-        //if (!gladLoadGLLoader((GLADloadproc)(glfwGetProcAddress))) log_status(STATUS_FATAL_ERROR, "GLAD could not initialize, POINT OF FAILURE:\n\tMuzzle.Applet.InitializeApplet.gladLoadGLLoader()");
-    //#endif
+    #ifndef MUZZLE_RETAIN_LEGACY
+        if (!gladLoadGLLoader((GLADloadproc)(glfwGetProcAddress))) log_status(STATUS_FATAL_ERROR, "GLAD could not initialize, POINT OF FAILURE:\n\tMuzzle.Applet.InitializeApplet.gladLoadGLLoader()");
+    #endif
 
 
     if (VSYNC == MUZZLE_TRUE)
