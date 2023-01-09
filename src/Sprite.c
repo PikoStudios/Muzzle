@@ -46,20 +46,20 @@ void draw_sprite(sprite *data, int x, int y, float scale, float rotation, tint c
 
     glBindTexture(GL_TEXTURE_2D, data->sprite_id);
 
-    mzPushMatrix();
-        mzTranslatef(x,y,0);
-        mzScalef(scale, scale, 1.0f);
-        mzRotatef(rotation, 0,0,1.0f);
+    glPushMatrix();
+        glTranslatef(x,y,0);
+        glScalef(scale, scale, 1.0f);
+        glRotatef(rotation, 0,0,1.0f);
 
-        mzBegin(GL_QUADS);
-            mzColor4ub(color_drawn.r,color_drawn.g,color_drawn.b,color_drawn.a);
-            mzNormal3f(0.0f, 0.0f, 1.0f);
-            mzTexCoord2f(0.0f, 0.0f);mzVertex2f(0.0f,0.0f);
-            mzTexCoord2f(1.0f, 0.0f);mzVertex2f(data->width,0.0f);
-            mzTexCoord2f(1.0f, 1.0f);mzVertex2f(data->width,data->height);
-            mzTexCoord2f(0.0f, 1.0f);mzVertex2f(0.0f,data->height);
-        mzEnd();
-    mzPopMatrix();
+        glBegin(GL_QUADS);
+            glColor4ub(color_drawn.r,color_drawn.g,color_drawn.b,color_drawn.a);
+            glNormal3f(0.0f, 0.0f, 1.0f);
+            glTexCoord2f(0.0f, 0.0f);glVertex2f(0.0f,0.0f);
+            glTexCoord2f(1.0f, 0.0f);glVertex2f(data->width,0.0f);
+            glTexCoord2f(1.0f, 1.0f);glVertex2f(data->width,data->height);
+            glTexCoord2f(0.0f, 1.0f);glVertex2f(0.0f,data->height);
+        glEnd();
+    glPopMatrix();
 
     glDisable(GL_TEXTURE_2D);
 }
@@ -75,18 +75,18 @@ void draw_sprite_portion(sprite* data, rectangle rec, vec2 pos, tint color_drawn
     
     glBindTexture(GL_TEXTURE_2D, data->sprite_id);
 
-    mzPushMatrix();
-        mzTranslatef(pos.x, pos.y, 0);
+    glPushMatrix();
+        glTranslatef(pos.x, pos.y, 0);
 
-        mzBegin(GL_QUADS);
-            mzColor4ub(color_drawn.r, color_drawn.g, color_drawn.b, color_drawn.a);
-            mzNormal3f(0.0f, 0.0f, 0.0f);
-            mzTexCoord2f((float)(rec.x / data->width), (float)(rec.y / data->height)); glVertex2f(0.0f, 0.0f);
-            mzTexCoord2f((float)((rec.x + rec.width) / data->width), (float)(rec.y / data->height)); glVertex2f(rec.width, 0.0f);
-            mzTexCoord2f((float)((rec.x + rec.width) / data->width), (float)((rec.y + rec.height) / data->height)); glVertex2f(rec.width, rec.height);
-            mzTexCoord2f((float)(rec.x / data->width), (float)((rec.y + rec.height) / data->height)); glVertex2f(0.0f, rec.height);
-        mzEnd();
-    mzPopMatrix();
+        glBegin(GL_QUADS);
+            glColor4ub(color_drawn.r, color_drawn.g, color_drawn.b, color_drawn.a);
+            glNormal3f(0.0f, 0.0f, 0.0f);
+            glTexCoord2f((float)(rec.x / data->width), (float)(rec.y / data->height)); glVertex2f(0.0f, 0.0f);
+            glTexCoord2f((float)((rec.x + rec.width) / data->width), (float)(rec.y / data->height)); glVertex2f(rec.width, 0.0f);
+            glTexCoord2f((float)((rec.x + rec.width) / data->width), (float)((rec.y + rec.height) / data->height)); glVertex2f(rec.width, rec.height);
+            glTexCoord2f((float)(rec.x / data->width), (float)((rec.y + rec.height) / data->height)); glVertex2f(0.0f, rec.height);
+        glEnd();
+    glPopMatrix();
 
     glDisable(GL_TEXTURE_2D);
 }

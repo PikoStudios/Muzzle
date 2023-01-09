@@ -7,8 +7,8 @@
 typedef struct Applet
 {
     int width, height;
-    char* WindowTitle;
-    GLFWwindow *window_handle;
+    char* window_title;
+    GLFWwindow* window_handle;
 } Applet;
     
 #ifdef __cplusplus

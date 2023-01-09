@@ -29,7 +29,7 @@ Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TI
     Applet buf;
     buf.height = (int)(HEIGHT);
     buf.width = (int)(WIDTH);
-    buf.WindowTitle = (char*)(WINDOW_TITLE);
+    buf.window_title = (char*)(WINDOW_TITLE);
     buf.window_handle = glfwCreateWindow(WIDTH, HEIGHT, WINDOW_TITLE, NULL, NULL);
 
     if (!buf.window_handle)

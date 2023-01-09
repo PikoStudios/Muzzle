@@ -32,7 +32,6 @@ exit(-1); \
  * 
  */
 
-#include "MuzzleGL.h"
 #include "core/vector.h"
 #include "core/Drawing.h"
 #include "core/tint.h"

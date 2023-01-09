@@ -15,16 +15,14 @@
 
 #include <stdlib.h>
 #include "memory.h"
-#include "MuzzleGL.h"
 
 #define MUZZLE_FALSE 0
 #define MUZZLE_TRUE 1
 
-//#ifndef MUZZLE_RETAIN_LEGACY
-//    #define GLAD_GL_IMPLEMENTION
-//    #include "../deps/glad/include/glad/glad.h"
-//    // Include cglm
-//#endif
+#ifndef MUZZLE_RETAIN_LEGACY
+    #define GLAD_GL_IMPLEMENTION
+    #include "../deps/glad/include/glad/glad.h"
+#endif
 
 #ifdef MZ_DEPS_USE_GLOBAL
     #include <GLFW/glfw3.h>
