@@ -22,6 +22,6 @@ typedef GLuint shader_program;
 MZ_API shader load_shader(shader_type type, const char* filepath);
 MZ_API shader_program link_shader(shader vertex, shader fragment);
 
-MZ_API void load_shader_program(shader_program shader);
+MZ_API void attach_shader_program(shader_program shader);
 MZ_API void unload_shader_program(shader_program shader);
-MZ_API void clear_shader_program();
+MZ_API void detach_shader_program();

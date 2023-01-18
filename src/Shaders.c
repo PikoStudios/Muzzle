@@ -49,14 +49,14 @@ shader load_shader(shader_type type, const char* filepath)
 
 shader_program link_shader(shader vertex, shader fragment)
 {
-    int id = glCreateProgram();
+    GLuint id = glCreateProgram();
     
     glAttachShader(id, vertex);
     glAttachShader(id, fragment);
     glLinkProgram(id);
 
     int status = 0;
-    glGetPorgramiv(id, GL_LINK_STATUS, &status);
+    glGetProgramiv(id, GL_LINK_STATUS, &status);
 
     if (status == MUZZLE_FALSE)
     {
@@ -77,15 +77,13 @@ shader_program link_shader(shader vertex, shader fragment)
         return;
     }
 
-    glDetachShader(id, vertex);
-    glDetachShader(id, fragment);
     glDeleteShader(vertex);
     glDeleteShader(fragment);
 
     return id;
 }
 
-void load_shader_program(shader_program shader)
+void attach_shader_program(shader_program shader)
 {
     glUseProgram(shader);
 }
@@ -95,7 +93,7 @@ void unload_shader_program(shader_program shader)
     glDeleteProgram(shader);
 }
 
-void clear_shader_program()
+void detach_shader_program()
 {
     glUseProgram(0);
 }
