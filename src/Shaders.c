@@ -41,7 +41,7 @@ shader load_shader(shader_type type, const char* filepath)
         glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
 
         char infolog[length + 1];
-        glGetShaderInfoLog(shader, length, NULL, infolog);
+        glGetShaderInfoLog(id, length, NULL, infolog);
 
         printf("\t%s\n", infolog);
     }
