@@ -13,14 +13,15 @@ batcher create_batcher_rectangle(int max_size)
 
     if (temp.vertices == NULL) log_status(STATUS_FATAL_ERROR, "Failed to allocate memory for Batch Renderer");
 
-    temp.vao = glGenVertexArrays();
+    glGenVertexArrays(1, &temp.vao);
     glBindVertexArray(temp.vao);
 
-    temp.vbo = glGenBuffers();
+    glGenBuffers(1, &temp.vbo);
     glBindBuffer(GL_ARRAY_BUFFER, temp.vbo);
-    glBufferData(GL_ARRAY_BUFFER, temp.vertices_size * 4, GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, temp.vertices_size * 4, NULL, GL_DYNAMIC_DRAW);
 
-    GLuint ebo = glGenBuffers();
+    GLuint ebo;
+    glGenBuffers(1, &ebo);
     int indices[6 * max_size];
 
     for (int i = 0; i < max_size; i++)
@@ -40,12 +41,13 @@ batcher create_batcher_rectangle(int max_size)
     }
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * max_size, indices, GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, POS_SIZE, GL_FLOAT, 0, MZ_BATCHER_RECTANGLE_VERTEX_SIZE * 4, MZ_BATCHER_RECTANGLE_VERTEX_POS_OFFSET);
+    // TODO: I feel like this prolly would not work, so make sure to test this
+    glVertexAttribPointer(0, MZ_BATCHER_RECTANGLE_VERTEX_POS_SIZE, GL_FLOAT, 0, MZ_BATCHER_RECTANGLE_VERTEX_SIZE * 4, (GLvoid*)(MZ_BATCHER_RECTANGLE_VERTEX_POS_OFFSET));
     glEnableVertexAttribArray(0);
 
-    glVertexAttribPointer(1, MZ_BATCHER_RECTANGLE_VERTEX_TINT_SIZE, GL_FLOAT, 0, MZ_BATCHER_RECTANGLE_VERTEX_SIZE * 4, MZ_BATCHER_RECTANGLE_VERTEX_TINT_OFFSET);
+    glVertexAttribPointer(1, MZ_BATCHER_RECTANGLE_VERTEX_TINT_SIZE, GL_FLOAT, 0, MZ_BATCHER_RECTANGLE_VERTEX_SIZE * 4, (GLvoid*)(MZ_BATCHER_RECTANGLE_VERTEX_TINT_OFFSET));
     glEnableVertexAttribArray(1);
 
     return temp;
@@ -55,11 +57,12 @@ void draw_batcher(batcher* renderer)
 {
     // Not fastest way to do this, but still way faster than indiviual draw calls
     glBindBuffer(GL_ARRAY_BUFFER, renderer->vbo);
-    glBufferSubData(GL_ARRAY_BUFFER, 0, renderer->vertices);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, renderer->vertices_size, renderer->vertices);
 
     // TODO: Load Shader
+    
+    
     glDrawElements(GL_TRIANGLES, renderer->object_count * 6, GL_UNSIGNED_INT, 0);
-
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
     glBindVertexArray(0);
