@@ -12,6 +12,15 @@ Do you want to contribute to the Muzzle Game Framework? <br /> Please read this 
 ## Resources
 [Naming Scheme](https://github.com/PikoStudios/Muzzle/blob/main/CONTRIBUTING.md#naming-scheme)
 
+## Commit Scheme
+Starting February 1st, 2023 (0:00 / 12:00 AM EST), all commits made to Muzzle should follow the following scheme:
+
+```
+Default Scheme - <scope>: <clear commit message>
+Breaking Change Scheme - <scope>!: <clear commit message>
+New submodule added Scheme - Deps!: Added <submodule name> submodule [extra info, may also put in body]
+```
+
 ## Naming Scheme
 ***
 Muzzle follows PascalCase and snake_case.
