@@ -87,6 +87,9 @@ make
 That's it, you just setup Muzzle! Now whenever working on projects, you can copy the CMakeLists.txt in the repository root as a template. 
 Reminder, you do not need to delete the `build` folder when you want to recompile. Doing this will only force you to run more commands and regenerate + recompile your entire project + recompiling Muzzle source code too.
 
+## Contributing
+View [main/CONTRIBUTING.md](https://github.com/PikoStudios/Muzzle/blob/main/CONTRIBUTING.md) if on `main` branch, else, visit `CONTRIBUTING.MD` file in the respective branch
+
 ## Static Linking
 You can compile Muzzle to a static library to reduce inital compile times, but with CMake, your compile times will be shortened after the first compile.
 
