@@ -90,5 +90,8 @@ Reminder, you do not need to delete the `build` folder when you want to recompil
 ## Static Linking
 You can compile Muzzle to a static library to reduce inital compile times, but with CMake, your compile times will be shortened after the first compile.
 
+## To-Do
+ - [] Build Tests
+
 ## Licensing
 Muzzle is freely usable under the MIT-License, but if you wish to support the project, you can contact us to purchase a license.
