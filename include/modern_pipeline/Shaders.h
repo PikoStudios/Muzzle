@@ -27,7 +27,11 @@ MZ_API shader_program link_shader(shader vertex, shader fragment);
 MZ_API void upload_shader_int(shader_program program, const char* var, int value);
 MZ_API void upload_shader_float(shader_program program, const char* var, float value);
 MZ_API void upload_shader_vec2(shader_program program, const char* var, vec2 value);
-// TODO: Add upload_shader vec3, vec4, matrix3, matrix4
+MZ_API void upload_shader_vec3(shader_program program, const char* var, vec3 value);
+MZ_API void upload_shader_vec4(shader_program program, const char* var, vec4 value);
+
+// TODO: Add upload_shader matrix3, matrix4
+// Reference code for implementing matrix types: https://github.com/raysan5/raylib/blob/master/src/raylib.h#L217
 
 MZ_API void attach_shader_program(shader_program shader);
 MZ_API void unload_shader_program(shader_program shader);
