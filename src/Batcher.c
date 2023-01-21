@@ -9,6 +9,8 @@ batcher create_batcher_rectangle(int max_size)
 
     temp.vertex_size = MZ_BATCHER_RECTANGLE_VERTEX_SIZE;
     temp.vertices_size = (max_size * MZ_BATCHER_RECTANGLE_VERTICES_QUADS) * temp.vertex_size;
+    
+    // TODO: is it better to call calloc on this or just do temp.vertices[temp.vertices_size]?
     temp.vertices = MZ_CALLOC(temp.vertices_size, sizeof(GLfloat));
 
     if (temp.vertices == NULL) log_status(STATUS_FATAL_ERROR, "Failed to allocate memory for Batch Renderer");
@@ -59,15 +61,14 @@ void draw_batcher(batcher* renderer)
     glBindBuffer(GL_ARRAY_BUFFER, renderer->vbo);
     glBufferSubData(GL_ARRAY_BUFFER, 0, renderer->vertices_size, renderer->vertices);
 
-    // TODO: Load Shader
-    
+    attach_shader_program(renderer->global_shader);
     
     glDrawElements(GL_TRIANGLES, renderer->object_count * 6, GL_UNSIGNED_INT, 0);
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
     glBindVertexArray(0);
 
-    // TODO: Detach shader
+    detach_shader_program(renderer->global_shader);
 }
 
 void push_batcher_rectangle(batcher* renderer, GLfloat x, GLfloat y, GLfloat w, GLfloat h, tint color_drawn)
@@ -112,4 +113,9 @@ void push_batcher_rectangle(batcher* renderer, GLfloat x, GLfloat y, GLfloat w, 
     renderer->vertices[offset_four + 3] = color_drawn.g;
     renderer->vertices[offset_four + 4] = color_drawn.b;
     renderer->vertices[offset_four + 5] = color_drawn.a;
+}
+
+void unload_batcher(batcher* renderer)
+{
+    free(renderer->vertices);
 }

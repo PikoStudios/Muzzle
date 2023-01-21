@@ -40,3 +40,5 @@ void draw_batcher(batcher* renderer);
 // Rectangle Batch Renderer
 batcher create_batcher_rectangle(int max_size);
 void push_batcher_rectangle(batcher* renderer, GLfloat x, GLfloat y, GLfloat w, GLfloat h, tint color_drawn);
+
+void unload_batcher(batcher* renderer);
