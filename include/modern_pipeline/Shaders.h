@@ -3,6 +3,7 @@
 #include "../core/tint.h"
 #include "../core/Error.h"
 #include "../core/vector.h"
+#include "../core/matrix.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -29,9 +30,8 @@ MZ_API void upload_shader_float(shader_program program, const char* var, float v
 MZ_API void upload_shader_vec2(shader_program program, const char* var, vec2 value);
 MZ_API void upload_shader_vec3(shader_program program, const char* var, vec3 value);
 MZ_API void upload_shader_vec4(shader_program program, const char* var, vec4 value);
-
-// TODO: Add upload_shader matrix3, matrix4
-// Reference code for implementing matrix types: https://github.com/raysan5/raylib/blob/master/src/raylib.h#L217
+MZ_API void upload_shader_mat3(shader_program program, const char* var, mat3 value);
+MZ_API void upload_shader_mat4(shader_program program, const char* var, mat4 value);
 
 MZ_API void attach_shader_program(shader_program shader);
 MZ_API void unload_shader_program(shader_program shader);

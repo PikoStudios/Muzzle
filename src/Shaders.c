@@ -89,7 +89,7 @@ shader_program link_shader(shader vertex, shader fragment)
 
 void upload_shader_int(shader_program program, const char* var, int value)
 {
-    int uniform_location = glGetUniformLocation(program, var);
+    GLuint uniform_location = glGetUniformLocation(program, var);
     glUseProgram(program);
     glUniform1i(uniform_location, value);
     
@@ -100,7 +100,7 @@ void upload_shader_int(shader_program program, const char* var, int value)
 
 void upload_shader_float(shader_program program, const char* var, float value)
 {
-    int uniform_location = glGetUniformLocation(program, var);
+    GLuint uniform_location = glGetUniformLocation(program, var);
     glUseProgram(program);
     glUniform1f(uniform_location, value);
     
@@ -111,7 +111,7 @@ void upload_shader_float(shader_program program, const char* var, float value)
 
 void upload_shader_vec2(shader_program program, const char* var, vec2 value)
 {
-    int uniform_location = glGetUniformLocation(program, var);
+    GLuint uniform_location = glGetUniformLocation(program, var);
     glUseProgram(program);
     glUniform2f(uniform_location, value.x, value.y);
     
@@ -122,7 +122,7 @@ void upload_shader_vec2(shader_program program, const char* var, vec2 value)
 
 void upload_shader_vec3(shader_program program, const char* var, vec3 value)
 {
-    int uniform_location = glGetUniformLocation(program, var);
+    GLuint uniform_location = glGetUniformLocation(program, var);
     glUseProgram(program);
     glUniform3f(uniform_location, value.x, value.y, value.z);
     
@@ -133,12 +133,34 @@ void upload_shader_vec3(shader_program program, const char* var, vec3 value)
 
 void upload_shader_vec4(shader_program program, const char* var, vec4 value)
 {
-    int uniform_location = glGetUniformLocation(program, var);
+    GLuint uniform_location = glGetUniformLocation(program, var);
     glUseProgram(program);
     glUniform4f(uniform_location, value.x, value.y, value.z, value.w);
     
     #ifdef MUZZLE_VERBOSE
         log_status(STATUS_INFO, "Uploaded vec4 to shader");
+    #endif
+}
+
+void upload_shader_mat3(shader_program program, const char* var, mat3 value)
+{
+    GLuint uniform_location = glGetUniformLocation(program, var);
+    glUseProgram(program);
+    glUniformMatrix3fv(uniform_location, 1, 0, value);
+    
+    #ifdef MUZZLE_VERBOSE
+        log_status(STATUS_INFO, "Uploaded mat3 to shader");
+    #endif
+}
+
+void upload_shader_mat4(shader_program program, const char* var, mat  value)
+{
+    GLuint uniform_location = glGetUniformLocation(program, var);
+    glUseProgram(program);
+    glUniformMatrix3fv(uniform_location, 1, 0, value);
+    
+    #ifdef MUZZLE_VERBOSE
+        log_status(STATUS_INFO, "Uploaded mat4 to shader");
     #endif
 }
 
