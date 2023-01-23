@@ -32,7 +32,13 @@
 
 #define MZ_ASSERT(condition, msg) if ((condition) == 0) \
 { \
-fprint(stderr, "Assertion '%s' failed, more info: %s", #condition, msg); \
+fprintf(stderr, "Assertion '%s' failed in function '%s', more info: %s", #condition, __func__, msg); \
+exit(-1); \
+}
+
+#define MZ_ASSERT_NO_MSG(condition) if ((condition) == 0) \
+{ \
+fprintf(stderr, "Assertion '%s' failed in function '%s'", #condition, __func__); \
 exit(-1); \
 }
 
