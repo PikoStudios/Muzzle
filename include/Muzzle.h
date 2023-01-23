@@ -10,7 +10,9 @@
     #define MZ_MATH_IMPLEMENTION
 #endif
 
-#include "core/Applet.h"
+#ifndef MZ_EXCLUDE_APPLET
+    #include "core/Applet.h"
+#endif
 
 #ifndef MZ_EXCLUDE_AUDIO
     #include "core/Audio.h"
@@ -19,18 +21,6 @@
 #ifndef MUZZLE_SHARED_VARIABLE_ARRAY_SIZE
     #define MUZZLE_SHARED_VARIABLE_ARRAY_SIZE 5
 #endif
-
-#define MZ_ASSERT(condition, msg) if ((condition) == 0) \
-{ \
-fprintf(stderr, "Assertion '%s' failed, more info: %s", #condition, msg); \
-exit(-1); \
-}
-
-// NOTE:
-/*
- * In MZ_Assert I am using an if statement instead of ((x) ? a : b) because ((x) ? a : b) will not compile when reaching ;
- * 
- */
 
 #include "core/vector.h"
 #include "core/Drawing.h"

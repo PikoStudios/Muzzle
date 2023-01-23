@@ -30,6 +30,12 @@
     #include "../deps/glfw/include/GLFW/glfw3.h"
 #endif
 
+#define MZ_ASSERT(condition, msg) if ((condition) == 0) \
+{ \
+fprint(stderr, "Assertion '%s' failed, more info: %s", #condition, msg); \
+exit(-1); \
+}
+
 #define MUZZLE_NULL (void*)(1)
 
 #ifdef _WIN32
