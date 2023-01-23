@@ -144,6 +144,14 @@ void upload_shader_vec4(shader_program program, const char* var, vec4 value)
 
 void upload_shader_mat3(shader_program program, const char* var, mat3 value)
 {
+    if (!value)
+    {
+        #ifdef MUZZLE_VERBOSE
+            log_status(STATUS_ERROR, "Failed to upload mat3 to shader");
+        #endif
+        return;
+    }
+
     GLuint uniform_location = glGetUniformLocation(program, var);
     glUseProgram(program);
     glUniformMatrix3fv(uniform_location, 1, 0, value);
@@ -153,8 +161,16 @@ void upload_shader_mat3(shader_program program, const char* var, mat3 value)
     #endif
 }
 
-void upload_shader_mat4(shader_program program, const char* var, mat  value)
+void upload_shader_mat4(shader_program program, const char* var, mat4 value)
 {
+    if (!value)
+    {
+        #ifdef MUZZLE_VERBOSE
+            log_status(STATUS_ERROR, "Failed to upload mat4 to shader");
+        #endif
+        return;
+    }
+
     GLuint uniform_location = glGetUniformLocation(program, var);
     glUseProgram(program);
     glUniformMatrix3fv(uniform_location, 1, 0, value);
