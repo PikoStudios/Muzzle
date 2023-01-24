@@ -4,3 +4,4 @@ examples/*/build
 .*.clangd
 .clangd
 compile_flags.txt
+.gitpod.yml
