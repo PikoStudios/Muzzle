@@ -23,7 +23,6 @@ extern "C" {
 
 typedef FONScontext font_manager;
 
-
 typedef struct font
 {
     int fn;
