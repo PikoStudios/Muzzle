@@ -22,8 +22,6 @@ extern "C" {
 
 
 typedef FONScontext font_manager;
-static int __fons_initialized = 0;
-
 
 typedef struct font
 {

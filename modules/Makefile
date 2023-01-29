@@ -14,17 +14,17 @@ all:
 	@make help
 
 compile_prerequisites:
-	@echo "[1/3] Generating GLFW"
+	@echo "1/3 Generating GLFW"
 	cd "../deps/glfw/"; \
 	mkdir build; \
 	cd build; \
-	$(CMAKE) .. -G $(GENERATOR) $(CMAKE_FLAGS); \
+	$(CMAKE) .. -G \"$(GENERATOR)\" $(CMAKE_FLAGS); \
 	$(CMAKE) .. -G ""; \
-	echo "[2/3] Compiling GLFW"; \
+	echo "2/3 Compiling GLFW"; \
 	$(BUILDTOOL) $(BUILDTOOL_FLAGS); \
-	if [ $(BUILDTOOL_MAKE) == "true" ]; then \
-		echo "[3/3] Installing GLFW" \
-		$(BUILDTOOL) install \
+	if [ $(BUILDTOOL_MAKE) == true ]; then \
+		echo "3/3 Installing GLFW"; \
+		$(BUILDTOOL) install; \
 	fi
 
 install_submodules:
@@ -55,3 +55,6 @@ help:
 	@echo "    BUILDTOOL=\"make\" - Build tool executable"
 	@echo "    BUILDTOOL_MAKE=true - Boolean [ \"true\" | \"false\"] if build tool is make"
 	@echo "    BUILDTOOL_FLAGS= - Build tool flags"
+
+clean:
+	rm -rf ../deps/glfw/build
