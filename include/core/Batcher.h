@@ -32,13 +32,22 @@ struct _batcher
     shader_program global_shader;
 };
 
+struct _batcher_array
+{
+    struct _batcher* batchers;
+    struct _batcher* top;
+    size_t length;
+};
+
 typedef enum _BATCHER_TYPES BATCHER_TYPES;
 typedef struct _batcher batcher;
+typedef struct _batcher_array batcher_array;
 
 void draw_batcher(batcher* renderer);
 
 // Rectangle Batch Renderer
 batcher create_batcher_rectangle(int max_size);
+void update_batcher_rectangle(batcher* renderer, unsigned int index, GLfloat x, GLfloat y, GLfloat w, GLfloat h, tint color_drawn);
 void push_batcher_rectangle(batcher* renderer, GLfloat x, GLfloat y, GLfloat w, GLfloat h, tint color_drawn);
 
 void unload_batcher(batcher* renderer);

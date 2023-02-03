@@ -71,15 +71,8 @@ void draw_batcher(batcher* renderer)
     detach_shader_program(renderer->global_shader);
 }
 
-void push_batcher_rectangle(batcher* renderer, GLfloat x, GLfloat y, GLfloat w, GLfloat h, tint color_drawn)
+void update_batcher_rectangle(batcher* renderer, unsigned int index, GLfloat x, GLfloat y, GLfloat w, GLfloat h, tint color_drawn)
 {
-    if (renderer->object_count + 1 > renderer->max_size)
-    {
-        log_status(STATUS_ERROR, "Batcher overflow! Cannot push rectangle to batcher");
-        return;
-    }
-
-    int index = renderer->object_count++;
     int offset = (index * 4) * MZ_BATCHER_RECTANGLE_VERTEX_SIZE;
     int offset_two = offset + MZ_BATCHER_RECTANGLE_VERTEX_SIZE;
     int offset_three = offset + (MZ_BATCHER_RECTANGLE_VERTEX_SIZE * 2);
@@ -113,6 +106,18 @@ void push_batcher_rectangle(batcher* renderer, GLfloat x, GLfloat y, GLfloat w, 
     renderer->vertices[offset_four + 3] = color_drawn.g;
     renderer->vertices[offset_four + 4] = color_drawn.b;
     renderer->vertices[offset_four + 5] = color_drawn.a;
+}
+
+void push_batcher_rectangle(batcher* renderer, GLfloat x, GLfloat y, GLfloat w, GLfloat h, tint color_drawn)
+{
+    if (renderer->object_count + 1 > renderer->max_size)
+    {
+        log_status(STATUS_ERROR, "Batcher overflow! Cannot push rectangle to batcher");
+        return;
+    }
+
+    int index = renderer->object_count++;
+    update_batcher_rectangle(renderer, index, x, y, w, h, color_drawn);
 }
 
 void unload_batcher(batcher* renderer)
