@@ -144,7 +144,7 @@ void upload_shader_vec4(shader_program program, const char* var, vec4 value)
 
 void upload_shader_mat3(shader_program program, const char* var, mat3 value)
 {
-    // TODO: Assert if value is NULL with MZ_ASSERT();
+    MZ_ASSERT_NO_MSG(value != NULL)
 
     GLuint uniform_location = glGetUniformLocation(program, var);
     glUseProgram(program);
@@ -157,7 +157,7 @@ void upload_shader_mat3(shader_program program, const char* var, mat3 value)
 
 void upload_shader_mat4(shader_program program, const char* var, mat4 value)
 {
-    // TODO: Assert if value is NULL with MZ_ASSERT();
+    MZ_ASSERT_NO_MSG(value != NULL)
 
     GLuint uniform_location = glGetUniformLocation(program, var);
     glUseProgram(program);
