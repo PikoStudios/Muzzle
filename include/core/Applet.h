@@ -3,11 +3,17 @@
 #include "Error.h"
 #include "callback.h"
 #include "../backend.h"
+#include "Batcher.h"
+
+#ifndef MZ_BATCHER_SIZE
+    #define MZ_BATCHER_SIZE 1000
+#endif
 
 typedef struct Applet
 {
     int width, height;
     char* window_title;
+    batcher_array rect_batchers;
     GLFWwindow* window_handle;
 } Applet;
     
@@ -21,7 +27,7 @@ extern "C" {
 * StartApplet - Start a Applet
 * @param self Pointer to Applet
 */
-MZ_API void StartApplet(Applet *self);
+MZ_API void StartApplet(Applet* self);
 
 /*
 * InitializeApplet - Create an Applet

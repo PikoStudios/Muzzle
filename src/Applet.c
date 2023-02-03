@@ -1,8 +1,9 @@
 #include "core/Applet.h"
 
 
-void StartApplet(Applet *self)
-{
+void StartApplet(Applet* self)
+{    
+    __draw_pointer_ctx = (void*)(self);
     OnAppletUpdate(self);
 }
 
@@ -65,19 +66,32 @@ Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TI
 
     // NOTE: MAYBE: Instead of doing glViewport width height. Maybe get the actual framebuffer size and pass throught that?
     glViewport(0,0, WIDTH, HEIGHT);
-
+    
+    // TODO: Check if we need to enable GL_DEPTH_TEST, https://learnopengl.com/Advanced-OpenGL/Depth-testing
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // quickly clear the screen with white 
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // quickly clear the screen with white
 
     glEnable(GL_BLEND); // for transperency
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrtho(0, WIDTH, HEIGHT, 0, 0, 1);
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-
+    #ifdef MUZZLE_RETAIN_LEGACY
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glOrtho(0, WIDTH, HEIGHT, 0, 0, 1);
+    
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+    #endif
+    
+    // TODO: Create Batchers
+    buf.rect_batchers.length = 1;
+    buf.rect_batchers.batchers = MZ_CALLOC(1, sizeof(batcher));
+    
+    if (buf.rect_batchers.batchers == NULL)
+        log_status(STATUS_FATAL_ERROR, "Failed to allocate memory for rectangle batcher");
+    
+    buf.rect_batchers.batchers[0] = create_batcher_rectangle(MZ_BATCHER_SIZE);
+    buf.rect_batchers.top = &buf.rect_batchers.batchers[0];
+    
     return buf;
 }
