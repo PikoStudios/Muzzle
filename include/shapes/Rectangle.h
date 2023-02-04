@@ -2,6 +2,7 @@
 #include "../backend.h"
 #include "../core/tint.h"
 #include "../core/vector.h"
+#include "../core/Applet.h"
 
 /* 
 Muzzle Rectangle
@@ -10,6 +11,7 @@ float X
 float Y
 float width
 float height
+int index
 */
 typedef struct rectangle
 {
@@ -17,7 +19,27 @@ typedef struct rectangle
     float y;
     float width;
     float height;
+    unsigned int index;
+    unsigned int parent;
 } rectangle;
+
+/*
+Muzzle skinny_rectangle
+================
+float x
+float y
+float width
+float height
+
+This struct provides a rectangle-like structure without batcher index info
+*/
+typedef struct skinny_rectangle
+{
+    float x;
+    float y;
+    float width;
+    float height;
+} skinny_rectangle;
 
 #ifdef __cplusplus
 extern "C" {
@@ -39,7 +61,7 @@ Draw a rectangle to the screen
 retangle rec
 tint color_drawn
 */
-MZ_API void draw_rectangle_rec(rectangle rec, tint color_drawn);
+MZ_API void draw_rectangle_rec(Applet* applet, rectangle* rec, tint color_drawn);
 /* 
 Muzzle draw_rectangle_vec2()
 ======================

@@ -2,8 +2,7 @@
 
 
 void StartApplet(Applet* self)
-{    
-    __draw_pointer_ctx = (void*)(self);
+{
     OnAppletUpdate(self);
 }
 

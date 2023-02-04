@@ -3,11 +3,15 @@
 void begin_drawing()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glLoadIdentity();
+    
+    #ifdef MUZZLE_RETAIN_LEGACY
+        glLoadIdentity();
+    #endif
 }
 
 void end_drawing(Applet *applet)
 {
+    // TODO: Change this out
     #ifdef INTERNAL_MODERN_RENDERER_USAGE
         rlDrawRenderBatchActive();
     #endif
