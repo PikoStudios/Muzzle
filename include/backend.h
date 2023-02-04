@@ -70,5 +70,5 @@ exit(-1); \
     #define MZ_LITERAL(x) (x)
 #endif
 
-static void* __draw_pointer_ctx; // This pointer should only be used for drawing functions, like draw_rectangle. This pointer should be used for context data needed by the drawing functions
+//static void* __draw_pointer_ctx; // This pointer should only be used for drawing functions, like draw_rectangle. This pointer should be used for context data needed by the drawing functions
 typedef GLFWwindow* MUZZLE_WINDOW;
