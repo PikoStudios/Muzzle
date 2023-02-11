@@ -10,8 +10,8 @@
 #include <stdio.h>					// malloc, free, fopen, fclose, ftell, fseek, fread
 #include <string.h>					// memset
 #include "../backend.h"
-#include "../deps/fontstash/fontstash.h"
-#include "../deps/fontstash/glfontstash.h"
+#include "../deps/fontstash/src/fontstash.h"
+#include "../deps/fontstash/src/gl3corefontstash.h"
 #include "Error.h"
 #include "tint.h"
 #include "vector.h"
