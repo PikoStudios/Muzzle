@@ -4,7 +4,6 @@
 #include "vector.h"
 #include "Error.h"
 #include "tint.h"
-#include "time.h"
 
 typedef struct animation
 {

@@ -24,7 +24,7 @@ animation load_animation(const char** locations, int size, vec2 position)
 }
 void play_animation(animation* data, long target_fps, float scale, float rotation, tint color_drawn)
 {
-    for (data->current_frame <= data->frames; data->current_frame++;)
+    for (;data->current_frame <= data->frames; data->current_frame++)
     {
         draw_sprite_vec2(data->spr[data->current_frame], data->position, scale, rotation, color_drawn);
     }
