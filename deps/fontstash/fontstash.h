@@ -16,6 +16,14 @@
 // 3. This notice may not be removed or altered from any source distribution.
 //
 
+// Change List
+// ==========
+// This list tracks all changes made to fonstash as part of Muzzle Development
+// This is required to comply with the fontstash license
+//
+// Feb 6, 2023:
+//		Added Change List
+
 #ifndef FONS_H
 #define FONS_H
 

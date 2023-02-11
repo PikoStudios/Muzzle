@@ -7,18 +7,9 @@
 Applet applet;
 
 void OnAppletUpdate()
-{
-
-#ifdef MUZZLE_COMPILE_AS_TEST
-    int frame_counter = 0;
-#endif
-    
+{   
     while (keep_applet(applet.window_handle))
-    {
-#ifdef MUZZLE_COMPILE_AS_TEST
-        if (frame_counter++ >= 1000) exit(0);
-#endif
-        
+    {        
         begin_drawing();
             clear_screen(GRAY);
         end_drawing(&applet);
