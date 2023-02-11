@@ -75,21 +75,24 @@ void draw_sprite_vec2(sprite *data, vec2 pos, float scale, float rotation, tint 
 void draw_sprite_portion(sprite* data, rectangle rec, vec2 pos, tint color_drawn)
 {
     glEnable(GL_TEXTURE_2D);
-    
     glBindTexture(GL_TEXTURE_2D, data->sprite_id);
 
-    glPushMatrix();
-        glTranslatef(pos.x, pos.y, 0);
+    #ifdef MUZZLE_RETAIN_LEGACY
+        glPushMatrix();
+            glTranslatef(pos.x, pos.y, 0);
 
-        glBegin(GL_QUADS);
-            glColor4ub(color_drawn.r, color_drawn.g, color_drawn.b, color_drawn.a);
-            glNormal3f(0.0f, 0.0f, 0.0f);
-            glTexCoord2f((float)(rec.x / data->width), (float)(rec.y / data->height)); glVertex2f(0.0f, 0.0f);
-            glTexCoord2f((float)((rec.x + rec.width) / data->width), (float)(rec.y / data->height)); glVertex2f(rec.width, 0.0f);
-            glTexCoord2f((float)((rec.x + rec.width) / data->width), (float)((rec.y + rec.height) / data->height)); glVertex2f(rec.width, rec.height);
-            glTexCoord2f((float)(rec.x / data->width), (float)((rec.y + rec.height) / data->height)); glVertex2f(0.0f, rec.height);
-        glEnd();
-    glPopMatrix();
+            glBegin(GL_QUADS);
+                glColor4ub(color_drawn.r, color_drawn.g, color_drawn.b, color_drawn.a);
+                glNormal3f(0.0f, 0.0f, 0.0f);
+                glTexCoord2f((float)(rec.x / data->width), (float)(rec.y / data->height)); glVertex2f(0.0f, 0.0f);
+                glTexCoord2f((float)((rec.x + rec.width) / data->width), (float)(rec.y / data->height)); glVertex2f(rec.width, 0.0f);
+                glTexCoord2f((float)((rec.x + rec.width) / data->width), (float)((rec.y + rec.height) / data->height)); glVertex2f(rec.width, rec.height);
+                glTexCoord2f((float)(rec.x / data->width), (float)((rec.y + rec.height) / data->height)); glVertex2f(0.0f, rec.height);
+            glEnd();
+        glPopMatrix();
+    #else
+        #warning "Not Implemented"
+    #endif
 
     glDisable(GL_TEXTURE_2D);
 }
