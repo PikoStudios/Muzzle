@@ -1,5 +1,13 @@
 #include "core/Applet.h"
 
+void set_global_shader(Applet* applet, shader_program program)
+{
+    // Rectangle Batchers
+    for (int i = 0; i < applet->rect_batchers.length; i++)
+    {
+        applet->rect_batchers.batchers[i].global_shader = program;
+    }
+}
 
 void StartApplet(Applet* self)
 {

@@ -4,6 +4,7 @@
 #include "callback.h"
 #include "../backend.h"
 #include "Batcher.h"
+#include "../modern_pipeline/Shaders.h"
 
 #ifndef MZ_BATCHER_SIZE
     #define MZ_BATCHER_SIZE 1000
@@ -21,7 +22,11 @@ typedef struct Applet
 extern "C" {
 #endif
 
-
+/*
+* set_global_shader - Set the global shader
+* @param program Shader Program
+*/
+MZ_API void set_global_shader(Applet* applet, shader_program program);
 
 /*
 * StartApplet - Start a Applet
