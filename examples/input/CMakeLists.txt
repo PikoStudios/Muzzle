@@ -27,6 +27,8 @@ ${mz_source_dir}/Text.c
 ${mz_source_dir}/Time.c
 ${mz_source_dir}/Audio.c
 ${mz_source_dir}/Line.c
+${mz_source_dir}/Batcher.c
+${mz_source_dir}/Shaders.c
 ${MUZZLE_LIB_FOLDER}/glad/src/glad.c
 )
 
