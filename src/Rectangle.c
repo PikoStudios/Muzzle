@@ -19,7 +19,12 @@ void draw_rectangle_rec(Applet* applet, rectangle* rec, tint color_drawn)
     if (rec->index == 0)
     {
         rec->parent = applet->rect_batchers.length - 1;
-        rec->index = applet->rect_batchers.batchers[rec->parent].object_count;
+        rec->index = applet->rect_batchers.batchers[rec->parent].object_count++;
+        
+        if (applet->rect_batchers.batchers[rec->parent].object_count > applet->rect_batchers.batchers[rec->parent].max_size)
+        {
+            // TODO: Implement this behaviour
+        }
     }
     
     // TODO: Profile this if slow
