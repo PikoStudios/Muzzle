@@ -10,7 +10,6 @@ batcher create_batcher_rectangle(int max_size)
     temp.vertex_size = MZ_BATCHER_RECTANGLE_VERTEX_SIZE;
     temp.vertices_size = (max_size * MZ_BATCHER_RECTANGLE_VERTICES_QUADS) * temp.vertex_size;
     
-    // TODO: is it better to call calloc on this or just do temp.vertices[temp.vertices_size]?
     temp.vertices = MZ_CALLOC(temp.vertices_size, sizeof(GLfloat));
 
     if (temp.vertices == NULL) log_status(STATUS_FATAL_ERROR, "Failed to allocate memory for Batch Renderer");
@@ -51,6 +50,8 @@ batcher create_batcher_rectangle(int max_size)
 
     glVertexAttribPointer(1, MZ_BATCHER_RECTANGLE_VERTEX_TINT_SIZE, GL_FLOAT, 0, MZ_BATCHER_RECTANGLE_VERTEX_SIZE * 4, (GLvoid*)(MZ_BATCHER_RECTANGLE_VERTEX_TINT_OFFSET));
     glEnableVertexAttribArray(1);
+    
+    log_status(STATUS_SUCCESS, "Created Rectangle Batcher");
 
     return temp;
 }
@@ -63,7 +64,12 @@ void draw_batcher(batcher* renderer)
 
     attach_shader_program(renderer->global_shader);
     
+    glBindVertexArray(renderer->vao);
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    
     glDrawElements(GL_TRIANGLES, renderer->object_count * 6, GL_UNSIGNED_INT, 0);
+    
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
     glBindVertexArray(0);
@@ -123,4 +129,5 @@ void push_batcher_rectangle(batcher* renderer, GLfloat x, GLfloat y, GLfloat w, 
 void unload_batcher(batcher* renderer)
 {
     free(renderer->vertices);
+    // TODO: Is there more to destroy?
 }
