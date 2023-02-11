@@ -3,6 +3,7 @@
 #include "tint.h"
 #include "vector.h"
 #include "Applet.h"
+#include "Batcher.h"
 
 #ifdef __cplusplus
 extern "C" {

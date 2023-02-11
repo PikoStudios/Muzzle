@@ -16,6 +16,11 @@ void end_drawing(Applet *applet)
         rlDrawRenderBatchActive();
     #endif
     
+    for (int i = 0; i < applet->rect_batchers.length; i++)
+    {
+        draw_batcher(&applet->rect_batchers.batchers[i]);
+    }
+    
     glfwSwapBuffers(applet->window_handle);
     glfwPollEvents();
 
