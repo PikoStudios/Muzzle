@@ -7,3 +7,6 @@
 [submodule "deps/openal-soft"]
 	path = deps/openal-soft
 	url = https://github.com/kcat/openal-soft.git
+[submodule "deps/fontstash"]
+	path = deps/fontstash
+	url = https://github.com/PikoStudios/fontstash
