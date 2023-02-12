@@ -1,4 +1,4 @@
-#include "memory.h"
+#include "core/Memory.h"
 
 void* mz_safe_realloc(void* ptr, size_t size)
 {
