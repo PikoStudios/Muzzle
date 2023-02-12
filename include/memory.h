@@ -18,10 +18,8 @@
 #endif
 
 #ifndef MZ_REALLOC
-    #define MZ_REALLOC(ptr, size)   realloc(ptr, size)
+    #define MZ_REALLOC(ptr, size)   mz_safe_realloc(ptr, size)
 #endif
 
-#define RLGL_MALLOC                 MZ_MALLOC
-#define RLGL_CALLOC                 MZ_CALLOC
-#define RLGL_FREE                   MZ_FREE
-#define RLGL_REALLOC                MZ_REALLOC
+// This function will MZ_FREE(ptr) when realloc fails. 
+void* mz_safe_realloc(void* ptr, size_t size);
