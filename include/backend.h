@@ -14,7 +14,7 @@
 #endif
 
 #include <stdlib.h>
-#include "memory.h"
+#include "core/Memory.h"
 
 #define MUZZLE_FALSE 0
 #define MUZZLE_TRUE 1
