@@ -16,14 +16,18 @@ void draw_rectangle(int x, int y, int width, int height, tint color_drawn)
 }
 void draw_rectangle_rec(Applet* applet, rectangle* rec, tint color_drawn)
 {
-    if (rec->index == 0)
+    if (rec->index == 0 || rec->parent == 0)
     {
         rec->parent = applet->rect_batchers.length - 1;
-        rec->index = applet->rect_batchers.batchers[rec->parent].object_count++;
+        rec->index = applet->rect_batchers.top->object_count++;
         
-        if (applet->rect_batchers.batchers[rec->parent].object_count > applet->rect_batchers.batchers[rec->parent].max_size)
+        if (applet->rect_batchers.top->object_count > applet->rect_batchers.top->max_size)
         {
-            // TODO: Implement this behaviour
+            applet->rect_batchers.top->object_count--;
+            
+            __append_batchers(applet, BATCHER_TYPE_RECTANGLE);
+            rec->parent = applet->rect_batchers.length - 1;
+            rec->index = applet->rect_batchers.top->object_count++;
         }
     }
     

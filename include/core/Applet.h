@@ -23,6 +23,12 @@ extern "C" {
 #endif
 
 /*
+* __append_batchers - Internal function to append batcher array
+* @param type Batcher Type
+*/
+MZ_API void __append_batchers(Applet* applet, int type);
+
+/*
 * set_global_shader - Set the global shader
 * @param program Shader Program
 */
