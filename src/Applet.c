@@ -10,7 +10,7 @@ void __append_batchers(Applet* applet, int type)
         if (applet->rect_batchers.batchers == NULL)
             log_status(STATUS_FATAL_ERROR, "Not able to allocate enough memory to append rectangle batcher");
 
-        applet->rect_batchers.batchers[applet->rect_batchers.length - 1] = create_batcher_rectangle(MZ_BATCHER_SIZE);
+        applet->rect_batchers.batchers[applet->rect_batchers.length - 1] = initialize_batcher_rectangle(MZ_BATCHER_SIZE);
         applet->rect_batchers.top = &applet->rect_batchers.batchers[applet->rect_batchers.length - 1];
         
         break;
@@ -114,7 +114,7 @@ Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TI
     if (buf.rect_batchers.batchers == NULL)
         log_status(STATUS_FATAL_ERROR, "Failed to allocate memory for rectangle batcher");
     
-    buf.rect_batchers.batchers[0] = create_batcher_rectangle(MZ_BATCHER_SIZE);
+    buf.rect_batchers.batchers[0] = initialize_batcher_rectangle(MZ_BATCHER_SIZE);
     buf.rect_batchers.top = &buf.rect_batchers.batchers[0];
     
     return buf;

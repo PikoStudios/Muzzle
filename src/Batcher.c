@@ -1,6 +1,6 @@
 #include "core/Batcher.h"
 
-batcher create_batcher_rectangle(int max_size)
+batcher initialize_batcher_rectangle(int max_size)
 {
     batcher temp;
     temp.global_shader = 0;
