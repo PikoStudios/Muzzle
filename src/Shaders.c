@@ -27,6 +27,8 @@ shader load_shader_from_string(shader_type type, const char* shader_code)
 
         printf("\t%s\n", infolog);
     }
+    
+    return id;
 }
 
 shader load_shader(shader_type type, const char* filepath)
@@ -42,13 +44,23 @@ shader load_shader(shader_type type, const char* filepath)
     const int filesize = ftell(file);
     fseek(file, 0, SEEK_SET);
     
-    char buffer[filesize + 1];
+    char* buffer = MZ_MALLOC(sizeof(char) * (filesize + 1));
+    
+    if (buffer == NULL)
+    {
+        log_status(STATUS_ERROR, "Failed to allocate memory for string buffer, load_shader:45");
+        fclose(file);
+        return 0;
+    }
     
     fread(buffer, 1, filesize, file);
     buffer[filesize] = '\0';
     fclose(file);
     
-    return load_shader_from_string(type, buffer);
+    shader result = load_shader_from_string(type, buffer);
+    MZ_FREE(buffer);
+    
+    return result;
 }
 
 shader_program link_shader(shader vertex, shader fragment)
