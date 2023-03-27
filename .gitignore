@@ -5,3 +5,4 @@ examples/*/build
 .clangd
 compile_flags.txt
 .gitpod.yml
+.ignore
