@@ -5,6 +5,9 @@
 #include "vector.h"
 #include "tint.h"
 #include <stdint.h>
+#include <stddef.h>
+
+// shoutout to the cherno
 
 #define MZ_BATCHER_RECTANGLE_VERTEX_SIZE 6
 #define MZ_BATCHER_RECTANGLE_VERTICES_QUADS 4
@@ -24,24 +27,47 @@
  }
 */
 
+// Internal vertex structures
+struct _quad_vertex
+{
+    vec3 position;
+    tint_f color_drawn;
+    vec2 tex_coords;
+    float tex_id;
+};
+
+struct _circle_vertex
+{
+    vec3 world_position;
+    vec3 local_position;
+    tint color_drawn;
+    float thickness;
+    float fade;
+};
+
+struct _line_vertex
+{
+    vec3 position;
+    tint_f color_drawn;
+};
+
 enum _BATCHER_TYPES
 {
-    BATCHER_TYPE_RECTANGLE = 0,
+    BATCHER_TYPE_QUAD = 0,
     BATCHER_TYPE_CIRCLE,
     BATCHER_TYPE_LINE,
-    BATCHER_TYPE_SPRITE
 };
 
 struct _batcher
 {
-    GLfloat* vertices;
-    GLfloat* vertices_ptr;
-    uint32_t* textures;
-    uint32_t texture_index;
+    struct _vertex* vertices;
+    struct _vertex* vertices_ptr;
     size_t vertices_size;
     uint32_t vertices_index;
     size_t vertex_size;
     size_t max_size;
+    uint32_t* textures;
+    uint32_t texture_index;
     GLuint vao;
     GLuint vbo;
     GLuint ebo;
@@ -50,19 +76,28 @@ struct _batcher
 
 struct _batch
 {
-    struct _batcher* quads_batch;
-    struct _batcher* quads_batch_ptr;
+    struct _batcher* quads;
+    struct _batcher* quads_ptr;
+    size_t quads_size;
 };
 
 typedef enum _BATCHER_TYPES BATCHER_TYPES;
 typedef struct _batcher batcher;
 typedef struct _batch batch;
 
-void draw_batcher(batcher* renderer);
+// NOTE: Not calling it "draw_batcher" because this function should not be seen easily.
+// NOTE: Not using internal naming convention because this function could reasonably be used
+// NOTE: Outside of an internal space
+MZ_API void next_frame_batcher(int type, batcher* renderer);
 
-// Rectangle Batch Renderer
-batcher initialize_batcher_rectangle(int max_size);
-void update_batcher_rectangle(batcher* renderer, unsigned int index, GLfloat x, GLfloat y, GLfloat w, GLfloat h, tint color_drawn);
-void push_batcher_rectangle(batcher* renderer, GLfloat x, GLfloat y, GLfloat w, GLfloat h, tint color_drawn);
+// Internal Batcher Initialization functions //
+// TODO: Find better name :)
+static batcher _mz_internal_init_batcher_rect(int max_size);
 
-void unload_batcher(batcher* renderer);
+// Public batcher initialization function //
+MZ_API batcher load_batcher(int type, int max_size);
+
+MZ_API void update_batcher_rectangle(batcher* renderer, unsigned int index, GLfloat x, GLfloat y, GLfloat w, GLfloat h, tint color_drawn);
+MZ_API void push_batcher_rectangle(batcher* renderer, GLfloat x, GLfloat y, GLfloat w, GLfloat h, tint color_drawn);
+
+MZ_API void unload_batcher(batcher* renderer);

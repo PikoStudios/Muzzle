@@ -1,16 +1,34 @@
 #include "core/Batcher.h"
 
-batcher initialize_batcher_rectangle(int max_size)
+batcher load_batcher(int type, int max_size)
 {
+    switch(type)
+    {
+    case BATCHER_TYPE_QUAD:
+        return _mz_internal_init_batcher_rect(max_size);
+        break;
+    case BATCHER_TYPE_CIRCLE:
+        log_status(STATUS_FATAL_ERROR, "Batcher type 'BATCHER_TYPE_CIRCLE' not implemented!");
+        break;
+    case BATCHER_TYPE_LINE:
+        log_status(STATUS_FATAL_ERROR, "Batcher type 'BATCHER_TYPE_LINE' not implemented!");
+        break;
+    default:
+        log_status(STATUS_FATAL_ERROR, "Unknown batcher type");
+        break;
+    }
+}
+
+static batcher _mz_internal_init_batcher_rect(int max_size)
+{   
     batcher temp;
     temp.batch_shader = 0;
     temp.vertices_index = 0;
+    temp.texture_index = 1;
     temp.max_size = max_size;
 
-    temp.vertex_size = MZ_BATCHER_RECTANGLE_VERTEX_SIZE;
-    temp.vertex_size = (max_size * MZ_BATCHER_RECTANGLE_VERTICES_QUADS) * temp.vertex_size;
-    
-    temp.vertices = MZ_CALLOC(temp.vertices_size, sizeof(GLfloat));
+    temp.vertex_size = sizeof(struct _quad_vertex);
+    temp.vertices = MZ_CALLOC(max_size * 4, temp.vertex_size);
 
     if (temp.vertices == NULL) log_status(STATUS_FATAL_ERROR, "Failed to allocate memory for Batch Renderer");
 
@@ -19,7 +37,7 @@ batcher initialize_batcher_rectangle(int max_size)
 
     glGenBuffers(1, &temp.vbo);
     glBindBuffer(GL_ARRAY_BUFFER, temp.vbo);
-    glBufferData(GL_ARRAY_BUFFER, temp.vertices_size * 4, NULL, GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, (temp.vertex_size * 4) * max_size, NULL, GL_DYNAMIC_DRAW);
 
     glGenBuffers(1, &temp.ebo);
     int indices[6 * max_size];
@@ -43,12 +61,17 @@ batcher initialize_batcher_rectangle(int max_size)
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, temp.ebo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * max_size, indices, GL_STATIC_DRAW);
 
-    // TODO: I feel like this prolly would not work, so make sure to test this
-    glVertexAttribPointer(0, MZ_BATCHER_RECTANGLE_VERTEX_POS_SIZE, GL_FLOAT, 0, MZ_BATCHER_RECTANGLE_VERTEX_SIZE * 4, (GLvoid*)(MZ_BATCHER_RECTANGLE_VERTEX_POS_OFFSET));
-    glEnableVertexAttribArray(0);
-
-    glVertexAttribPointer(1, MZ_BATCHER_RECTANGLE_VERTEX_TINT_SIZE, GL_FLOAT, 0, MZ_BATCHER_RECTANGLE_VERTEX_SIZE * 4, (GLvoid*)(MZ_BATCHER_RECTANGLE_VERTEX_TINT_OFFSET));
-    glEnableVertexAttribArray(1);
+    glEnableVertexArrayAttrib(temp.vbo, 0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, temp.vertex_size, (void*)(offsetof(struct _quad_vertex, position)));
+    
+    glEnableVertexArrayAttrib(temp.vbo, 1);
+    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, temp.vertex_size, (void*)(offsetof(struct _quad_vertex, color_drawn)));
+    
+    glEnableVertexArrayAttrib(temp.vbo, 2);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, temp.vertex_size, (void*)(offsetof(struct _quad_vertex, tex_coords)));
+    
+    glEnableVertexArrayAttrib(temp.vbo, 3);
+    glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, temp.vertex_size, (void*)(offsetof(struct _quad_vertex, tex_id)));
     
     log_status(STATUS_SUCCESS, "Created Rectangle Batcher");
 
@@ -59,7 +82,7 @@ void draw_batcher(batcher* renderer)
 {
     // Not fastest way to do this, but still way faster than indiviual draw calls
     glBindBuffer(GL_ARRAY_BUFFER, renderer->vbo);
-    glBufferSubData(GL_ARRAY_BUFFER, 0, renderer->vertices_size, renderer->vertices);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(struct _quad_vertex), renderer->vertices);
 
     attach_shader_program(renderer->batch_shader);
     
@@ -82,8 +105,11 @@ void update_batcher_rectangle(batcher* renderer, unsigned int index, GLfloat x, 
     int offset_two = offset + MZ_BATCHER_RECTANGLE_VERTEX_SIZE;
     int offset_three = offset + (MZ_BATCHER_RECTANGLE_VERTEX_SIZE * 2);
     int offset_four = offset + (MZ_BATCHER_RECTANGLE_VERTEX_SIZE * 3);
+    
+    
 
     // Load Vertex data
+    renderer->vertices[index] 
     renderer->vertices[offset] = x + w;
     renderer->vertices[offset + 1] = y + h;
     renderer->vertices[offset + 2] = color_drawn.r;
