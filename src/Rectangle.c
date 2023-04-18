@@ -14,7 +14,7 @@ void draw_rectangle(int x, int y, int width, int height, tint color_drawn)
         #warning "Not Implemented"
     #endif
 }
-void draw_rectangle_rec(Applet* applet, rectangle* rec, tint color_drawn)
+void draw_rectangle_rec(batch* batch, rectangle* rec, tint color_drawn)
 {
     if (rec->index == 0 || rec->parent == 0)
     {

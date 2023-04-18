@@ -1,26 +1,64 @@
 #include "core/Batcher.h"
+#define VAO(x) x[0]
+#define VBO(x) x[1]
+#define EBO(x) x[2]
 
-batcher load_batcher(int type, int max_size)
+batcher* _mz_internal_batcher_array = NULL;
+
+batcher load_individual_batcher(int max_size)
 {
-    switch(type)
+    batcher temp;
+    temp.max_size = max_size;
+    
+    temp.textures = MZ_CALLOC(32, sizeof(uint32_t));
+    temp.quads_buffers = MZ_CALLOC(3, sizeof(GLuint));
+    temp.circles_buffers = NULL;
+    temp.lines_buffers = NULL;
+    temp.quads = MZ_CALLOC(max_size * 4, sizeof(struct _quad_vertex));
+    temp.circles = NULL;
+    temp.lines = NULL;
+    
+    int* quad_indices = MZ_CALLOC(6 * max_size, sizeof(int));
+    int* circle_indices = NULL;
+    int* lines_indices = NULL;
+    
+    if (temp.textures == NULL) log_status(STATUS_FATAL_ERROR, "Failed to allocate memory for texture array");
+    if (temp.quads_buffers == NULL) log_status(STATUS_FATAL_ERROR, "Failed to allocate memory for quad buffers");
+    if (temp.quads == NULL) log_status(STATUS_FATAL_ERROR, "Failed to allocate memory for quad array");
+    if (quad_indices == NULL) log_status(STATUS_FATAL_ERROR, "Failed to allocate memory for quad indices");
+    
+    glGenVertexArrays(1, &VAO(temp.quads_buffers));
+    glBindVertexArray(VAO(temp.quads_buffers));
+    
+    glGenBuffers(1, &VBO(temp.quads_buffers));
+    glBindBuffer(GL_ARRAY_BUFFER, VBO(temp.quads_buffers));
+    glBufferData(GL_ARRAY_BUFFER, (sizeof(struct _quad_vertex) * 4) * max_size, NULL, GL_DYNAMIC_DRAW);
+    
+    glGenBuffers(1, &EBO(temp.quads_buffers));
+    
+    for (int i = 0; i < max_size; i++)
     {
-    case BATCHER_TYPE_QUAD:
-        return _mz_internal_init_batcher_rect(max_size);
-        break;
-    case BATCHER_TYPE_CIRCLE:
-        log_status(STATUS_FATAL_ERROR, "Batcher type 'BATCHER_TYPE_CIRCLE' not implemented!");
-        break;
-    case BATCHER_TYPE_LINE:
-        log_status(STATUS_FATAL_ERROR, "Batcher type 'BATCHER_TYPE_LINE' not implemented!");
-        break;
-    default:
-        log_status(STATUS_FATAL_ERROR, "Unknown batcher type");
-        break;
+        int index_offset = 6 * i;
+        int offset = 4 * i;
+        
+        // Triangle 1
+        quad_indices[index_offset++] = offset + 3;
+        quad_indices[index_offset++] = offset + 2;
+        quad_indices[index_offset++] = offset;
+        
+        // Triangle 2
+        quad_indices[index_offset++] = offset;
+        quad_indices[index_offset++] = offset + 2;
+        quad_indices[index_offset++] = offset + 1;
     }
+    
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO(temp.quads_buffers));
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * max_size, quad_indices, GL_STATIC_DRAW);
+    MZ_FREE(quad_indices);
 }
 
-static batcher _mz_internal_init_batcher_rect(int max_size)
-{   
+batcher* load_batcher(int max_size)
+{
     batcher temp;
     temp.batch_shader = 0;
     temp.vertices_index = 0;

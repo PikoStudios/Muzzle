@@ -7,8 +7,6 @@
 #include <stdint.h>
 #include <stddef.h>
 
-// shoutout to the cherno
-
 #define MZ_BATCHER_RECTANGLE_VERTEX_SIZE 6
 #define MZ_BATCHER_RECTANGLE_VERTICES_QUADS 4
 #define MZ_BATCHER_RECTANGLE_VERTEX_POS_SIZE 2
@@ -51,53 +49,42 @@ struct _line_vertex
     tint_f color_drawn;
 };
 
-enum _BATCHER_TYPES
-{
-    BATCHER_TYPE_QUAD = 0,
-    BATCHER_TYPE_CIRCLE,
-    BATCHER_TYPE_LINE,
-};
-
 struct _batcher
 {
-    struct _vertex* vertices;
-    struct _vertex* vertices_ptr;
-    size_t vertices_size;
-    uint32_t vertices_index;
-    size_t vertex_size;
-    size_t max_size;
+    uint32_t max_size;
+    struct _quad_vertex* quads;
+    struct _quad_vertex* quads_current_ptr;
+    size_t quads_current_index;
+    size_t quads_size;
+    size_t quads_count;
+    GLuint* quads_buffers;
+    struct _circle_vertex* circles;
+    struct _circle_vertex* circles_current_ptr;
+    size_t circles_current_index;
+    size_t circles_size;
+    size_t circles_count;
+    GLuint* circles_buffers;
+    struct _line_vertex* lines;
+    struct _line_vertex* lines_current_ptr;
+    size_t lines_currrent_index;
+    size_t lines_size;
+    size_t lines_count;
+    GLuint* lines_buffers;
     uint32_t* textures;
     uint32_t texture_index;
-    GLuint vao;
-    GLuint vbo;
-    GLuint ebo;
     shader_program batch_shader;
 };
 
-struct _batch
-{
-    struct _batcher* quads;
-    struct _batcher* quads_ptr;
-    size_t quads_size;
-};
-
-typedef enum _BATCHER_TYPES BATCHER_TYPES;
 typedef struct _batcher batcher;
-typedef struct _batch batch;
 
-// NOTE: Not calling it "draw_batcher" because this function should not be seen easily.
-// NOTE: Not using internal naming convention because this function could reasonably be used
-// NOTE: Outside of an internal space
-MZ_API void next_frame_batcher(int type, batcher* renderer);
+extern batcher* _mz_internal_batcher_array;
 
-// Internal Batcher Initialization functions //
-// TODO: Find better name :)
-static batcher _mz_internal_init_batcher_rect(int max_size);
+// NOTE: Automatically called by Muzzle at the during each frame.
+MZ_API void update_batcher(batcher* renderer);
 
-// Public batcher initialization function //
-MZ_API batcher load_batcher(int type, int max_size);
+// NOTE: Used internally, just gets the global batcher
+MZ_API batcher* get_batcher_scope();
 
-MZ_API void update_batcher_rectangle(batcher* renderer, unsigned int index, GLfloat x, GLfloat y, GLfloat w, GLfloat h, tint color_drawn);
-MZ_API void push_batcher_rectangle(batcher* renderer, GLfloat x, GLfloat y, GLfloat w, GLfloat h, tint color_drawn);
-
+MZ_API batcher load_individual_batcher(int max_size);
+MZ_API batcher* load_batcher(int max_size);
 MZ_API void unload_batcher(batcher* renderer);

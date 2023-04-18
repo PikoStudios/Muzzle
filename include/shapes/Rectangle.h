@@ -3,6 +3,7 @@
 #include "../core/tint.h"
 #include "../core/vector.h"
 #include "../core/Applet.h"
+#include "../core/Batcher.h"
 
 /* 
 Muzzle Rectangle
@@ -19,8 +20,9 @@ typedef struct rectangle
     float y;
     float width;
     float height;
-    unsigned int index;
-    unsigned int parent;
+    batch* batch;
+    batcher* parent;
+    
 } rectangle;
 
 /*
@@ -61,7 +63,7 @@ Draw a rectangle to the screen
 retangle rec
 tint color_drawn
 */
-MZ_API void draw_rectangle_rec(Applet* applet, rectangle* rec, tint color_drawn);
+MZ_API void draw_rectangle_rec(batch* batch, rectangle* rec, tint color_drawn);
 /* 
 Muzzle draw_rectangle_vec2()
 ======================
