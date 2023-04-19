@@ -57,22 +57,24 @@ struct _batcher
     size_t quads_current_index;
     size_t quads_size;
     size_t quads_count;
+    shader_program quad_shader;
     GLuint* quads_buffers;
     struct _circle_vertex* circles;
     struct _circle_vertex* circles_current_ptr;
     size_t circles_current_index;
     size_t circles_size;
     size_t circles_count;
+    shader_program circle_shader;
     GLuint* circles_buffers;
     struct _line_vertex* lines;
     struct _line_vertex* lines_current_ptr;
     size_t lines_currrent_index;
     size_t lines_size;
     size_t lines_count;
+    shader_program line_shader;
     GLuint* lines_buffers;
     uint32_t* textures;
     uint32_t texture_index;
-    shader_program batch_shader;
 };
 
 typedef struct _batcher batcher;

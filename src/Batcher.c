@@ -54,7 +54,37 @@ batcher load_individual_batcher(int max_size)
     
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO(temp.quads_buffers));
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * max_size, quad_indices, GL_STATIC_DRAW);
+    
+    glEnableVertexArrayAttrib(VAO(temp.quads_buffers), 0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(struct _quad_vertex), (void*)(offsetof(struct _quad_vertex, position)));
+    
+    glEnableVertexArrayAttrib(VAO(temp.quads_buffers), 1);
+    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(struct _quad_vertex), (void*)(offsetof(struct _quad_vertex, color_drawn)));
+    
+    glEnableVertexArrayAttrib(VAO(temp.quads_buffers), 2);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(struct _quad_vertex), (void*)(offsetof(struct _quad_vertex, tex_coords)));
+    
+    glEnableVertexArrayAttrib(VAO(temp.quads_buffers), 3);
+    glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, sizeof(struct _quad_vertex), (void*)(offsetof(struct _quad_vertex, tex_id)));
+    
     MZ_FREE(quad_indices);
+    
+    uint32_t* default_texture = &temp.textures[0];
+    uint32_t default_texture_hex = 0xFFFFFFFF;
+    
+    glCreateTextures(GL_TEXTURE_2D, 1, default_texture);
+    glTextureStorage2D(*default_texture, 1, GL_RGBA8, 1, 1);
+    
+    glTextureParameteri(*default_texture, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTextureParameteri(*default_texture, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTextureParameteri(*default_texture, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTextureParameteri(*default_texture, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    
+    glTextureSubImage2D(*default_texture, 0, 0, 0, 1, 1, GL_RGBA8, GL_UNSIGNED_BYTE, &default_texture_hex);
+    
+    
+    
+    return temp;
 }
 
 batcher* load_batcher(int max_size)
