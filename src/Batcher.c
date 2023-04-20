@@ -11,6 +11,7 @@ batcher load_individual_batcher(int max_size)
     temp.max_size = max_size;
     
     temp.textures = MZ_CALLOC(32, sizeof(uint32_t));
+    temp.texture_index = 1;
     temp.quads_buffers = MZ_CALLOC(3, sizeof(GLuint));
     temp.circles_buffers = NULL;
     temp.lines_buffers = NULL;
@@ -82,67 +83,16 @@ batcher load_individual_batcher(int max_size)
     
     glTextureSubImage2D(*default_texture, 0, 0, 0, 1, 1, GL_RGBA8, GL_UNSIGNED_BYTE, &default_texture_hex);
     
-    
-    
     return temp;
 }
 
-batcher* load_batcher(int max_size)
+batcher* load_batcher(int max_size, size_t* batch_index)
 {
-    batcher temp;
-    temp.batch_shader = 0;
-    temp.vertices_index = 0;
-    temp.texture_index = 1;
-    temp.max_size = max_size;
-
-    temp.vertex_size = sizeof(struct _quad_vertex);
-    temp.vertices = MZ_CALLOC(max_size * 4, temp.vertex_size);
-
-    if (temp.vertices == NULL) log_status(STATUS_FATAL_ERROR, "Failed to allocate memory for Batch Renderer");
-
-    glGenVertexArrays(1, &temp.vao);
-    glBindVertexArray(temp.vao);
-
-    glGenBuffers(1, &temp.vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, temp.vbo);
-    glBufferData(GL_ARRAY_BUFFER, (temp.vertex_size * 4) * max_size, NULL, GL_DYNAMIC_DRAW);
-
-    glGenBuffers(1, &temp.ebo);
-    int indices[6 * max_size];
-
-    for (int i = 0; i < max_size; i++)
-    {
-        int index_offset = 6 * i;
-        int offset = 4 * i;
-
-        // Triangle 1
-        indices[index_offset] = offset + 3;
-        indices[index_offset + 1] = offset + 2;
-        indices[index_offset + 2] = offset;
-
-        // Triangle 2
-        indices[index_offset + 3] = offset;
-        indices[index_offset + 4] = offset + 2;
-        indices[index_offset + 5] = offset + 1;
-    }
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, temp.ebo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * max_size, indices, GL_STATIC_DRAW);
-
-    glEnableVertexArrayAttrib(temp.vbo, 0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, temp.vertex_size, (void*)(offsetof(struct _quad_vertex, position)));
+    batcher* temp = MZ_CALLOC(1, sizeof(batcher));
+    if (temp == NULL) log_status(STATUS_FATAL_ERROR, "Failed to allocate memory for batcher");
     
-    glEnableVertexArrayAttrib(temp.vbo, 1);
-    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, temp.vertex_size, (void*)(offsetof(struct _quad_vertex, color_drawn)));
-    
-    glEnableVertexArrayAttrib(temp.vbo, 2);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, temp.vertex_size, (void*)(offsetof(struct _quad_vertex, tex_coords)));
-    
-    glEnableVertexArrayAttrib(temp.vbo, 3);
-    glVertexAttribPointer(3, 1, GL_FLOAT, GL_FALSE, temp.vertex_size, (void*)(offsetof(struct _quad_vertex, tex_id)));
-    
-    log_status(STATUS_SUCCESS, "Created Rectangle Batcher");
-
+    temp[0] = load_individual_batcher(max_size);
+    *batch_index += 1;
     return temp;
 }
 
@@ -219,11 +169,26 @@ void push_batcher_rectangle(batcher* renderer, GLfloat x, GLfloat y, GLfloat w, 
     update_batcher_rectangle(renderer, index, x, y, w, h, color_drawn);
 }
 
-void unload_batcher(batcher* renderer)
+void unload_individual_batcher(batcher* batch)
 {
-    glDeleteVertexArrays(1, &renderer->vao);
-    glDeleteBuffers(1, &renderer->vbo);
-    glDeleteBuffers(1, &renderer->ebo);
+    glDeleteVertexArrays(1, &VAO(batch->quads_buffers));
+    glDeleteBuffers(1, &VBO(batch->quads_buffers));
+    glDeleteBuffers(1, &EBO(batch->quads_buffers));
+    glDeleteTextures(batch->texture_index, batch->textures);
     
-    MZ_FREE(renderer->vertices);
+    // TODO: Unload other buffers
+    // TODO: Unload shaders
+    
+    MZ_FREE(batch->quads);
+    MZ_FREE(batch->quads_buffers);
+}
+
+void unload_batcher(batcher* batch, size_t* batch_index)
+{
+    for (int i = 0; i < batch_index; i++)
+    {
+        unload_individual_batcher(batch[i]);
+    }
+    
+    MZ_FREE(batch);
 }

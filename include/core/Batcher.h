@@ -88,5 +88,6 @@ MZ_API void update_batcher(batcher* renderer);
 MZ_API batcher* get_batcher_scope();
 
 MZ_API batcher load_individual_batcher(int max_size);
-MZ_API batcher* load_batcher(int max_size);
-MZ_API void unload_batcher(batcher* renderer);
+MZ_API batcher* load_batcher(int max_size, size_t* batch_index);
+MZ_API void unload_individual_batcher(batcher* batch);
+MZ_API void unload_batcher(batcher* batch, size_t* batch_index);
