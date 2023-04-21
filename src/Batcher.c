@@ -93,6 +93,7 @@ batcher* load_batcher(int max_size, size_t* batch_index)
     
     temp[0] = load_individual_batcher(max_size);
     *batch_index += 1;
+    _mz_internal_batcher_array = temp;
     return temp;
 }
 
