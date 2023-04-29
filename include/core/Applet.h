@@ -6,33 +6,21 @@
 #include "Batcher.h"
 #include "../modern_pipeline/Shaders.h"
 
-#ifndef MZ_BATCHER_SIZE
-    #define MZ_BATCHER_SIZE 1000
+#ifndef MZ_DEFAULT_BATCH_SIZE
+    #define MZ_DEFAULT_BATCH_SIZE 1000
 #endif
 
 typedef struct Applet
 {
     int width, height;
     char* window_title;
-    batcher_array rect_batchers;
+    batcher* default_batch;
     GLFWwindow* window_handle;
 } Applet;
     
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-/*
-* __append_batchers - Internal function to append batcher array
-* @param type Batcher Type
-*/
-MZ_API void __append_batchers(Applet* applet, int type);
-
-/*
-* set_global_shader - Set the global shader
-* @param program Shader Program
-*/
-MZ_API void set_global_shader(Applet* applet, shader_program program);
 
 /*
 * StartApplet - Start a Applet

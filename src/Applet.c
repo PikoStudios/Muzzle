@@ -1,31 +1,5 @@
 #include "core/Applet.h"
 
-void __append_batchers(Applet* applet, int type)
-{
-    switch (type)
-    {
-    case BATCHER_TYPE_RECTANGLE:
-        applet->rect_batchers.batchers = MZ_REALLOC(applet->rect_batchers.batchers, sizeof(batcher) * ++applet->rect_batchers.length);
-        
-        if (applet->rect_batchers.batchers == NULL)
-            log_status(STATUS_FATAL_ERROR, "Not able to allocate enough memory to append rectangle batcher");
-
-        applet->rect_batchers.batchers[applet->rect_batchers.length - 1] = initialize_batcher_rectangle(MZ_BATCHER_SIZE);
-        applet->rect_batchers.top = &applet->rect_batchers.batchers[applet->rect_batchers.length - 1];
-        
-        break;
-    }
-}
-
-void set_global_shader(Applet* applet, shader_program program)
-{
-    // Rectangle Batchers
-    for (int i = 0; i < applet->rect_batchers.length; i++)
-    {
-        applet->rect_batchers.batchers[i].global_shader = program;
-    }
-}
-
 void StartApplet(Applet* self)
 {
     OnAppletUpdate(self);
@@ -108,14 +82,7 @@ Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TI
     #endif
     
     // TODO: Create Batchers
-    buf.rect_batchers.length = 1;
-    buf.rect_batchers.batchers = MZ_CALLOC(1, sizeof(batcher));
-    
-    if (buf.rect_batchers.batchers == NULL)
-        log_status(STATUS_FATAL_ERROR, "Failed to allocate memory for rectangle batcher");
-    
-    buf.rect_batchers.batchers[0] = initialize_batcher_rectangle(MZ_BATCHER_SIZE);
-    buf.rect_batchers.top = &buf.rect_batchers.batchers[0];
+    buf.default_batch = load_batcher(MZ_DEFAULT_BATCH_SIZE);
     
     return buf;
 }

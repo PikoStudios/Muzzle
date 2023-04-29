@@ -5,6 +5,8 @@
 #include "Applet.h"
 #include "Batcher.h"
 
+extern batcher* _mz_internal_drawing_active_batcher;
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -16,6 +18,10 @@ MZ_API void end_scissor();
 MZ_API void begin_drawing();
 MZ_API void end_drawing(Applet *applet);
 MZ_API void clear_screen(tint color_drawn);
+
+MZ_API void begin_batcher(batcher* batch);
+MZ_API void end_batcher();
+MZ_API batcher* get_batcher_scope();
 
 MZ_API void update_viewport(Applet *applet, int w, int h);
 
