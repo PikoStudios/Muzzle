@@ -46,6 +46,7 @@ exit(-1); \
 
 #ifdef _WIN32
     // Include WinAPI if on windows. Required for MultiByteToWideChar
+    #define WIN32_LEAN_AND_MEAN // TODO: Verify we do not need extra Windows API features
     #include "windows.h"
 
     #ifdef BUILD_LIBTYPE_SHARED
