@@ -60,7 +60,7 @@ struct _batcher
     GLuint* circles_buffers;
     struct _line_vertex* lines;
     struct _line_vertex* lines_current_ptr;
-    uint32_t lines_currrent_index;
+    uint32_t lines_current_index;
     size_t lines_size;
     size_t lines_count;
     shader_program line_shader;
@@ -73,8 +73,10 @@ struct _batcher
 typedef struct _batcher batcher;
 
 // NOTE: Automatically called by Muzzle at the during each frame.
-MZ_API void update_individual_batcher(batcher* batch);
-MZ_API void update_batcher(batcher* batch);
+MZ_API void end_individual_batcher(batcher* batch);
+MZ_API void end_batcher(batcher* batch);
+MZ_API void begin_individual_batcher(batcher* batch);
+MZ_API void begin_batcher(batcher* batch);
 
 MZ_API batcher load_individual_batcher(int max_size);
 MZ_API batcher* load_batcher(int max_size);

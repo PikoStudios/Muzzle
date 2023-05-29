@@ -16,24 +16,9 @@ void draw_rectangle(int x, int y, int width, int height, tint color_drawn)
 }
 void draw_rectangle_rec(batch* batch, rectangle* rec, tint color_drawn)
 {
-    if (rec->index == 0 || rec->parent == 0)
-    {
-        rec->parent = applet->rect_batchers.length - 1;
-        rec->index = applet->rect_batchers.top->object_count++;
-        
-        if (applet->rect_batchers.top->object_count > applet->rect_batchers.top->max_size)
-        {
-            applet->rect_batchers.top->object_count--;
-            
-            __append_batchers(applet, BATCHER_TYPE_RECTANGLE);
-            rec->parent = applet->rect_batchers.length - 1;
-            rec->index = applet->rect_batchers.top->object_count++;
-        }
-    }
     
-    // TODO: Profile this if slow
-    update_batcher_rectangle(&applet->rect_batchers.batchers[rec->parent], rec->index, rec->x, rec->y, rec->width, rec->height, color_drawn);
     
+       
     #ifdef MUZZLE_RETAIN_LEGACY
         glBegin(GL_QUADS);
             glColor4ub(color_drawn.r, color_drawn.g, color_drawn.b, color_drawn.a);

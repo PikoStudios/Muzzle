@@ -17,7 +17,7 @@ batcher load_individual_batcher(int max_size)
     temp.quads_count = 0;
     temp.circles_current_index = 0;
     temp.circles_count = 0;
-    temp.lines_currrent_index = 0;
+    temp.lines_current_index = 0;
     temp.lines_count = 0;
     temp.quads = MZ_CALLOC(max_size * 4, sizeof(struct _quad_vertex));
     temp.circles = NULL;
@@ -102,16 +102,59 @@ batcher* load_batcher(int max_size)
     return temp;
 }
 
-void update_individual_batcher(batcher* batch)
+void begin_individual_batcher(batcher* batch)
 {
-    // TODO: Implement
+    batch->quads_current_index = 0;
+    batch->quads_count = 0;
+    batch->quads_current_ptr = batch->quads;
+    
+    batch->circles_current_index = 0;
+    batch->circles_count = 0;
+    batch->circles_current_ptr = batch->circles;
+    
+    batch->lines_current_index = 0;
+    batch->lines_count = 0;
+    batch->lines_current_ptr = batch->lines;
+    
+    // Refresh textures
 }
 
-void update_batcher(batcher* batch)
+void begin_batcher(batcher* batch)
 {
     for (int i = 0; i < batch[0]._batch_array_index; i++)
     {
-        update_individual_batcher(&batch[i]);
+        begin_individual_batcher(&batch[i]);
+    }
+}
+
+void end_individual_batcher(batcher* batch)
+{
+    if (batch->quads_current_index > 0)
+    {
+        glBindBuffer(GL_ARRAY_BUFFER, EBO(batch->quads_buffers));
+        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(struct _quad_vertex), batch->quads);
+        
+        attach_shader_program(batch->quad_shader);
+        
+        glBindVertexArray(VAO(batch->quads_buffers));
+        glEnableVertexAttribArray(0);
+        glEnableVertexAttribArray(1);
+        
+        glDrawElements(GL_TRIANGLES, batch->quads_count * 6, GL_UNSIGNED_INT, 0);
+        
+        glDisableVertexAttribArray(0);
+        glDisableVertexAttribArray(1);
+        glBindVertexArray(0);
+        
+        detach_shader_program(batch->quad_shader);
+    }
+}
+
+void end_batcher(batcher* batch)
+{
+    for (int i = 0; i < batch[0]._batch_array_index; i++)
+    {
+        end_individual_batcher(&batch[i]);
     }
 }
 
