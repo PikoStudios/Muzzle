@@ -67,18 +67,13 @@ struct _batcher
     GLuint* lines_buffers;
     uint32_t* textures;
     uint32_t texture_index;
-    size_t _batch_array_index; // Internal use variable, only used for the first element in an array of batchers
 };
 
 typedef struct _batcher batcher;
 
 // NOTE: Automatically called by Muzzle at the during each frame.
-MZ_API void end_individual_batcher(batcher* batch);
 MZ_API void end_batcher(batcher* batch);
-MZ_API void begin_individual_batcher(batcher* batch);
 MZ_API void begin_batcher(batcher* batch);
 
-MZ_API batcher load_individual_batcher(int max_size);
-MZ_API batcher* load_batcher(int max_size);
-MZ_API void unload_individual_batcher(batcher* batch);
+MZ_API batcher load_batcher(int max_size);
 MZ_API void unload_batcher(batcher* batch);

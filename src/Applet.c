@@ -5,7 +5,7 @@ void StartApplet(Applet* self)
     OnAppletUpdate(self);
 }
 
-Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TITLE, int RESIZEABLE, int VSYNC)
+Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TITLE, int RESIZEABLE, int VSYNC, uint32_t EXTRA_FLAGS)
 {
     #ifndef MUZZLE_RETAIN_LEGACY
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -81,8 +81,12 @@ Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TI
         glLoadIdentity();
     #endif
     
-    // TODO: Create Batchers
-    buf.default_batch = load_batcher(MZ_DEFAULT_BATCH_SIZE);
+    if (EXTRA_FLAGS & MZ_APPLET_FLAG_DONT_INIT_BATCHER)
+    {
+        buf.batch = (batcher){0};
+        return buf;
+    }
     
+    buf.batch = load_batcher(MZ_DEFAULT_BATCH_SIZE);
     return buf;
 }

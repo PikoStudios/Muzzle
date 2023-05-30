@@ -10,11 +10,14 @@
     #define MZ_DEFAULT_BATCH_SIZE 1000
 #endif
 
+#define MZ_APPLET_FLAG_NONE 1
+#define MZ_APPLET_FLAG_DONT_INIT_BATCHER 2
+
 typedef struct Applet
 {
     int width, height;
     char* window_title;
-    batcher* default_batch;
+    batcher batch;
     GLFWwindow* window_handle;
 } Applet;
     
@@ -37,7 +40,7 @@ MZ_API void StartApplet(Applet* self);
 * @param VSYNC Toggle VSync, If set to MUZZLE_FALSE Muzzle will try to use as much of the GPU and CPU that it can usep
 * @return Applet
 */
-MZ_API Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TITLE, int RESIZEABLE, int VSYNC);
+MZ_API Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TITLE, int RESIZEABLE, int VSYNC, uint32_t EXTRA_FLAGS);
 #ifdef __cplusplus
 }
 #endif

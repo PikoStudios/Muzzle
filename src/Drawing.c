@@ -1,30 +1,17 @@
 #include "core/Drawing.h"
 
-batcher* _mz_internal_drawing_active_batcher = NULL;
-
 void begin_drawing(Applet* applet)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    
-    _mz_internal_drawing_active_batcher = applet->default_batch;
-    
-    #ifdef MUZZLE_RETAIN_LEGACY
-        glLoadIdentity();
-    #endif
+    begin_batcher(&applet->batch);
 }
 
 void end_drawing(Applet *applet)
-{
-    // TODO: Change this out
-    #ifdef INTERNAL_MODERN_RENDERER_USAGE
-        rlDrawRenderBatchActive();
-    #endif
-    
+{   
     glfwSwapBuffers(applet->window_handle);
     glfwPollEvents();
     
-    update_batcher(applet->default_batch);
-
+    end_batcher(&applet->batch);
     glFlush();
 }
 
@@ -36,25 +23,6 @@ void clear_screen(tint color_drawn)
     float a = (float)(color_drawn.a) / 255;
 
     glClearColor(r, g, b, a);
-}
-
-void begin_batcher(batcher* batch)
-{
-    _mz_internal_drawing_active_batcher = batch;
-}
-
-void end_batcher()
-{
-    batcher* batch = _mz_internal_drawing_active_batcher;
-    
-    batch->quads_current_index = 0;
-    batch->quads_current_ptr = &batch->quads[0];
-    //batch->texture_index = 1;
-}
-
-batcher* get_batcher_scope()
-{
-    return _mz_internal_drawing_active_batcher;
 }
 
 vec2 get_window_scale_dpi(Applet* applet)

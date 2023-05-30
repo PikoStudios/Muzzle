@@ -3,7 +3,7 @@
 #define VBO(x) x[1]
 #define EBO(x) x[2]
 
-batcher load_individual_batcher(int max_size)
+batcher load_batcher(int max_size)
 {
     batcher temp;
     temp.max_size = max_size;
@@ -92,17 +92,7 @@ batcher load_individual_batcher(int max_size)
     return temp;
 }
 
-batcher* load_batcher(int max_size)
-{
-    batcher* temp = MZ_CALLOC(1, sizeof(batcher));
-    if (temp == NULL) log_status(STATUS_FATAL_ERROR, "Failed to allocate memory for batcher");
-    
-    temp[0] = load_individual_batcher(max_size);
-    temp[0]._batch_array_index = 1;
-    return temp;
-}
-
-void begin_individual_batcher(batcher* batch)
+void begin_batcher(batcher* batch)
 {
     batch->quads_current_index = 0;
     batch->quads_count = 0;
@@ -119,15 +109,7 @@ void begin_individual_batcher(batcher* batch)
     // Refresh textures
 }
 
-void begin_batcher(batcher* batch)
-{
-    for (int i = 0; i < batch[0]._batch_array_index; i++)
-    {
-        begin_individual_batcher(&batch[i]);
-    }
-}
-
-void end_individual_batcher(batcher* batch)
+void end_batcher(batcher* batch)
 {
     if (batch->quads_current_index > 0)
     {
@@ -150,15 +132,7 @@ void end_individual_batcher(batcher* batch)
     }
 }
 
-void end_batcher(batcher* batch)
-{
-    for (int i = 0; i < batch[0]._batch_array_index; i++)
-    {
-        end_individual_batcher(&batch[i]);
-    }
-}
-
-void unload_individual_batcher(batcher* batch)
+void unload_batcher(batcher* batch)
 {
     glDeleteVertexArrays(1, &VAO(batch->quads_buffers));
     glDeleteBuffers(1, &VBO(batch->quads_buffers));
@@ -170,16 +144,4 @@ void unload_individual_batcher(batcher* batch)
     
     MZ_FREE(batch->quads);
     MZ_FREE(batch->quads_buffers);
-}
-
-void unload_batcher(batcher* batch)
-{
-    // Skip first element so we can preserve batch array index
-    for (int i = 1; i < batch[0]._batch_array_index; i++)
-    {
-        unload_individual_batcher(&batch[i]);
-    }
-    
-    unload_individual_batcher(&batch[0]);
-    MZ_FREE(batch);
 }
