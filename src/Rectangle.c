@@ -1,45 +1,53 @@
 #include "shapes/Rectangle.h"
 
-void draw_rectangle(int x, int y, int width, int height, tint color_drawn)
+void draw_rectangle(Applet* applet, int x, int y, int width, int height, tint color_drawn)
 {
-    #ifdef MUZZLE_RETAIN_LEGACY
-        glBegin(GL_QUADS);
-            glColor4ub(color_drawn.r, color_drawn.g, color_drawn.b, color_drawn.a);
-            glVertex2i(x, y);
-            glVertex2i(x + width, y);
-            glVertex2i(x + width, y + height);
-            glVertex2i(x, y + height);
-        glEnd();
-    #else
-        #warning "Not Implemented"
-    #endif
+    draw_rectangle_vec2(applet, (vec2){x,y}, (vec2){width,height}, color_drawn);
 }
-void draw_rectangle_rec(batch* batch, rectangle* rec, tint color_drawn)
+
+void draw_rectangle_rec(Applet* applet, rectangle rec, tint color_drawn)
 {
-    
-    
-       
-    #ifdef MUZZLE_RETAIN_LEGACY
-        glBegin(GL_QUADS);
-            glColor4ub(color_drawn.r, color_drawn.g, color_drawn.b, color_drawn.a);
-            glVertex2i(rec.x, rec.y);
-            glVertex2i(rec.x + rec.width, rec.y);
-            glVertex2i(rec.x + rec.width, rec.y + rec.height);
-            glVertex2i(rec.x, rec.y + rec.height);
-        glEnd();
-    #endif
+    draw_rectangle_vec2(applet, (vec2){rec.x,rec.y}, (vec2){rec.width,rec.height}, color_drawn);
 }
-void draw_rectangle_vec2(vec2 pos, vec2 size, tint color_drawn)
+
+void draw_rectangle_vec2(Applet* applet, vec2 pos, vec2 size, tint color_drawn)
 {
-    #ifdef MUZZLE_RETAIN_LEGACY
-        glBegin(GL_QUADS);
-            glColor4ub(color_drawn.r, color_drawn.g, color_drawn.b, color_drawn.a);
-            glVertex2f(pos.x, pos.y);
-            glVertex2f(pos.x + size.x, pos.y);
-            glVertex2f(pos.x + size.x, pos.y + size.y);
-            glVertex2f(pos.x, pos.y + size.y);
-        glEnd();
-    #else
-        #warning "Not Implemented"
-    #endif
+    if (applet->batch.quads_count + 1 > applet->batch.max_size)
+    {
+        end_batcher(&applet->batch);
+        begin_batcher(&applet->batch);
+    }
+    
+    //static vec2 tex_coords[] = {{0.0f,0.0f}, {1.0f, 0.0f}, {1.0f,1.0f}, {0.0f, 1.0f}};
+    
+    // Vertex 1
+    applet->batch.quads_current_ptr->position = (vec3){pos.x + size.x, pos.y + size.y, 0};
+    applet->batch.quads_current_ptr->color_drawn = TINT_TO_TINTF(color_drawn);
+    applet->batch.quads_current_ptr->tex_coords = (vec2){0.0f, 0.0f};
+    applet->batch.quads_current_ptr->tex_id = 0.0f;
+    applet->batch.quads_current_ptr++;
+    
+    // Vertex 2
+    applet->batch.quads_current_ptr->position = (vec3){pos.x + size.x, pos.y, 0};
+    applet->batch.quads_current_ptr->color_drawn = TINT_TO_TINTF(color_drawn);
+    applet->batch.quads_current_ptr->tex_coords = (vec2){1.0f, 0.0f};
+    applet->batch.quads_current_ptr->tex_id = 0.0f;
+    applet->batch.quads_current_ptr++;
+    
+    // Vertex 3
+    applet->batch.quads_current_ptr->position = (vec3){pos.x, pos.y, 0};
+    applet->batch.quads_current_ptr->color_drawn = TINT_TO_TINTF(color_drawn);
+    applet->batch.quads_current_ptr->tex_coords = (vec2){1.0f, 1.0f};
+    applet->batch.quads_current_ptr->tex_id = 0.0f;
+    applet->batch.quads_current_ptr++;
+    
+    // Vertex 4
+    applet->batch.quads_current_ptr->position = (vec3){pos.x, pos.y + size.y, 0};
+    applet->batch.quads_current_ptr->color_drawn = TINT_TO_TINTF(color_drawn);
+    applet->batch.quads_current_ptr->tex_coords = (vec2){0.0f, 1.0f};
+    applet->batch.quads_current_ptr->tex_id = 0.0f;
+    applet->batch.quads_current_ptr++;
+    
+    applet->batch.quads_current_index += 4;
+    applet->batch.quads_count++;
 }

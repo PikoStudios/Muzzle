@@ -19,29 +19,8 @@ typedef struct rectangle
     float x;
     float y;
     float width;
-    float height;
-    batch* batch;
-    batcher* parent;
-    
+    float height;    
 } rectangle;
-
-/*
-Muzzle skinny_rectangle
-================
-float x
-float y
-float width
-float height
-
-This struct provides a rectangle-like structure without batcher index info
-*/
-typedef struct skinny_rectangle
-{
-    float x;
-    float y;
-    float width;
-    float height;
-} skinny_rectangle;
 
 #ifdef __cplusplus
 extern "C" {
@@ -55,7 +34,7 @@ Draw a rectangle to the screen
 int x,y,width,height
 tint color_drawn
 */
-MZ_API void draw_rectangle(int x, int y, int width, int height, tint color_drawn);
+MZ_API void draw_rectangle(Applet* applet, int x, int y, int width, int height, tint color_drawn);
 /* 
 Muzzle draw_rectangle_rec()
 ======================
@@ -63,7 +42,7 @@ Draw a rectangle to the screen
 retangle rec
 tint color_drawn
 */
-MZ_API void draw_rectangle_rec(batch* batch, rectangle* rec, tint color_drawn);
+MZ_API void draw_rectangle_rec(Applet* applet, rectangle rec, tint color_drawn);
 /* 
 Muzzle draw_rectangle_vec2()
 ======================
@@ -71,7 +50,7 @@ Draw a rectangle to the screen
 vec2 pos, size
 tint color_drawn
 */
-MZ_API void draw_rectangle_vec2(vec2 pos, vec2 size, tint color_drawn);
+MZ_API void draw_rectangle_vec2(Applet* applet, vec2 pos, vec2 size, tint color_drawn);
 
 #ifdef __cplusplus
 }

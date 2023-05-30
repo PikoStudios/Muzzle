@@ -111,9 +111,11 @@ void begin_batcher(batcher* batch)
 
 void end_batcher(batcher* batch)
 {
+    // TODO: Check this, i feel like it is wrong.
+    
     if (batch->quads_current_index > 0)
     {
-        glBindBuffer(GL_ARRAY_BUFFER, EBO(batch->quads_buffers));
+        glBindBuffer(GL_ARRAY_BUFFER, VBO(batch->quads_buffers));
         glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(struct _quad_vertex), batch->quads);
         
         attach_shader_program(batch->quad_shader);
@@ -121,11 +123,15 @@ void end_batcher(batcher* batch)
         glBindVertexArray(VAO(batch->quads_buffers));
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
+        glEnableVertexAttribArray(2);
+        glEnableVertexAttribArray(3);
         
         glDrawElements(GL_TRIANGLES, batch->quads_count * 6, GL_UNSIGNED_INT, 0);
         
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
+        glDisableVertexAttribArray(2);
+        glDisableVertexAttribArray(3);
         glBindVertexArray(0);
         
         detach_shader_program(batch->quad_shader);
