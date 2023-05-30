@@ -4,8 +4,10 @@
 
 #ifdef __cplusplus
     #define RGBA(r,g,b,a) tint{r,g,b,a}
+    #define TINT_TO_TINTF(t) tint_f{(float)(t.r), (float)(t.g), (float)(t.b), (float)(t.a)}
 #else
     #define RGBA(r,g,b,a) (tint){r,g,b,a}
+    #define TINT_TO_TINTF(t) (tint_f){(float)(t.r), (float)(t.g), (float)(t.b), (float)(t.a)}
 #endif
 
 
