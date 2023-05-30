@@ -8,6 +8,8 @@
 ***
 Muzzle is an open-source C99 game framework that is easy-to-use and lightweight, but still exposes lower-level APIs.
 
+**You are in the legacy branch.**
+
 ## Example Window
 ```c
 #define MUZZLE_DEPS
