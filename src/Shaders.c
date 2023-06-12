@@ -86,17 +86,25 @@ shader_program link_shader(shader vertex, shader fragment)
 
         printf("\t%s\n", infolog);
 
+        glDetachShader(id, vertex);
+        glDetachShader(id, fragment);
         glDeleteProgram(id);
-
-        glDeleteShader(vertex);
-        glDeleteShader(fragment);
         return 0;
     }
-
-    glDeleteShader(vertex);
-    glDeleteShader(fragment);
-
+    
+    glDetachShader(id, vertex);
+    glDetachShader(id, fragment);
+    
     return id;
+}
+
+shader_program link_shader_then_delete(shader* vertex, shader* fragment)
+{
+    GLuint program = link_shader(*vertex, *fragment);
+    unload_shader(vertex);
+    unload_shader(fragment);
+    
+    return program;
 }
 
 void upload_shader_int(shader_program program, const char* var, int value)
@@ -144,7 +152,7 @@ void upload_shader_vec3(shader_program program, const char* var, vec3 value)
 }
 
 void upload_shader_vec4(shader_program program, const char* var, vec4 value)
-{
+{   
     GLuint uniform_location = glGetUniformLocation(program, var);
     glUseProgram(program);
     glUniform4f(uniform_location, value.x, value.y, value.z, value.w);
@@ -180,17 +188,24 @@ void upload_shader_mat4(shader_program program, const char* var, mat4 value)
     #endif
 }
 
-void attach_shader_program(shader_program shader)
+void begin_shader_program(shader_program shader)
 {
     glUseProgram(shader);
 }
 
-void unload_shader_program(shader_program shader)
-{
-    glDeleteProgram(shader);
-}
-
-void detach_shader_program()
+void end_shader_program()
 {
     glUseProgram(0);
+}
+
+void unload_shader_program(shader_program* shader)
+{
+    glDeleteProgram(*shader);
+    *shader = 0;
+}
+
+void unload_shader(shader* shader)
+{
+    glDeleteShader(*shader);
+    *shader = 0;
 }

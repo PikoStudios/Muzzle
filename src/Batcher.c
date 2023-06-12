@@ -1,4 +1,5 @@
 #include "core/Batcher.h"
+#include "modern_pipeline/default_shaders/ds_quad2d.h"
 #define VAO(x) x[0]
 #define VBO(x) x[1]
 #define EBO(x) x[2]
@@ -22,6 +23,10 @@ batcher load_batcher(int max_size)
     temp.quads = MZ_CALLOC(max_size * 4, sizeof(struct _quad_vertex));
     temp.circles = NULL;
     temp.lines = NULL;
+    
+    shader frag = load_shader_from_string(SHADER_FRAGMENT, MUZZLE_DEFAULT_SHADER_QUAD_2D_FRAGMENT);
+    shader vertex = load_shader_from_string(SHADER_VERTEX, MUZZLE_DEFAULT_SHADER_QUAD_2D_VERTEX);
+    temp.quad_shader = link_shader(vertex, frag);
     
     int* quad_indices = MZ_CALLOC(6 * max_size, sizeof(int));
     int* circle_indices = NULL;
@@ -118,23 +123,21 @@ void end_batcher(batcher* batch)
         glBindBuffer(GL_ARRAY_BUFFER, VBO(batch->quads_buffers));
         glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(struct _quad_vertex), batch->quads);
         
-        attach_shader_program(batch->quad_shader);
+        begin_shader_program(batch->quad_shader);
+            glBindVertexArray(VAO(batch->quads_buffers));
+            glEnableVertexAttribArray(0);
+            glEnableVertexAttribArray(1);
+            glEnableVertexAttribArray(2);
+            glEnableVertexAttribArray(3);
         
-        glBindVertexArray(VAO(batch->quads_buffers));
-        glEnableVertexAttribArray(0);
-        glEnableVertexAttribArray(1);
-        glEnableVertexAttribArray(2);
-        glEnableVertexAttribArray(3);
+            glDrawElements(GL_TRIANGLES, batch->quads_count * 6, GL_UNSIGNED_INT, 0);
         
-        glDrawElements(GL_TRIANGLES, batch->quads_count * 6, GL_UNSIGNED_INT, 0);
-        
-        glDisableVertexAttribArray(0);
-        glDisableVertexAttribArray(1);
-        glDisableVertexAttribArray(2);
-        glDisableVertexAttribArray(3);
-        glBindVertexArray(0);
-        
-        detach_shader_program(batch->quad_shader);
+            glDisableVertexAttribArray(0);
+            glDisableVertexAttribArray(1);
+            glDisableVertexAttribArray(2);
+            glDisableVertexAttribArray(3);
+            glBindVertexArray(0);
+        end_shader_program();
     }
 }
 

@@ -17,7 +17,7 @@
 "	OutputData.ColorDrawn = a_ColorDrawn;\n" \
 "	OutputData.TexCoords = a_TexCoords;\n" \
 "	OutputData.TexID = a_TexID;\n" \
-"	ViewProjection = 1;\n" \
+"	int ViewProjection = 1;\n" \
 "	gl_Position = ViewProjection * vec4(a_Position, 1.0);\n" \
 "}\n\0"
 
@@ -28,16 +28,16 @@
 "	vec2 TexCoords;\n" \
 "	float TexID;\n" \
 "};\n" \
-"in VertexOutputData InputData;\n" \
+"in VertexOutputData OutputData;\n" \
 "out vec4 f_Color;\n" \
 "layout (binding = 0) uniform sampler2D u_Textures[32];\n" \
 "void main()\n" \
 "{\n" \
-"	vec4 textureColorDrawn = InputData.ColorDrawn;\n" \
-"	int textureIndex = int(InputData.TexID);\n" \
+"	vec4 textureColorDrawn = OutputData.ColorDrawn;\n" \
+"	int textureIndex = int(OutputData.TexID);\n" \
 "	if (textureIndex < 32)\n" \
 "	{\n" \
-"		textureColorDrawn *= texture(u_Textures[textureIndex], InputData.TexCoords);\n" \
+"		//textureColorDrawn *= texture(u_Textures[textureIndex], OutputData.TexCoords);\n" \
 "	}\n" \
 "	f_Color = textureColorDrawn;\n" \
 "}\n\0"
