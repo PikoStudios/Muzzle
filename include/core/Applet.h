@@ -1,4 +1,3 @@
-#pragma once
 #include "Loop.h"
 #include "Error.h"
 #include "callback.h"

@@ -26,7 +26,7 @@ batcher load_batcher(int max_size)
     
     shader frag = load_shader_from_string(SHADER_FRAGMENT, MUZZLE_DEFAULT_SHADER_QUAD_2D_FRAGMENT);
     shader vertex = load_shader_from_string(SHADER_VERTEX, MUZZLE_DEFAULT_SHADER_QUAD_2D_VERTEX);
-    temp.quad_shader = link_shader(vertex, frag);
+    temp.quad_shader = link_shader_then_delete(&vertex, &frag);
     
     int* quad_indices = MZ_CALLOC(6 * max_size, sizeof(int));
     int* circle_indices = NULL;
@@ -111,7 +111,7 @@ void begin_batcher(batcher* batch)
     batch->lines_count = 0;
     batch->lines_current_ptr = batch->lines;
     
-    // Refresh textures
+    // TODO: Refresh textures
 }
 
 void end_batcher(batcher* batch)

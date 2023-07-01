@@ -1,5 +1,6 @@
 #pragma once
 #include "../backend.h"
+#define MZ_SHADERS_EXCLUDE_APPLET
 #include "../modern_pipeline/Shaders.h"
 #include "Error.h"
 #include "vector.h"
