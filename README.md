@@ -1,4 +1,3 @@
-**This branch is archived and should not be considered working, visit the `dev` branch**
 ![Muzzle Logo](https://github.com/PikoStudios/Muzzle/blob/main/.github/assests/muzzle.png?raw=true)
 
 

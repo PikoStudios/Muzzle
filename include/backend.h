@@ -1,75 +1,71 @@
-#pragma once
+#ifndef MUZZLE_BACKEND_H
+#define MUZZLE_BACKEND_H
 
 #if defined(__EMSCRIPTEN__)
-    #define GLFW_INCLUDE_ES2
+	#define GLFW_INCLUDE_ES2
 #endif
 
-
-#ifdef MUZZLE_ALLOW_BUFFER_HIGH
-    #define MAX_BUFFERS 8
-    #define BUFFER_LENGTH 2048
-#else
-    #define MAX_BUFFERS 4
-    #define BUFFER_LENGTH 1024
+#ifndef MUZZLE_STRING_FMT_BUFFER_SIZE
+	#define MUZZLE_STRING_FMT_BUFFER_SIZE 1024
 #endif
 
-#include <stdlib.h>
+#ifdef MUZZLE_EXCLUDE_STDLIB
+	#define MZ_MEMORY_EXCLUDE_STDLIB
+#endif
+
 #include "core/Memory.h"
 
-#define MUZZLE_FALSE 0
-#define MUZZLE_TRUE 1
+#define MUZZLE_FALSE (unsigned char)(0)
+#define MUZZLE_TRUE (unsigned char)(1)
+typedef unsigned char mz_boolean;
 
-#ifndef MUZZLE_RETAIN_LEGACY
-    #define GLAD_GL_IMPLEMENTION
-    #include "../deps/glad/include/glad/glad.h"
-#endif
+#define GLAD_GL_IMPLEMENTION
+#include "../deps/glad/include/glad/glad.h"
 
-#ifdef MZ_DEPS_USE_GLOBAL
-    #include <GLFW/glfw3.h>
+#ifdef MUZZLE_USE_GLOBAL_DEPS
+	#include <GLFW/glfw3.h>
 #else
-    #include "../deps/glfw/include/GLFW/glfw3.h"
+	#include "../deps/glfw/include/GLFW/glfw3.h"
 #endif
 
-#define MZ_ASSERT(condition, msg) if ((condition) == 0) \
-{ \
-fprintf(stderr, "Assertion '%s' failed in function '%s', more info: %s", #condition, __func__, msg); \
-exit(-1); \
-}
-
-#define MZ_ASSERT_NO_MSG(condition) if ((condition) == 0) \
-{ \
-fprintf(stderr, "Assertion '%s' failed in function '%s'", #condition, __func__); \
-exit(-1); \
-}
-
-#define MUZZLE_NULL (void*)(1)
+#ifndef MUZZLE_NO_ASSERTIONS
+	#define MZ_ASSERT(condition, details) do \
+	{ \
+	if ((condition) == 0) \
+	{\
+	fprintf(stderr, "Assertion '%s' failed in function '%s', details: %s", #condition, __func__, details); \
+	exit(-1); \
+	} } while (0)
+#else
+	#define MZ_ASSERT(condition, details) // Removes assertion from compiled code for optimization
+#endif
 
 #ifdef _WIN32
-    // Include WinAPI if on windows. Required for MultiByteToWideChar
-    #define WIN32_LEAN_AND_MEAN // TODO: Verify we do not need extra Windows API features
-    #include "windows.h"
+	// Required for MultiBytesToWideChar
+	#define WIN32_LEAN_AND_MEAN
+	#include "windows.h"
 
-    #ifdef BUILD_LIBTYPE_SHARED
-        #define MZ_API __declspec(dllexport)
-    #elif defined(USE_LIBTYPE_SHARED)
-        #define MZ_API __declspec(dllimport)
-    #endif
+	#ifdef BUILD_LIBTYPE_SHARED
+		#define MZ_API __declspec(dllexport)
+	#elif defined(USE_LIBTYPE_SHARED)
+		#define MZ_API __declspec(dllimport)
+	#endif
 #endif
 
 #ifndef MZ_API
-    #define MZ_API
+	#define MZ_API
 #endif
-
-#ifndef MZ_FONT_DEFAULT_SIZE
-    #define MZ_FONT_DEFAULT_SIZE 32
-#endif
-
 
 #ifdef __cplusplus
-    #define MZ_LITERAL(x) x
+	#define MZ_LITERAL(x) x
 #else
-    #define MZ_LITERAL(x) (x)
+	#define MZ_LITERAL(x) (x)
 #endif
 
-//static void* __draw_pointer_ctx; // This pointer should only be used for drawing functions, like draw_rectangle. This pointer should be used for context data needed by the drawing functions
-typedef GLFWwindow* MUZZLE_WINDOW;
+#ifndef MUZZLE_DEFAULT_EXIT_KEY
+	#define MUZZLE_DEFAULT_EXIT_KEY GLFW_KEY_ESCAPE
+#endif
+
+typedef GLFWwindow* mz_window;
+
+#endif //MUZZLE_BACKEND_H

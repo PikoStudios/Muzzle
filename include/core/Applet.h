@@ -1,45 +1,22 @@
-#include "Loop.h"
-#include "Error.h"
-#include "callback.h"
+#ifndef MUZZLE_CORE_APPLET_H
+#define MUZZLE_CORE_APPLET_H
+
 #include "../backend.h"
-#include "Batcher.h"
-#include "../modern_pipeline/Shaders.h"
 
-#ifndef MZ_DEFAULT_BATCH_SIZE
-    #define MZ_DEFAULT_BATCH_SIZE 1000
-#endif
-
-#define MZ_APPLET_FLAG_NONE 1
-#define MZ_APPLET_FLAG_DONT_INIT_BATCHER 2
-
-typedef struct Applet
+struct _mz_applet
 {
-    int width, height;
-    char* window_title;
-    batcher batch;
-    GLFWwindow* window_handle;
-} Applet;
-    
-#ifdef __cplusplus
-extern "C" {
-#endif
+	int width;
+	int height;
+	char* window_title;
+	mz_window window_handle;
+};
 
-/*
-* StartApplet - Start a Applet
-* @param self Pointer to Applet
-*/
+typedef struct _mz_applet Applet;
+
+#define APPLET_RESIZEABLE 	0x1
+#define APPLET_VSYNC		0x2
+
+MZ_API Applet InitializeApplet(int width, int height, const char* window_title, uint32_t flags);
 MZ_API void StartApplet(Applet* self);
 
-/*
-* InitializeApplet - Create an Applet
-* @param WIDTH Width of Screen
-* @param HEIGHT Height of Screen
-* @param WINDOW_TITLE Title of the Window
-* @param RESIZEABLE Toggle resizeability
-* @param VSYNC Toggle VSync, If set to MUZZLE_FALSE Muzzle will try to use as much of the GPU and CPU that it can usep
-* @return Applet
-*/
-MZ_API Applet InitializeApplet(const int WIDTH, const int HEIGHT, const char* WINDOW_TITLE, int RESIZEABLE, int VSYNC, uint32_t EXTRA_FLAGS);
-#ifdef __cplusplus
-}
-#endif
+#endif // MUZZLE_CORE_APPLET_H

@@ -1,42 +1,47 @@
 #include "core/Error.h"
 
-void muzzle_error(int error, const char *desc) 
+MZ_API void log_status(status_types type, const char* status)
 {
-    fprintf(stderr, "Internal Error (GLFW3): %s", desc);
+	switch (type)
+	{
+	case STATUS_FATAL_ERROR:
+		fprintf(stderr, "\e[0;31m\e[4;31m[FATAL] :: %s\n\e[0m", status);
+		exit(-1);
+		break;
+	case STATUS_WARNING:
+		printf("\e[0;33m\e[4;33m[WARNINGS] :: %s\n\e[0m", status);
+		break;
+	case STATUS_ERROR:
+		fprintf(stderr, "\e[0;31m\e[4;31m[ERROR] :; %s\n\e[0m", status);
+		break;
+	case STATUS_SUCCESS:
+		printf("\e[0;32m\e[4;32m[SUCCESS] :: %s\n\e[0m", status);
+		break;
+	
+	case STATUS_INFO:
+		printf("\e[0;34m\e[4;34m[INFO] :: %s\n\e[0m", status);
+		break;
+	
+	default:
+		fprintf(stderr, "\e[0;31m\e[4;31m[FATAL] :: Unknown status type '%d'\n\e[0m", type);
+		exit(-1);
+		break;
+	}
 }
-void log_status(StatusTypes type, const char *status)
+
+MZ_API void log_status_formatted(status_types type, const char* fmt, ...)
 {
-    switch (type)
-    {
-    case STATUS_FATAL_ERROR:
-        fprintf(stderr, "\e[0;31m\e[4;31m[FATAL] :: %s\n\e[0m", status);
-        exit(-1);
-        break;
-    case STATUS_WARNING:
-        printf("\e[0;33m\e[4;33m[WARNING] :: %s\n\e[0m", status);
-        break;
-
-    case STATUS_ERROR:
-        fprintf(stderr, "\e[0;31m\e[4;31m[ERROR] :: %s\n\e[0m", status);
-        break;
-
-    case STATUS_SUCCESS:
-        printf("\e[0;32m\e[4;32m[SUCCESS] :: %s\n\e[0m", status);
-        break;
-
-    case STATUS_INFO:
-        printf("\e[0;34m\e[4;34m[INFO] :: %s\n\e[0m", status);
-        break;
-
-    default:
-        printf("Funny Enough. There was a unknown error when logging this status.\nIt may of been a fatal error. So because of that to be safe, we are going to still exit the application\n Sorry!! lol please report this at the github repo for Muzzle");
-        exit(-1);
-        break;
-    }
-    
-}
-void log_fatal(const char* status, const char* func_name)
-{
-    fprintf(stderr, "\e[0;31m\e[4;31m[FATAL][FUNCTION \"%s\"] :: %s\n\e[0m", func_name, status);
-    exit(-1);
+	va_list args;
+	va_start(args, fmt);
+	
+	char buffer[(MUZZLE_STRING_FMT_BUFFER_SIZE + strlen(fmt))];
+#if defined(_MSC_VER) && _MSC_VER < 1900
+	memset(buffer, 0, sizeof(buffer));
+	_vsnprintf(buffer, sizeof(buffer), fmt, args);
+#else
+	vsnprintf(buffer, sizeof(buffer), fmt, args);
+#endif
+	log_status(type, buffer);
+	
+	va_end(args);
 }
