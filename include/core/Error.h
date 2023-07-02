@@ -8,10 +8,17 @@
 
 enum _mz_status_types
 {
+	// Yellow Text
 	STATUS_WARNING,
+	// Red Text
 	STATUS_ERROR,
+	// Red Text, exit, and attempt to clean up resources
 	STATUS_FATAL_ERROR,
+	// Red Text and exit but do not attempt to clean up resources. (Not recommended)
+	STATUS_FATAL_ERROR_DONT_CLEAN_UP,
+	// Green text
 	STATUS_SUCCESS,
+	// Blue text
 	STATUS_INFO
 };
 

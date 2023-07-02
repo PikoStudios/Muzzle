@@ -5,6 +5,8 @@ MZ_API void log_status(status_types type, const char* status)
 	switch (type)
 	{
 	case STATUS_FATAL_ERROR:
+		glfwTerminate();
+	case STATUS_FATAL_ERROR_DONT_CLEAN_UP:
 		fprintf(stderr, "\e[0;31m\e[4;31m[FATAL] :: %s\n\e[0m", status);
 		exit(-1);
 		break;
