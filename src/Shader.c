@@ -100,6 +100,87 @@ shader_program link_shader_then_delete(shader* vertex, shader* fragment)
 	return id;
 }
 
+vertex_attribute_buffer load_vertex_attribute_buffer(shader_program program)
+{	
+	vertex_attribute_buffer buffer = {0};
+	buffer.program = program;
+	
+	return buffer; 
+}
+
+void add_vertex_attribute(vertex_attribute_buffer* buffer, const char* attribute, size_t elements, vertex_attribute_type type, size_t type_size, mz_boolean normalized)
+{
+	if (buffer->attributes == NULL)
+	{
+		buffer->attributes_size = 5;
+		buffer->attributes = MZ_MALLOC(sizeof(intptr_t) * buffer->attributes_size);
+		buffer->index = 0;
+		
+		if (buffer->attributes == NULL)
+		{
+			log_status(STATUS_FATAL_ERROR, "Unable to allocate enough memory for vertex attributes");
+		}
+	}
+	
+	else
+	{
+		buffer->attributes_size += 5;
+		buffer->attributes = MZ_REALLOC(buffer->attributes, sizeof(intptr_t) * buffer->attributes_size);
+		buffer->index++;
+		
+		if (buffer->attributes == NULL)
+		{
+			log_status(STATUS_FATAL_ERROR, "Unable to reallocate enough memory for vertex attributes");
+		}
+	}
+	
+	int index = buffer->index * 5;
+	
+	buffer->attributes[index] = glGetAttribLocation(buffer->program, attribute);
+	buffer->attributes[index + 1] = elements;
+	buffer->attributes[index + 2] = type;
+	buffer->attributes[index + 3] = normalized;
+	buffer->attributes[index + 4] = buffer->stride;
+	buffer->stride += elements * type_size;
+	
+	/* this is weird, ill explain...
+	==================================
+	The stride is always the same for each vertex attribute
+	So here we calculate the stride by adding the product of
+	how many elements there are in this attribute by how big the type is.
+	
+	However, we can also use this as an offset, if we knew that the stride before this
+	new vertex attribute was X, we know the offset of this attribute is X
+	*/
+}
+
+void enable_vertex_attributes(vertex_attribute_buffer* buffer)
+{
+	for (int i = 0; i < buffer->index; i++)
+	{
+		int index = i*5;
+		
+		glEnableVertexAttribArray(buffer->attributes[index]);
+		glVertexAttribPointer(
+			buffer->attributes[index],
+			buffer->attributes[index + 1],
+			buffer->attributes[index + 2],
+			buffer->attributes[index + 3],
+			buffer->stride,
+			(void*)(buffer->attributes[index + 4])
+		);
+		
+		// buffer->attributes[index to index+4] = [
+		//	location, elements, type, normalized, offset
+		// ]
+	}
+}
+
+void unload_vertex_attribute_buffer(vertex_attribute_buffer* buffer)
+{
+	MZ_FREE(buffer->attributes);
+}
+
 void unload_shader(shader* shader)
 {
 	glDeleteShader(*shader);
