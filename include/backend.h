@@ -17,7 +17,7 @@
 
 #define MUZZLE_FALSE (0)
 #define MUZZLE_TRUE (1)
-typedef int mz_boolean;
+typedef unsigned char mz_boolean;
 
 #define GLAD_GL_IMPLEMENTION
 #include "../deps/glad/include/glad/glad.h"
