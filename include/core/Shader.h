@@ -3,6 +3,7 @@
 
 #include "../backend.h"
 #include "Error.h"
+#include "vector.h"
 
 enum _mz_shader_type
 {
@@ -50,7 +51,12 @@ MZ_API void add_vertex_attribute_complex(vertex_attribute_buffer* buffer, const 
 MZ_API void enable_vertex_attributes(vertex_attribute_buffer* buffer);
 MZ_API void unload_vertex_attribute_buffer(vertex_attribute_buffer* buffer);
 
-// TODO: Uniform upload functions
+void upload_uniform_int(shader_program program, const char* uniform, int value);
+void upload_uniform_float(shader_program program, const char* uniform, float value);
+void upload_uniform_vec2(shader_program program, const char* uniform, vec2 value);
+void upload_uniform_vec3(shader_program program, const char* uniform, vec3 value);
+void upload_uniform_vec4(shader_program program, const char* uniform, vec4 value);
+// TODO: Implement Matrix uploading
 
 // Unload shader and set shader to 0
 MZ_API void unload_shader(shader* shader);

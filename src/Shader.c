@@ -187,6 +187,41 @@ void unload_vertex_attribute_buffer(vertex_attribute_buffer* buffer)
 	MZ_FREE(buffer->attributes);
 }
 
+void upload_uniform_int(shader_program program, const char* uniform, int value)
+{
+	GLuint loc = glGetUniformLocation(program, uniform);
+	glUseProgram(program);
+	glUniform1i(loc, value);
+}
+
+void upload_uniform_float(shader_program program, const char* uniform, float value)
+{
+	GLuint loc = glGetUniformLocation(program, uniform);
+	glUseProgram(program);
+	glUniform1f(loc, value);
+}
+
+void upload_uniform_vec2(shader_program program, const char* uniform, vec2 value)
+{
+	GLuint loc = glGetUniformLocation(program, uniform);
+	glUseProgram(program);
+	glUniform2f(loc, value.x, value.y);
+}
+
+void upload_uniform_vec3(shader_program program, const char* uniform, vec3 value)
+{
+	GLuint loc = glGetUniformLocation(program, uniform);
+	glUseProgram(program);
+	glUniform3f(loc, value.x, value.y, value.z);
+}
+
+void upload_uniform_vec4(shader_program program, const char* uniform, vec4 value)
+{
+	GLuint loc = glGetUniformLocation(program, uniform);
+	glUseProgram(program);
+	glUniform4f(loc, value.x, value.y, value.z, value.w);
+}
+
 void unload_shader(shader* shader)
 {
 	glDeleteShader(*shader);
