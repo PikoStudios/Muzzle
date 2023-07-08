@@ -154,6 +154,12 @@ void add_vertex_attribute(vertex_attribute_buffer* buffer, const char* attribute
 	*/
 }
 
+void add_vertex_attribute_complex(vertex_attribute_buffer* buffer, const char* attribute, size_t elements, vertex_attribute_type type, size_t type_size, mz_boolean normalized, intptr_t offset)
+{
+	add_vertex_attribute(buffer, attribute, elements, type, type_size, normalized);
+	buffer->attributes[(buffer->index * 5) + 4] = offset;
+}
+
 void enable_vertex_attributes(vertex_attribute_buffer* buffer)
 {
 	for (int i = 0; i < buffer->index; i++)

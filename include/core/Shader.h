@@ -46,6 +46,7 @@ MZ_API shader_program link_shader_then_delete(shader* vertex, shader* fragment);
 
 MZ_API vertex_attribute_buffer load_vertex_attribute_buffer(shader_program program);
 MZ_API void add_vertex_attribute(vertex_attribute_buffer* buffer, const char* attribute, size_t elements, vertex_attribute_type type, size_t type_size, mz_boolean normalized);
+MZ_API void add_vertex_attribute_complex(vertex_attribute_buffer* buffer, const char* attribute, size_t elements, vertex_attribute_type type, size_t type_size, mz_boolean normalized, intptr_t offset);
 MZ_API void enable_vertex_attributes(vertex_attribute_buffer* buffer);
 MZ_API void unload_vertex_attribute_buffer(vertex_attribute_buffer* buffer);
 
