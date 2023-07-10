@@ -10,3 +10,6 @@
 [submodule "deps/fontstash"]
 	path = deps/fontstash
 	url = https://github.com/PikoStudios/fontstash
+[submodule "deps/kazmath"]
+	path = deps/kazmath
+	url = https://github.com/Kazade/kazmath/
