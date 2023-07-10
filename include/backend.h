@@ -19,6 +19,10 @@
 #define MUZZLE_TRUE (1)
 typedef unsigned char mz_boolean;
 
+#ifdef MZ_INCLUDE_KAZMATH
+	#include "../deps/kazmath/kazmath.h"
+#endif
+
 #define GLAD_GL_IMPLEMENTION
 #include "../deps/glad/include/glad/glad.h"
 
