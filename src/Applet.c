@@ -1,5 +1,6 @@
 #include "core/Applet.h"
 #include "internal/core.internal.h"
+#include "internal/core.default_shaders.internal.h"
 
 Applet InitializeApplet(int width, int height, const char* window_title, uint32_t flags)
 {
@@ -26,6 +27,7 @@ Applet InitializeApplet(int width, int height, const char* window_title, uint32_
 	
 	log_status(STATUS_SUCCESS, "Window created successfully");
 	
+	glfwSetFramebufferSizeCallback(applet.window_handle, mz_glfw_callback_window_resize);
 	glfwSetKeyCallback(applet.window_handle, mz_glfw_callback_key);
 	glfwMakeContextCurrent(applet.window_handle);
 	
@@ -55,12 +57,17 @@ Applet InitializeApplet(int width, int height, const char* window_title, uint32_
 	
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	applet.default_fragment = mz_load_default_shader_fragment();
+	applet.default_vertex = mz_load_default_shader_vertex();
+	applet.default_shader_program = link_shader(applet.default_vertex, applet.default_fragment);
 	
 	return applet;
 }
 
 void StartApplet(Applet* self)
 {
+	glfwSetWindowUserPointer(applet.window_handle, self);
 	OnAppletUpdate(self);
 }
 

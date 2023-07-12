@@ -2,9 +2,14 @@
 #define MUZZLE_CORE_APPLET_H
 
 #include "../backend.h"
+#include "Shader.h"
 
 struct _mz_applet
 {
+	shader default_vertex;
+	shader default_fragment;
+	shader_program default_shader_program;
+	
 	int width;
 	int height;
 	char* window_title;

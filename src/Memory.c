@@ -6,6 +6,6 @@ void* mz_safe_realloc(void* ptr, size_t size)
 	
 	if (temp == NULL)
 		MZ_FREE(ptr);
-	
+		
 	return temp;
 }
