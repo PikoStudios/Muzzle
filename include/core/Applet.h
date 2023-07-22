@@ -3,13 +3,15 @@
 
 #include "../backend.h"
 #include "Shader.h"
+#include "Batch.h"
 
 struct _mz_applet
 {
+	batch default_batch;
+	batch* active_batch;
 	shader default_vertex;
 	shader default_fragment;
 	shader_program default_shader_program;
-	
 	int width;
 	int height;
 	char* window_title;
@@ -28,5 +30,8 @@ MZ_API void OnAppletUpdate(Applet* self);
 
 MZ_API Applet InitializeApplet(int width, int height, const char* window_title, uint32_t flags);
 MZ_API void StartApplet(Applet* self);
+
+MZ_API void begin_shader(shader_program program, Applet* applet);
+MZ_API void end_shader(Applet* applet);
 
 #endif // MUZZLE_CORE_APPLET_H

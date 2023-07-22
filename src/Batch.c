@@ -13,7 +13,7 @@ batch load_batch(shader_program quad_shader)
 		log_status(STATUS_FATAL_ERROR, "Failed to allocate memory for quad buffers");
 	}
 	
-	buffer.quad_vertices = MZ_CALLOC(MUZZLE_BATCH_QUAD_MAX, sizeof(struct _mz_quad_vertex));
+	buffer.quad_vertices = MZ_CALLOC(MUZZLE_BATCH_QUAD_MAX * 4, sizeof(struct _mz_quad_vertex));
 	buffer.quad_vertex_ptr = buffer.quad_vertices;
 	buffer.quad_count = 0;
 	
@@ -53,7 +53,7 @@ batch load_batch(shader_program quad_shader)
 	
 	glGenBuffers(1, vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, *vbo);
-	glBufferData(GL_ARRAY_BUFFER, (sizeof(struct _mz_quad_vertex) * 5) * MUZZLE_BATCH_QUAD_MAX, NULL, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(struct _mz_quad_vertex) * (MUZZLE_BATCH_QUAD_MAX * 4), NULL, GL_DYNAMIC_DRAW);
 
 	glGenBuffers(1, ebo);
 	
