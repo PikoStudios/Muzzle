@@ -91,19 +91,3 @@ mz_boolean keep_applet_delta_f(Applet* self, float* delta)
 	glfwSetTime(0);
 	return !glfwWindowShouldClose(self->window_handle);
 }
-
-void begin_shader(shader_program program, Applet* applet)
-{
-	end_batch(applet->active_batch);
-	begin_batch(applet->active_batch);
-	
-	applet->active_batch->quad_shader_program = program;
-}
-
-void end_shader(Applet* applet)
-{
-	end_batch(applet->active_batch);
-	begin_batch(applet->active_batch);
-	
-	applet->active_batch->quad_shader_program = applet->active_batch->quad_fallback_shader_program;
-}

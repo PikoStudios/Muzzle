@@ -31,7 +31,4 @@ MZ_API void OnAppletUpdate(Applet* self);
 MZ_API Applet InitializeApplet(int width, int height, const char* window_title, uint32_t flags);
 MZ_API void StartApplet(Applet* self);
 
-MZ_API void begin_shader(shader_program program, Applet* applet);
-MZ_API void end_shader(Applet* applet);
-
 #endif // MUZZLE_CORE_APPLET_H
