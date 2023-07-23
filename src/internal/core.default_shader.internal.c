@@ -4,10 +4,10 @@
 
 shader mz_load_default_shader_fragment(void)
 {
-    return load_shader_from_string(default_quad_frag_glsl, SHADER_FRAGMENT);
+    return load_shader_from_string((char*)(default_quad_frag_glsl), SHADER_FRAGMENT);
 }
 
 shader mz_load_default_shader_vertex(void)
 {
-    return load_shader_from_string(default_quad_vertex_glsl, SHADER_VERTEX);
+    return load_shader_from_string((char*)(default_quad_vertex_glsl), SHADER_VERTEX);
 }
