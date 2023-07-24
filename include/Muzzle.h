@@ -3,7 +3,18 @@
 
 #include "backend.h"
 
+#ifndef MUZZLE_EXCLUDE_CORE
 #include "core/Applet.h"
 #include "core/Error.h"
+#include "core/Batch.h"
+#include "core/tint.h"
+#include "core/Shader.h"
+#include "core/vector.h"
+#include "core/Drawing.h"
+#endif
+
+#ifdef MUZZLE_EXCLUDE_CORE
+#warning "Excluding core will break Muzzle if proper subsitutes are not in place"
+#endif
 
 #endif // MUZZLE_MUZZLE_H
