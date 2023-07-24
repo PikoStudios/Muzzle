@@ -20,8 +20,8 @@ struct _mz_applet
 
 typedef struct _mz_applet Applet;
 
-#define APPLET_RESIZABLE 	0x1
-#define APPLET_VSYNC		0x2
+#define MZ_APPLET_RESIZABLE 	0x1
+#define MZ_APPLET_VSYNC			0x2
 
 MZ_API mz_boolean keep_applet(Applet* self);
 MZ_API mz_boolean keep_applet_delta(Applet* self, double* delta);
