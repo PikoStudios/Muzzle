@@ -26,9 +26,11 @@ typedef struct _mz_applet Applet;
 MZ_API mz_boolean keep_applet(Applet* self);
 MZ_API mz_boolean keep_applet_delta(Applet* self, double* delta);
 MZ_API mz_boolean keep_applet_delta_f(Applet* self, float* delta);
-MZ_API void OnAppletUpdate(Applet* self);
+MZ_API void OnAppletUpdate(Applet*);
 
 MZ_API Applet InitializeApplet(int width, int height, const char* window_title, uint32_t flags);
 MZ_API void StartApplet(Applet* self);
+
+MZ_API void QuitMuzzle(Applet* self);
 
 #endif // MUZZLE_CORE_APPLET_H

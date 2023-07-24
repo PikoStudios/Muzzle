@@ -91,3 +91,18 @@ mz_boolean keep_applet_delta_f(Applet* self, float* delta)
 	glfwSetTime(0);
 	return !glfwWindowShouldClose(self->window_handle);
 }
+
+void QuitMuzzle(Applet* self)
+{
+	log_status(STATUS_INFO, "Closing Window");
+	glfwDestroyWindow(self->window_handle);
+	
+	log_status(STATUS_INFO, "Unloading resources");
+	unload_batch(&self->default_batch);
+	unload_shader_program(&self->default_shader_program);
+	unload_shader(&self->default_fragment);
+	unload_shader(&self->default_vertex);
+	
+	log_status(STATUS_INFO, "Terminating OpenGL Context");
+	glfwTerminate();
+}
