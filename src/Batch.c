@@ -153,6 +153,8 @@ void end_batch(batch* batch)
 {
 	if (batch->quad_count > 0)
 	{
+		printf("quad_count = %d\n", batch->quad_count);
+		
 		glBindVertexArray(batch->quad_buffers[0]);
 		// TODO: maybe set size to sizeof(struct _mz_quad_vertex) * 4 * batch->quad_count
 		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(struct _mz_quad_vertex), batch->quad_vertices);

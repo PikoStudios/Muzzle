@@ -4,6 +4,8 @@ project(Muzzle)
 set(MUZZLE_ROOT "../..")
 set(MUZZLE_LIB_FOLDER ${MUZZLE_ROOT}/deps)
 
+set(CMAKE_BUILD_TYPE Debug)
+
 INCLUDE_DIRECTORIES(${MUZZLE_ROOT}/include)
 LINK_DIRECTORIES(${MUZZLE_LIB_FOLDER}/glfw/lib)
 set(mz_source_dir ${MUZZLE_ROOT}/src)

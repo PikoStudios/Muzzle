@@ -24,7 +24,7 @@ shader load_shader_from_string(const char* code, shader_type type)
 		glGetShaderInfoLog(id, log_length, NULL, message);
 		
 		log_status(STATUS_ERROR, "Shader failed to compile, More info:");
-		printf("\t%s\n", message);
+		printf("\t%s\n\t%s\n", (type == SHADER_FRAGMENT) ? "Fragment Error" : "Vertex Error", message);
 	}
 	
 	return id;

@@ -37,7 +37,7 @@ Applet InitializeApplet(int width, int height, const char* window_title, uint32_
 		log_status(STATUS_FATAL_ERROR, "GLAD could not initialize");
 	}
 	
-	if (flags & APPLET_VSYNC)
+	if (flags & MZ_APPLET_VSYNC)
 	{
 		log_status(STATUS_INFO, "Enabled VSync");
 		glfwSwapInterval(1);
@@ -48,7 +48,7 @@ Applet InitializeApplet(int width, int height, const char* window_title, uint32_
 		glfwSwapInterval(0);
 	}
 	
-	glfwSetWindowAttrib(applet.window_handle, GLFW_RESIZABLE, (flags & APPLET_RESIZABLE));
+	glfwSetWindowAttrib(applet.window_handle, GLFW_RESIZABLE, (flags & MZ_APPLET_RESIZABLE));
 	glfwSetWindowPos(applet.window_handle, 230, 230);
 	
 	glViewport(0, 0, width, height);

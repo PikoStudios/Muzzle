@@ -15,14 +15,14 @@ struct vertexOutput
     float tilingFactor;
 };
 
-layout (location = 0) out struct vertexOutput output;
+layout (location = 0) out vertexOutput outputData;
 
 void main()
 {
-    output.tint = a_Tint;
-    output.textureCoordinate = a_TextureCoordinate;
-    output.textureId = a_TextureId;
-    output.tilingFactor = a_TilingFactor;
+    outputData.tint = a_Tint;
+    outputData.textureCoordinate = a_TextureCoordinate;
+    outputData.textureId = a_TextureId;
+    outputData.tilingFactor = a_TilingFactor;
     
-    gl_Position = u_ViewProjectionMatrix * vec4(a_Position, 1.0);
+    gl_Position = u_ViewProjectionMatrix * vec4(a_Position, 1.0, 1.0);
 }
