@@ -9,7 +9,7 @@ void OnAppletUpdate(Applet* applet)
 	{
 		begin_drawing(applet);
 			//printf("Frame %d (Check idk): quad_count = %d\n", ++frame, applet->active_batch->quad_count);
-			YELLOW;
+			clear_screen(YELLOW);
 		end_drawing(applet);
 	}
 }

@@ -2,23 +2,15 @@
 
 void begin_drawing(Applet* applet)
 {
-	// TODO: Find really weird memory glitch where clearing the screen causes
-	// active_batch->quad_count = clear_color.b?????
-	static int frame = 0;
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	begin_batch(applet->active_batch);
-	printf("Frame %d (Check 1): quad_count = %d\n", ++frame, applet->active_batch->quad_count);
 }
 
 void end_drawing(Applet* applet)
 {
-	static int frame = 1;
-	
 	glfwSwapBuffers(applet->window_handle);
 	glfwPollEvents();
-	printf("Frame %d (Check 2): quad_count = %d\n", frame, applet->active_batch->quad_count);
 	end_batch(applet->active_batch);
-	printf("Frame %d (Check 3): quad_count = %d\n", frame++, applet->active_batch->quad_count);
 	glFlush();
 }
 

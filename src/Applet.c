@@ -62,13 +62,15 @@ Applet InitializeApplet(int width, int height, const char* window_title, uint32_
 	applet.default_vertex = mz_load_default_shader_vertex();
 	applet.default_shader_program = link_shader(applet.default_vertex, applet.default_fragment);
 	applet.default_batch = load_batch(applet.default_shader_program);
-	applet.active_batch = &applet.default_batch;
+	applet.active_batch = NULL;
 	
 	return applet;
 }
 
 void StartApplet(Applet* self)
 {
+	self->active_batch = &self->default_batch;
+	
 	glfwSetWindowUserPointer(self->window_handle, self);
 	OnAppletUpdate(self);
 }
