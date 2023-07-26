@@ -8,8 +8,7 @@ void OnAppletUpdate(Applet* applet)
 	while (keep_applet(applet))
 	{
 		begin_drawing(applet);
-			//printf("Frame %d (Check idk): quad_count = %d\n", ++frame, applet->active_batch->quad_count);
-			clear_screen(YELLOW);
+			clear_screen(GRAY);
 		end_drawing(applet);
 	}
 }
