@@ -1,5 +1,5 @@
 #include "core/Applet.h"
-#include "internal/core.internal.h"
+#include "internal/core.callbacks.internal.h"
 #include "internal/core.default_shaders.internal.h"
 
 Applet InitializeApplet(int width, int height, const char* window_title, uint32_t flags)

@@ -1,5 +1,5 @@
 #include "core/CallbackHook.h"
-#include "internal/core.internal.h"
+#include "internal/core.callbacks.internal.h"
 
 void muzzle_register_callback(uint8_t target, union callback_hook_union callback)
 {

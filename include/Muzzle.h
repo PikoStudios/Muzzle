@@ -17,4 +17,8 @@
 #warning "Excluding core will break Muzzle if proper subsitutes are not in place"
 #endif
 
+#ifdef MUZZLE_INCLUDE_CALLBACK_HOOK_API
+#include "core/CallbackHook.h"
+#endif
+
 #endif // MUZZLE_MUZZLE_H

@@ -1,4 +1,4 @@
-#include "internal/core.internal.h"
+#include "internal/core.callbacks.internal.h"
 
 MZcallback_keyinputfun mz_glfw_callback_hook_key	       =	NULL;
 MZcallback_errorfun mz_glfw_callback_hook_error            =	NULL;
@@ -24,7 +24,7 @@ void mz_glfw_callback_key(GLFWwindow* handle, int key, int scan_code, int action
 		);
 }
 
-MZ_API void mz_glfw_callback_window_resize(GLFWwindow* handle, int width, int height)
+void mz_glfw_callback_window_resize(GLFWwindow* handle, int width, int height)
 {
 	Applet* applet = (Applet*)(glfwGetWindowUserPointer(handle));
 	applet->width = width;
@@ -33,8 +33,5 @@ MZ_API void mz_glfw_callback_window_resize(GLFWwindow* handle, int width, int he
 	glViewport(0,0,width,height);
 	
 	if (mz_glfw_callback_hook_window_resize != NULL)
-		mz_glfw_callback_hook_window_resize(
-			(Applet*)(glfwGetWindowUserPointer(handle)),
-			width, height
-		);
+		mz_glfw_callback_hook_window_resize(applet, width, height);
 }
