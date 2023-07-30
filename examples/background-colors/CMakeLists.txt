@@ -13,15 +13,20 @@ set(mz_source_dir ${MUZZLE_ROOT}/src)
 #could use aux_source_directory() but its better to list each file to ensure new files are compiled
 #https://stackoverflow.com/a/25077976/10415312
 
+set(mz_internal_src
+${mz_source_dir}/internal/core.callbacks.internal.c
+${mz_source_dir}/internal/core.default_shaders.internal.c
+)
+
 set(mz_source
 ${mz_source_dir}/Applet.c
-${mz_source_dir}/internal/core.internal.c
-${mz_source_dir}/internal/core.default_shader.internal.c
 ${mz_source_dir}/Drawing.c
 ${mz_source_dir}/Error.c
 ${mz_source_dir}/Batch.c
 ${mz_source_dir}/Shader.c
 ${mz_source_dir}/Memory.c
+${mz_source_dir}/CallbackHook.c
+${mz_internal_src}
 ${MUZZLE_LIB_FOLDER}/glad/src/glad.c
 )
 
