@@ -1,7 +1,10 @@
 #ifndef MUZZLE_CORE_TINT_H
 #define MUZZLE_CORE_TINT_H
 
-#define NORMALIZE_TINT_AS_VEC4(x) MZ_LITERAL(vec4){x.r / 255, x.g / 255, x.b / 255, x.a / 255};
+#ifdef MUZZLE_INCLUDE_UTILS
+	#define NORMALIZE_TINT_AS_VEC4(x) MZ_LITERAL(vec4){x.r / 255, x.g / 255, x.b / 255, x.a / 255};
+	#define TINT(r,g,b,a) (tint){r,g,b,a}
+#endif
 
 struct _mz_tint
 {
