@@ -5,7 +5,7 @@
 #define MUZZLE_CALLBACK_HOOK_ERROR     	0x2
 #define MUZZLE_CALLBACK_HOOK_REISZE	    0x4
 
-#include "..\backend.h"
+#include "../backend.h"
 #include "Applet.h"
 
 // void key_input_callback(Applet* applet, int key, int scancode, int action, int mods);
