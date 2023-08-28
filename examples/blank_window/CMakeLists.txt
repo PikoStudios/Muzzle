@@ -16,6 +16,7 @@ set(mz_source_dir ${MUZZLE_ROOT}/src)
 set(mz_internal_src
 ${mz_source_dir}/internal/core.callbacks.internal.c
 ${mz_source_dir}/internal/core.default_shaders.internal.c
+${mz_source_dir}/internal/globals.internal.c
 )
 
 set(mz_source
@@ -46,10 +47,10 @@ elseif (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 
 elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     message(STATUS "Checking OS - found (Linux)")
-    TARGET_LINK_LIBRARIES(main glfw GL m)
+    TARGET_LINK_LIBRARIES(main glfw3 GL m)
 
 else ()
 # Default to Unix
     message(STATUS "Checking OS - not found (Unix)")
-    TARGET_LINK_LIBRARIES(main glfw GL m)
+    TARGET_LINK_LIBRARIES(main glfw3 GL m)
 endif ()

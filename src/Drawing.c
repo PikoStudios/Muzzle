@@ -1,9 +1,12 @@
 #include "core/Drawing.h"
+#include "internal/globals.internal.h"
 
 void begin_drawing(Applet* applet)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	begin_batch(applet->active_batch);
+
+	mz_globals_internal_active_batch = applet->active_batch;
 }
 
 void end_drawing(Applet* applet)
@@ -12,6 +15,8 @@ void end_drawing(Applet* applet)
 	glfwPollEvents();
 	end_batch(applet->active_batch);
 	glFlush();
+
+	mz_globals_internal_active_batch = applet->active_batch;
 }
 
 void clear_screen(tint color_drawn)
