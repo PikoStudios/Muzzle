@@ -16,17 +16,25 @@ set(mz_source_dir ${MUZZLE_ROOT}/src)
 set(mz_internal_src
 ${mz_source_dir}/internal/core.callbacks.internal.c
 ${mz_source_dir}/internal/core.default_shaders.internal.c
+${mz_source_dir}/internal/globals.internal.c
 )
 
-set(mz_source
+set(mz_core_src
 ${mz_source_dir}/Applet.c
 ${mz_source_dir}/Drawing.c
 ${mz_source_dir}/Error.c
 ${mz_source_dir}/Batch.c
 ${mz_source_dir}/Shader.c
-${mz_source_dir}/Memory.c
 ${mz_source_dir}/CallbackHook.c
+)
+
+set(mz_shapes_src
+${mz_source_dir}/Rectangle.c)
+
+set(mz_source
+${mz_core_src}
 ${mz_internal_src}
+${mz_shapes_src}
 ${MUZZLE_LIB_FOLDER}/glad/src/glad.c
 )
 

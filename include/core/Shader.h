@@ -4,6 +4,7 @@
 #include "../backend.h"
 #include "Error.h"
 #include "vector.h"
+#include "matrix.h"
 
 enum _mz_shader_type
 {
@@ -28,6 +29,8 @@ MZ_API void upload_uniform_float(shader_program program, const char* uniform, fl
 MZ_API void upload_uniform_vec2(shader_program program, const char* uniform, vec2 value);
 MZ_API void upload_uniform_vec3(shader_program program, const char* uniform, vec3 value);
 MZ_API void upload_uniform_vec4(shader_program program, const char* uniform, vec4 value);
+MZ_API void upload_uniform_mat3(shader_program program, const char* uniform, mat3 value);
+MZ_API void upload_uniform_mat4(shader_program program, const char* uniform, mat4 value);
 // TODO: Implement Matrix uploading
 
 // Unload shader and set shader to 0

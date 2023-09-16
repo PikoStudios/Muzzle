@@ -21,4 +21,8 @@
 #include "core/CallbackHook.h"
 #endif
 
+#ifndef MUZZLE_EXCLUDE_SHAPES
+#include "shapes/Rectangle.h"
+#endif
+
 #endif // MUZZLE_MUZZLE_H

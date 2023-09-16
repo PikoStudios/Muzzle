@@ -135,6 +135,20 @@ void upload_uniform_vec4(shader_program program, const char* uniform, vec4 value
 	glUniform4f(loc, value.x, value.y, value.z, value.w);
 }
 
+void upload_uniform_mat3(shader_program program, const char* uniform, mat3 value)
+{
+	GLuint loc = glGetUniformLocation(program, uniform);
+	glUseProgram(program);
+	glUniformMatrix3fv(loc, 1, MUZZLE_FALSE, value);
+}
+
+void upload_uniform_mat4(shader_program program, const char* uniform, mat4 value)
+{
+	GLuint loc = glGetUniformLocation(program, uniform);
+	glUseProgram(program);
+	glUniformMatrix4fv(loc, 1, MUZZLE_FALSE, value);
+}
+
 void unload_shader(shader* shader)
 {
 	glDeleteShader(*shader);

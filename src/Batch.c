@@ -1,5 +1,11 @@
 #include "core/Batch.h"
 
+#define MATRIX4X4( \
+	x11,x12,x13,x14, \
+	x21,x22,x23,x24, \
+	x31,x32,x33,x34, \
+	x41,x42,x43,x44  ) {x11,x12,x13,x14,x21,x22,x23,x24,x31,x32,x33,x34,x41,x42,x43,x44}
+
 batch load_batch(shader_program quad_shader)
 {
 	batch buffer;
@@ -154,13 +160,20 @@ void end_batch(batch* batch)
 	if (batch->quad_count > 0)
 	{
 		glBindVertexArray(batch->quad_buffers[0]);
-		// TODO: maybe set size to sizeof(struct _mz_quad_vertex) * 4 * batch->quad_count
-		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(struct _mz_quad_vertex), batch->quad_vertices);
+			mat4 projection = MATRIX4X4(
+				1,1,1,1,
+				1,1,1,1,
+				1,1,1,1,
+				1,1,1,1);
 		
-		glUseProgram(batch->quad_shader_program);
-		glDrawElements(GL_TRIANGLES, batch->quad_count * 6, GL_UNSIGNED_INT, 0);
-		glUseProgram(0);
+			//upload_uniform_mat4(batch->quad_shader_program, "u_ViewProjectionMatrix", projection);
+			glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(struct _mz_quad_vertex) * batch->quad_count, batch->quad_vertices);
 		
+			glUseProgram(batch->quad_shader_program);
+				GLuint loc = glGetUniformLocation(batch->quad_shader_program, "u_ViewProjectionMatrix");
+				glUniformMatrix4fv(loc, 1, MUZZLE_FALSE, projection);
+				glDrawElements(GL_TRIANGLES, batch->quad_count * 6, GL_UNSIGNED_INT, 0);
+			glUseProgram(0);
 		glBindVertexArray(0);
 	}
 }
