@@ -1,11 +1,12 @@
 #include "shapes/Rectangle.h"
 #include "internal/globals.internal.h"
 
-#define DEFINE_QUAD_VERTEX(x, y, nt, tx, ty, tid) \
+#define DEFINE_QUAD_VERTEX(x, y, nt, tx, ty, tid, tf) \
 active->quad_vertex_ptr->position = (vec2){x,y}; \
 active->quad_vertex_ptr->tint = nt; \
 active->quad_vertex_ptr->texture_coordinate = (vec2){tx,ty}; \
 active->quad_vertex_ptr->texture_id = tid; \
+active->quad_vertex_ptr->tiling_factor = tf;\
 active->quad_vertex_ptr++
 
 
@@ -27,7 +28,8 @@ void draw_rectangle_rec(rectangle rec, tint color_drawn)
         rec.x + rec.width, rec.y + rec.height, /* Position */
         normalized_tint, /* Normalized Tint */
         0.0f, 0.0f, /* Texture Coordinate */
-        0.0f /* Texture ID*/
+        0.0f, /* Texture ID*/
+        1.0f /* Tiling Factor */
     );
 
     // Vertex 2
@@ -35,7 +37,8 @@ void draw_rectangle_rec(rectangle rec, tint color_drawn)
         rec.x + rec.width, rec.y, /* Position */
         normalized_tint, /* Normalized Tint */
         1.0f, 0.0f, /* Texture Coordinate */
-        0.0f /* Texture ID*/
+        0.0f, /* Texture ID*/
+        1.0f /* Tiling Factor */
     );
 
     // Vertex 3
@@ -43,15 +46,17 @@ void draw_rectangle_rec(rectangle rec, tint color_drawn)
         rec.x, rec.y, /* Position */
         normalized_tint, /* Normalized Tint */
         1.0f, 1.0f, /* Texture Coordinate */
-        0.0f /* Texture ID */
+        0.0f, /* Texture ID */
+        1.0f /* Tiling Factor */
     );
 
     // Vertex 4
     DEFINE_QUAD_VERTEX(
-        rec.x, rec.y + rec.width, /* Position */
+        rec.x, rec.y + rec.height, /* Position */
         normalized_tint, /* Normalized Tint */
         0.0f, 1.0f, /* Texture Coordinate */
-        0.0f /* Texture ID */
+        0.0f, /* Texture ID */
+        1.0f /* Tiling Factor */
     );
 }
 

@@ -1,11 +1,5 @@
 #include "core/Batch.h"
 
-#define MATRIX4X4( \
-	x11,x12,x13,x14, \
-	x21,x22,x23,x24, \
-	x31,x32,x33,x34, \
-	x41,x42,x43,x44  ) {x11,x12,x13,x14,x21,x22,x23,x24,x31,x32,x33,x34,x41,x42,x43,x44}
-
 batch load_batch(shader_program quad_shader)
 {
 	batch buffer;
@@ -66,20 +60,19 @@ batch load_batch(shader_program quad_shader)
 	// not best practice to have 48 kilobytes of data on stack
 	uint32_t* quad_indices = MZ_CALLOC(6 * MUZZLE_BATCH_QUAD_MAX, sizeof(uint32_t));
 	
-	for (int i = 0; i < MUZZLE_BATCH_QUAD_MAX; i++)
+	for (int i = 0; i < MUZZLE_BATCH_QUAD_MAX; i += 6)
 	{
-		int index = 6 * i;
 		int offset = 4 * i;
 		
 		// Triangle 1
-		quad_indices[index + 0] = offset + 3;
-		quad_indices[index + 1] = offset + 2;
-		quad_indices[index + 2] = offset + 0;
+		quad_indices[i + 0] = offset + 3;
+		quad_indices[i + 1] = offset + 2;
+		quad_indices[i + 2] = offset + 0;
 		
 		// Triangle 2
-		quad_indices[index + 3] = offset + 0;
-		quad_indices[index + 4] = offset + 2;
-		quad_indices[index + 5] = offset + 1;
+		quad_indices[i + 3] = offset + 0;
+		quad_indices[i + 4] = offset + 2;
+		quad_indices[i + 5] = offset + 1;
 	}
 	
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *ebo);
@@ -90,7 +83,7 @@ batch load_batch(shader_program quad_shader)
 	glEnableVertexArrayAttrib(*vao, 0);
 	glVertexAttribPointer(
 		/* index */ 		0,
-		/* size */ 			3,
+		/* size */ 			2,
 		/* type */ 			GL_FLOAT,
 		/* normalized */ 	GL_TRUE,
 		/* stride */ 		sizeof(struct _mz_quad_vertex),
@@ -159,21 +152,28 @@ void end_batch(batch* batch)
 {
 	if (batch->quad_count > 0)
 	{
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, batch->quad_buffers[2]);
 		glBindVertexArray(batch->quad_buffers[0]);
-			mat4 projection = MATRIX4X4(
-				1,1,1,1,
-				1,1,1,1,
-				1,1,1,1,
-				1,1,1,1);
+			mat4 projection = {
+				1, 1, 1, 1,
+				1, 1, 1, 1,
+				1, 1, 1, 1,
+				1, 1, 1, 1
+			};
 		
 			//upload_uniform_mat4(batch->quad_shader_program, "u_ViewProjectionMatrix", projection);
-			glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(struct _mz_quad_vertex) * batch->quad_count, batch->quad_vertices);
+			glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(struct _mz_quad_vertex) * (batch->quad_count * 4), batch->quad_vertices);
 		
 			glUseProgram(batch->quad_shader_program);
 				GLuint loc = glGetUniformLocation(batch->quad_shader_program, "u_ViewProjectionMatrix");
 				glUniformMatrix4fv(loc, 1, MUZZLE_FALSE, projection);
+		
+				loc = glGetUniformLocation(batch->quad_shader_program, "u_Textures");
+				glUniform1iv(loc, 32, (GLint*)(batch->textures));
+		
 				glDrawElements(GL_TRIANGLES, batch->quad_count * 6, GL_UNSIGNED_INT, 0);
 			glUseProgram(0);
 		glBindVertexArray(0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 }

@@ -9,7 +9,7 @@ void OnAppletUpdate(Applet* applet)
 	{
 		begin_drawing(applet);
 			clear_screen(GRAY);
-			draw_rectangle(300.f, 100.f, 50.f, 50.f, WHITE);
+			draw_rectangle(300.f, 300.f, 50.f, 50.f, WHITE);
 		end_drawing(applet);
 	}
 }

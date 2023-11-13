@@ -24,5 +24,6 @@ void main()
     outputData.textureId = a_TextureId;
     outputData.tilingFactor = a_TilingFactor;
     
-    gl_Position = u_ViewProjectionMatrix * vec4(a_Position, 1.0, 1.0);
+    vec4 position = vec4(a_Position, 0.0, 1.0);
+    gl_Position = position;
 }
