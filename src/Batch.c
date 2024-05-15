@@ -155,10 +155,10 @@ void end_batch(batch* batch)
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, batch->quad_buffers[2]);
 		glBindVertexArray(batch->quad_buffers[0]);
 			mat4 projection = {
-				1, 1, 1, 1,
-				1, 1, 1, 1,
-				1, 1, 1, 1,
-				1, 1, 1, 1
+				1,0,0,0,
+				0,1,0,0,
+				0,0,1,0,
+				0,0,0,1
 			};
 		
 			//upload_uniform_mat4(batch->quad_shader_program, "u_ViewProjectionMatrix", projection);
