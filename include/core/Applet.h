@@ -1,36 +1,28 @@
 #ifndef MUZZLE_CORE_APPLET_H
 #define MUZZLE_CORE_APPLET_H
 
-#include "../backend.h"
-#include "Shader.h"
-#include "Batch.h"
+#include "backend.h"
 
-struct _mz_applet
+typedef struct mz_applet
 {
-	batch default_batch;
-	batch* active_batch;
-	shader default_vertex;
-	shader default_fragment;
-	shader_program default_shader_program;
+	GLFWwindow* window;
 	int width;
 	int height;
-	char* window_title;
-	mz_window window_handle;
-};
+	double delta_time;
+	mz_boolean delta_time_flag;
+} mz_applet;
 
-typedef struct _mz_applet Applet;
+typedef enum mz_applet_flags
+{
+	APPLET_FLAG_RESIZBALE			= 1 << 0,
+	APPLET_FLAG_VSYNC				= 1 << 1,
+	APPLET_FLAG_TRACK_DELTA_TIME	= 1 << 2,
+} mz_applet_flags;
 
-#define MZ_APPLET_RESIZABLE 	0x1
-#define MZ_APPLET_VSYNC			0x2
+typedef void (*mz_applet_main_dispatch_fn)(mz_applet*);
 
-MZ_API mz_boolean keep_applet(Applet* self);
-MZ_API mz_boolean keep_applet_delta(Applet* self, double* delta);
-MZ_API mz_boolean keep_applet_delta_f(Applet* self, float* delta);
-MZ_API void OnAppletUpdate(Applet*);
-
-MZ_API Applet InitializeApplet(int width, int height, const char* window_title, uint32_t flags);
-MZ_API void StartApplet(Applet* self);
-
-MZ_API void QuitMuzzle(Applet* self);
+MZ_API mz_applet mz_initialize_applet(const char* window_title, int width, int height, mz_applet_flags flags);
+MZ_API void mz_start_applet(mz_applet* applet, mz_applet_main_dispatch_fn main_dispatch);
+MZ_API mz_boolean mz_keep_applet(mz_applet* applet);
 
 #endif // MUZZLE_CORE_APPLET_H

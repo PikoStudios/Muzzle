@@ -1,66 +1,43 @@
 #ifndef MUZZLE_BACKEND_H
 #define MUZZLE_BACKEND_H
 
-#if defined(__EMSCRIPTEN__)
+#include <stdint.h>
+
+#include "core/memory.h"
+
+#ifdef __EMSCRIPTEN__
 	#define GLFW_INCLUDE_ES2
 #endif
 
-#ifndef MUZZLE_STRING_FMT_BUFFER_SIZE
-	#define MUZZLE_STRING_FMT_BUFFER_SIZE 1024
-#endif
+typedef uint8_t mz_boolean;
+#define MZ_BOOLEAN_CAST(x) (((x)) ? 1 : 0)
 
-#ifndef MUZZLE_BATCH_DEFAULT_MAX
-	#define MUZZLE_BATCH_DEFAULT_MAX 2000
-#endif
+#define MUZZLE_FALSE 0
+#define MUZZLE_TRUE 1
 
-#ifndef MUZZLE_BATCH_QUAD_MAX
-	#define MUZZLE_BATCH_QUAD_MAX MUZZLE_BATCH_DEFAULT_MAX
-#endif
-
-#ifdef MUZZLE_EXCLUDE_STDLIB
-	#define MZ_MEMORY_EXCLUDE_STDLIB
-#endif
-
-#include "core/Memory.h"
-
-#define MUZZLE_FALSE (0)
-#define MUZZLE_TRUE (1)
-typedef unsigned char mz_boolean;
-
-#ifdef MZ_INCLUDE_KAZMATH
-	#include "../deps/kazmath/kazmath.h"
+#ifndef MUZZLE_GLAD_INCLUDE_PATH
+	#define MUZZLE_GLAD_INCLUDE_PATH "../deps/glad/include/glad/glad.h"
 #endif
 
 #define GLAD_GL_IMPLEMENTION
-#include "../deps/glad/include/glad/glad.h"
+#include MUZZLE_GLAD_INCLUDE_PATH
 
-#ifdef MUZZLE_USE_GLOBAL_DEPS
-	#include <GLFW/glfw3.h>
-#else
-	#include "../deps/glfw/include/GLFW/glfw3.h"
+#ifndef MUZZLE_GLFW_INCLUDE_PATH
+	#define MUZZLE_GLFW_INCLUDE_PATH "../deps/glfw/include/GLFW/glfw3.h"
 #endif
 
-#ifndef MUZZLE_NO_ASSERTIONS
-	#define MZ_ASSERT(condition, details) do \
-	{ \
-	if ((condition) == 0) \
-	{\
-	fprintf(stderr, "Assertion '%s' failed in function '%s', details: %s", #condition, __func__, details); \
-	exit(-1); \
-	} } while (0)
-#else
-	#define MZ_ASSERT(condition, details) // Removes assertion from compiled code for optimization
-#endif
+#include MUZZLE_GLFW_INCLUDE_PATH
 
 #ifdef _WIN32
-	// Required for MultiBytesToWideChar
 	#define WIN32_LEAN_AND_MEAN
-	#include "windows.h"
+	#include <windows.h>
 
-	#ifdef BUILD_LIBTYPE_SHARED
+	#ifdef BUILD_LIBYPE_SHARED
 		#define MZ_API __declspec(dllexport)
-	#elif defined(USE_LIBTYPE_SHARED)
-		#define MZ_API __declspec(dllimport)
+	#else
+		#ifdef USE_LIBTYPE_SHARED
+			#define MZ_API __declspec(dllimport)
+		#endif
 	#endif
 #endif
 
@@ -68,16 +45,40 @@ typedef unsigned char mz_boolean;
 	#define MZ_API
 #endif
 
-#ifdef __cplusplus
-	#define MZ_LITERAL(x) x
-#else
+#ifndef __cplusplus
 	#define MZ_LITERAL(x) (x)
+#else
+	#define MZ_LITERAL(x) x
 #endif
 
-#ifndef MUZZLE_DEFAULT_EXIT_KEY
-	#define MUZZLE_DEFAULT_EXIT_KEY GLFW_KEY_ESCAPE
+#ifdef MUZZLE_DEBUG_BUILD
+	#ifdef _WIN32
+		#include <intrin.h>
+		#define MZ_TRIGGER_BREAKPOINT() __debugbreak()
+	#else
+		#include <signal.h>
+		#define MZ_TRIGGER_BREAKPOINT() raise(SIGTRAP)
+	#endif
+	
+	#define MZ_ASSERT_DETAILED(expression, error_msg) if (!(expression)) { log_status(STATUS_FATAL_ERROR, "Assertion " #expression " failed: " #error_msg); exit(-1); MZ_TRIGGER_BREAKPOINT(); }
+#else
+	// No effect without MUZZLE_DEBUG_BUILD defined
+	#define MZ_TRIGGER_BREAKPOINT()
+	
+	// No effect without MUZZLE_DEBUG_BUILD defined
+	#define MZ_ASSERT_DETAILED(expression, error_msg)
 #endif
 
-typedef GLFWwindow* mz_window;
+#ifndef MUZZLE_EXIT_KEY
+	#define MUZZLE_EXIT_KEY GLFW_KEY_ESCAPE
+#endif
 
-#endif //MUZZLE_BACKEND_H
+#ifndef MUZZLE_OPENGL_VERSION_MAJOR
+	#define MUZZLE_OPENGL_VERSION_MAJOR 4
+#endif
+
+#ifndef MUZZLE_OPENGL_VERSION_MINOR
+	#define MUZZLE_OPENGL_VERSION_MINOR 6
+#endif
+
+#endif // MUZZLE_BACKEND_H

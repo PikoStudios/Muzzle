@@ -1,0 +1,82 @@
+#include "core/applet.h"
+#include "core/logging.h"
+#include "internals/glfw_error_helper.h"
+
+mz_applet mz_initialize_applet(const char* window_title, int width, int height, mz_applet_flags flags)
+{
+	mz_applet applet;
+	applet.width = width;
+	applet.height = height;
+
+	if (!glfwInit())
+	{
+		const char* error_description = internals_get_error_description();
+		mz_log_status_formatted(LOG_STATUS_FATAL_ERROR, "GLFW3 failed to initialize:\n\t%s", error_description);
+	}
+
+	mz_log_status(LOG_STATUS_SUCCESS, "Successfully initialized GLFW3");
+
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, MUZZLE_OPENGL_VERSION_MAJOR);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, MUZZLE_OPENGL_VERSION_MINOR);
+
+	glfwSetErrorCallback(NULL); // TODO: Create error callbacks
+
+	applet.window = glfwCreateWindow(width, height, window_title, NULL, NULL);
+
+	if (applet.window == NULL)
+	{
+		const char* error_description = internals_get_error_description();
+		mz_log_status_formatted(LOG_STATUS_FATAL_ERROR, "GLFW3 Window failed to initialized: \n\t%s", error_description);
+	}
+
+	mz_log_status(LOG_STATUS_SUCCESS, "Successfully created window");
+
+	// TODO: Create on framebuffer size update callback and on key press callback
+	glfwMakeContextCurrent(applet.window);
+
+	if (!gladLoadGLLoader((GLADloadproc)(glfwGetProcAddress)))
+	{
+		glfwDestroyWindow(applet.window);
+		mz_log_status_formatted(LOG_STATUS_FATAL_ERROR, "GLAD failed to initialize");
+	}
+
+	glfwSwapInterval(0);
+	glfwSetWindowAttrib(applet.window, GLFW_RESIZABLE, (flags & APPLET_FLAG_RESIZBALE));
+
+	if (flags & APPLET_FLAG_VSYNC)
+	{
+		mz_log_status(LOG_STATUS_INFO, "Enabled VSync");
+		glfwSwapInterval(1);
+	}
+
+	applet.delta_time = 0.0f;
+	applet.delta_time_flag = MZ_BOOLEAN_CAST(flags & APPLET_FLAG_TRACK_DELTA_TIME);
+
+	glfwSetWindowPos(applet.window, 230, 230); // TODO: needed?
+
+	glViewport(0, 0, width, height);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	return applet;
+}
+
+void mz_start_applet(mz_applet* applet, mz_applet_main_dispatch_fn main_dispatch)
+{
+	glfwSetWindowUserPointer(applet->window, applet);
+	main_dispatch(applet);
+}
+
+mz_boolean mz_keep_applet(mz_applet* applet)
+{
+	if (applet->delta_time_flag)
+	{
+		applet->delta_time = glfwGetTime();
+		glfwSetTime(0);
+	}
+
+	return !glfwWindowShouldClose(applet->window);
+}

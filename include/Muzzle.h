@@ -1,28 +1,7 @@
-#ifndef MUZZLE_MUZZLE_H
-#define MUZZLE_MUZZLE_H
+#ifndef MUZZLE_H
+#define MUZZLE_H
 
-#include "backend.h"
+#include "core/logging.h"
+#include "core/applet.h"
 
-#ifndef MUZZLE_EXCLUDE_CORE
-#include "core/Applet.h"
-#include "core/Error.h"
-#include "core/Batch.h"
-#include "core/tint.h"
-#include "core/Shader.h"
-#include "core/vector.h"
-#include "core/Drawing.h"
-#endif
-
-#ifdef MUZZLE_EXCLUDE_CORE
-#warning "Excluding core will break Muzzle if proper subsitutes are not in place"
-#endif
-
-#ifdef MUZZLE_INCLUDE_CALLBACK_HOOK_API
-#include "core/CallbackHook.h"
-#endif
-
-#ifndef MUZZLE_EXCLUDE_SHAPES
-#include "shapes/Rectangle.h"
-#endif
-
-#endif // MUZZLE_MUZZLE_H
+#endif // MUZZLE_H
