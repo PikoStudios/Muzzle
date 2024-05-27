@@ -2,12 +2,14 @@
 #define MUZZLE_CORE_APPLET_H
 
 #include "backend.h"
+#include "core/quad_renderer.h"
 
 typedef struct mz_applet
 {
 	GLFWwindow* window;
 	int width;
 	int height;
+	mz_quad_renderer quad_renderer;
 	double delta_time;
 	mz_boolean delta_time_flag;
 } mz_applet;
