@@ -1,0 +1,41 @@
+#include "core/drawing.h"
+#include "core/quad_renderer.h"
+#define ONE_OVER_255 0.0039215686
+
+void mz_begin_drawing(mz_applet* applet)
+{
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void mz_end_drawing(mz_applet* applet)
+{
+	glfwSwapBuffers(applet->window);
+	glfwPollEvents();
+	
+	if (applet->quad_renderer.quad_count > 0)
+	{
+		mz_quad_renderer_flush(&applet->quad_renderer);
+	}
+
+	glFlush(); // TODO: needed?
+}
+
+void mz_clear_screen(mz_tint tint)
+{
+#ifndef MUZZLE_PREFER_MULTIPLICATION
+	glClearColor(
+		(float)(tint.r) / 255,
+		(float)(tint.g) / 255,
+		(float)(tint.b) / 255,
+		(float)(tint.a) / 255
+	);
+#else
+#warning "Multiplication over division may cause small imperfects due to size of constant"
+	glClearColor(
+		(float)(tint.r) * ONE_OVER_255,
+		(float)(tint.g) * ONE_OVER_255,
+		(float)(tint.b) * ONE_OVER_255,
+		(float)(tint.a) * ONE_OVER_255
+	);
+#endif
+}

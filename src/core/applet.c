@@ -1,5 +1,6 @@
 #include "core/applet.h"
 #include "core/logging.h"
+#include "core/quad_renderer.h"
 #include "internals/glfw_error_helper.h"
 
 mz_applet mz_initialize_applet(const char* window_title, int width, int height, mz_applet_flags flags)
@@ -61,6 +62,8 @@ mz_applet mz_initialize_applet(const char* window_title, int width, int height, 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+	applet.quad_renderer = mz_quad_renderer_initialize(100); // TODO: Macro instead of hard coded value
+
 	return applet;
 }
 
@@ -79,4 +82,14 @@ mz_boolean mz_keep_applet(mz_applet* applet)
 	}
 
 	return !glfwWindowShouldClose(applet->window);
+}
+
+void mz_terminate_applet(mz_applet* applet)
+{
+	mz_log_status(LOG_STATUS_INFO, "Cleaning up resources");
+	mz_quad_renderer_destroy(&applet->quad_renderer);
+	
+	mz_log_status(LOG_STATUS_INFO, "Closing Window");
+	glfwDestroyWindow(applet->window);
+	glfwTerminate();
 }

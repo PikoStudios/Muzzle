@@ -1,5 +1,6 @@
 #include "internals/file_helper.h"
 #include "core/logging.h"
+#include <stdio.h>
 
 char* internals_read_file(FILE** file, const char* filepath, const char* msg_on_file_error, const char* msg_on_malloc_error)
 {

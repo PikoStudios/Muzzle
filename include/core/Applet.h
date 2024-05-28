@@ -26,5 +26,6 @@ typedef void (*mz_applet_main_dispatch_fn)(mz_applet*);
 MZ_API mz_applet mz_initialize_applet(const char* window_title, int width, int height, mz_applet_flags flags);
 MZ_API void mz_start_applet(mz_applet* applet, mz_applet_main_dispatch_fn main_dispatch);
 MZ_API mz_boolean mz_keep_applet(mz_applet* applet);
+MZ_API void mz_terminate_applet(mz_applet* applet);
 
 #endif // MUZZLE_CORE_APPLET_H

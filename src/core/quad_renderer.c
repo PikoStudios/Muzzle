@@ -8,13 +8,12 @@ mz_quad_renderer mz_quad_renderer_initialize(uint32_t max_quads)
 	quad_renderer.vertices = MZ_CALLOC(max_quads * 4, sizeof(mz_quad_vertex));
 	quad_renderer.max_quads = max_quads;
 	quad_renderer.quad_count = 0;
+	quad_renderer.vertex_index = 0;
 
 	if (quad_renderer.vertices == NULL)
 	{
 		mz_log_status(LOG_STATUS_FATAL_ERROR, "Failed to allocate memory [quad_renderer::mz_quad_renderer_initialize]");
 	}
-
-	quad_renderer.vertex_ptr = quad_renderer.vertices;
 
 	glGenBuffers(2, quad_renderer.buffers);
 
@@ -80,6 +79,26 @@ void mz_quad_renderer_flush(mz_quad_renderer* quad_renderer)
 
 	glUseProgram(quad_renderer->shader_id);
 	glDrawElements(GL_TRIANGLES, quad_renderer->quad_count * 6, GL_UNSIGNED_INT, NULL);
+
+	quad_renderer->quad_count = 0;
+	quad_renderer->vertex_index = 0;
+}
+
+mz_boolean mz_quad_renderer_push_quad(mz_quad_renderer* quad_renderer, mz_quad_vertex v1, mz_quad_vertex v2, mz_quad_vertex v3, mz_quad_vertex v4)
+{
+	if (++quad_renderer->quad_count > quad_renderer->max_quads)
+	{
+		quad_renderer->quad_count--;
+		return MUZZLE_FALSE;
+	}
+
+	quad_renderer->vertices[quad_renderer->vertex_index + 0] = v1;
+	quad_renderer->vertices[quad_renderer->vertex_index + 1] = v2;
+	quad_renderer->vertices[quad_renderer->vertex_index + 2] = v3;
+	quad_renderer->vertices[quad_renderer->vertex_index + 3] = v4;
+
+	quad_renderer->vertex_index += 4;
+	return MUZZLE_TRUE;
 }
 
 void mz_quad_renderer_destroy(mz_quad_renderer* quad_renderer)

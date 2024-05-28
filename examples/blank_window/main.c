@@ -1,23 +1,30 @@
+#include "core/applet.h"
+#include "core/drawing.h"
+#include "core/tint.h"
 #include <Muzzle.h>
 #include <stdio.h>
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720
 
-void OnAppletUpdate(Applet* applet)
+void applet_loop(mz_applet* applet)
 {
-	while (keep_applet(applet))
+	while (mz_keep_applet(applet))
 	{
-		begin_drawing(applet);
-			clear_screen(GRAY);
-		end_drawing(applet);
+#ifndef EXCLUDE_FRAMETIME
+		printf("FPS: %f (%f ms)\r", 1/applet->delta_time, applet->delta_time * 1000);
+		fflush(stdout);
+#endif
+		mz_begin_drawing(applet);
+			mz_clear_screen(TINT_GRAY);
+		mz_end_drawing(applet);
 	}
 }
 
 int main(void)
 {
-	Applet applet = InitializeApplet(SCREEN_WIDTH, SCREEN_HEIGHT, "Muzzle [CORE] - Blank Window", MZ_APPLET_VSYNC | MZ_APPLET_RESIZABLE);
-	StartApplet(&applet);
+	mz_applet applet = mz_initialize_applet("Muzzle [CORE] - Blank Window", SCREEN_WIDTH, SCREEN_HEIGHT, APPLET_FLAG_RESIZBALE | APPLET_FLAG_TRACK_DELTA_TIME);
+	mz_start_applet(&applet, applet_loop);
 	
-	QuitMuzzle(&applet);
+	mz_terminate_applet(&applet);
 	return 0;
 }
