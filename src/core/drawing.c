@@ -4,20 +4,19 @@
 
 void mz_begin_drawing(mz_applet* applet)
 {
+	glfwSwapBuffers(applet->window);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void mz_end_drawing(mz_applet* applet)
 {
-	glfwSwapBuffers(applet->window);
-	glfwPollEvents();
-	
 	if (applet->quad_renderer.quad_count > 0)
 	{
-		mz_quad_renderer_flush(&applet->quad_renderer);
+		mz_quad_renderer_flush(&applet->quad_renderer, applet->width, applet->height);
 	}
 
 	glFlush(); // TODO: needed?
+	glfwPollEvents();
 }
 
 void mz_clear_screen(mz_tint tint)

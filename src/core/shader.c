@@ -4,7 +4,7 @@
 #include "internals/todo.h"
 #include <stdio.h>
 
-void handle_compile_status(const char* msg, GLuint id)
+static void handle_compile_status(const char* msg, GLuint id)
 {
 	GLint s = 0;
 	glGetShaderiv(id, GL_COMPILE_STATUS, &s);

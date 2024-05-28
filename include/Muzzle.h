@@ -6,5 +6,6 @@
 #include "core/shader.h"
 #include "core/vector.h"
 #include "core/drawing.h"
+#include "primitives/rectangle.h"
 
 #endif // MUZZLE_H

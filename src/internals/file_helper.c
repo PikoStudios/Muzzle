@@ -4,9 +4,13 @@
 
 char* internals_read_file(FILE** file, const char* filepath, const char* msg_on_file_error, const char* msg_on_malloc_error)
 {
+#ifdef _MSC_VER
 	fopen_s(file, filepath, "r");
+#else
+	*file = fopen(filepath, "r");
+#endif
 
-	if (file == NULL)
+	if (*file == NULL)
 	{
 		// TODO: give reason
 		mz_log_status(LOG_STATUS_FATAL_ERROR, msg_on_file_error);

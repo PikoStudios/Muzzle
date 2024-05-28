@@ -1,6 +1,10 @@
 #include "core/quad_renderer.h"
 #include "core/logging.h"
 
+#define VAO 0
+#define VBO 1
+#define EBO 2
+
 mz_quad_renderer mz_quad_renderer_initialize(uint32_t max_quads)
 {
 	mz_quad_renderer quad_renderer = (mz_quad_renderer){0};
@@ -15,39 +19,33 @@ mz_quad_renderer mz_quad_renderer_initialize(uint32_t max_quads)
 		mz_log_status(LOG_STATUS_FATAL_ERROR, "Failed to allocate memory [quad_renderer::mz_quad_renderer_initialize]");
 	}
 
-	glGenBuffers(2, quad_renderer.buffers);
+	glGenBuffers(2, &quad_renderer.buffers[VBO]);
 
-	quad_renderer.vao = &quad_renderer.buffers[0];
-	quad_renderer.vbo = &quad_renderer.buffers[1];
-	quad_renderer.ebo = &quad_renderer.buffers[2];
-
-	glGenVertexArrays(1, quad_renderer.vao);
-	glBindVertexArray(*quad_renderer.vao);
-	glBindBuffer(GL_ARRAY_BUFFER, *quad_renderer.vbo);
+	glGenVertexArrays(1, &quad_renderer.buffers[VAO]);
+	glBindVertexArray(quad_renderer.buffers[VAO]);
+	glBindBuffer(GL_ARRAY_BUFFER, quad_renderer.buffers[VBO]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(mz_quad_vertex) * (max_quads * 4), NULL, GL_DYNAMIC_DRAW);
 
 	quad_renderer.indices = MZ_CALLOC(max_quads * 6, sizeof(uint32_t)); // TODO: Do we need to keep these indices?
 	// TODO: ^ consider GLuint because we dont know what unsigned int/GL_UNSIGNED_INT will be
 
-	for (int i = 0; i < max_quads; i += 6)
+	for (int i = 0, offset = 0; i < max_quads; i += 6, offset += 4)
 	{
-		int offset = 4 * i;
-
 		// Triangle 1
-		quad_renderer.indices[i + 0] = offset + 3;
-		quad_renderer.indices[i + 1] = offset + 2;
-		quad_renderer.indices[i + 2] = offset + 0;
+		quad_renderer.indices[i + 0] = offset + 0;
+		quad_renderer.indices[i + 1] = offset + 3;
+		quad_renderer.indices[i + 2] = offset + 2;
 
 		// Triangle 2
 		quad_renderer.indices[i + 3] = offset + 0;
-		quad_renderer.indices[i + 4] = offset + 2;
-		quad_renderer.indices[i + 5] = offset + 1;
+		quad_renderer.indices[i + 4] = offset + 1;
+		quad_renderer.indices[i + 5] = offset + 3;
 	}
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *quad_renderer.ebo);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, quad_renderer.buffers[EBO]);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * max_quads, quad_renderer.indices, GL_STATIC_DRAW);
 
-	glEnableVertexArrayAttrib(*quad_renderer.vao, 0);
+	glEnableVertexArrayAttrib(quad_renderer.buffers[VAO], 0);
 	glVertexAttribPointer(
 		/* index */ 	 0,
 		/* size */ 		 2, // TODO: sizeof(vec2)?
@@ -57,7 +55,7 @@ mz_quad_renderer mz_quad_renderer_initialize(uint32_t max_quads)
 		/* offset */	 (GLvoid*)(offsetof(mz_quad_vertex, position))
 	);
 
-	glEnableVertexArrayAttrib(*quad_renderer.vao, 1);
+	glEnableVertexArrayAttrib(quad_renderer.buffers[VAO], 1);
 	glVertexAttribPointer(
 		1,
 		4,
@@ -70,14 +68,18 @@ mz_quad_renderer mz_quad_renderer_initialize(uint32_t max_quads)
 	return quad_renderer;
 }
 
-void mz_quad_renderer_flush(mz_quad_renderer* quad_renderer)
+void mz_quad_renderer_flush(mz_quad_renderer* quad_renderer, float width, float height)
 {
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *quad_renderer->ebo);
-	glBindVertexArray(*quad_renderer->vao);
-
+	glUseProgram(quad_renderer->shader_id);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, quad_renderer->buffers[EBO]);
+	glBindBuffer(GL_ARRAY_BUFFER, quad_renderer->buffers[VBO]);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(mz_quad_vertex) * (quad_renderer->quad_count * 4), quad_renderer->vertices);
 
-	glUseProgram(quad_renderer->shader_id);
+	// TODO: store this in struct so we dont have to keep getting if not needed
+	GLint loc = glGetUniformLocation(quad_renderer->shader_id, "uViewportResolution");
+	glUniform2f(loc, width, height);
+	
+	glBindVertexArray(quad_renderer->buffers[VAO]);
 	glDrawElements(GL_TRIANGLES, quad_renderer->quad_count * 6, GL_UNSIGNED_INT, NULL);
 
 	quad_renderer->quad_count = 0;
@@ -103,8 +105,8 @@ mz_boolean mz_quad_renderer_push_quad(mz_quad_renderer* quad_renderer, mz_quad_v
 
 void mz_quad_renderer_destroy(mz_quad_renderer* quad_renderer)
 {
-	glDeleteVertexArrays(1, quad_renderer->vao);
-	glDeleteBuffers(2, &quad_renderer->buffers[1]);
+	glDeleteVertexArrays(1, &quad_renderer->buffers[VAO]);
+	glDeleteBuffers(2, &quad_renderer->buffers[VBO]);
 
 	MZ_FREE(quad_renderer->indices);
 	MZ_FREE(quad_renderer->vertices);

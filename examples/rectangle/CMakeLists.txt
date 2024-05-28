@@ -14,27 +14,27 @@ set(mz_source_dir ${MUZZLE_ROOT}/src)
 #https://stackoverflow.com/a/25077976/10415312
 
 set(mz_internal_src
-${mz_source_dir}/internal/core.callbacks.internal.c
-${mz_source_dir}/internal/core.default_shaders.internal.c
-${mz_source_dir}/internal/globals.internal.c
+${mz_source_dir}/internals/file_helper.c
+${mz_source_dir}/internals/glfw_error_helper.c
 )
 
 set(mz_core_src
-${mz_source_dir}/Applet.c
-${mz_source_dir}/Drawing.c
-${mz_source_dir}/Error.c
-${mz_source_dir}/Batch.c
-${mz_source_dir}/Shader.c
-${mz_source_dir}/CallbackHook.c
+${mz_source_dir}/core/applet.c
+${mz_source_dir}/core/drawing.c
+${mz_source_dir}/core/logging.c
+${mz_source_dir}/core/memory.c
+${mz_source_dir}/core/quad_renderer.c
+${mz_source_dir}/core/shader.c
 )
 
-set(mz_shapes_src
-${mz_source_dir}/Rectangle.c)
+set(mz_primitives_src
+${mz_source_dir}/primitives/rectangle.c
+)
 
 set(mz_source
-${mz_core_src}
 ${mz_internal_src}
-${mz_shapes_src}
+${mz_core_src}
+${mz_primitives_src}
 ${MUZZLE_LIB_FOLDER}/glad/src/glad.c
 )
 

@@ -1,7 +1,10 @@
 #include "core/applet.h"
 #include "core/logging.h"
 #include "core/quad_renderer.h"
+#include "core/shader.h"
 #include "internals/glfw_error_helper.h"
+#include "core/shaders/quad_renderer_default_vertex.glsl.h"
+#include "core/shaders/quad_renderer_default_fragment.glsl.h"
 
 mz_applet mz_initialize_applet(const char* window_title, int width, int height, mz_applet_flags flags)
 {
@@ -62,8 +65,11 @@ mz_applet mz_initialize_applet(const char* window_title, int width, int height, 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	applet.quad_renderer = mz_quad_renderer_initialize(100); // TODO: Macro instead of hard coded value
+	mz_shader default_quad_shader = mz_create_shader((char*)(quad_renderer_default_vertex_glsl), (char*)(quad_renderer_default_fragment_glsl), SHADER_TARGET_QUAD); 
 
+	applet.quad_renderer = mz_quad_renderer_initialize(100); // TODO: Macro instead of hard coded value
+	applet.quad_renderer.shader_id = default_quad_shader.pid;
+	
 	return applet;
 }
 

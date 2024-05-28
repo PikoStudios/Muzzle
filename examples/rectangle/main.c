@@ -1,24 +1,28 @@
+#include "core/applet.h"
+#include "core/tint.h"
 #include <Muzzle.h>
 #include <stdio.h>
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720
 
-void OnAppletUpdate(Applet* applet)
+void applet_loop(mz_applet* applet)
 {
-	while (keep_applet(applet))
+	while (mz_keep_applet(applet))
 	{
-		begin_drawing(applet);
-			clear_screen(GRAY);
-			draw_rectangle(300.f, 300.f, 50.f, 50.f, WHITE);
-		end_drawing(applet);
+		mz_begin_drawing(applet);
+			mz_clear_screen(TINT_GRAY);
+			mz_draw_rectangle(applet, 300.f, 300.f, 50.f, 50.f, TINT_BLUE);
+			mz_draw_rectangle(applet, 0.f, 0.f, 150.f, 150.f, TINT_YELLOW);
+			mz_draw_rectangle(applet, SCREEN_WIDTH - 300.f, SCREEN_HEIGHT - 400.f, 200.f, 350.f, TINT_ORANGE);
+		mz_end_drawing(applet);
 	}
 }
 
 int main(void)
 {
-	Applet applet = InitializeApplet(SCREEN_WIDTH, SCREEN_HEIGHT, "Muzzle [CORE] - Blank Window", MZ_APPLET_VSYNC | MZ_APPLET_RESIZABLE);
-	StartApplet(&applet);
-	
-	QuitMuzzle(&applet);
+	mz_applet applet = mz_initialize_applet("Muzzle [PRIMITIVES] - Rectangle", SCREEN_WIDTH, SCREEN_HEIGHT, APPLET_FLAG_VSYNC);
+	mz_start_applet(&applet, applet_loop);
+
+	mz_terminate_applet(&applet);
 	return 0;
 }
