@@ -6,7 +6,7 @@
 
 ![Discord](https://img.shields.io/discord/784899614410670090?color=%23AAA62C&label=PikoStudios%20Discord%20Server&style=flat-square)
 ***
-Muzzle is an open-source C99 game framework that is easy-to-use and lightweight, but still exposes lower-level APIs.
+Muzzle is an open-source C11 game framework that is easy-to-use and lightweight, but still exposes lower-level APIs.
 
 ## Example Window
 ```c
