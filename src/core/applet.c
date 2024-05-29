@@ -2,6 +2,7 @@
 #include "core/logging.h"
 #include "core/quad_renderer.h"
 #include "core/shader.h"
+#include "internals/glfw_callbacks.h"
 #include "internals/glfw_error_helper.h"
 #include "core/shaders/quad_renderer_default_vertex.glsl.h"
 #include "core/shaders/quad_renderer_default_fragment.glsl.h"
@@ -23,7 +24,7 @@ mz_applet mz_initialize_applet(const char* window_title, int width, int height, 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, MUZZLE_OPENGL_VERSION_MAJOR);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, MUZZLE_OPENGL_VERSION_MINOR);
 
-	glfwSetErrorCallback(NULL); // TODO: Create error callbacks
+	glfwSetErrorCallback(internals_glfw_callback_error);
 
 	applet.window = glfwCreateWindow(width, height, window_title, NULL, NULL);
 
@@ -35,7 +36,8 @@ mz_applet mz_initialize_applet(const char* window_title, int width, int height, 
 
 	mz_log_status(LOG_STATUS_SUCCESS, "Successfully created window");
 
-	// TODO: Create on framebuffer size update callback and on key press callback
+	glfwSetFramebufferSizeCallback(applet.window, internals_glfw_callback_window_resize);
+	glfwSetKeyCallback(applet.window, internals_glfw_callback_key);
 	glfwMakeContextCurrent(applet.window);
 
 	if (!gladLoadGLLoader((GLADloadproc)(glfwGetProcAddress)))

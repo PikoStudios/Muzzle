@@ -15,6 +15,7 @@ set(mz_source_dir ${MUZZLE_ROOT}/src)
 
 set(mz_internal_src
 ${mz_source_dir}/internals/file_helper.c
+${mz_source_dir}/internals/glfw_callbacks.c
 ${mz_source_dir}/internals/glfw_error_helper.c
 )
 
@@ -27,9 +28,14 @@ ${mz_source_dir}/core/quad_renderer.c
 ${mz_source_dir}/core/shader.c
 )
 
+set(mz_primitives_src
+${mz_source_dir}/primitives/rectangle.c
+)
+
 set(mz_source
 ${mz_internal_src}
 ${mz_core_src}
+${mz_primitives_src}
 ${MUZZLE_LIB_FOLDER}/glad/src/glad.c
 )
 

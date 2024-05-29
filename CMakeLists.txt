@@ -15,6 +15,7 @@ set(mz_source_dir ${MUZZLE_ROOT}/src)
 
 set(mz_internal_src
 ${mz_source_dir}/internals/file_helper.c
+${mz_source_dir}/internals/glfw_callbacks.c
 ${mz_source_dir}/internals/glfw_error_helper.c
 )
 

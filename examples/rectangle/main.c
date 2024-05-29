@@ -20,7 +20,7 @@ void applet_loop(mz_applet* applet)
 
 int main(void)
 {
-	mz_applet applet = mz_initialize_applet("Muzzle [PRIMITIVES] - Rectangle", SCREEN_WIDTH, SCREEN_HEIGHT, APPLET_FLAG_VSYNC);
+	mz_applet applet = mz_initialize_applet("Muzzle [PRIMITIVES] - Rectangle", SCREEN_WIDTH, SCREEN_HEIGHT, APPLET_FLAG_VSYNC | APPLET_FLAG_RESIZBALE);
 	mz_start_applet(&applet, applet_loop);
 
 	mz_terminate_applet(&applet);
