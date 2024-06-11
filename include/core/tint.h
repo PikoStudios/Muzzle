@@ -23,5 +23,6 @@ typedef struct mz_tint
 #define TINT_YELLOW     MZ_LITERAL(mz_tint){255,255,51,255}
 #define TINT_USAF_BLUE  MZ_LITERAL(mz_tint){0,48,143,255}
 #define TINT_BLACK      MZ_LITERAL(mz_tint){0,0,0,255}
+#define TINT_MIDNIGHT_BLUE MZ_LITERAL(mz_tint){0,12,25,255}
 
 #endif // MUZZLE_CORE_TINT_H

@@ -12,7 +12,7 @@ void mz_end_drawing(mz_applet* applet)
 {
 	if (applet->quad_renderer.quad_count > 0)
 	{
-		mz_quad_renderer_flush(&applet->quad_renderer, applet->width, applet->height);
+		mz_quad_renderer_flush(&applet->quad_renderer, applet->width, applet->height, &applet->render_order);
 	}
 
 	glFlush(); // TODO: needed?

@@ -7,5 +7,7 @@
 #include "core/vector.h"
 #include "core/drawing.h"
 #include "primitives/rectangle.h"
+#include "input/key.h"
+#include "input/mouse.h"
 
 #endif // MUZZLE_H

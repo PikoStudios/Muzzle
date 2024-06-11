@@ -22,4 +22,9 @@ void internals_glfw_callback_window_resize(GLFWwindow* window, int width, int he
 	applet->height = height;
 
 	glViewport(0,0,width,height);
+
+	//if (applet->quad_renderer.locs_valid)
+	//{
+	//	glUniform2f(applet->quad_renderer.loc_uViewportResolution, width, height);
+	//}
 }

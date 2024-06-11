@@ -69,6 +69,7 @@ mz_applet mz_initialize_applet(const char* window_title, int width, int height, 
 
 	mz_shader default_quad_shader = mz_create_shader((char*)(quad_renderer_default_vertex_glsl), (char*)(quad_renderer_default_fragment_glsl), SHADER_TARGET_QUAD); 
 
+	applet.render_order = 0;
 	applet.quad_renderer = mz_quad_renderer_initialize(100); // TODO: Macro instead of hard coded value
 	applet.quad_renderer.shader_id = default_quad_shader.pid;
 	
