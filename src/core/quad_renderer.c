@@ -109,6 +109,7 @@ void mz_quad_renderer_flush(struct mz_quad_renderer* quad_renderer, float width,
 		quad_renderer->loc_uRenderOrderMax = glGetUniformLocation(quad_renderer->shader_id, "uRenderOrderMax");
 		quad_renderer->locs_valid = MUZZLE_TRUE;
 
+		// TODO: Fix that it cannot find uniform when uniform isnt used
 		LOC_VERIFY(uViewportResolution);
 		LOC_VERIFY(uRenderOrderMax);
 	}
