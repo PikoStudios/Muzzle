@@ -11,6 +11,7 @@ void applet_loop(mz_applet* applet)
 	{
 		mz_begin_drawing(applet);
 			mz_clear_screen(TINT_GRAY);
+			mz_draw_rectangle(applet, 330.f, 300.f, 50.f, 50.f, TINT_MAGENTA);
 			mz_draw_rectangle(applet, 300.f, 300.f, 50.f, 50.f, TINT_BLUE);
 			mz_draw_rectangle(applet, 0.f, 0.f, 150.f, 150.f, TINT_YELLOW);
 			mz_draw_rectangle(applet, SCREEN_WIDTH - 300.f, SCREEN_HEIGHT - 400.f, 200.f, 350.f, TINT_ORANGE);
