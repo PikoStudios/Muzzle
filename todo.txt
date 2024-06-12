@@ -1,1 +1,3 @@
 define MUZZLE_DEBUG_BUILD on debug build
+make sprite :)
+add render order straight to position instead of extra vertex attribute
