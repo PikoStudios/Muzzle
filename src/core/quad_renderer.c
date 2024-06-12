@@ -76,11 +76,10 @@ struct mz_quad_renderer mz_quad_renderer_initialize(uint32_t max_quads)
 	);
 
 	glEnableVertexArrayAttrib(quad_renderer.buffers[VAO], 2);
-	glVertexAttribPointer(
+	glVertexAttribIPointer(
 		2,
 		1,
 		GL_INT,
-		GL_FALSE,
 		sizeof(struct mz_quad_vertex),
 		(GLvoid*)(offsetof(struct mz_quad_vertex, render_order))
 	);
@@ -94,7 +93,7 @@ struct mz_quad_renderer mz_quad_renderer_initialize(uint32_t max_quads)
 
 #define LOC_VERIFY(x) if (quad_renderer->loc_##x == -1) {mz_log_status(LOG_STATUS_ERROR, "Cannot find location for \"" #x "\""); quad_renderer->locs_valid = MUZZLE_FALSE;}
 
-void mz_quad_renderer_flush(struct mz_quad_renderer* quad_renderer, float width, float height, int* render_order)
+void mz_quad_renderer_flush(struct mz_quad_renderer* quad_renderer, float width, float height, int render_order)
 {
 	glUseProgram(quad_renderer->shader_id);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, quad_renderer->buffers[EBO]);
@@ -116,13 +115,12 @@ void mz_quad_renderer_flush(struct mz_quad_renderer* quad_renderer, float width,
 
 	// TODO: see if there is a elegant way to not update every frame
 	glUniform2f(quad_renderer->loc_uViewportResolution, width, height);
-	glUniform1i(quad_renderer->loc_uRenderOrderMax, *render_order);
+	glUniform1i(quad_renderer->loc_uRenderOrderMax, render_order);
 	
 	glDrawElements(GL_TRIANGLES, quad_renderer->quad_count * 6, GL_UNSIGNED_INT, NULL);
 
 	quad_renderer->quad_count = 0;
 	quad_renderer->vertex_index = 0;
-	*render_order = 0;
 }
 
 mz_boolean mz_quad_renderer_push_quad(struct mz_quad_renderer* quad_renderer, struct mz_quad_vertex v1, struct mz_quad_vertex v2, struct mz_quad_vertex v3, struct mz_quad_vertex v4)
