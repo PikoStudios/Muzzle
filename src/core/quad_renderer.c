@@ -1,5 +1,6 @@
 #include "core/quad_renderer.h"
 #include "core/logging.h"
+#include "internals/quad_indices.h"
 #include <stdio.h>
 
 #define LOC_UNINITIALIZED_VALUE -404
@@ -37,6 +38,8 @@ struct mz_quad_renderer mz_quad_renderer_initialize(uint32_t max_quads)
 		mz_log_status(LOG_STATUS_FATAL_ERROR, "Failed to allocate memory [quad_renderer::mz_quad_renderer_initialize::indices]");
 	}
 
+	//internals_generate_quad_indices(indices, max_quads);
+
 	for (int i = 0, offset = 0; i < max_quads; i += 6, offset += 4)
 	{
 		// Triangle 1
@@ -49,7 +52,7 @@ struct mz_quad_renderer mz_quad_renderer_initialize(uint32_t max_quads)
 		indices[i + 4] = offset + 1;
 		indices[i + 5] = offset + 3;
 	}
-
+	
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, quad_renderer.buffers[EBO]);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * max_quads, indices, GL_STATIC_DRAW);
 

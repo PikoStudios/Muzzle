@@ -1,4 +1,5 @@
 #include "core/applet.h"
+#include "core/circle_renderer.h"
 #include "core/logging.h"
 #include "core/quad_renderer.h"
 #include "core/shader.h"
@@ -6,6 +7,10 @@
 #include "internals/glfw_error_helper.h"
 #include "core/shaders/quad_renderer_default_vertex.glsl.h"
 #include "core/shaders/quad_renderer_default_fragment.glsl.h"
+#include "core/shaders/sprite_renderer_default_vertex.glsl.h"
+#include "core/shaders/sprite_renderer_default_fragment.glsl.h"
+#include "core/shaders/circle_renderer_default_vertex.glsl.h"
+#include "core/shaders/circle_renderer_default_fragment.glsl.h"
 
 mz_applet mz_initialize_applet(const char* window_title, int width, int height, mz_applet_flags flags)
 {
@@ -67,11 +72,23 @@ mz_applet mz_initialize_applet(const char* window_title, int width, int height, 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
+
 	mz_shader default_quad_shader = mz_create_shader((char*)(quad_renderer_default_vertex_glsl), (char*)(quad_renderer_default_fragment_glsl), SHADER_TARGET_QUAD); 
+	mz_shader default_sprite_shader = mz_create_shader((char*)(sprite_renderer_default_vertex_glsl), (char*)(sprite_renderer_default_fragment_glsl), SHADER_TARGET_SPRITE);
+	mz_shader default_circle_shader = mz_create_shader((char*)(circle_renderer_default_vertex_glsl), (char*)(circle_renderer_default_fragment_glsl), SHADER_TARGET_CIRCLE);
 
 	applet.render_order = 0;
+
+	// NOTE: I tried lazy loading and it saves maybe like 0.5 mb of memory
 	applet.quad_renderer = mz_quad_renderer_initialize(100); // TODO: Macro instead of hard coded value
+	applet.sprite_renderer = mz_sprite_renderer_initialize(100);
+	applet.circle_renderer = mz_circle_renderer_initialize(100);
+	
 	applet.quad_renderer.shader_id = default_quad_shader.pid;
+	applet.sprite_renderer.shader_id = default_sprite_shader.pid;
+	applet.circle_renderer.shader_id = default_circle_shader.pid;
 	
 	return applet;
 }
@@ -97,8 +114,16 @@ void mz_terminate_applet(mz_applet* applet)
 {
 	mz_log_status(LOG_STATUS_INFO, "Cleaning up resources");
 	mz_quad_renderer_destroy(&applet->quad_renderer);
+	mz_sprite_renderer_destroy(&applet->sprite_renderer);
+	mz_circle_renderer_destroy(&applet->circle_renderer);
+	// TODO: destroy default shaders
 	
 	mz_log_status(LOG_STATUS_INFO, "Closing Window");
 	glfwDestroyWindow(applet->window);
 	glfwTerminate();
+}
+
+void mz_update_window_title(mz_applet* applet, const char* title)
+{
+	glfwSetWindowTitle(applet->window, title);
 }

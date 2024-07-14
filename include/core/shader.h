@@ -7,6 +7,8 @@
 typedef enum
 {
     SHADER_TARGET_QUAD = 0,
+    SHADER_TARGET_SPRITE = 1,
+    SHADER_TARGET_CIRCLE = 2
     // TODO: SHADER_TARGET_ALL
 } mz_shader_target;
 

@@ -30,6 +30,7 @@ ${mz_source_dir}/core/shader.c
 
 set(mz_primitives_src
 ${mz_source_dir}/primitives/rectangle.c
+${mz_source_dir}/primitives/sprite.c
 )
 
 set(mz_source

@@ -9,3 +9,4 @@ examples/scaffold.ps1
 compile_flags.txt
 .gitpod.yml
 .ignore
+lib

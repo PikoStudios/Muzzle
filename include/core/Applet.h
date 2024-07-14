@@ -2,7 +2,9 @@
 #define MUZZLE_CORE_APPLET_H
 
 #include "backend.h"
+#include "core/circle_renderer.h"
 #include "core/quad_renderer.h"
+#include "core/sprite_renderer.h"
 
 typedef struct mz_applet
 {
@@ -11,6 +13,8 @@ typedef struct mz_applet
 	int height;
 	GLint render_order;
 	struct mz_quad_renderer quad_renderer;
+	struct mz_sprite_renderer sprite_renderer;
+	struct mz_circle_renderer circle_renderer;
 	double delta_time;
 	mz_boolean delta_time_flag;
 } mz_applet;
@@ -28,5 +32,6 @@ MZ_API mz_applet mz_initialize_applet(const char* window_title, int width, int h
 MZ_API void mz_start_applet(mz_applet* applet, mz_applet_main_dispatch_fn main_dispatch);
 MZ_API mz_boolean mz_keep_applet(mz_applet* applet);
 MZ_API void mz_terminate_applet(mz_applet* applet);
+MZ_API void mz_update_window_title(mz_applet* applet, const char* title);
 
 #endif // MUZZLE_CORE_APPLET_H

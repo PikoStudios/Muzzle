@@ -1,6 +1,7 @@
 #include "core/sprite_renderer.h"
 #include "core/logging.h"
 #include "core/memory.h"
+#include "internals/quad_indices.h"
 
 #define LOC_UNINITIALIZED_VALUE -404
 
@@ -41,18 +42,7 @@ struct mz_sprite_renderer mz_sprite_renderer_initialize(uint32_t max_sprites)
 		mz_log_status(LOG_STATUS_FATAL_ERROR, "Failed to allocate memory [quad_renderer::mz_sprite_renderer_initialize::indices]");
 	}
 
-	for (int i = 0, offset = 0; i < max_sprites; i += 6, offset += 4)
-	{
-		// Triangle 1
-		indices[i + 0] = offset + 0;
-		indices[i + 1] = offset + 3;
-		indices[i + 2] = offset + 2;
-		
-		// Triangle 2
-		indices[i + 3] = offset + 0;
-		indices[i + 4] = offset + 1;
-		indices[i + 5] = offset + 3;
-	}
+	internals_generate_quad_indices(indices, max_sprites);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, sprite_renderer.buffers[EBO]);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, max_sprites * 6, indices, GL_STATIC_DRAW);
@@ -159,41 +149,46 @@ void mz_sprite_renderer_flush(struct mz_sprite_renderer* sprite_renderer, float 
 	glUniform2f(sprite_renderer->loc_uViewportResolution, width, height);
 	glUniform1i(sprite_renderer->loc_uRenderOrderMax, render_order);
 	glUniform1uiv(sprite_renderer->loc_uTextures, sprite_renderer->max_textures, sprite_renderer->textures);
+
+	glDrawElements(GL_TRIANGLES, sprite_renderer->sprite_count * 6, GL_UNSIGNED_INT, NULL);
+
+	sprite_renderer->sprite_count = 0;
+	sprite_renderer->vertex_index = 0;
+	sprite_renderer->texture_count = 0;
 }
 
-static mz_boolean push_texture(struct mz_sprite_renderer* sprite_renderer, GLint texture_id)
+int mz_sprite_renderer_push_texture(struct mz_sprite_renderer* sprite_renderer, GLint texture_id)
 {
+	MZ_ASSERT_DETAILED(texture_id > -1, "Texture ID should be guaranteed to be valid");
+	
 	if (sprite_renderer->texture_count + 1 > sprite_renderer->max_textures)
 	{
-		return MUZZLE_FALSE;
+		// Texture buffer full
+		return -1;
 	}
 	
 	for (int i = 0; i < sprite_renderer->texture_count; i++)
 	{
 		if (sprite_renderer->textures[i] == texture_id)
 		{
-			return MUZZLE_TRUE;
+			// Texture already pushed
+			return i;
 		}
 	}
 
 	sprite_renderer->textures[sprite_renderer->texture_count] = texture_id;
 	sprite_renderer->texture_count++;
 
-	return MUZZLE_TRUE;
+	return sprite_renderer->texture_count - 1;
 }
 
 mz_boolean mz_sprite_renderer_push_sprite(struct mz_sprite_renderer* sprite_renderer, struct mz_sprite_vertex v1, struct mz_sprite_vertex v2, struct mz_sprite_vertex v3, struct mz_sprite_vertex v4)
 {
+	MZ_ASSERT_DETAILED(v1.tex_id == v2.tex_id && v2.tex_id == v3.tex_id && v3.tex_id == v4.tex_id, "All texture ids should equal for all vertices");
+	
 	if (++sprite_renderer->sprite_count > sprite_renderer->max_sprites)
 	{
 		sprite_renderer->sprite_count--;
-		return MUZZLE_FALSE;
-	}
-
-	MZ_ASSERT_DETAILED(v1.tex_id == v2.tex_id && v2.tex_id == v3.tex_id && v3.tex_id == v4.tex_id, "All texture ids should equal for all vertices");
-	
-	if (push_texture(sprite_renderer, v1.tex_id) == MUZZLE_FALSE)
-	{
 		return MUZZLE_FALSE;
 	}
 

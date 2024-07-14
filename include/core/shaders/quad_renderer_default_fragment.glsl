@@ -1,8 +1,12 @@
 #version 450
-layout (location = 0) in vec4 aTint;
-layout (location = 0) out vec4 vFragColor;
+layout (location = 0) in vec4 vTint;
+layout (location = 0) out vec4 fFragColor;
 
 void main()
 {
-	vFragColor = aTint;
+	fFragColor = vTint;
+	if (fFragColor.a == 0.0)
+	{
+		discard;
+	}
 }
