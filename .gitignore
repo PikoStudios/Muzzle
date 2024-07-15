@@ -10,3 +10,4 @@ compile_flags.txt
 .gitpod.yml
 .ignore
 lib
+swig/build
