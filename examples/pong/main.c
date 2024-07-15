@@ -1,14 +1,8 @@
-#include "core/applet.h"
-#include "core/drawing.h"
-#include "input/key.h"
-#include "primitives/rectangle.h"
-#include "primitives/sprite.h"
 #include <Muzzle.h>
 #include <stdio.h>
 #include <math.h>
 #include <stdbool.h>
 #include <string.h>
-#include <winnt.h>
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720
 #define EMPTY_STRING ""
@@ -19,24 +13,13 @@
 
 #define WINDOW_TITLE "Muzzle [EXAMPLES] - Pong"
 
-bool check_collision_point_rec(mz_vec2 point, mz_rectangle rec)
+bool check_collision_point_rec(mz_circle point, mz_rectangle rec)
 {
     if ((point.x >= rec.x) && (point.x <= (rec.x + rec.width)) && (point.y >= rec.y) && (point.y <= (rec.y + rec.height))) return true;
     return false;
 }
 
-// Will be removed when circles are added to Muzzle 3
-typedef struct ball
-{
-    mz_vec2 position;
-    mz_tint tint;
-    float radius;
-} ball;
 
-void draw_ball(mz_applet* applet, ball ball, mz_sprite* ball_sprite)
-{
-    mz_draw_sprite(applet, ball_sprite, ball.position.x - (ball_sprite->width * 0.5), ball.position.y - (ball_sprite->height * 0.5), ball.tint);
-}
 //#define DEBUG
 
 enum direction
@@ -55,13 +38,13 @@ enum players
 
 void applet_dispatch(mz_applet* applet)
 {
-    ball ball =
+    mz_circle ball =
     {
-        .radius = 5,
-        .position = {.x = SCREEN_WIDTH / 2, .y = SCREEN_HEIGHT / 2},
-        .tint = TINT_WHITE
+        .radius = 10,
+        .x = SCREEN_WIDTH / 2,
+        .y = SCREEN_HEIGHT / 2    
     };
-
+    
     enum direction ball_direction_x = LEFT; // Initialized it as LEFT
     enum direction ball_direction_y = DOWN;
     enum players last_player_collision;
@@ -104,8 +87,6 @@ void applet_dispatch(mz_applet* applet)
     char title_buffer[1024];
     memset(title_buffer, 0, 1024);
 
-    mz_sprite ball_sprite = mz_load_sprite(ASSETS_DIR "circle.png");
-
     while (mz_keep_applet(applet))
     {
         snprintf(title_buffer, 1024, WINDOW_TITLE " Score: %d-%d", p1, p2);
@@ -132,7 +113,7 @@ void applet_dispatch(mz_applet* applet)
         }
 
 #ifdef DEBUG
-        printf("ball { x: %i, x.directon: %i, y: %i, y.directon: %i, } player { x: %f, y: %f }\r", ball.position.x, ball_direction_x, ball.position.y, ball_direction_y, player.x, player.y);
+        printf("ball { x: %i, x.directon: %i, y: %i, y.directon: %i, } player { x: %f, y: %f }\r", ball.x, ball_direction_x, ball.y, ball_direction_y, player.x, player.y);
 #endif
         // Physics
 
@@ -142,10 +123,10 @@ void applet_dispatch(mz_applet* applet)
         //if (!paused)
         //{
             // Hit Edge on Y
-            if (ball.position.y >= 720 || ball.position.y <= 5)
+            if (ball.y >= 720 || ball.y <= 5)
             { // Invert
-                if (ball.position.y <= 5) ball.position.y += 5;
-                else ball.position.y -= 5;
+                if (ball.y <= 5) ball.y += 5;
+                else ball.y -= 5;
                 switch (ball_direction_y)
                 {
                 case UP:
@@ -161,10 +142,10 @@ void applet_dispatch(mz_applet* applet)
                 }
             }
 
-            if (ball.position.x < player.x || ball.position.x > player2.x) 
+            if (ball.x < player.x || ball.x > player2.x) 
             {
                 p2++;
-                ball.position.x = SCREEN_WIDTH / 2;
+                ball.x = SCREEN_WIDTH / 2;
                 switch (ball_direction_y)
                 {
                 case UP:
@@ -181,16 +162,16 @@ void applet_dispatch(mz_applet* applet)
                 ball_direction_x = RIGHT;
             } 
 
-            if (check_collision_point_rec(ball.position, player))
+            if (check_collision_point_rec(ball, player))
             {
-                ball.position.x += 5; 
+                ball.x += 5; 
                 ball_direction_x = RIGHT;
                 break;
             }
 
-            ball.position.x -= 5;
-            if (ball_direction_y == UP) ball.position.y -= 5;
-            else if (ball_direction_y == DOWN) ball.position.y += 5;
+            ball.x -= 5;
+            if (ball_direction_y == UP) ball.y -= 5;
+            else if (ball_direction_y == DOWN) ball.y += 5;
 
             break;
         //}
@@ -198,10 +179,10 @@ void applet_dispatch(mz_applet* applet)
         case RIGHT:
         //if (!paused)
         //{
-            if (ball.position.y >= 720 || ball.position.y <= 5)
+            if (ball.y >= 720 || ball.y <= 5)
             { // Invert
-                if (ball.position.y <= 5) ball.position.y += 5;
-                else ball.position.y -= 5;
+                if (ball.y <= 5) ball.y += 5;
+                else ball.y -= 5;
                 switch (ball_direction_y)
                 {
                 case UP:
@@ -217,10 +198,10 @@ void applet_dispatch(mz_applet* applet)
                 }
             }
 
-            if (ball.position.x < player.x  || ball.position.x > player2.x) 
+            if (ball.x < player.x  || ball.x > player2.x) 
             {
                 p1++;
-                ball.position.x = SCREEN_WIDTH / 2;
+                ball.x = SCREEN_WIDTH / 2;
                 switch (ball_direction_y)
                 {
                 case UP:
@@ -237,16 +218,16 @@ void applet_dispatch(mz_applet* applet)
                 ball_direction_x = LEFT;
             } 
 
-            if (check_collision_point_rec(ball.position, player2))
+            if (check_collision_point_rec(ball, player2))
             {
-                ball.position.x -= 5;
+                ball.x -= 5;
                 ball_direction_x = LEFT;
                 break;
             }
 
-            ball.position.x += 5;
-            if (ball_direction_y == UP) ball.position.y -= 5;
-            else if (ball_direction_y == DOWN) ball.position.y += 5;
+            ball.x += 5;
+            if (ball_direction_y == UP) ball.y -= 5;
+            else if (ball_direction_y == DOWN) ball.y += 5;
             break;
         //}
 
@@ -263,13 +244,11 @@ void applet_dispatch(mz_applet* applet)
 
             mz_draw_rectangle_type(applet, player, TINT_WHITE);
             mz_draw_rectangle_type(applet, player2, TINT_WHITE);
-            draw_ball(applet, ball, &ball_sprite);
+            mz_draw_circle_type(applet, ball, TINT_WHITE);
 
         mz_end_drawing(applet);
 
     }
-
-    mz_unload_sprite(&ball_sprite);
 }
 
 int main(void)
