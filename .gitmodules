@@ -13,3 +13,6 @@
 [submodule "deps/kazmath"]
 	path = deps/kazmath
 	url = https://github.com/Kazade/kazmath/
+[submodule "deps/freetype"]
+	path = deps/freetype
+	url = https://gitlab.freedesktop.org/freetype/freetype.git
