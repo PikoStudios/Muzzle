@@ -16,3 +16,4 @@
 [submodule "deps/freetype"]
 	path = deps/freetype
 	url = https://gitlab.freedesktop.org/freetype/freetype.git
+	branch = tag/VER-2-13-2
