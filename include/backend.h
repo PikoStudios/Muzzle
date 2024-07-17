@@ -28,6 +28,14 @@ typedef uint8_t mz_boolean;
 
 #include MUZZLE_GLFW_INCLUDE_PATH
 
+#ifndef MUZZLE_FREETYPE_FT2BUILD_INCLUDE_PATH
+	#define MUZZLE_FREETYPE_FT2BUILD_INCLUDE_PATH "../deps/freetype/include/ft2build.h"
+#endif
+
+
+#include MUZZLE_FREETYPE_FT2BUILD_INCLUDE_PATH
+#include FT_FREETYPE_H
+
 #ifdef _WIN32
 	#define WIN32_LEAN_AND_MEAN
 	#include <windows.h>

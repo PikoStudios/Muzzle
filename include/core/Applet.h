@@ -15,6 +15,7 @@ typedef struct mz_applet
 	struct mz_quad_renderer quad_renderer;
 	struct mz_sprite_renderer sprite_renderer;
 	struct mz_circle_renderer circle_renderer;
+	FT_Library font_library;
 	double delta_time;
 	mz_boolean delta_time_flag;
 } mz_applet;
