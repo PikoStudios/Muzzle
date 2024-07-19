@@ -1,7 +1,8 @@
 #include "primitives/text.h"
+#include "core/font.h"
 #include "core/logging.h"
 
-mz_font mz_load_font(mz_applet* applet, const char* filepath)
+mz_font mz_load_font(mz_applet* applet, const char* filepath, int max_font_size)
 {
 	mz_font font = (mz_font){0};
 	FT_Face face = NULL;
@@ -10,6 +11,8 @@ mz_font mz_load_font(mz_applet* applet, const char* filepath)
 	{
 		mz_log_status_formatted(LOG_STATUS_FATAL_ERROR, "Could not load font '%s'", filepath);
 	}
+
+	FT_Set_Pixel_Sizes(face, 0, (max_font_size > 0) ? max_font_size : 64);
 
 	font.glyph_count = face->num_glyphs;
 	font.glyphs = MZ_CALLOC(font.glyph_count, sizeof(mz_font_glyph));

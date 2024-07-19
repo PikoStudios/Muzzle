@@ -26,6 +26,13 @@ mz_applet mz_initialize_applet(const char* window_title, int width, int height, 
 
 	mz_log_status(LOG_STATUS_SUCCESS, "Successfully initialized GLFW3");
 
+	int result = FT_Init_FreeType(&applet.font_library);
+	
+	if (result != 0)
+	{
+		mz_log_status_formatted(LOG_STATUS_FATAL_ERROR, "Freetype failed to initialize, error code: %d", result);
+	}
+
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, MUZZLE_OPENGL_VERSION_MAJOR);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, MUZZLE_OPENGL_VERSION_MINOR);
 
@@ -74,6 +81,7 @@ mz_applet mz_initialize_applet(const char* window_title, int width, int height, 
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
+
 
 	mz_shader default_quad_shader = mz_create_shader((char*)(quad_renderer_default_vertex_glsl), (char*)(quad_renderer_default_fragment_glsl), SHADER_TARGET_QUAD); 
 	mz_shader default_sprite_shader = mz_create_shader((char*)(sprite_renderer_default_vertex_glsl), (char*)(sprite_renderer_default_fragment_glsl), SHADER_TARGET_SPRITE);

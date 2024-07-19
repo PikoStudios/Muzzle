@@ -32,7 +32,6 @@ typedef uint8_t mz_boolean;
 	#define MUZZLE_FREETYPE_FT2BUILD_INCLUDE_PATH "../deps/freetype/include/ft2build.h"
 #endif
 
-
 #include MUZZLE_FREETYPE_FT2BUILD_INCLUDE_PATH
 #include FT_FREETYPE_H
 
@@ -90,7 +89,11 @@ typedef uint8_t mz_boolean;
 #endif
 
 #if MUZZLE_OPENGL_VERSION_MAJOR < 4 || MUZZLE_OPENGL_VERSION_MINOR < 5
-	#warning "OpenGL versions lower than 4.5 is not recommended. OpenGL versions less than 4.0 are NOT supported and will likely result in errors and versions less than 4.5 will have certain features limited. Read docs/less_than_4_5.md"
+	#warning "OpenGL versions lower than 4.5 is not recommended. OpenGL versions less than 4.3 are NOT supported and will likely result in errors and versions less than 4.5 will have certain features limited. Read docs/less_than_4_5.md"
+#endif
+
+#ifndef MUZZLE_TEXT_MAX_INDIRECT_COMMANDS
+	#define MUZZLE_TEXT_MAX_INDIRECT_COMMANDS 25
 #endif
 
 #endif // MUZZLE_BACKEND_H
