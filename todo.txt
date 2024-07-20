@@ -1,3 +1,6 @@
 define MUZZLE_DEBUG_BUILD on debug build
 Add instance rendering (glDraw*Instanced)
 Add SPIR-V
+Make handle abstraction (for example: vertex buffer object id)
+Fix render order
+Fix harfbuzz linking problem. Allow for default to not require harfbuzz, if needed by the user allow to support
