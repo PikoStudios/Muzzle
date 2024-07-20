@@ -17,7 +17,7 @@ void mz_draw_circle(mz_applet* applet, float x, float y, float radius, mz_tint t
 
 	if (mz_circle_renderer_push_circle(&applet->circle_renderer, v1, v2, v3, v4) == MUZZLE_FALSE)
 	{
-		mz_circle_renderer_flush(&applet->circle_renderer, applet->width, applet->height, applet->render_order);
+		mz_circle_renderer_flush(&applet->circle_renderer, applet->width, applet->height);
 #ifdef MUZZLE_DEBUG_BUILD
 		MZ_ASSERT_DETAILED(mz_circle_renderer_push_circle(&applet->circle_renderer, v1, v2, v3, v4) == MUZZLE_TRUE, "If circle renderer is still full after flushing, there has been a bug")
 #else

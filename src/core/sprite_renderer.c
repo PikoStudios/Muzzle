@@ -109,7 +109,6 @@ struct mz_sprite_renderer mz_sprite_renderer_initialize(uint32_t max_sprites)
 
 	sprite_renderer.locs_valid = MUZZLE_FALSE;
 	sprite_renderer.loc_uViewportResolution = LOC_UNINITIALIZED_VALUE;
-	sprite_renderer.loc_uRenderOrderMax = LOC_UNINITIALIZED_VALUE;
 	sprite_renderer.loc_uTextures = LOC_UNINITIALIZED_VALUE;
 
 	return sprite_renderer;
@@ -117,7 +116,7 @@ struct mz_sprite_renderer mz_sprite_renderer_initialize(uint32_t max_sprites)
 
 #define LOC_VERIFY(x) if (sprite_renderer->loc_##x == -1) {mz_log_status(LOG_STATUS_ERROR, "Cannot find location for \"" #x "\""); sprite_renderer->locs_valid = MUZZLE_FALSE;}
 
-void mz_sprite_renderer_flush(struct mz_sprite_renderer* sprite_renderer, float width, float height, int render_order)
+void mz_sprite_renderer_flush(struct mz_sprite_renderer* sprite_renderer, float width, float height)
 {
 	glUseProgram(sprite_renderer->shader_id);
 	
@@ -130,15 +129,15 @@ void mz_sprite_renderer_flush(struct mz_sprite_renderer* sprite_renderer, float 
 	if (sprite_renderer->locs_valid == MUZZLE_FALSE)
 	{
 		sprite_renderer->loc_uViewportResolution = glGetUniformLocation(sprite_renderer->shader_id, "uViewportResolution");
-		sprite_renderer->loc_uRenderOrderMax = glGetUniformLocation(sprite_renderer->shader_id, "uRenderOrderMax");
 		sprite_renderer->loc_uTextures = glGetUniformLocation(sprite_renderer->shader_id, "uTextures");
 		sprite_renderer->locs_valid = MUZZLE_TRUE;
 
 		// TODO: Fix that it cannot find uniform when uniform isnt used
 		LOC_VERIFY(uViewportResolution);
-		LOC_VERIFY(uRenderOrderMax);
 		LOC_VERIFY(uTextures);
 	}
+
+	// TODO: Convert texture to texture array for a lot more textures GL_TEXTURE_2D_ARRAY
 
 	for (int i = 0; i < sprite_renderer->texture_count; i++)
 	{
@@ -147,7 +146,6 @@ void mz_sprite_renderer_flush(struct mz_sprite_renderer* sprite_renderer, float 
 	}
 
 	glUniform2f(sprite_renderer->loc_uViewportResolution, width, height);
-	glUniform1i(sprite_renderer->loc_uRenderOrderMax, render_order);
 	glUniform1uiv(sprite_renderer->loc_uTextures, sprite_renderer->max_textures, sprite_renderer->textures);
 
 	glDrawElements(GL_TRIANGLES, sprite_renderer->sprite_count * 6, GL_UNSIGNED_INT, NULL);

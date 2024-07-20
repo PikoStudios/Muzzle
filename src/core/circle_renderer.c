@@ -96,7 +96,6 @@ struct mz_circle_renderer mz_circle_renderer_initialize(uint32_t max_circles)
 
 	renderer.locs_valid = MUZZLE_FALSE;
 	renderer.loc_uViewportResolution = LOC_UNINITIALIZED_VALUE;
-	renderer.loc_uRenderOrderMax = LOC_UNINITIALIZED_VALUE;
 
 	return renderer;
 }
@@ -104,7 +103,7 @@ struct mz_circle_renderer mz_circle_renderer_initialize(uint32_t max_circles)
 
 #define LOC_VERIFY(x) if (circle_renderer->loc_##x == -1) {mz_log_status(LOG_STATUS_ERROR, "Cannot find location for \"" #x "\""); circle_renderer->locs_valid = MUZZLE_FALSE;}
 
-void mz_circle_renderer_flush(struct mz_circle_renderer* circle_renderer, float width, float height, int render_order)
+void mz_circle_renderer_flush(struct mz_circle_renderer* circle_renderer, float width, float height)
 {
 	glUseProgram(circle_renderer->shader_id);
 	
@@ -117,14 +116,12 @@ void mz_circle_renderer_flush(struct mz_circle_renderer* circle_renderer, float 
 	if (circle_renderer->locs_valid == MUZZLE_FALSE)
 	{
 		circle_renderer->loc_uViewportResolution = glGetUniformLocation(circle_renderer->shader_id, "uViewportResolution");
-		circle_renderer->loc_uRenderOrderMax = glGetUniformLocation(circle_renderer->shader_id, "uRenderOrderMax");
+		circle_renderer->locs_valid = MUZZLE_TRUE;
 
 		LOC_VERIFY(uViewportResolution);
-		LOC_VERIFY(uRenderOrderMax);
 	}
 
 	glUniform2f(circle_renderer->loc_uViewportResolution, width, height);
-	glUniform1i(circle_renderer->loc_uRenderOrderMax, render_order);
 
 	glDrawElements(GL_TRIANGLES, circle_renderer->circle_count * 6, GL_UNSIGNED_INT, NULL);
 

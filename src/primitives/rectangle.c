@@ -26,7 +26,7 @@ void mz_draw_rectangle(mz_applet* applet, float x, float y, float width, float h
 	if (mz_quad_renderer_push_quad(&applet->quad_renderer, v1, v2, v3, v4) == MUZZLE_FALSE)
 	{
 		// Quad renderer is full
-		mz_quad_renderer_flush(&applet->quad_renderer, applet->width, applet->height, applet->render_order);
+		mz_quad_renderer_flush(&applet->quad_renderer, applet->width, applet->height);
 #ifdef MUZZLE_DEBUG_BUILD
 		MZ_ASSERT_DETAILED(mz_quad_renderer_push_quad(&applet->quad_renderer, v1, v2, v3, v4) == MUZZLE_TRUE, "If quad renderer is still full after flushing, there has been a bug")
 #else

@@ -14,17 +14,17 @@ void mz_end_drawing(mz_applet* applet)
 {
 	if (applet->quad_renderer.quad_count > 0)
 	{
-		mz_quad_renderer_flush(&applet->quad_renderer, applet->width, applet->height, applet->render_order);
+		mz_quad_renderer_flush(&applet->quad_renderer, applet->width, applet->height);
 	}
 
 	if (applet->sprite_renderer.sprite_count > 0)
 	{
-		mz_sprite_renderer_flush(&applet->sprite_renderer, applet->width, applet->height, applet->render_order);
+		mz_sprite_renderer_flush(&applet->sprite_renderer, applet->width, applet->height);
 	}
 
 	if (applet->circle_renderer.circle_count > 0)
 	{
-		mz_circle_renderer_flush(&applet->circle_renderer, applet->width, applet->height, applet->render_order);
+		mz_circle_renderer_flush(&applet->circle_renderer, applet->width, applet->height);
 	}
 
 	applet->render_order = 0;

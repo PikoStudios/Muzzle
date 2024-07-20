@@ -5,6 +5,7 @@
 #include "core/circle_renderer.h"
 #include "core/quad_renderer.h"
 #include "core/sprite_renderer.h"
+#include "core/text_renderer.h"
 
 typedef struct mz_applet
 {
@@ -15,6 +16,7 @@ typedef struct mz_applet
 	struct mz_quad_renderer quad_renderer;
 	struct mz_sprite_renderer sprite_renderer;
 	struct mz_circle_renderer circle_renderer;
+	struct mz_text_renderer text_renderer;
 	FT_Library font_library;
 	double delta_time;
 	mz_boolean delta_time_flag;

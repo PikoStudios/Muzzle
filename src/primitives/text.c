@@ -1,70 +1,78 @@
 #include "primitives/text.h"
-#include "core/font.h"
 #include "core/logging.h"
+#include "core/text_renderer.h"
+#include "core/vector.h"
 
-mz_font mz_load_font(mz_applet* applet, const char* filepath, int max_font_size)
+#define TINT_TO_VEC4(t) (mz_vec4){(float)(t.r),(float)(t.g),(float)(t.b), (float)(t.a)}
+#define VERTEX(x, y, tx, ty, tidx) (struct mz_text_vertex){(mz_vec2){x, y}, (mz_vec2){tx, ty}, tidx}
+#define UNLIKELY_IF(x) if (__builtin_expect(!!(x), 0))
+
+void mz_draw_text(mz_applet* applet, const char* text, float x, float y, float font_size, mz_font* font, mz_tint tint)
 {
-	mz_font font = (mz_font){0};
-	FT_Face face = NULL;
-
-	if (FT_New_Face(applet->font_library, filepath, 0, &face) != 0)
-	{
-		mz_log_status_formatted(LOG_STATUS_FATAL_ERROR, "Could not load font '%s'", filepath);
-	}
-
-	FT_Set_Pixel_Sizes(face, 0, (max_font_size > 0) ? max_font_size : 64);
-
-	font.glyph_count = face->num_glyphs;
-	font.glyphs = MZ_CALLOC(font.glyph_count, sizeof(mz_font_glyph));
-
-	if (font.glyphs == NULL)
-	{
-		mz_log_status(LOG_STATUS_FATAL_ERROR, "Could not allocate memory for glyphs");
-	}
-
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	applet->render_order++;
 	
-	for (int i = 0; i < font.glyph_count; i++)
+	mz_vec4 color = TINT_TO_VEC4(tint);
+	float scale = scale / 256;
+	float newline_x = x;
+
+	// TODO: make this more safe
+
+	for (int i = 0; text[i] != '\0'; i++)
 	{
-		if (FT_Load_Char(face, i, FT_LOAD_RENDER))
+		mz_font_glyph glyph = font->glyphs[text[i]]; // TODO not safe lmao
+
+		UNLIKELY_IF(glyph._loaded == MUZZLE_FALSE)
 		{
-			mz_log_status_formatted(LOG_STATUS_ERROR, "Failed to load glyph #%d from '%s'", i, filepath);
+			mz_log_status_formatted(LOG_STATUS_WARNING, "Unloaded character: '%c'", text[i]);	
+			x += (font->glyphs[' '].advance >> 6) * scale;
 			continue;
 		}
 
-		glCreateTextures(GL_TEXTURE_2D, 1, &font.glyphs[i].texture_id);
-		glTextureStorage2D(font.glyphs[i].texture_id, 1, GL_R8, face->glyph->bitmap.width, face->glyph->bitmap.rows);
+		if (text[i] == '\n')
+		{
+			y -= glyph.size.y * /* 1.3 * */ scale;
+			x = newline_x;
+			continue;
+		}
 
-		glTextureParameteri(font.glyphs[i].texture_id, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTextureParameteri(font.glyphs[i].texture_id, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTextureParameteri(font.glyphs[i].texture_id, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTextureParameteri(font.glyphs[i].texture_id, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		if (text[i] == ' ')
+		{
+			// No need to render a space. Just advance to next character
+			goto advance;
+		}
 
-		glTextureSubImage2D(
-		        font.glyphs[i].texture_id,
-		        0,
-		        0,
-		        0,
-		        face->glyph->bitmap.width,
-		        face->glyph->bitmap.rows,
-		        GL_RED,
-		        GL_UNSIGNED_BYTE,
-		        face->glyph->bitmap.buffer
-		);
+		mz_vec2 pos = (mz_vec2){x + glyph.bearing.x * scale, y - (256 - glyph.bearing.y) * scale};
+		int size = 256 * scale;
 
-		font.glyphs[i].size = (mz_vec2_i){face->glyph->bitmap.width, face->glyph->bitmap.rows};
-		font.glyphs[i].bearing = (mz_vec2_i){face->glyph->bitmap_left, face->glyph->bitmap_top};
-		font.glyphs[i].advance = face->glyph->advance.x;
+		struct mz_text_vertex v1 = VERTEX(pos.x, pos.y, 0, 1, glyph.texture_idx);
+		struct mz_text_vertex v2 = VERTEX(pos.x + size, pos.y, 1, 1, glyph.texture_idx);
+		struct mz_text_vertex v3 = VERTEX(pos.x, pos.y + size, 0, 0, glyph.texture_idx);
+		struct mz_text_vertex v4 = VERTEX(pos.x + size, pos.y + size, 1, 0, glyph.texture_idx);
+
+		if (mz_text_renderer_push_char(applet->text_renderer, v1, v2, v3, v4) == MUZZLE_FALSE)
+		{
+			mz_text_renderer_flush(applet->text_renderer, font, applet->width, applet->height, applet->render_order, tint);
+#ifdef MUZZLE_DEBUG_BUILD
+			MZ_ASSERT_DETAILED(mz_text_renderer_push_char(applet->text_renderer, v1, v2, v3, v4) == MUZZLE_TRUE, "Text renderer should be empty");
+#else
+			mz_text_renderer_push_char(applet->text_renderer, v1, v2, v3, v4);
+#endif
+		}
+
+advance:
+		// bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels))
+		x += (glyph.advance >> 6) * font_size;
 	}
-
-	//glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
-	FT_Done_Face(face);
 	
-	return font;
+	mz_text_renderer_flush(applet->text_renderer, font, applet->width, applet->height, applet->render_order, tint);
 }
 
-void mz_unload_font(mz_font* font)
+void mz_draw_text_vec2(mz_applet* applet, const char* text, mz_vec2 position, float font_size, mz_font* font, mz_tint tint)
 {
-	MZ_FREE(font->glyphs);
-	font->glyph_count = 0;
+	
+}
+
+void mz_draw_text_vec3(mz_applet* applet, const char* text, mz_vec3 position_and_font_size, mz_font* font, mz_tint tint)
+{
+	
 }

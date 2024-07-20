@@ -89,14 +89,13 @@ struct mz_quad_renderer mz_quad_renderer_initialize(uint32_t max_quads)
 	
 	quad_renderer.locs_valid = MUZZLE_FALSE;
 	quad_renderer.loc_uViewportResolution = LOC_UNINITIALIZED_VALUE;
-	quad_renderer.loc_uRenderOrderMax = LOC_UNINITIALIZED_VALUE;
 
 	return quad_renderer;
 }
 
 #define LOC_VERIFY(x) if (quad_renderer->loc_##x == -1) {mz_log_status(LOG_STATUS_ERROR, "Cannot find location for \"" #x "\""); quad_renderer->locs_valid = MUZZLE_FALSE;}
 
-void mz_quad_renderer_flush(struct mz_quad_renderer* quad_renderer, float width, float height, int render_order)
+void mz_quad_renderer_flush(struct mz_quad_renderer* quad_renderer, float width, float height)
 {
 	glUseProgram(quad_renderer->shader_id);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, quad_renderer->buffers[EBO]);
@@ -108,17 +107,14 @@ void mz_quad_renderer_flush(struct mz_quad_renderer* quad_renderer, float width,
 	if (quad_renderer->locs_valid == MUZZLE_FALSE)
 	{
 		quad_renderer->loc_uViewportResolution = glGetUniformLocation(quad_renderer->shader_id, "uViewportResolution");
-		quad_renderer->loc_uRenderOrderMax = glGetUniformLocation(quad_renderer->shader_id, "uRenderOrderMax");
 		quad_renderer->locs_valid = MUZZLE_TRUE;
 
 		// TODO: Fix that it cannot find uniform when uniform isnt used
 		LOC_VERIFY(uViewportResolution);
-		LOC_VERIFY(uRenderOrderMax);
 	}
 
 	// TODO: see if there is a elegant way to not update every frame
 	glUniform2f(quad_renderer->loc_uViewportResolution, width, height);
-	glUniform1i(quad_renderer->loc_uRenderOrderMax, render_order);
 	
 	glDrawElements(GL_TRIANGLES, quad_renderer->quad_count * 6, GL_UNSIGNED_INT, NULL);
 

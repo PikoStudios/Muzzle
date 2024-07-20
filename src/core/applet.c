@@ -3,6 +3,7 @@
 #include "core/logging.h"
 #include "core/quad_renderer.h"
 #include "core/shader.h"
+#include "core/text_renderer.h"
 #include "internals/glfw_callbacks.h"
 #include "internals/glfw_error_helper.h"
 #include "core/shaders/quad_renderer_default_vertex.glsl.h"
@@ -11,6 +12,8 @@
 #include "core/shaders/sprite_renderer_default_fragment.glsl.h"
 #include "core/shaders/circle_renderer_default_vertex.glsl.h"
 #include "core/shaders/circle_renderer_default_fragment.glsl.h"
+#include "core/shaders/text_renderer_default_vertex.glsl.h"
+#include "core/shaders/text_renderer_default_fragment.glsl.h"
 
 mz_applet mz_initialize_applet(const char* window_title, int width, int height, mz_applet_flags flags)
 {
@@ -82,10 +85,12 @@ mz_applet mz_initialize_applet(const char* window_title, int width, int height, 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
 
-
 	mz_shader default_quad_shader = mz_create_shader((char*)(quad_renderer_default_vertex_glsl), (char*)(quad_renderer_default_fragment_glsl), SHADER_TARGET_QUAD); 
 	mz_shader default_sprite_shader = mz_create_shader((char*)(sprite_renderer_default_vertex_glsl), (char*)(sprite_renderer_default_fragment_glsl), SHADER_TARGET_SPRITE);
 	mz_shader default_circle_shader = mz_create_shader((char*)(circle_renderer_default_vertex_glsl), (char*)(circle_renderer_default_fragment_glsl), SHADER_TARGET_CIRCLE);
+	mz_shader default_text_shader = mz_create_shader((char*)(text_renderer_default_vertex_glsl), (char*)(text_renderer_default_fragment_glsl), SHADER_TARGET_TEXT);
+
+	mz_log_status(LOG_STATUS_SUCCESS, "Compiled default shaders");
 
 	applet.render_order = 0;
 
@@ -93,10 +98,12 @@ mz_applet mz_initialize_applet(const char* window_title, int width, int height, 
 	applet.quad_renderer = mz_quad_renderer_initialize(100); // TODO: Macro instead of hard coded value
 	applet.sprite_renderer = mz_sprite_renderer_initialize(100);
 	applet.circle_renderer = mz_circle_renderer_initialize(100);
+	applet.text_renderer = mz_text_renderer_initialize(200);
 	
 	applet.quad_renderer.shader_id = default_quad_shader.pid;
 	applet.sprite_renderer.shader_id = default_sprite_shader.pid;
 	applet.circle_renderer.shader_id = default_circle_shader.pid;
+	applet.text_renderer.shader_id = default_text_shader.pid;
 	
 	return applet;
 }
@@ -124,6 +131,7 @@ void mz_terminate_applet(mz_applet* applet)
 	mz_quad_renderer_destroy(&applet->quad_renderer);
 	mz_sprite_renderer_destroy(&applet->sprite_renderer);
 	mz_circle_renderer_destroy(&applet->circle_renderer);
+	mz_text_renderer_destroy(&applet->text_renderer);
 	// TODO: destroy default shaders
 	
 	mz_log_status(LOG_STATUS_INFO, "Closing Window");

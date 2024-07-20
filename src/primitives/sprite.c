@@ -57,7 +57,7 @@ void mz_draw_sprite(mz_applet* applet, mz_sprite* data, float x, float y, mz_tin
 
 	if (texture_id == -1)
 	{
-		mz_sprite_renderer_flush(&applet->sprite_renderer, applet->width, applet->height, applet->render_order);
+		mz_sprite_renderer_flush(&applet->sprite_renderer, applet->width, applet->height);
 		texture_id = mz_sprite_renderer_push_texture(&applet->sprite_renderer, data->_id);
 
 		MZ_ASSERT_DETAILED(texture_id > -1, "Texture Buffer should not be full");
@@ -71,7 +71,7 @@ void mz_draw_sprite(mz_applet* applet, mz_sprite* data, float x, float y, mz_tin
 
 	if (mz_sprite_renderer_push_sprite(&applet->sprite_renderer, v1, v2, v3, v4) == MUZZLE_FALSE)
 	{
-		mz_sprite_renderer_flush(&applet->sprite_renderer, applet->width, applet->height, applet->render_order);
+		mz_sprite_renderer_flush(&applet->sprite_renderer, applet->width, applet->height);
 #ifdef MUZZLE_DEBUG_BUILD
 		MZ_ASSERT_DETAILED(mz_sprite_renderer_push_sprite(&applet->sprite_renderer, v1, v2, v3, v4) == MUZZLE_TRUE, "Quad renderer should not still be full")
 #else

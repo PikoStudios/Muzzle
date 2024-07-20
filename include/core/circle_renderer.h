@@ -24,11 +24,10 @@ struct mz_circle_renderer
 
 	mz_boolean locs_valid;
 	GLint loc_uViewportResolution;
-	GLint loc_uRenderOrderMax;
 };
 
 MZ_API struct mz_circle_renderer mz_circle_renderer_initialize(uint32_t max_circles);
-MZ_API void mz_circle_renderer_flush(struct mz_circle_renderer* circle_renderer, float width, float height, int render_order);
+MZ_API void mz_circle_renderer_flush(struct mz_circle_renderer* circle_renderer, float width, float height);
 MZ_API mz_boolean mz_circle_renderer_push_circle(struct mz_circle_renderer* circle_renderer, struct mz_circle_vertex v1, struct mz_circle_vertex v2, struct mz_circle_vertex v3, struct mz_circle_vertex v4);
 MZ_API void mz_circle_renderer_destroy(struct mz_circle_renderer* circle_renderer);
 

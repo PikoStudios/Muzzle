@@ -24,11 +24,10 @@ struct mz_quad_renderer
 	// Locations. If a lot is needed then make it into a inner struct
 	mz_boolean locs_valid;
 	GLint loc_uViewportResolution;
-	GLint loc_uRenderOrderMax;
 };
 
 MZ_API struct mz_quad_renderer mz_quad_renderer_initialize(uint32_t max_quads);
-MZ_API void mz_quad_renderer_flush(struct mz_quad_renderer* quad_renderer, float width, float height, int render_order);
+MZ_API void mz_quad_renderer_flush(struct mz_quad_renderer* quad_renderer, float width, float height);
 MZ_API mz_boolean mz_quad_renderer_push_quad(struct mz_quad_renderer* quad_renderer, struct mz_quad_vertex v1, struct mz_quad_vertex v2, struct mz_quad_vertex v3, struct mz_quad_vertex v4);
 MZ_API void mz_quad_renderer_destroy(struct mz_quad_renderer* quad_renderer);
 
