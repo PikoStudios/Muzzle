@@ -22,3 +22,4 @@
 %include "../include/primitives/circle.h"
 %include "../include/primitives/rectangle.h"
 %include "../include/primitives/sprite.h"
+%include "../include/primitives/text.h"

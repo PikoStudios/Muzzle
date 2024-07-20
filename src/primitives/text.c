@@ -49,13 +49,13 @@ void mz_draw_text(mz_applet* applet, const char* text, float x, float y, float f
 		struct mz_text_vertex v3 = VERTEX(pos.x, pos.y + size, 0, 0, glyph.texture_idx);
 		struct mz_text_vertex v4 = VERTEX(pos.x + size, pos.y + size, 1, 0, glyph.texture_idx);
 
-		if (mz_text_renderer_push_char(applet->text_renderer, v1, v2, v3, v4) == MUZZLE_FALSE)
+		if (mz_text_renderer_push_char(&applet->text_renderer, v1, v2, v3, v4) == MUZZLE_FALSE)
 		{
-			mz_text_renderer_flush(applet->text_renderer, font, applet->width, applet->height, applet->render_order, tint);
+			mz_text_renderer_flush(&applet->text_renderer, font, applet->width, applet->height, applet->render_order, color);
 #ifdef MUZZLE_DEBUG_BUILD
 			MZ_ASSERT_DETAILED(mz_text_renderer_push_char(applet->text_renderer, v1, v2, v3, v4) == MUZZLE_TRUE, "Text renderer should be empty");
 #else
-			mz_text_renderer_push_char(applet->text_renderer, v1, v2, v3, v4);
+			mz_text_renderer_push_char(&applet->text_renderer, v1, v2, v3, v4);
 #endif
 		}
 
@@ -64,7 +64,7 @@ advance:
 		x += (glyph.advance >> 6) * font_size;
 	}
 	
-	mz_text_renderer_flush(applet->text_renderer, font, applet->width, applet->height, applet->render_order, tint);
+	mz_text_renderer_flush(&applet->text_renderer, font, applet->width, applet->height, applet->render_order, color);
 }
 
 void mz_draw_text_vec2(mz_applet* applet, const char* text, mz_vec2 position, float font_size, mz_font* font, mz_tint tint)

@@ -28,6 +28,8 @@ ${mz_source_dir}/core/memory.c
 ${mz_source_dir}/core/quad_renderer.c
 ${mz_source_dir}/core/sprite_renderer.c
 ${mz_source_dir}/core/circle_renderer.c
+${mz_source_dir}/core/text_renderer.c
+${mz_source_dir}/core/font.c
 ${mz_source_dir}/core/shader.c
 )
 
@@ -35,6 +37,7 @@ set(mz_primitives_src
 ${mz_source_dir}/primitives/rectangle.c
 ${mz_source_dir}/primitives/sprite.c
 ${mz_source_dir}/primitives/circle.c
+${mz_source_dir}/primitives/text.c
 )
 
 set(mz_input_src

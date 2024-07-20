@@ -67,6 +67,7 @@ mz_font mz_load_font(mz_applet* applet, const char* filepath)
 
 void mz_unload_font(mz_font* font)
 {
+	glDeleteTextures(1, &font->texture_array_id);
 	MZ_FREE(font->glyphs);
 	font->glyph_count = 0;
 }

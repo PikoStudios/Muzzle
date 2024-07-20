@@ -95,6 +95,7 @@ void mz_text_renderer_flush(struct mz_text_renderer* renderer, mz_font* font, fl
 	glUniform4f(renderer->loc_uTint, tint.x, tint.y, tint.z, tint.w);
 
 	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, renderer->char_count);
+	//glDrawArrays(GL_TRIANGLE_STRIP, 0, renderer->char_count * 4);
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 
 	renderer->char_count = 0;
