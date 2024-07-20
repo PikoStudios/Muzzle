@@ -10,7 +10,6 @@ layout (location = 1) out vec4 vTint;
 layout (location = 2) out flat float vRadiusSquared;
 
 uniform vec2 uViewportResolution;
-uniform int uRenderOrderMax;
 
 void main()
 {
@@ -18,5 +17,5 @@ void main()
 	vScreenCenterPosition = aCenterPosition;
 	vRadiusSquared = aRadius * aRadius;
 	vec2 ndcPos = (2.0 * aPosition / uViewportResolution) - 1.0;
-	gl_Position = vec4(ndcPos.x, -ndcPos.y, float(uRenderOrderMax) / (uRenderOrderMax + aRenderOrder), 1.0);
+	gl_Position = vec4(ndcPos.x, -ndcPos.y,1 - (0.001 * aRenderOrder), 1.0);
 }
