@@ -2,7 +2,7 @@
 
 void internals_generate_quad_indices(GLuint* indices, uint32_t max_quads)
 {
-	for (int i = 0, offset = 0; i < max_quads; i += 6, offset += 4)
+	for (int i = 0, offset = 0; i < max_quads * 6; i += 6, offset += 4)
 	{
 		// Triangle 1
 		indices[i + 0] = offset + 0;

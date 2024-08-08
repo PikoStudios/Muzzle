@@ -14,8 +14,7 @@ struct mz_text_vertex
 
 struct mz_text_renderer
 {
-	GLuint vao;
-	GLuint vbo;
+	GLuint buffers[3];
 	struct mz_text_vertex* vertices;
 	uint32_t vertex_index;
 	uint32_t char_count;

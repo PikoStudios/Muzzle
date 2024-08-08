@@ -45,7 +45,7 @@ struct mz_sprite_renderer mz_sprite_renderer_initialize(uint32_t max_sprites)
 	internals_generate_quad_indices(indices, max_sprites);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, sprite_renderer.buffers[EBO]);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, max_sprites * 6, indices, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, max_sprites * 6 * sizeof(GLuint), indices, GL_STATIC_DRAW);
 
 	MZ_FREE(indices);
 

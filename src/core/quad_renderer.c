@@ -9,6 +9,23 @@
 #define VBO 1
 #define EBO 2
 
+static void print_vertex_array(struct mz_quad_vertex* vertices, size_t len)
+{
+	for (int i = 0; i < len; i++)
+	{
+		printf("IDX: %d\n\tPosition:\n\t\tX: %f\n\t\tY: %f\n\tTint:\n\t\tR: %f\n\t\tG: %f\n\t\tB: %f\n\t\tA: %f\n\tRender Order: %d\n",
+		       i,
+		       vertices[i].position.x,
+		       vertices[i].position.y,
+		       vertices[i].tint.x,
+		       vertices[i].tint.y,
+		       vertices[i].tint.z,
+		       vertices[i].tint.w,
+		       vertices[i].render_order
+		);
+	}
+}
+
 struct mz_quad_renderer mz_quad_renderer_initialize(uint32_t max_quads)
 {
 	struct mz_quad_renderer quad_renderer = (struct mz_quad_renderer){0};
@@ -38,23 +55,10 @@ struct mz_quad_renderer mz_quad_renderer_initialize(uint32_t max_quads)
 		mz_log_status(LOG_STATUS_FATAL_ERROR, "Failed to allocate memory [quad_renderer::mz_quad_renderer_initialize::indices]");
 	}
 
-	//internals_generate_quad_indices(indices, max_quads);
-
-	for (int i = 0, offset = 0; i < max_quads; i += 6, offset += 4)
-	{
-		// Triangle 1
-		indices[i + 0] = offset + 0;
-		indices[i + 1] = offset + 3;
-		indices[i + 2] = offset + 2;
-
-		// Triangle 2
-		indices[i + 3] = offset + 0;
-		indices[i + 4] = offset + 1;
-		indices[i + 5] = offset + 3;
-	}
+	internals_generate_quad_indices(indices, max_quads);
 	
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, quad_renderer.buffers[EBO]);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * max_quads, indices, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * max_quads * sizeof(GLuint), indices, GL_STATIC_DRAW);
 
 	MZ_FREE(indices);
 
@@ -112,6 +116,9 @@ void mz_quad_renderer_flush(struct mz_quad_renderer* quad_renderer, float width,
 		// TODO: Fix that it cannot find uniform when uniform isnt used
 		LOC_VERIFY(uViewportResolution);
 	}
+
+	//print_vertex_array(quad_renderer->vertices, quad_renderer->quad_count * 4);
+	//exit(-1);
 
 	// TODO: see if there is a elegant way to not update every frame
 	glUniform2f(quad_renderer->loc_uViewportResolution, width, height);

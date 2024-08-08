@@ -54,6 +54,7 @@ mz_font mz_load_font(mz_applet* applet, const char* filepath)
 		        
 		);
 
+		font.glyphs[i].texture_idx = i;
 		font.glyphs[i].size = (mz_vec2_i){face->glyph->bitmap.width, face->glyph->bitmap.rows};
 		font.glyphs[i].bearing = (mz_vec2_i){face->glyph->bitmap_left, face->glyph->bitmap_top};
 		font.glyphs[i].advance = face->glyph->advance.x;

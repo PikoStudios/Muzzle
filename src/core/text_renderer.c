@@ -1,8 +1,12 @@
 #include "core/text_renderer.h"
 #include "core/logging.h"
-#include "internals/todo.h"
+#include "internals/quad_indices.h"
 
 #define LOC_UNINITIALIZED_VALUE -404
+
+#define VAO 0
+#define VBO 1
+#define EBO 2
 
 struct mz_text_renderer mz_text_renderer_initialize(uint32_t max_chars)
 {
@@ -18,14 +22,35 @@ struct mz_text_renderer mz_text_renderer_initialize(uint32_t max_chars)
 		mz_log_status(LOG_STATUS_FATAL_ERROR, "Failed to allocate memory [text_renderer::initialize::vertices]");
 	}
 
-	glGenVertexArrays(1, &renderer.vao);
-	glGenBuffers(1, &renderer.vbo);
+	glGenBuffers(2, &renderer.buffers[VBO]);
+	glGenVertexArrays(1, &renderer.buffers[VAO]);
 
-	glBindVertexArray(renderer.vao);
-	glNamedBufferData(renderer.vbo, sizeof(mz_vec2) * (max_chars * 4), NULL, GL_DYNAMIC_DRAW);
+	glBindVertexArray(renderer.buffers[VAO]);
+	glBindBuffer(GL_ARRAY_BUFFER, renderer.buffers[VBO]);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, renderer.buffers[EBO]);
+	
+	//glNamedBufferData(renderer.buffers[VBO], sizeof(mz_vec2) * (max_chars * 4), NULL, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(mz_vec2) * (max_chars * 4), NULL, GL_DYNAMIC_DRAW);
 
-	glEnableVertexArrayAttrib(renderer.vao, 0);
-	glVertexAttribDivisor(0, 1); // Tell GPU this is a per-instance attribute. Needed because we will be instancing
+	GLuint* indices = MZ_CALLOC(max_chars * 6, sizeof(GLuint));
+
+	if (indices == NULL)
+	{
+		MZ_FREE(renderer.vertices);
+		glDeleteVertexArrays(1, &renderer.buffers[VAO]);
+		glDeleteBuffers(1, &renderer.buffers[VBO]);
+
+		mz_log_status(LOG_STATUS_FATAL_ERROR, "Failed to allocate memory [text_renderer::mz_text_renderer_initialize::indices]");
+	}
+
+	internals_generate_quad_indices(indices, max_chars);
+	//glNamedBufferData(renderer.buffers[EBO], 6 * max_chars * sizeof(GLuint), indices, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * max_chars * sizeof(GLuint), indices, GL_STATIC_DRAW);
+
+	MZ_FREE(indices);
+	
+	glEnableVertexArrayAttrib(renderer.buffers[VAO], 0);
+	//glVertexAttribDivisor(0, 1); // Tell GPU this is a per-instance attribute. Needed because we will be instancing
 	glVertexAttribPointer(
 		/* index */ 	 0,
 		/* size */ 		 2,
@@ -35,8 +60,8 @@ struct mz_text_renderer mz_text_renderer_initialize(uint32_t max_chars)
 		/* offset */	 (GLvoid*)(offsetof(struct mz_text_vertex, position))
 	);
 
-	glEnableVertexArrayAttrib(renderer.vao, 1);
-	glVertexAttribDivisor(1, 1);
+	glEnableVertexArrayAttrib(renderer.buffers[VAO], 1);
+//	glVertexAttribDivisor(1, 1);
 	glVertexAttribPointer(
 		1,
 		2,
@@ -46,8 +71,8 @@ struct mz_text_renderer mz_text_renderer_initialize(uint32_t max_chars)
 		(GLvoid*)(offsetof(struct mz_text_vertex, texture_coords))
 	);
 
-	glEnableVertexArrayAttrib(renderer.vao, 2);
-	glVertexAttribDivisor(2, 1);
+	glEnableVertexArrayAttrib(renderer.buffers[VAO], 2);
+//	glVertexAttribDivisor(2, 1);
 	glVertexAttribIPointer(
 		2,
 		1,
@@ -71,8 +96,9 @@ void mz_text_renderer_flush(struct mz_text_renderer* renderer, mz_font* font, fl
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	glUseProgram(renderer->shader_id);
 
-	glBindBuffer(GL_ARRAY_BUFFER, renderer->vbo);
-	glBindVertexArray(renderer->vao);
+	glBindBuffer(GL_ARRAY_BUFFER, renderer->buffers[VBO]);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, renderer->buffers[EBO]);
+	glBindVertexArray(renderer->buffers[VAO]);
 
 	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(struct mz_text_vertex) * (renderer->char_count * 4), renderer->vertices); // Sadly glNamedBufferSubData() isn't well documented so I will stick with the binding approach
 	
@@ -94,7 +120,8 @@ void mz_text_renderer_flush(struct mz_text_renderer* renderer, mz_font* font, fl
 	glUniform1i(renderer->loc_uRenderOrder, render_order);
 	glUniform4f(renderer->loc_uTint, tint.x, tint.y, tint.z, tint.w);
 
-	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, renderer->char_count);
+	glDrawElements(GL_TRIANGLES, renderer->char_count * 6, GL_UNSIGNED_INT, NULL);
+	//glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, renderer->char_count);
 	//glDrawArrays(GL_TRIANGLE_STRIP, 0, renderer->char_count * 4);
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 
@@ -121,8 +148,8 @@ mz_boolean mz_text_renderer_push_char(struct mz_text_renderer* renderer, struct 
 
 void mz_text_renderer_destroy(struct mz_text_renderer* renderer)
 {
-	glDeleteVertexArrays(1, &renderer->vao);
-	glDeleteBuffers(1, &renderer->vbo);
+	glDeleteVertexArrays(1, &renderer->buffers[VAO]);
+	glDeleteBuffers(2, &renderer->buffers[VBO]);
 	
 	MZ_FREE(renderer->vertices);
 }
