@@ -46,7 +46,7 @@ load_char:
 
 		if (text[i] == '\n')
 		{
-			y += glyph.size.y * /* 1.3 * */ scale;
+			y += glyph.size.y * 1.3 * scale;
 			x = newline_x;
 			continue;
 		}

@@ -1,6 +1,7 @@
 #include "core/font.h"
 #include "core/logging.h"
 #include "core/applet.h"
+#include "freetype/freetype.h"
 
 mz_font mz_load_font(mz_applet* applet, const char* filepath)
 {

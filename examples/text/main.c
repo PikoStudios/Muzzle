@@ -34,9 +34,9 @@ void applet_loop(mz_applet* applet)
 
 		mz_begin_drawing(applet);
 			mz_clear_screen(TINT_GRAY);
-			mz_draw_text(applet, "Hello World from \n Muzzle!", 250.f, 250.f,48.f, &font, TINT_BLACK);
-			//mz_draw_text(applet, "hmmmm", 250.f, 250.f,48.f, &font, TINT_BLACK);
-			//draw_text(applet, "goodnight", 250.f, 250.f, 28.f, &font);
+			mz_draw_text(applet, "The quick brown fox jumps over the lazy dog", 10.f, 100.f, 48.f, &font, TINT_BLACK);
+			mz_draw_text(applet, "abcdefghijklmnoqrstuvwxyz!@#$%^&*()_+-=1234567890`~[]", 20.f, 200.f, 38.f, &font, TINT_BLACK);
+			//mz_draw_text(applet, "Hello World from Muzzle!", 250.f, 250.f,48.f, &font, TINT_BLACK);
 		mz_end_drawing(applet);
 	}
 
