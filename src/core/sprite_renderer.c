@@ -11,6 +11,8 @@
 
 struct mz_sprite_renderer mz_sprite_renderer_initialize(uint32_t max_sprites)
 {
+	MZ_TRACK_FUNCTION();
+
 	struct mz_sprite_renderer sprite_renderer = (struct mz_sprite_renderer){0};
 	
 	glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &sprite_renderer.max_textures); 
@@ -118,6 +120,8 @@ struct mz_sprite_renderer mz_sprite_renderer_initialize(uint32_t max_sprites)
 
 void mz_sprite_renderer_flush(struct mz_sprite_renderer* sprite_renderer, float width, float height)
 {
+	MZ_TRACK_FUNCTION();
+
 	glUseProgram(sprite_renderer->shader_id);
 	
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, sprite_renderer->buffers[EBO]);
@@ -157,6 +161,8 @@ void mz_sprite_renderer_flush(struct mz_sprite_renderer* sprite_renderer, float 
 
 int mz_sprite_renderer_push_texture(struct mz_sprite_renderer* sprite_renderer, GLint texture_id)
 {
+	MZ_TRACK_FUNCTION();
+
 	MZ_ASSERT_DETAILED(texture_id > -1, "Texture ID should be guaranteed to be valid");
 	
 	if (sprite_renderer->texture_count + 1 > sprite_renderer->max_textures)
@@ -182,6 +188,8 @@ int mz_sprite_renderer_push_texture(struct mz_sprite_renderer* sprite_renderer, 
 
 mz_boolean mz_sprite_renderer_push_sprite(struct mz_sprite_renderer* sprite_renderer, struct mz_sprite_vertex v1, struct mz_sprite_vertex v2, struct mz_sprite_vertex v3, struct mz_sprite_vertex v4)
 {
+	MZ_TRACK_FUNCTION();
+
 	MZ_ASSERT_DETAILED(v1.tex_id == v2.tex_id && v2.tex_id == v3.tex_id && v3.tex_id == v4.tex_id, "All texture ids should equal for all vertices");
 	
 	if (++sprite_renderer->sprite_count > sprite_renderer->max_sprites)
@@ -201,6 +209,8 @@ mz_boolean mz_sprite_renderer_push_sprite(struct mz_sprite_renderer* sprite_rend
 
 void mz_sprite_renderer_destroy(struct mz_sprite_renderer* sprite_renderer)
 {
+	MZ_TRACK_FUNCTION();
+
 	glDeleteVertexArrays(1, &sprite_renderer->buffers[VAO]);
 	glDeleteBuffers(2, &sprite_renderer->buffers[VBO]);
 	MZ_FREE(sprite_renderer->vertices);

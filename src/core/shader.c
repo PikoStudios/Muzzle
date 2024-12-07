@@ -6,6 +6,8 @@
 
 static void handle_compile_status(const char* msg, GLuint id)
 {
+	MZ_TRACK_FUNCTION();
+
 	GLint s = 0;
 	glGetShaderiv(id, GL_COMPILE_STATUS, &s);
 
@@ -23,6 +25,8 @@ static void handle_compile_status(const char* msg, GLuint id)
 
 mz_shader mz_create_shader(const char* vertex_src, const char* fragment_src, mz_shader_target target)
 {
+	MZ_TRACK_FUNCTION();
+
 	GLuint vid = glCreateShader(GL_VERTEX_SHADER);
 	GLuint fid = glCreateShader(GL_FRAGMENT_SHADER);
 
@@ -157,11 +161,14 @@ void mz_use_shaders(mz_applet* applet, mz_shader* shaders, size_t shaders_len)
 
 void mz_unload_shader(mz_shader shader)
 {
+	MZ_TRACK_FUNCTION();
 	glDeleteProgram(shader.pid);
 }
 
 void mz_unload_shaders(mz_shader* shaders, size_t len)
 {
+	MZ_TRACK_FUNCTION();
+
 	for (int i = 0; i < len; i++)
 	{
 		glDeleteProgram(shaders[i].pid);

@@ -1,4 +1,5 @@
 #include "primitives/circle.h"
+#include "backend.h"
 #include "core/circle_renderer.h"
 
 #define TINT_TO_VEC4(t) (mz_vec4){(float)(t.r),(float)(t.g),(float)(t.b), (float)(t.a)}
@@ -6,6 +7,7 @@
 
 void mz_draw_circle(mz_applet* applet, float x, float y, float radius, mz_tint tint)
 {
+	MZ_TRACK_FUNCTION();
 	applet->render_order++;
 
 	mz_vec4 color = TINT_TO_VEC4(tint);

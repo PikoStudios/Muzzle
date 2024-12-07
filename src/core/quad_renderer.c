@@ -28,6 +28,8 @@ static void print_vertex_array(struct mz_quad_vertex* vertices, size_t len)
 
 struct mz_quad_renderer mz_quad_renderer_initialize(uint32_t max_quads)
 {
+	MZ_TRACK_FUNCTION();
+
 	struct mz_quad_renderer quad_renderer = (struct mz_quad_renderer){0};
 
 	quad_renderer.vertices = MZ_CALLOC(max_quads * 4, sizeof(struct mz_quad_vertex));
@@ -101,6 +103,8 @@ struct mz_quad_renderer mz_quad_renderer_initialize(uint32_t max_quads)
 
 void mz_quad_renderer_flush(struct mz_quad_renderer* quad_renderer, float width, float height)
 {
+	MZ_TRACK_FUNCTION();
+
 	glUseProgram(quad_renderer->shader_id);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, quad_renderer->buffers[EBO]);
 	glBindBuffer(GL_ARRAY_BUFFER, quad_renderer->buffers[VBO]);
@@ -131,6 +135,8 @@ void mz_quad_renderer_flush(struct mz_quad_renderer* quad_renderer, float width,
 
 mz_boolean mz_quad_renderer_push_quad(struct mz_quad_renderer* quad_renderer, struct mz_quad_vertex v1, struct mz_quad_vertex v2, struct mz_quad_vertex v3, struct mz_quad_vertex v4)
 {
+	MZ_TRACK_FUNCTION();
+
 	if (++quad_renderer->quad_count > quad_renderer->max_quads)
 	{
 		quad_renderer->quad_count--;
@@ -148,6 +154,8 @@ mz_boolean mz_quad_renderer_push_quad(struct mz_quad_renderer* quad_renderer, st
 
 void mz_quad_renderer_destroy(struct mz_quad_renderer* quad_renderer)
 {
+	MZ_TRACK_FUNCTION();
+
 	glDeleteVertexArrays(1, &quad_renderer->buffers[VAO]);
 	glDeleteBuffers(2, &quad_renderer->buffers[VBO]);
 

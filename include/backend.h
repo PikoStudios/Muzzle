@@ -59,21 +59,35 @@ typedef uint8_t mz_boolean;
 #endif
 
 #ifdef MUZZLE_DEBUG_BUILD
+	extern char* __mz_debug_current_function_name;
+
 	#ifdef _WIN32
-		#include <intrin.h>
-		#define MZ_TRIGGER_BREAKPOINT() __debugbreak()
+		//#include <intrin.h>
+		#define MZ_TRIGGER_BREAKPOINT() DebugBreak()
 	#else
 		#include <signal.h>
 		#define MZ_TRIGGER_BREAKPOINT() raise(SIGTRAP)
 	#endif
 	
-	#define MZ_ASSERT_DETAILED(expression, error_msg) if (!(expression)) { log_status(STATUS_FATAL_ERROR, "Assertion " #expression " failed: " #error_msg); exit(-1); MZ_TRIGGER_BREAKPOINT(); }
+	#define MZ_ASSERT_DETAILED(expression, error_msg) if (!(expression)) { printf("\nAssertion " #expression " failed: " #error_msg "\n"); exit(-1); MZ_TRIGGER_BREAKPOINT(); }
+	#define MZ_TRACK_FUNCTION() __mz_debug_current_function_name = (char*)__func__
+	#define MZ_TRACK_FUNCTION_STAGE(s) __mz_debug_current_function_name = s
+	#define MZ_GET_CURRENT_FUNCTION() __mz_debug_current_function_name
 #else
 	// No effect without MUZZLE_DEBUG_BUILD defined
 	#define MZ_TRIGGER_BREAKPOINT()
 	
 	// No effect without MUZZLE_DEBUG_BUILD defined
 	#define MZ_ASSERT_DETAILED(expression, error_msg)
+
+	// No effect without MUZZLE_DEDBUG_BUILD defined
+	#define MZ_TRACK_FUNCTION()
+	
+	// No effect without MUZZLE_DEDBUG_BUILD defined
+	#define MZ_TRACK_FUNCTION_STAGE(s)
+	
+	// No effect without MUZZLE_DEDBUG_BUILD defined
+	#define MZ_GET_CURRENT_FUNCTION() "unknown"
 #endif
 
 #ifndef MUZZLE_EXIT_KEY

@@ -8,6 +8,9 @@ typedef enum mz_log_status_type
 	// Yellow text
 	LOG_STATUS_WARNING,
 
+	// Yellow text (should only be used in debug)
+	LOG_STATUS_DEBUG,
+
 	// Red text
 	LOG_STATUS_ERROR,
 

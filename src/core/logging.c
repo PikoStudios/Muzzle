@@ -12,6 +12,10 @@ void mz_log_status(mz_log_status_type type, const char* status)
 		printf("\e[0;33m\e[4;33m[WARNING] :: %s\e[0m\n", status);
 		break;
 
+	case LOG_STATUS_DEBUG:
+		printf("\e[0;33m\e[4;33m[DEBUG] :: %s\e[0m\n", status);
+		break;
+
 	case LOG_STATUS_ERROR:
 		printf("\e[0;31m\e[4;31m[ERROR] :: %s\e[0m\n", status);
 		break;

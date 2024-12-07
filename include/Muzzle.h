@@ -1,6 +1,11 @@
 #ifndef MUZZLE_H
 #define MUZZLE_H
 
+#ifdef MUZZLE_DEBUG_BUILD
+    #include "backend.h"
+    char* __mz_debug_current_function_name = "unknown";
+#endif
+
 #include "core/logging.h"
 #include "core/applet.h"
 #include "core/shader.h"

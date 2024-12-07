@@ -1,4 +1,5 @@
 #include "core/text_renderer.h"
+#include "backend.h"
 #include "core/logging.h"
 #include "internals/quad_indices.h"
 
@@ -10,6 +11,8 @@
 
 struct mz_text_renderer mz_text_renderer_initialize(uint32_t max_chars)
 {
+	MZ_TRACK_FUNCTION();
+	
 	struct mz_text_renderer renderer = (struct mz_text_renderer){0};
 
 	renderer.vertices = MZ_CALLOC(max_chars * 4, sizeof(struct mz_text_vertex));
@@ -29,8 +32,7 @@ struct mz_text_renderer mz_text_renderer_initialize(uint32_t max_chars)
 	glBindBuffer(GL_ARRAY_BUFFER, renderer.buffers[VBO]);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, renderer.buffers[EBO]);
 	
-	//glNamedBufferData(renderer.buffers[VBO], sizeof(mz_vec2) * (max_chars * 4), NULL, GL_DYNAMIC_DRAW);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(mz_vec2) * (max_chars * 4), NULL, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(struct mz_text_vertex) * (max_chars * 4), NULL, GL_DYNAMIC_DRAW);
 
 	GLuint* indices = MZ_CALLOC(max_chars * 6, sizeof(GLuint));
 
@@ -44,13 +46,11 @@ struct mz_text_renderer mz_text_renderer_initialize(uint32_t max_chars)
 	}
 
 	internals_generate_quad_indices(indices, max_chars);
-	//glNamedBufferData(renderer.buffers[EBO], 6 * max_chars * sizeof(GLuint), indices, GL_STATIC_DRAW);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * max_chars * sizeof(GLuint), indices, GL_STATIC_DRAW);
 
 	MZ_FREE(indices);
 	
 	glEnableVertexArrayAttrib(renderer.buffers[VAO], 0);
-	//glVertexAttribDivisor(0, 1); // Tell GPU this is a per-instance attribute. Needed because we will be instancing
 	glVertexAttribPointer(
 		/* index */ 	 0,
 		/* size */ 		 2,
@@ -61,7 +61,6 @@ struct mz_text_renderer mz_text_renderer_initialize(uint32_t max_chars)
 	);
 
 	glEnableVertexArrayAttrib(renderer.buffers[VAO], 1);
-//	glVertexAttribDivisor(1, 1);
 	glVertexAttribPointer(
 		1,
 		2,
@@ -72,7 +71,6 @@ struct mz_text_renderer mz_text_renderer_initialize(uint32_t max_chars)
 	);
 
 	glEnableVertexArrayAttrib(renderer.buffers[VAO], 2);
-//	glVertexAttribDivisor(2, 1);
 	glVertexAttribIPointer(
 		2,
 		1,
@@ -93,6 +91,8 @@ struct mz_text_renderer mz_text_renderer_initialize(uint32_t max_chars)
 
 void mz_text_renderer_flush(struct mz_text_renderer* renderer, mz_font* font, float width, float height, int render_order, mz_vec4 tint)
 {
+	MZ_TRACK_FUNCTION();
+	
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	glUseProgram(renderer->shader_id);
 
@@ -107,6 +107,7 @@ void mz_text_renderer_flush(struct mz_text_renderer* renderer, mz_font* font, fl
 		renderer->loc_uViewportResolution = glGetUniformLocation(renderer->shader_id, "uViewportResolution");
 		renderer->loc_uRenderOrder = glGetUniformLocation(renderer->shader_id, "uRenderOrder");
 		renderer->loc_uTint = glGetUniformLocation(renderer->shader_id, "uTint");
+		renderer->locs_valid = MUZZLE_TRUE;
 
 		LOC_VERIFY(uViewportResolution);
 		LOC_VERIFY(uRenderOrder);
@@ -121,8 +122,6 @@ void mz_text_renderer_flush(struct mz_text_renderer* renderer, mz_font* font, fl
 	glUniform4f(renderer->loc_uTint, tint.x, tint.y, tint.z, tint.w);
 
 	glDrawElements(GL_TRIANGLES, renderer->char_count * 6, GL_UNSIGNED_INT, NULL);
-	//glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, renderer->char_count);
-	//glDrawArrays(GL_TRIANGLE_STRIP, 0, renderer->char_count * 4);
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 
 	renderer->char_count = 0;
@@ -131,6 +130,8 @@ void mz_text_renderer_flush(struct mz_text_renderer* renderer, mz_font* font, fl
 
 mz_boolean mz_text_renderer_push_char(struct mz_text_renderer* renderer, struct mz_text_vertex v1, struct mz_text_vertex v2, struct mz_text_vertex v3, struct mz_text_vertex v4)
 {
+	MZ_TRACK_FUNCTION();
+
 	if (++renderer->char_count > renderer->max_chars)
 	{
 		renderer->char_count--;
@@ -148,6 +149,8 @@ mz_boolean mz_text_renderer_push_char(struct mz_text_renderer* renderer, struct 
 
 void mz_text_renderer_destroy(struct mz_text_renderer* renderer)
 {
+	MZ_TRACK_FUNCTION();
+	
 	glDeleteVertexArrays(1, &renderer->buffers[VAO]);
 	glDeleteBuffers(2, &renderer->buffers[VBO]);
 	

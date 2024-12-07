@@ -1,11 +1,11 @@
 #include "core/applet.h"
-#include "core/circle_renderer.h"
 #include "core/logging.h"
-#include "core/quad_renderer.h"
 #include "core/shader.h"
+
+#include "core/quad_renderer.h"
+#include "core/circle_renderer.h"
 #include "core/text_renderer.h"
-#include "internals/glfw_callbacks.h"
-#include "internals/glfw_error_helper.h"
+
 #include "core/shaders/quad_renderer_default_vertex.glsl.h"
 #include "core/shaders/quad_renderer_default_fragment.glsl.h"
 #include "core/shaders/sprite_renderer_default_vertex.glsl.h"
@@ -15,8 +15,14 @@
 #include "core/shaders/text_renderer_default_vertex.glsl.h"
 #include "core/shaders/text_renderer_default_fragment.glsl.h"
 
+#include "internals/gl_callbacks.h"
+#include "internals/glfw_callbacks.h"
+#include "internals/glfw_error_helper.h"
+
 mz_applet mz_initialize_applet(const char* window_title, int width, int height, mz_applet_flags flags)
 {
+	MZ_TRACK_FUNCTION();
+
 	mz_applet applet;
 	applet.width = width;
 	applet.height = height;
@@ -75,6 +81,11 @@ mz_applet mz_initialize_applet(const char* window_title, int width, int height, 
 
 	glfwSetWindowPos(applet.window, 230, 230); // TODO: needed?
 
+#ifdef MUZZLE_DEBUG_BUILD
+	glEnable(GL_DEBUG_OUTPUT);
+	glDebugMessageCallback(internals_gl_debug_message_callback, NULL);
+#endif
+
 	glViewport(0, 0, width, height);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -127,6 +138,8 @@ mz_boolean mz_keep_applet(mz_applet* applet)
 
 void mz_terminate_applet(mz_applet* applet)
 {
+	MZ_TRACK_FUNCTION();
+
 	mz_log_status(LOG_STATUS_INFO, "Cleaning up resources");
 	mz_quad_renderer_destroy(&applet->quad_renderer);
 	mz_sprite_renderer_destroy(&applet->sprite_renderer);

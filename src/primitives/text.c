@@ -13,14 +13,17 @@ static inline mz_font_glyph safe_index_glyphs(mz_font* font, unsigned int index)
 	return (index >= font->glyph_count) ? (mz_font_glyph){0} : font->glyphs[index];
 }
 
+// TODO: Fix unicode not working :)
+// TODO: Fix text origin being bottom left instead of top left
 void mz_draw_text(mz_applet* applet, const char* text, float x, float y, float font_size, mz_font* font, mz_tint tint)
 {
-	applet->render_order++;
+	MZ_TRACK_FUNCTION();
 	
+	applet->render_order++;
 	mz_vec4 color = TINT_TO_VEC4(tint);
 	float scale = font_size / 256;
 	float newline_x = x;
-
+	
 	for (int i = 0; text[i] != '\0'; i++)
 	{
 		int idx = text[i];
@@ -44,9 +47,10 @@ load_char:
 			goto load_char;
 		}
 
+		// TODO: Not working
 		if (text[i] == '\n')
 		{
-			y += glyph.size.y * 1.3 * scale;
+			y += font_size;
 			x = newline_x;
 			continue;
 		}
@@ -58,18 +62,17 @@ load_char:
 		}
 
 		mz_vec2 pos = (mz_vec2){x + glyph.bearing.x * scale, y - glyph.bearing.y * scale};
-		int size = 256 * scale;
 
 		struct mz_text_vertex v1 = VERTEX(pos.x, pos.y, 0, 0, glyph.texture_idx);
-		struct mz_text_vertex v2 = VERTEX(pos.x + size, pos.y, 1, 0, glyph.texture_idx);
-		struct mz_text_vertex v3 = VERTEX(pos.x, pos.y + size, 0, 1, glyph.texture_idx);
-		struct mz_text_vertex v4 = VERTEX(pos.x + size, pos.y + size, 1, 1, glyph.texture_idx);
+		struct mz_text_vertex v2 = VERTEX(pos.x + font_size, pos.y, 1, 0, glyph.texture_idx);
+		struct mz_text_vertex v3 = VERTEX(pos.x, pos.y + font_size, 0, 1, glyph.texture_idx);
+		struct mz_text_vertex v4 = VERTEX(pos.x + font_size, pos.y + font_size, 1, 1, glyph.texture_idx);
 
 		if (mz_text_renderer_push_char(&applet->text_renderer, v1, v2, v3, v4) == MUZZLE_FALSE)
 		{
 			mz_text_renderer_flush(&applet->text_renderer, font, applet->width, applet->height, applet->render_order, color);
 #ifdef MUZZLE_DEBUG_BUILD
-			MZ_ASSERT_DETAILED(mz_text_renderer_push_char(applet->text_renderer, v1, v2, v3, v4) == MUZZLE_TRUE, "Text renderer should be empty");
+			MZ_ASSERT_DETAILED(mz_text_renderer_push_char(&applet->text_renderer, v1, v2, v3, v4) == MUZZLE_TRUE, "Text renderer should be empty");
 #else
 			mz_text_renderer_push_char(&applet->text_renderer, v1, v2, v3, v4);
 #endif
@@ -85,10 +88,10 @@ advance:
 
 void mz_draw_text_vec2(mz_applet* applet, const char* text, mz_vec2 position, float font_size, mz_font* font, mz_tint tint)
 {
-	
+	mz_draw_text(applet, text, position.x, position.y, font_size, font, tint);
 }
 
 void mz_draw_text_vec3(mz_applet* applet, const char* text, mz_vec3 position_and_font_size, mz_font* font, mz_tint tint)
 {
-	
+	mz_draw_text(applet, text, position_and_font_size.x, position_and_font_size.y, position_and_font_size.z, font, tint);
 }

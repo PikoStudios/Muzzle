@@ -1,10 +1,11 @@
 #include "core/font.h"
 #include "core/logging.h"
 #include "core/applet.h"
-#include "freetype/freetype.h"
 
 mz_font mz_load_font(mz_applet* applet, const char* filepath)
 {
+	MZ_TRACK_FUNCTION();
+
 	mz_font font = (mz_font){0};
 	FT_Face face = NULL;
 
@@ -24,14 +25,18 @@ mz_font mz_load_font(mz_applet* applet, const char* filepath)
 	}
 
 	glCreateTextures(GL_TEXTURE_2D_ARRAY, 1, &font.texture_array_id);
-	glTextureStorage3D(font.texture_array_id, 1, GL_R8, 256, 256, font.glyph_count);
+	glTextureStorage3D(font.texture_array_id, 1, GL_R8, 256, 256, 256 /*font.glyph_count*/);
 	
 	glTextureParameteri(font.texture_array_id, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTextureParameteri(font.texture_array_id, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTextureParameteri(font.texture_array_id, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTextureParameteri(font.texture_array_id, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	for (int i = 0; i < font.glyph_count; i++)
+	glPixelStorei(GL_PACK_ALIGNMENT, 1);
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+	// TODO: i < font.glyph_count to load unicode characters
+	for (int i = 0; i < 256; i++)
 	{
 		if (FT_Load_Char(face, i, FT_LOAD_RENDER))
 		{
@@ -62,6 +67,9 @@ mz_font mz_load_font(mz_applet* applet, const char* filepath)
 		font.glyphs[i]._loaded = MUZZLE_TRUE;
 	}
 
+	glPixelStorei(GL_PACK_ALIGNMENT, 4);
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+
 	FT_Done_Face(face);
 	
 	return font;
@@ -69,6 +77,8 @@ mz_font mz_load_font(mz_applet* applet, const char* filepath)
 
 void mz_unload_font(mz_font* font)
 {
+	MZ_TRACK_FUNCTION();
+
 	glDeleteTextures(1, &font->texture_array_id);
 	MZ_FREE(font->glyphs);
 	font->glyph_count = 0;

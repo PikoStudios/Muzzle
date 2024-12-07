@@ -1,4 +1,5 @@
 #include "core/drawing.h"
+#include <stdio.h>
 #include "core/circle_renderer.h"
 #include "core/quad_renderer.h"
 #include "core/sprite_renderer.h"
@@ -6,12 +7,15 @@
 
 void mz_begin_drawing(mz_applet* applet)
 {
+	MZ_TRACK_FUNCTION();
 	glfwSwapBuffers(applet->window);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void mz_end_drawing(mz_applet* applet)
 {
+	MZ_TRACK_FUNCTION();
+
 	if (applet->quad_renderer.quad_count > 0)
 	{
 		mz_quad_renderer_flush(&applet->quad_renderer, applet->width, applet->height);
@@ -29,12 +33,13 @@ void mz_end_drawing(mz_applet* applet)
 
 	applet->render_order = 0;
 
-	glFlush(); // TODO: needed?
 	glfwPollEvents();
 }
 
 void mz_clear_screen(mz_tint tint)
 {
+	MZ_TRACK_FUNCTION();
+
 #ifndef MUZZLE_PREFER_MULTIPLICATION
 	glClearColor(
 		(float)(tint.r) / 255,

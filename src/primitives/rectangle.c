@@ -9,11 +9,7 @@
 
 void mz_draw_rectangle(mz_applet* applet, float x, float y, float width, float height, mz_tint tint)
 {
-	//UNLIKELY_IF(applet->quad_renderer.__init == MUZZLE_FALSE)
-	//{
-	//	mz_quad_renderer_initialize(&applet->quad_renderer, 100);
-	//	MZ_ASSERT_DETAILED(applet->quad_renderer.__init == MUZZLE_TRUE, "Quad renderer should be initialized now");
-	//}
+	MZ_TRACK_FUNCTION();
 	
 	applet->render_order++;
 	

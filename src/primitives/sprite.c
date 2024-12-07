@@ -7,6 +7,8 @@
 
 mz_sprite mz_load_sprite(const char* filepath)
 {
+	MZ_TRACK_FUNCTION();
+	
 	int w, h, bpp;
 	unsigned char* data = stbi_load(filepath, &w, &h, &bpp, 4);
 
@@ -43,6 +45,7 @@ mz_sprite mz_load_sprite(const char* filepath)
 
 void mz_unload_sprite(mz_sprite* data)
 {
+	MZ_TRACK_FUNCTION();
 	glDeleteTextures(1, &data->_id);
 }
 
@@ -51,6 +54,8 @@ void mz_unload_sprite(mz_sprite* data)
 
 void mz_draw_sprite(mz_applet* applet, mz_sprite* data, float x, float y, mz_tint tint)
 {
+	MZ_TRACK_FUNCTION();
+
 	applet->render_order++;
 
 	int texture_id = mz_sprite_renderer_push_texture(&applet->sprite_renderer, data->_id);

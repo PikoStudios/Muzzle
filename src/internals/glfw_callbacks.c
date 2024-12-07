@@ -17,6 +17,8 @@ void internals_glfw_callback_key(GLFWwindow* handle, int key, int scan_code, int
 
 void internals_glfw_callback_window_resize(GLFWwindow* window, int width, int height)
 {
+	MZ_TRACK_FUNCTION();
+
 	mz_applet* applet = (mz_applet*)(glfwGetWindowUserPointer(window));
 	applet->width = width;
 	applet->height = height;

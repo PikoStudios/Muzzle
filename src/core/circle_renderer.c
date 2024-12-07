@@ -11,6 +11,8 @@
 
 struct mz_circle_renderer mz_circle_renderer_initialize(uint32_t max_circles)
 {
+	MZ_TRACK_FUNCTION();
+
 	struct mz_circle_renderer renderer = (struct mz_circle_renderer){0};
 
 	renderer.vertices = MZ_CALLOC(max_circles * 4, sizeof(struct mz_circle_vertex));
@@ -105,6 +107,8 @@ struct mz_circle_renderer mz_circle_renderer_initialize(uint32_t max_circles)
 
 void mz_circle_renderer_flush(struct mz_circle_renderer* circle_renderer, float width, float height)
 {
+	MZ_TRACK_FUNCTION();
+
 	glUseProgram(circle_renderer->shader_id);
 	
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, circle_renderer->buffers[EBO]);
@@ -131,6 +135,8 @@ void mz_circle_renderer_flush(struct mz_circle_renderer* circle_renderer, float 
 
 mz_boolean mz_circle_renderer_push_circle(struct mz_circle_renderer* circle_renderer, struct mz_circle_vertex v1, struct mz_circle_vertex v2, struct mz_circle_vertex v3, struct mz_circle_vertex v4)
 {
+	MZ_TRACK_FUNCTION();
+
 	if (++circle_renderer->circle_count > circle_renderer->max_circles)
 	{
 		circle_renderer->circle_count--;
@@ -148,6 +154,8 @@ mz_boolean mz_circle_renderer_push_circle(struct mz_circle_renderer* circle_rend
 
 void mz_circle_renderer_destroy(struct mz_circle_renderer* circle_renderer)
 {
+	MZ_TRACK_FUNCTION();
+
 	glDeleteVertexArrays(1, &circle_renderer->buffers[VAO]);
 	glDeleteBuffers(2, &circle_renderer->buffers[VBO]);
 
