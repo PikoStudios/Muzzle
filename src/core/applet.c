@@ -6,14 +6,7 @@
 #include "core/circle_renderer.h"
 #include "core/text_renderer.h"
 
-#include "core/shaders/quad_renderer_default_vertex.glsl.h"
-#include "core/shaders/quad_renderer_default_fragment.glsl.h"
-#include "core/shaders/sprite_renderer_default_vertex.glsl.h"
-#include "core/shaders/sprite_renderer_default_fragment.glsl.h"
-#include "core/shaders/circle_renderer_default_vertex.glsl.h"
-#include "core/shaders/circle_renderer_default_fragment.glsl.h"
-#include "core/shaders/text_renderer_default_vertex.glsl.h"
-#include "core/shaders/text_renderer_default_fragment.glsl.h"
+#include "core/shaders/default_shaders.h"
 
 #include "internals/gl_callbacks.h"
 #include "internals/glfw_callbacks.h"
@@ -96,10 +89,10 @@ mz_applet mz_initialize_applet(const char* window_title, int width, int height, 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
 
-	mz_shader default_quad_shader = mz_create_shader((char*)(quad_renderer_default_vertex_glsl), (char*)(quad_renderer_default_fragment_glsl), SHADER_TARGET_QUAD); 
-	mz_shader default_sprite_shader = mz_create_shader((char*)(sprite_renderer_default_vertex_glsl), (char*)(sprite_renderer_default_fragment_glsl), SHADER_TARGET_SPRITE);
-	mz_shader default_circle_shader = mz_create_shader((char*)(circle_renderer_default_vertex_glsl), (char*)(circle_renderer_default_fragment_glsl), SHADER_TARGET_CIRCLE);
-	mz_shader default_text_shader = mz_create_shader((char*)(text_renderer_default_vertex_glsl), (char*)(text_renderer_default_fragment_glsl), SHADER_TARGET_TEXT);
+	mz_shader default_quad_shader = mz_create_shader((char*)(quad_vertex_glsl), (char*)(quad_fragment_glsl), SHADER_TARGET_QUAD); 
+	mz_shader default_sprite_shader = mz_create_shader((char*)(sprite_vertex_glsl), (char*)(sprite_fragment_glsl), SHADER_TARGET_SPRITE);
+	mz_shader default_circle_shader = mz_create_shader((char*)(circle_vertex_glsl), (char*)(circle_fragment_glsl), SHADER_TARGET_CIRCLE);
+	mz_shader default_text_shader = mz_create_shader((char*)(text_vertex_glsl), (char*)(text_fragment_glsl), SHADER_TARGET_TEXT);
 
 	mz_log_status(LOG_STATUS_SUCCESS, "Compiled default shaders");
 
@@ -146,6 +139,11 @@ void mz_terminate_applet(mz_applet* applet)
 	mz_circle_renderer_destroy(&applet->circle_renderer);
 	mz_text_renderer_destroy(&applet->text_renderer);
 	// TODO: destroy default shaders
+
+	glDeleteProgram(applet->quad_renderer.shader_id);
+	glDeleteProgram(applet->sprite_renderer.shader_id);
+	glDeleteProgram(applet->circle_renderer.shader_id);
+	glDeleteProgram(applet->text_renderer.shader_id);
 	
 	mz_log_status(LOG_STATUS_INFO, "Closing Window");
 	glfwDestroyWindow(applet->window);
