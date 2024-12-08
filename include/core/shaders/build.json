@@ -1,0 +1,30 @@
+{
+	"guard_name": "DEFAULT",
+	"filename": "default_shaders.h",
+	"shaders":
+	[
+		{
+			"name": "quad",
+			"vertex": "quad/quad_vertex.glsl",
+			"fragment": "quad/quad_fragment.glsl"
+		},
+
+		{
+			"name": "circle",
+			"vertex": "circle/circle_vertex.glsl",
+			"fragment": "circle/circle_fragment.glsl"
+		},
+
+		{
+			"name": "sprite",
+			"vertex": "sprite/sprite_vertex.glsl",
+			"fragment": "sprite/sprite_fragment.glsl"
+		},
+
+		{
+			"name": "text",
+			"vertex": "text/text_vertex.glsl",
+			"fragment": "text/text_fragment.glsl"
+		}
+	]
+}
