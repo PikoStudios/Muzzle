@@ -9,16 +9,17 @@
 
 typedef struct mz_applet
 {
-	GLFWwindow* window;
-	int width;
-	int height;
-	GLint render_order;
 	struct mz_quad_renderer quad_renderer;
 	struct mz_sprite_renderer sprite_renderer;
 	struct mz_circle_renderer circle_renderer;
 	struct mz_text_renderer text_renderer;
+	
+	GLFWwindow* window;
 	FT_Library font_library;
 	double delta_time;
+	GLint render_order;
+	int width;
+	int height;
 	mz_boolean delta_time_flag;
 } mz_applet;
 
