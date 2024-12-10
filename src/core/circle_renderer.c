@@ -156,6 +156,7 @@ void mz_circle_renderer_destroy(struct mz_circle_renderer* circle_renderer)
 {
 	MZ_TRACK_FUNCTION();
 
+	glDeleteProgram(circle_renderer->shader_id);
 	glDeleteVertexArrays(1, &circle_renderer->buffers[VAO]);
 	glDeleteBuffers(2, &circle_renderer->buffers[VBO]);
 

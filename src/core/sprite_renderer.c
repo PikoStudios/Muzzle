@@ -211,7 +211,9 @@ void mz_sprite_renderer_destroy(struct mz_sprite_renderer* sprite_renderer)
 {
 	MZ_TRACK_FUNCTION();
 
+	glDeleteProgram(sprite_renderer->shader_id);
 	glDeleteVertexArrays(1, &sprite_renderer->buffers[VAO]);
 	glDeleteBuffers(2, &sprite_renderer->buffers[VBO]);
+	
 	MZ_FREE(sprite_renderer->vertices);
 }

@@ -96,6 +96,11 @@ mz_applet mz_initialize_applet(const char* window_title, int width, int height, 
 
 	mz_log_status(LOG_STATUS_SUCCESS, "Compiled default shaders");
 
+	applet.default_shaders[0] = default_quad_shader.pid;
+	applet.default_shaders[1] = default_sprite_shader.pid;
+	applet.default_shaders[2] = default_circle_shader.pid;
+	applet.default_shaders[3] = default_text_shader.pid;
+
 	applet.render_order = 0;
 
 	// NOTE: I tried lazy loading and it saves maybe like 0.5 mb of memory
@@ -134,18 +139,14 @@ void mz_terminate_applet(mz_applet* applet)
 	MZ_TRACK_FUNCTION();
 
 	mz_log_status(LOG_STATUS_INFO, "Cleaning up resources");
+	
 	mz_quad_renderer_destroy(&applet->quad_renderer);
 	mz_sprite_renderer_destroy(&applet->sprite_renderer);
 	mz_circle_renderer_destroy(&applet->circle_renderer);
 	mz_text_renderer_destroy(&applet->text_renderer);
-	// TODO: destroy default shaders
 
-	glDeleteProgram(applet->quad_renderer.shader_id);
-	glDeleteProgram(applet->sprite_renderer.shader_id);
-	glDeleteProgram(applet->circle_renderer.shader_id);
-	glDeleteProgram(applet->text_renderer.shader_id);
-	
 	mz_log_status(LOG_STATUS_INFO, "Closing Window");
+	
 	glfwDestroyWindow(applet->window);
 	glfwTerminate();
 }

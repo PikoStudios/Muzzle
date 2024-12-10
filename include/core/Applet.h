@@ -13,7 +13,7 @@ typedef struct mz_applet
 	struct mz_sprite_renderer sprite_renderer;
 	struct mz_circle_renderer circle_renderer;
 	struct mz_text_renderer text_renderer;
-	
+
 	GLFWwindow* window;
 	FT_Library font_library;
 	double delta_time;

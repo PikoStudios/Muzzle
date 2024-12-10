@@ -150,7 +150,8 @@ mz_boolean mz_text_renderer_push_char(struct mz_text_renderer* renderer, struct 
 void mz_text_renderer_destroy(struct mz_text_renderer* renderer)
 {
 	MZ_TRACK_FUNCTION();
-	
+
+	glDeleteProgram(renderer->shader_id);
 	glDeleteVertexArrays(1, &renderer->buffers[VAO]);
 	glDeleteBuffers(2, &renderer->buffers[VBO]);
 	

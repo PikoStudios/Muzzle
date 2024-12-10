@@ -156,6 +156,7 @@ void mz_quad_renderer_destroy(struct mz_quad_renderer* quad_renderer)
 {
 	MZ_TRACK_FUNCTION();
 
+	glDeleteProgram(quad_renderer->shader_id);
 	glDeleteVertexArrays(1, &quad_renderer->buffers[VAO]);
 	glDeleteBuffers(2, &quad_renderer->buffers[VBO]);
 
