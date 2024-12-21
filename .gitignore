@@ -4,6 +4,8 @@ examples/*/build.ps1
 examples/*/build
 examples/build.ps1
 examples/scaffold.ps1
+examples/*/.idea
+examples/*/cmake-build-debug
 .*.clangd
 .clangd
 compile_flags.txt
