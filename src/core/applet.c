@@ -96,11 +96,6 @@ mz_applet mz_initialize_applet(const char* window_title, int width, int height, 
 
 	mz_log_status(LOG_STATUS_SUCCESS, "Compiled default shaders");
 
-	applet.default_shaders[0] = default_quad_shader.pid;
-	applet.default_shaders[1] = default_sprite_shader.pid;
-	applet.default_shaders[2] = default_circle_shader.pid;
-	applet.default_shaders[3] = default_text_shader.pid;
-
 	applet.render_order = 0;
 
 	// NOTE: I tried lazy loading and it saves maybe like 0.5 mb of memory
