@@ -17,11 +17,11 @@ struct mz_sprite_vertex
 struct mz_sprite_renderer
 {
 	uint32_t textures[32];
-	uint32_t texture_count;
 	uint32_t buffers[3];
 	struct mz_sprite_vertex* vertices;
 	uint32_t vertex_index;
 	uint32_t sprite_count;
+	uint32_t texture_count;
 	uint32_t max_sprites;
 	GLint max_textures;
 	GLuint shader_id;
