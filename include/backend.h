@@ -87,7 +87,7 @@ typedef uint8_t mz_boolean;
 	#define MZ_TRACK_FUNCTION_STAGE(s)
 	
 	// No effect without MUZZLE_DEDBUG_BUILD defined
-	#define MZ_GET_CURRENT_FUNCTION() "unknown"
+	#define MZ_GET_CURRENT_FUNCTION() "debug features disabled"
 #endif
 
 #ifndef MUZZLE_EXIT_KEY
