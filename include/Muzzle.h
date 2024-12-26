@@ -20,4 +20,6 @@
 #include "input/key.h"
 #include "input/mouse.h"
 
+#include "utils/sleep.h"
+
 #endif // MUZZLE_H
