@@ -50,11 +50,16 @@ ${mz_source_dir}/input/key.c
 ${mz_source_dir}/input/mouse.c
 )
 
+set(mz_utils_src
+${mz_source_dir}/utis/sleep.c
+)
+
 set(mz_source
 ${mz_internal_src}
 ${mz_core_src}
 ${mz_primitives_src}
 ${mz_input_src}
+${mz_utils_src}
 ${MUZZLE_LIB_FOLDER}/glad/src/glad.c
 )
 
