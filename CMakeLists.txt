@@ -51,7 +51,7 @@ ${mz_source_dir}/input/mouse.c
 )
 
 set(mz_utils_src
-${mz_source_dir}/utis/sleep.c
+${mz_source_dir}/utils/sleep.c
 )
 
 set(mz_source
