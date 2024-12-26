@@ -69,8 +69,7 @@ mz_applet mz_initialize_applet(const char* window_title, int width, int height, 
 		glfwSwapInterval(1);
 	}
 
-	applet.delta_time = 0.0f;
-	applet.delta_time_flag = MZ_BOOLEAN_CAST(flags & APPLET_FLAG_TRACK_DELTA_TIME);
+	applet.delta_time = (flags & APPLET_FLAG_TRACK_DELTA_TIME) ? 0.0f : -1;
 
 	glfwSetWindowPos(applet.window, 230, 230); // TODO: needed?
 
@@ -120,7 +119,7 @@ void mz_start_applet(mz_applet* applet, mz_applet_main_dispatch_fn main_dispatch
 
 mz_boolean mz_keep_applet(mz_applet* applet)
 {
-	if (applet->delta_time_flag)
+	if (applet->delta_time > -1)
 	{
 		applet->delta_time = glfwGetTime();
 		glfwSetTime(0);

@@ -17,10 +17,10 @@ typedef struct mz_applet
 	GLFWwindow* window;
 	FT_Library font_library;
 	double delta_time;
+	double elapsed_time;
 	GLint render_order;
 	int width;
 	int height;
-	mz_boolean delta_time_flag;
 } mz_applet;
 
 typedef enum mz_applet_flags
