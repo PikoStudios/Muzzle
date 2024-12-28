@@ -106,6 +106,10 @@ typedef uint8_t mz_boolean;
 	#warning "OpenGL versions lower than 4.5 is not recommended. OpenGL versions less than 4.3 are NOT supported and will likely result in errors and versions less than 4.5 will have certain features limited. Read docs/less_than_4_5.md"
 #endif
 
+#ifndef MUZZLE_TEXT_SOURCE_FONT_SIZE
+	#define MUZZLE_TEXT_SOURCE_FONT_SIZE 256
+#endif
+
 #ifndef MUZZLE_TEXT_DEFAULT_SPACE_WIDTH
 	#define MUZZLE_TEXT_DEFAULT_SPACE_WIDTH 10
 #endif

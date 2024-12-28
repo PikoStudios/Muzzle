@@ -14,7 +14,7 @@ mz_font mz_load_font(mz_applet* applet, const char* filepath)
 		mz_log_status_formatted(LOG_STATUS_FATAL_ERROR, "Could not load font '%s'", filepath);
 	}
 
-	FT_Set_Pixel_Sizes(face, 256, 256);
+	FT_Set_Pixel_Sizes(face, MUZZLE_TEXT_SOURCE_FONT_SIZE, MUZZLE_TEXT_SOURCE_FONT_SIZE);
 
 	font.glyph_count = face->num_glyphs;
 	font.glyphs = MZ_CALLOC(font.glyph_count, sizeof(mz_font_glyph));
@@ -25,7 +25,7 @@ mz_font mz_load_font(mz_applet* applet, const char* filepath)
 	}
 
 	glCreateTextures(GL_TEXTURE_2D_ARRAY, 1, &font.texture_array_id);
-	glTextureStorage3D(font.texture_array_id, 1, GL_R8, 256, 256, 256 /*font.glyph_count*/);
+	glTextureStorage3D(font.texture_array_id, 1, GL_R8, MUZZLE_TEXT_SOURCE_FONT_SIZE, MUZZLE_TEXT_SOURCE_FONT_SIZE, 256 /*font.glyph_count*/);
 	
 	glTextureParameteri(font.texture_array_id, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTextureParameteri(font.texture_array_id, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);

@@ -21,33 +21,32 @@ void mz_draw_text(mz_applet* applet, const char* text, float x, float y, float f
 	
 	applet->render_order++;
 	mz_vec4 color = TINT_TO_VEC4(tint);
-	float scale = font_size / 256;
+	float scale = font_size / MUZZLE_TEXT_SOURCE_FONT_SIZE;
 	float newline_x = x;
 	
 	for (int i = 0; text[i] != '\0'; i++)
 	{
-		int idx = text[i];
+		int c = text[i];
 		mz_font_glyph glyph;
 		
 load_char:
-		glyph = safe_index_glyphs(font, idx); // NOTE: Reason we do this is because we can't declare a variable, goto, declare it again.
+		glyph = safe_index_glyphs(font, c); // NOTE: Reason we do this is because we can't declare a variable, goto, declare it again.
 
 		UNLIKELY_IF(glyph._loaded == MUZZLE_FALSE)
 		{
 			mz_log_status_formatted(LOG_STATUS_WARNING, "Unloaded character: '%c'", text[i]);
 
-			if (idx == ' ')
+			if (c == ' ')
 			{
 				// NOTE: This is to prevent an infinite loop where we keep trying to load the space glyph and its unloaded
 				x += MUZZLE_TEXT_DEFAULT_SPACE_WIDTH * scale;
 				continue;
 			}
 			
-			idx = ' ';
+			c = ' ';
 			goto load_char;
 		}
 
-		// TODO: Not working
 		if (text[i] == '\n')
 		{
 			y += font_size;
@@ -94,4 +93,54 @@ void mz_draw_text_vec2(mz_applet* applet, const char* text, mz_vec2 position, fl
 void mz_draw_text_vec3(mz_applet* applet, const char* text, mz_vec3 position_and_font_size, mz_font* font, mz_tint tint)
 {
 	mz_draw_text(applet, text, position_and_font_size.x, position_and_font_size.y, position_and_font_size.z, font, tint);
+}
+
+mz_vec2 mz_measure_text(mz_applet* applet, const char* text, float font_size, mz_font* font)
+{
+	mz_vec2 dimensions = (mz_vec2){0.0f, MUZZLE_TEXT_SOURCE_FONT_SIZE};
+	float scale = font_size / MUZZLE_TEXT_SOURCE_FONT_SIZE;
+	int width = 0;
+	
+	for (int i = 0; text[i] != '\0'; i++)
+	{
+		int c = text[i];
+		mz_font_glyph glyph;
+
+load_char:
+		glyph = safe_index_glyphs(font, text[i]);
+
+		UNLIKELY_IF(glyph._loaded == MUZZLE_FALSE)
+		{
+			mz_log_status_formatted(LOG_STATUS_WARNING, "Unloaded character: '%c'", text[i]);
+
+			if (c == ' ')
+			{
+				width += MUZZLE_TEXT_DEFAULT_SPACE_WIDTH;
+				continue;
+			}
+
+			c = ' ';
+			goto load_char;
+		}
+
+		if (text[i] == '\n')
+		{
+			if (width > dimensions.x)
+			{
+				dimensions.x = width;
+			}
+
+			// MUZZLE_TEXT_SOURCE_FONT_SIZE * scale = font_size
+			dimensions.y += MUZZLE_TEXT_SOURCE_FONT_SIZE;
+			width = 0;
+			continue;
+		}
+
+		width += glyph.advance >> 6;
+	}
+
+	dimensions.x *= scale;
+	dimensions.y *= scale;
+
+	return dimensions;
 }
