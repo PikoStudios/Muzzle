@@ -92,25 +92,39 @@ def watch() -> None:
 		      "lastmod": Path(shader["fragment"]).stat().st_mtime
 		})
 
+	running: bool = True
+
 	def worker(index: int) -> None:
-		currmod: float = files[index]["path"].stat().st_mtime
+		print(f"Thread {index + 1}: Watching {files[index]["path"]}")
+		
+		while running:
+			currmod: float = files[index]["path"].stat().st_mtime
 
-		if currmod != files[index]["lastmod"]:
-			files[index]["lastmod"] = currmod
-			print(f"Detected change in {files[index]['path']}, rebuilding...")
-			build()
+			if currmod != files[index]["lastmod"]:
+				files[index]["lastmod"] = currmod
+				print(f"Thread {index + 1}: Detected change in {files[index]['path']}, rebuilding...")
+				build()
 
-		time.sleep(1)
+			time.sleep(1)
+
+		print(f"Thread {index + 1}: Shutting down")
 
 	threads: t.List[Thread] = []
 
 	for i in range(len(files)):
-		t = Thread(target=worker, args=(i,))
-		threads.append(t)
-		t.start()
+		th = Thread(target=worker, daemon=True, args=(i,))
+		threads.append(th)
+		th.start()
 
-	for t in threads:
-		t.join()
+
+	try:
+		while True:
+			pass
+	except KeyboardInterrupt:
+		running = False
+		
+		for th in threads:
+			th.join()
 
 def help() -> None:
 	print("Muzzle generate.py - GLSL Shader to C Header script\n\t[nothing] - build header file\n\t--watch/-w - watch files defined in build.json for changes and rebuild on change\n\t[else] - this help screen")
