@@ -2,7 +2,10 @@ import typing as t
 import subprocess
 from pathlib import Path
 from datetime import datetime
+from threading import Thread
+import time
 import json
+import sys
 
 XXD_BINARY: str = "xxd"
 
@@ -41,7 +44,7 @@ def generate(name: str, vertex: Path, fragment: Path) -> t.Tuple[str, str]:
 		fragment_code.replace(fragment_var, f"{name}_fragment_glsl").replace(fragment_var + "_len", f"{name}_fragment_glsl_len"),
 	)
 
-def main() -> None:
+def build() -> None:
 	with open("build.json", "r") as fp:
 		build_config: t.Dict = json.load(fp)
 
@@ -72,5 +75,50 @@ def main() -> None:
 
 	print(f"Generated {filepath}")
 
+def watch() -> None:
+	with open("build.json", "r") as fp:
+		build_config: t.Dict = json.load(fp)
+
+	files: t.List[t.Dict[str, Path | float]] = []
+
+	for shader in build_config["shaders"]:
+		files.append({
+		     "path": Path(shader["vertex"]),
+		     "lastmod": Path(shader["vertex"]).stat().st_mtime
+		})
+		
+		files.append({
+		      "path": Path(shader["fragment"]),
+		      "lastmod": Path(shader["fragment"]).stat().st_mtime
+		})
+
+	def worker(index: int) -> None:
+		currmod: float = files[index]["path"].stat().st_mtime
+
+		if currmod != files[index]["lastmod"]:
+			files[index]["lastmod"] = currmod
+			print(f"Detected change in {files[index]['path']}, rebuilding...")
+			build()
+
+		time.sleep(1)
+
+	threads: t.List[Thread] = []
+
+	for i in range(len(files)):
+		t = Thread(target=worker, args=(i,))
+		threads.append(t)
+		t.start()
+
+	for t in threads:
+		t.join()
+
+def help() -> None:
+	print("Muzzle generate.py - GLSL Shader to C Header script\n\t[nothing] - build header file\n\t--watch/-w - watch files defined in build.json for changes and rebuild on change\n\t[else] - this help screen")
+
 if __name__ == "__main__":
-	main()
+	if len(sys.argv) < 2:
+		build()
+	elif sys.argv[1] == "--watch" or sys.argv[1] == "-w":
+		watch()
+	else:
+		help()
