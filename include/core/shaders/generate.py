@@ -95,19 +95,17 @@ def watch() -> None:
 	running: bool = True
 
 	def worker(index: int) -> None:
-		print(f"Thread {index + 1}: Watching {files[index]["path"]}")
+		print(f"Watching {files[index]["path"]}")
 		
 		while running:
 			currmod: float = files[index]["path"].stat().st_mtime
 
 			if currmod != files[index]["lastmod"]:
 				files[index]["lastmod"] = currmod
-				print(f"Thread {index + 1}: Detected change in {files[index]['path']}, rebuilding...")
+				print(f"Detected change in {files[index]['path']}, rebuilding...")
 				build()
 
 			time.sleep(1)
-
-		print(f"Thread {index + 1}: Shutting down")
 
 	threads: t.List[Thread] = []
 
@@ -121,6 +119,7 @@ def watch() -> None:
 		while True:
 			pass
 	except KeyboardInterrupt:
+		print("Shutting down watcher threads")
 		running = False
 		
 		for th in threads:
