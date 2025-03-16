@@ -94,6 +94,12 @@ mz_boolean internals_hm_put(internals_hashmap* hm, internals_hm_entry entry)
 	}
 
 	ptr->next = MZ_MALLOC(sizeof(internals_hm_entry));
+
+	if (ptr->next == NULL)
+	{
+		mz_log_status(LOG_STATUS_FATAL_ERROR, "Failed to allocate memory for next entry");
+	}
+	
 	*ptr->next = entry;
 	
 	ptr->next->prev = ptr;

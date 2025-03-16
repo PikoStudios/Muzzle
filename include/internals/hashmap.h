@@ -11,6 +11,7 @@
 
 typedef void (*internals_hm_entry_free_func)(void*, void*);
 
+// TODO: Specialize for string => int associations
 typedef struct internals_hm_entry
 {
 	void* key;
