@@ -1,8 +1,8 @@
 package dev.pikostudios.muzzle.bridge;
 
-import dev.pikostudios.muzzle.bridge.utils.Struct;
+import dev.pikostudios.muzzle.bridge.utils.NativeStruct;
 
-public class Applet extends Struct
+public class Applet extends NativeStruct
 {
 	public interface DispatchCallback
 	{

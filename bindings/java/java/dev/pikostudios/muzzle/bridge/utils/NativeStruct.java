@@ -1,10 +1,10 @@
 package dev.pikostudios.muzzle.bridge.utils;
 
-public abstract class Struct
+public abstract class NativeStruct
 {
 	private final long nativePointer;
 	
-	public Struct(long nativePointer)
+	public NativeStruct(long nativePointer)
 	{
 		this.nativePointer = nativePointer;
 	}
