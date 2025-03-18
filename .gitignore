@@ -13,3 +13,4 @@ compile_flags.txt
 .ignore
 lib
 swig/build
+bindings/java/java/dev/pikostudios/muzzle/bridge/*.class

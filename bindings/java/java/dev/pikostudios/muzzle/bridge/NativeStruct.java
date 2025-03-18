@@ -1,4 +1,4 @@
-package dev.pikostudios.muzzle.bridge.utils;
+package dev.pikostudios.muzzle.bridge;
 
 public abstract class NativeStruct
 {

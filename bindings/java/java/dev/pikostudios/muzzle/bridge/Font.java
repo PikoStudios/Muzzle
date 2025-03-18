@@ -1,7 +1,5 @@
 package dev.pikostudios.muzzle.bridge;
 
-import dev.pikostudios.muzzle.bridge.utils.NativeStruct;
-
 public class Font extends NativeStruct
 {
     private Font(long nativePointer)
