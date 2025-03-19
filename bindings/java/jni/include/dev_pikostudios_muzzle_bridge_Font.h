@@ -10,9 +10,9 @@ extern "C" {
 /*
  * Class:     dev_pikostudios_muzzle_bridge_Font
  * Method:    load
- * Signature: (Ldev/pikostudios/muzzle/bridge/Applet;Ljava/lang/String;)V
+ * Signature: (Ldev/pikostudios/muzzle/bridge/Applet;Ljava/lang/String;)Ldev/pikostudios/muzzle/bridge/Font;
  */
-JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Font_load
+JNIEXPORT jobject JNICALL Java_dev_pikostudios_muzzle_bridge_Font_load
   (JNIEnv *, jclass, jobject, jstring);
 
 /*

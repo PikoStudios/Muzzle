@@ -7,6 +7,6 @@ public class Font extends NativeStruct
         super(nativePointer);
     }
 
-    public static native void load(Applet applet, String filepath);
+    public static native Font load(Applet applet, String filepath);
     public static native void unload(Font font);
 }

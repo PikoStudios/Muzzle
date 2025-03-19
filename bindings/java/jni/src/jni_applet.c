@@ -42,7 +42,7 @@ JNIEXPORT jobject JNICALL Java_dev_pikostudios_muzzle_bridge_Applet_initialize(J
     *applet = mz_initialize_applet(title, width, height, flags);
 
     jmethodID ctor = (*env)->GetMethodID(env, class, "<init>", "(Ljava/lang/String;JJ)V");
-    jobject japplet = (*env)->NewObject(env, class, ctor, PTR_TO_JLONG(applet), PTR_TO_JLONG(title));
+    jobject japplet = (*env)->NewObject(env, class, ctor, window_title, PTR_TO_JLONG(applet), PTR_TO_JLONG(title));
 
     return japplet;
 }

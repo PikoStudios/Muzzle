@@ -18,6 +18,7 @@ public class Applet extends NativeStruct
 	{
 		super(nativePointer);
 		this.title = title;
+		this.titlePointer = titlePointer;
 	}
 
 	public static native Applet initialize(String windowTitle, int width, int height, int flags);
