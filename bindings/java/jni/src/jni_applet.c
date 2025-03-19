@@ -1,5 +1,4 @@
 #include "../include/dev_pikostudios_muzzle_bridge_Applet.h"
-#include "core/Applet.h"
 #include "core/applet.h"
 #include "core/logging.h"
 #include "core/memory.h"
