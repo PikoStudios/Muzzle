@@ -2,22 +2,10 @@
 #include "core/applet.h"
 #include "core/logging.h"
 #include "core/memory.h"
-
-#define PTR_TO_JLONG(p) ((jlong)(((intptr_t)(p))))
-#define JLONG_TO_PTR(p) ((intptr_t)(p))
-#define JBOOLEAN(b) ((b) ? JNI_TRUE : JNI_FALSE)
+#include "../include/common.h"
 
 static JNIEnv* __applet_start_jnienv;
 static jobject __applet_start_callback;
-
-static mz_applet* get_applet(JNIEnv* env, jobject obj)
-{
-    jclass cls = (*env)->GetObjectClass(env, obj);
-    jfieldID native_pointer_field = (*env)->GetFieldID(env, cls, "nativePointer", "J");
-    jlong native_pointer = (*env)->GetLongField(env, obj, native_pointer_field);
-
-    return (mz_applet*)(JLONG_TO_PTR(native_pointer));
-}
 
 static void applet_dispatch(mz_applet* applet)
 {
