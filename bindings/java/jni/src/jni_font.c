@@ -34,6 +34,7 @@ JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Font_unload(JNIEnv* en
     mz_font* _font = (mz_font*)(JLONG_TO_PTR(native_pointer));
 
     mz_unload_font(_font);
+    MZ_FREE(_font);
 
     (*env)->SetLongField(env, font, native_pointer_field, 0L);
 }
