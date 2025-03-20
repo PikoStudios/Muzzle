@@ -9,4 +9,9 @@ public class Font extends NativeStruct
 
     public static native Font load(Applet applet, String filepath);
     public static native void unload(Font font);
+
+    public void unload()
+    {
+        Font.unload(this);
+    }
 }
