@@ -4,7 +4,7 @@ public class Sprite
 {
     private final int width;
     private final int height;
-    private final int id;
+    private int id;
 
     private Sprite(int width, int height, int id)
     {

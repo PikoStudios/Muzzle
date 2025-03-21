@@ -23,6 +23,8 @@ JNIEXPORT jobject JNICALL Java_dev_pikostudios_muzzle_bridge_Font_load(JNIEnv* e
 
     jmethodID ctor = (*env)->GetMethodID(env, class, "<init>", "(J)V");
     jobject jfont = (*env)->NewObject(env, class, ctor, PTR_TO_JLONG(font));
+
+    return jfont;
 }
 
 JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Font_unload(JNIEnv* env, jclass class, jobject font)
