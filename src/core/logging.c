@@ -51,8 +51,12 @@ void mz_log_status_formatted(mz_log_status_type type, const char* fmt, ...)
 	#define VA_SNPRINTF(buffer, length, format, argptr) vsnprintf(buffer, length, format, argptr)
 #endif
 
-	const int fmt_len = VA_SNPRINTF(NULL, 0, fmt, args);
+	// args should only be used once, so need to copy.
+	va_list args_temp;
+	va_copy(args_temp, args);
+	const int fmt_len = VA_SNPRINTF(NULL, 0, fmt, args_temp);
 	MZ_ASSERT_DETAILED(fmt_len > -1, "vsnprintf failed for some reason");
+	va_end(args_temp);
 
 	char buf[fmt_len + 1];
 
