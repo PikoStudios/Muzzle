@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.18)
 
-project(Sprites)
+project(Template)
 set(MUZZLE_ROOT "../..")
 set(MUZZLE_LIB_FOLDER ${MUZZLE_ROOT}/lib)
 set(MUZZLE_DEPS_FOLDER ${MUZZLE_ROOT}/deps)

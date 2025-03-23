@@ -12,5 +12,6 @@ compile_flags.txt
 .gitpod.yml
 .ignore
 lib
+build
 swig/build
 bindings/java/java/dev/pikostudios/muzzle/bridge/*.class
