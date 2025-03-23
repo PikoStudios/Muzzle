@@ -1,9 +1,0 @@
-[submodule "deps/glfw"]
-	path = deps/glfw
-	url = https://github.com/glfw/glfw
-[submodule "muzzle_sr_resolve"]
-	path = deps/sr_resolve
-	url = https://github.com/pikostudios/sr_resolve_muzzle
-[submodule "deps/openal-soft"]
-	path = deps/openal-soft
-	url = https://github.com/kcat/openal-soft.git
