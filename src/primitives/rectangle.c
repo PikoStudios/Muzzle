@@ -10,7 +10,7 @@
 void mz_draw_rectangle(mz_applet* applet, float x, float y, float width, float height, mz_tint tint)
 {
 	MZ_TRACK_FUNCTION();
-	
+
 	applet->render_order++;
 	
 	mz_vec4 color = TINT_TO_VEC4(tint);

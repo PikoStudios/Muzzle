@@ -21,6 +21,7 @@ struct mz_circle_renderer
 	uint32_t circle_count;
 	uint32_t max_circles;
 	GLuint shader_id;
+	GLuint default_shader_id;
 
 	mz_boolean locs_valid;
 	GLint loc_uViewportResolution;

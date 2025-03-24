@@ -1,5 +1,6 @@
 #include "core/drawing.h"
 #include <stdio.h>
+#include "backend.h"
 #include "core/circle_renderer.h"
 #include "core/quad_renderer.h"
 #include "core/sprite_renderer.h"
@@ -10,6 +11,16 @@ void mz_begin_drawing(mz_applet* applet)
 	MZ_TRACK_FUNCTION();
 	glfwSwapBuffers(applet->window);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	// Offscreen framebuffer used, so clear it
+	if (applet->shader_passes_len > 0)
+	{
+		glBindFramebuffer(GL_FRAMEBUFFER, applet->framebuffer_buffers[0]);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+		applet->shader_passes_len = 0;
+	}
 }
 
 void mz_end_drawing(mz_applet* applet)
@@ -31,6 +42,21 @@ void mz_end_drawing(mz_applet* applet)
 		mz_circle_renderer_flush(&applet->circle_renderer, applet->width, applet->height);
 	}
 
+	if (applet->shader_passes_len > 0)
+	{
+		MZ_TRACK_FUNCTION_STAGE("mz_end_drawing shader passes");
+
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glBindTexture(GL_TEXTURE_2D, applet->framebuffer_buffers[1]);
+
+		for (int i = 0; i < applet->shader_passes_len; i++)
+		{
+			glUseProgram(applet->shader_passes[i]);
+			// TODO: Render quad for shader pass
+		}
+
+		MZ_TRACK_FUNCTION();
+	}
 	applet->render_order = 0;
 
 	glfwPollEvents();

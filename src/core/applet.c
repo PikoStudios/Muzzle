@@ -1,4 +1,5 @@
 #include "core/applet.h"
+#include "backend.h"
 #include "core/logging.h"
 #include "core/shader.h"
 
@@ -19,6 +20,7 @@ mz_applet mz_initialize_applet(const char* window_title, int width, int height, 
 	mz_applet applet;
 	applet.width = width;
 	applet.height = height;
+	applet.shader_passes_len = 0;
 
 	if (!glfwInit())
 	{
@@ -88,25 +90,51 @@ mz_applet mz_initialize_applet(const char* window_title, int width, int height, 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
 
-	mz_shader default_quad_shader = mz_create_shader((char*)(quad_vertex_glsl), (char*)(quad_fragment_glsl), SHADER_TARGET_QUAD); 
-	mz_shader default_sprite_shader = mz_create_shader((char*)(sprite_vertex_glsl), (char*)(sprite_fragment_glsl), SHADER_TARGET_SPRITE);
-	mz_shader default_circle_shader = mz_create_shader((char*)(circle_vertex_glsl), (char*)(circle_fragment_glsl), SHADER_TARGET_CIRCLE);
-	mz_shader default_text_shader = mz_create_shader((char*)(text_vertex_glsl), (char*)(text_fragment_glsl), SHADER_TARGET_TEXT);
+	// Initialize off-screen framebuffer (used by shader passes)
+	glGenFramebuffers(1, &applet.framebuffer_buffers[0]);
+	glBindFramebuffer(GL_FRAMEBUFFER, applet.framebuffer_buffers[0]);
+
+	glGenTextures(1, &applet.framebuffer_buffers[1]);
+	glBindTexture(GL_TEXTURE_2D, applet.framebuffer_buffers[1]);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, applet.framebuffer_buffers[1], 0);
+
+	glGenRenderbuffers(1, &applet.framebuffer_buffers[2]);
+	glBindRenderbuffer(GL_RENDERBUFFER, applet.framebuffer_buffers[2]);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, applet.framebuffer_buffers[2]);
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	{
+		mz_log_status(LOG_STATUS_FATAL_ERROR, "Could not create framebuffer");
+	}
+
+	mz_shader default_quad_shader = mz_create_shader((char*)(quad_vertex_glsl), (char*)(quad_fragment_glsl), SHADER_TYPE_DIRECT_QUAD);
+	mz_shader default_sprite_shader = mz_create_shader((char*)(sprite_vertex_glsl), (char*)(sprite_fragment_glsl), SHADER_TYPE_DIRECT_SPRITE);
+	mz_shader default_circle_shader = mz_create_shader((char*)(circle_vertex_glsl), (char*)(circle_fragment_glsl), SHADER_TYPE_DIRECT_CIRCLE);
+	mz_shader default_text_shader = mz_create_shader((char*)(text_vertex_glsl), (char*)(text_fragment_glsl), SHADER_TYPE_DIRECT_TEXT);
 
 	mz_log_status(LOG_STATUS_SUCCESS, "Compiled default shaders");
 
 	applet.render_order = 0;
 
-	// NOTE: I tried lazy loading and it saves maybe like 0.5 mb of memory
-	applet.quad_renderer = mz_quad_renderer_initialize(100); // TODO: Macro instead of hard coded value
-	applet.sprite_renderer = mz_sprite_renderer_initialize(100);
-	applet.circle_renderer = mz_circle_renderer_initialize(100);
-	applet.text_renderer = mz_text_renderer_initialize(200);
+	applet.quad_renderer = mz_quad_renderer_initialize(MUZZLE_QUAD_BUFFER_CAPACITY);
+	applet.sprite_renderer = mz_sprite_renderer_initialize(MUZZLE_SPRITE_BUFFER_CAPACITY);
+	applet.circle_renderer = mz_circle_renderer_initialize(MUZZLE_CIRCLE_BUFFER_CAPACITY);
+	applet.text_renderer = mz_text_renderer_initialize(MUZZLE_TEXT_BUFFER_CAPACITY);
 	
 	applet.quad_renderer.shader_id = default_quad_shader.pid;
 	applet.sprite_renderer.shader_id = default_sprite_shader.pid;
 	applet.circle_renderer.shader_id = default_circle_shader.pid;
 	applet.text_renderer.shader_id = default_text_shader.pid;
+
+
+	applet.quad_renderer.default_shader_id = default_quad_shader.pid;
+	applet.sprite_renderer.default_shader_id = default_sprite_shader.pid;
+	applet.circle_renderer.default_shader_id = default_circle_shader.pid;
+	applet.text_renderer.default_shader_id = default_text_shader.pid;
 	
 	return applet;
 }

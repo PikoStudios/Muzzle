@@ -17,7 +17,9 @@ typedef struct mz_applet
 	GLFWwindow* window;
 	FT_Library font_library;
 	double delta_time;
-	double elapsed_time;
+	GLuint framebuffer_buffers[3]; // 0 => FBO, 1 => Texture, 2 => Depth Buffer
+	GLuint shader_passes[MUZZLE_MAX_SHADER_PASSES];
+	size_t shader_passes_len;
 	GLint render_order;
 	int width;
 	int height;

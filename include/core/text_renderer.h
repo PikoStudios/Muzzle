@@ -20,6 +20,7 @@ struct mz_text_renderer
 	uint32_t char_count;
 	uint32_t max_chars;
 	GLuint shader_id;
+	GLuint default_shader_id;
 
 	mz_boolean locs_valid;
 	GLint loc_uViewportResolution;

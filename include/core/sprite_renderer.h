@@ -25,6 +25,7 @@ struct mz_sprite_renderer
 	uint32_t max_sprites;
 	GLint max_textures;
 	GLuint shader_id;
+	GLuint default_shader_id;
 
 	mz_boolean locs_valid;
 	GLint loc_uViewportResolution;

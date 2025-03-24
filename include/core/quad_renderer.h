@@ -20,6 +20,7 @@ struct mz_quad_renderer
 	uint32_t quad_count;
 	uint32_t max_quads;
 	GLuint shader_id;
+	GLuint default_shader_id;
 
 	// Locations. If a lot is needed then make it into a inner struct
 	mz_boolean locs_valid;

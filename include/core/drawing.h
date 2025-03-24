@@ -6,7 +6,7 @@
 #include "tint.h"
 
 MZ_API void mz_begin_drawing(mz_applet* applet);
-MZ_API void mz_end_drawing(mz_applet* applet);
+MZ_API void mz_flush_pipeline(mz_applet* applet);
 
 MZ_API void mz_clear_screen(mz_tint tint);
 
