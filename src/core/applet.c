@@ -111,6 +111,8 @@ mz_applet mz_initialize_applet(const char* window_title, int width, int height, 
 		mz_log_status(LOG_STATUS_FATAL_ERROR, "Could not create framebuffer");
 	}
 
+	glGenVertexArrays(1, &applet.framebuffer_buffers[3]);
+
 	mz_shader default_quad_shader = mz_create_shader((char*)(quad_vertex_glsl), (char*)(quad_fragment_glsl), SHADER_TYPE_DIRECT_QUAD);
 	mz_shader default_sprite_shader = mz_create_shader((char*)(sprite_vertex_glsl), (char*)(sprite_fragment_glsl), SHADER_TYPE_DIRECT_SPRITE);
 	mz_shader default_circle_shader = mz_create_shader((char*)(circle_vertex_glsl), (char*)(circle_fragment_glsl), SHADER_TYPE_DIRECT_CIRCLE);

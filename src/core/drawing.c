@@ -48,11 +48,12 @@ void mz_end_drawing(mz_applet* applet)
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		glBindTexture(GL_TEXTURE_2D, applet->framebuffer_buffers[1]);
+		glBindVertexArray(applet->framebuffer_buffers[3]);
 
 		for (int i = 0; i < applet->shader_passes_len; i++)
 		{
 			glUseProgram(applet->shader_passes[i]);
-			// TODO: Render quad for shader pass
+			glDrawArrays(GL_TRIANGLES, 0, 6);
 		}
 
 		MZ_TRACK_FUNCTION();

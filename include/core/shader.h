@@ -28,4 +28,14 @@ MZ_API void mz_end_shader(mz_applet* applet, mz_shader shader);
 
 MZ_API void mz_unload_shader(mz_shader shader);
 
+MZ_API void mz_upload_uniform_int(mz_shader shader, const char* uniform, int value);
+MZ_API void mz_upload_uniform_float(mz_shader shader, const char* uniform, float value);
+MZ_API void mz_upload_uniform_vec2(mz_shader shader, const char* uniform, mz_vec2 value);
+MZ_API void mz_upload_uniform_vec3(mz_shader shader, const char* uniform, mz_vec3 value);
+MZ_API void mz_upload_uniform_vec4(mz_shader shader, const char* uniform, mz_vec4 value);
+
+// TODO: Make matrix type
+MZ_API void mz_upload_uniform_mat3(mz_shader shader, const char* uniform, const float* matrix);
+MZ_API void mz_upload_uniform_mat4(mz_shader shader, const char* uniform, const float* matrix);
+
 #endif // MUZZLE_CORE_SHADER_H

@@ -3,7 +3,6 @@
 #include "core/drawing.h"
 #include "core/logging.h"
 #include "internals/file_helper.h"
-#include "internals/framebuffer.h"
 
 static void verify_compile_status(const char* on_error_msg, GLuint id)
 {
@@ -164,4 +163,54 @@ void mz_end_shader(mz_applet* applet, mz_shader shader)
 			applet->text_renderer.shader_id = applet->text_renderer.default_shader_id;
 			break;
 	}
+}
+
+
+MZ_API void mz_upload_uniform_int(mz_shader shader, const char* uniform, int value)
+{
+	GLuint loc = glGetUniformLocation(shader.pid, uniform);
+	glUseProgram(shader.pid);
+	glUniform1i(loc, value);
+}
+
+MZ_API void mz_upload_uniform_float(mz_shader shader, const char* uniform, float value)
+{
+	GLuint loc = glGetUniformLocation(shader.pid, uniform);
+	glUseProgram(shader.pid);
+	glUniform1f(loc, value);
+}
+
+MZ_API void mz_upload_uniform_vec2(mz_shader shader, const char* uniform, mz_vec2 value)
+{
+	GLuint loc = glGetUniformLocation(shader.pid, uniform);
+	glUseProgram(shader.pid);
+	glUniform2f(loc, value.x, value.y);
+}
+
+MZ_API void mz_upload_uniform_vec3(mz_shader shader, const char* uniform, mz_vec3 value)
+{
+	GLuint loc = glGetUniformLocation(shader.pid, uniform);
+	glUseProgram(shader.pid);
+	glUniform3f(loc, value.x, value.y, value.z);
+}
+
+MZ_API void mz_upload_uniform_vec4(mz_shader shader, const char* uniform, mz_vec4 value)
+{
+	GLuint loc = glGetUniformLocation(shader.pid, uniform);
+	glUseProgram(shader.pid);
+	glUniform4f(loc, value.x, value.y, value.z, value.w);
+}
+
+MZ_API void mz_upload_uniform_mat3(mz_shader shader, const char* uniform, const float* matrix)
+{
+	GLuint loc = glGetUniformLocation(shader.pid, uniform);
+	glUseProgram(shader.pid);
+	glUniformMatrix4fv(loc, 1, GL_FALSE, matrix);
+}
+
+MZ_API void mz_upload_uniform_mat4(mz_shader shader, const char* uniform, const float* matrix)
+{
+	GLuint loc = glGetUniformLocation(shader.pid, uniform);
+	glUseProgram(shader.pid);
+	glUniformMatrix4fv(loc, 1, GL_FALSE, matrix);
 }
