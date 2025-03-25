@@ -1,3 +1,4 @@
+#include "core/shader.h"
 #include <Muzzle.h>
 #include <stdio.h>
 #include <math.h>
@@ -38,6 +39,9 @@ enum players
 
 void applet_dispatch(mz_applet* applet)
 {
+    mz_shader color_filter = mz_load_shader("../vert.glsl", "../frag.glsl", SHADER_TYPE_PASS);
+    float time = 0.0f;
+
     mz_circle ball =
     {
         .radius = 10,
@@ -89,6 +93,9 @@ void applet_dispatch(mz_applet* applet)
 
     while (mz_keep_applet(applet))
     {
+        time += applet->delta_time;
+        mz_upload_uniform_float(color_filter, "uTime", time);
+
         snprintf(title_buffer, 1024, WINDOW_TITLE " Score: %d-%d", p1, p2);
         printf("Player 1 Score: %d. Player 2 Score: %d\r", p1, p2);
 
@@ -237,6 +244,8 @@ void applet_dispatch(mz_applet* applet)
 
         mz_begin_drawing(applet);
             mz_clear_screen(TINT_BLACK);
+            mz_use_shader_pass(applet, color_filter);
+
             //draw_text(p2sp, buf_p1, p1_point_counter_position.x, p1_point_counter_position.y + 650, 35, WHITE);
             //draw_text(p2sp, buf_p2, p2_point_counter_position.x, p2_point_counter_position.y + 650, 35, WHITE);
 

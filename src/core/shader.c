@@ -105,6 +105,8 @@ MZ_API void mz_use_shader_pass(mz_applet* applet, mz_shader shader)
 
 	applet->shader_passes[applet->shader_passes_len++] = shader.pid;
 
+	glUseProgram(shader.pid);
+
 	glBindFramebuffer(GL_FRAMEBUFFER, applet->framebuffer_buffers[0]);
 }
 
@@ -165,52 +167,98 @@ void mz_end_shader(mz_applet* applet, mz_shader shader)
 	}
 }
 
+void mz_unload_shader(mz_shader shader)
+{
+	glDeleteProgram(shader.pid);
+}
 
-MZ_API void mz_upload_uniform_int(mz_shader shader, const char* uniform, int value)
+void mz_upload_uniform_int(mz_shader shader, const char* uniform, int value)
 {
 	GLuint loc = glGetUniformLocation(shader.pid, uniform);
 	glUseProgram(shader.pid);
+
+	if (loc == -1)
+	{
+		mz_log_status_formatted(LOG_STATUS_ERROR, "Uniform '%s' not found in shader %d", uniform, shader.pid);
+	}
+
 	glUniform1i(loc, value);
 }
 
-MZ_API void mz_upload_uniform_float(mz_shader shader, const char* uniform, float value)
+void mz_upload_uniform_float(mz_shader shader, const char* uniform, float value)
 {
 	GLuint loc = glGetUniformLocation(shader.pid, uniform);
 	glUseProgram(shader.pid);
+
+	if (loc == -1)
+	{
+		mz_log_status_formatted(LOG_STATUS_ERROR, "Uniform '%s' not found in shader %d", uniform, shader.pid);
+	}
+
 	glUniform1f(loc, value);
 }
 
-MZ_API void mz_upload_uniform_vec2(mz_shader shader, const char* uniform, mz_vec2 value)
+void mz_upload_uniform_vec2(mz_shader shader, const char* uniform, mz_vec2 value)
 {
 	GLuint loc = glGetUniformLocation(shader.pid, uniform);
 	glUseProgram(shader.pid);
+
+	if (loc == -1)
+	{
+		mz_log_status_formatted(LOG_STATUS_ERROR, "Uniform '%s' not found in shader %d", uniform, shader.pid);
+	}
+
 	glUniform2f(loc, value.x, value.y);
 }
 
-MZ_API void mz_upload_uniform_vec3(mz_shader shader, const char* uniform, mz_vec3 value)
+void mz_upload_uniform_vec3(mz_shader shader, const char* uniform, mz_vec3 value)
 {
 	GLuint loc = glGetUniformLocation(shader.pid, uniform);
 	glUseProgram(shader.pid);
+
+	if (loc == -1)
+	{
+		mz_log_status_formatted(LOG_STATUS_ERROR, "Uniform '%s' not found in shader %d", uniform, shader.pid);
+	}
+
 	glUniform3f(loc, value.x, value.y, value.z);
 }
 
-MZ_API void mz_upload_uniform_vec4(mz_shader shader, const char* uniform, mz_vec4 value)
+void mz_upload_uniform_vec4(mz_shader shader, const char* uniform, mz_vec4 value)
 {
 	GLuint loc = glGetUniformLocation(shader.pid, uniform);
 	glUseProgram(shader.pid);
+
+	if (loc == -1)
+	{
+		mz_log_status_formatted(LOG_STATUS_ERROR, "Uniform '%s' not found in shader %d", uniform, shader.pid);
+	}
+
 	glUniform4f(loc, value.x, value.y, value.z, value.w);
 }
 
-MZ_API void mz_upload_uniform_mat3(mz_shader shader, const char* uniform, const float* matrix)
+void mz_upload_uniform_mat3(mz_shader shader, const char* uniform, const float* matrix)
 {
 	GLuint loc = glGetUniformLocation(shader.pid, uniform);
 	glUseProgram(shader.pid);
+
+	if (loc == -1)
+	{
+		mz_log_status_formatted(LOG_STATUS_ERROR, "Uniform '%s' not found in shader %d", uniform, shader.pid);
+	}
+
 	glUniformMatrix4fv(loc, 1, GL_FALSE, matrix);
 }
 
-MZ_API void mz_upload_uniform_mat4(mz_shader shader, const char* uniform, const float* matrix)
+void mz_upload_uniform_mat4(mz_shader shader, const char* uniform, const float* matrix)
 {
 	GLuint loc = glGetUniformLocation(shader.pid, uniform);
 	glUseProgram(shader.pid);
+
+	if (loc == -1)
+	{
+		mz_log_status_formatted(LOG_STATUS_ERROR, "Uniform '%s' not found in shader %d", uniform, shader.pid);
+	}
+
 	glUniformMatrix4fv(loc, 1, GL_FALSE, matrix);
 }

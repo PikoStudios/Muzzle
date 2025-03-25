@@ -111,7 +111,46 @@ mz_applet mz_initialize_applet(const char* window_title, int width, int height, 
 		mz_log_status(LOG_STATUS_FATAL_ERROR, "Could not create framebuffer");
 	}
 
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
 	glGenVertexArrays(1, &applet.framebuffer_buffers[3]);
+	glGenBuffers(1, &applet.framebuffer_buffers[4]);
+
+	glBindVertexArray(applet.framebuffer_buffers[3]);
+	glBindBuffer(GL_ARRAY_BUFFER, applet.framebuffer_buffers[4]);
+
+	GLfloat shader_pass_vertices[] =
+	{
+		// vec2 aScreenCoords, vec2 aTexCoords
+		-1.0f,1.0f, 0.0f,1.0f,
+		1.0f,1.0f, 1.0f,1.0f,
+		-1.0f,-1.0f, 0.0f,0.0f,
+		1.0f,1.0f, 1.0f,1.0f,
+		-1.0f,-1.0f, 0.0f,0.0f,
+		1.0f,-1.0f, 1.0f,0.0f
+	};
+
+	glBufferData(GL_ARRAY_BUFFER, sizeof(shader_pass_vertices), shader_pass_vertices, GL_STATIC_DRAW);
+
+	glEnableVertexArrayAttrib(applet.framebuffer_buffers[3], 0);
+	glVertexAttribPointer(
+		0,
+		2,
+		GL_FLOAT,
+		GL_FALSE,
+		sizeof(GLfloat) * 4,
+		0
+	);
+
+	glEnableVertexArrayAttrib(applet.framebuffer_buffers[3], 1);
+	glVertexAttribPointer(
+		1,
+		2,
+		GL_FLOAT,
+		GL_FALSE,
+		sizeof(GLfloat) * 4,
+		(void*)(sizeof(GLfloat) * 2)
+	);
 
 	mz_shader default_quad_shader = mz_create_shader((char*)(quad_vertex_glsl), (char*)(quad_fragment_glsl), SHADER_TYPE_DIRECT_QUAD);
 	mz_shader default_sprite_shader = mz_create_shader((char*)(sprite_vertex_glsl), (char*)(sprite_fragment_glsl), SHADER_TYPE_DIRECT_SPRITE);
@@ -164,6 +203,12 @@ void mz_terminate_applet(mz_applet* applet)
 
 	mz_log_status(LOG_STATUS_INFO, "Cleaning up resources");
 	
+	glDeleteFramebuffers(1, &applet->framebuffer_buffers[0]);
+	glDeleteTextures(1, &applet->framebuffer_buffers[1]);
+	glDeleteRenderbuffers(1, &applet->framebuffer_buffers[2]);
+	glDeleteVertexArrays(1, &applet->framebuffer_buffers[3]);
+	glDeleteBuffers(1, &applet->framebuffer_buffers[4]);
+
 	mz_quad_renderer_destroy(&applet->quad_renderer);
 	mz_sprite_renderer_destroy(&applet->sprite_renderer);
 	mz_circle_renderer_destroy(&applet->circle_renderer);

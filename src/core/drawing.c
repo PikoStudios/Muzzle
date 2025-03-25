@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "backend.h"
 #include "core/circle_renderer.h"
+#include "core/logging.h"
 #include "core/quad_renderer.h"
 #include "core/sprite_renderer.h"
 #define ONE_OVER_255 0.0039215686
@@ -46,13 +47,33 @@ void mz_end_drawing(mz_applet* applet)
 	{
 		MZ_TRACK_FUNCTION_STAGE("mz_end_drawing shader passes");
 
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, applet->framebuffer_buffers[1]);
 		glBindVertexArray(applet->framebuffer_buffers[3]);
+		glBindBuffer(GL_ARRAY_BUFFER, applet->framebuffer_buffers[4]);
 
 		for (int i = 0; i < applet->shader_passes_len; i++)
 		{
+			if (i == applet->shader_passes_len - 1)
+			{
+				glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			}
+
 			glUseProgram(applet->shader_passes[i]);
+
+			GLuint texture_loc = glGetUniformLocation(applet->shader_passes[i], "uScreenTexture");
+			GLuint resolution_loc = glGetUniformLocation(applet->shader_passes[i], "uScreenResolution");
+
+			if (texture_loc != -1)
+			{
+				glUniform1i(texture_loc, 0);
+			}
+
+			if (resolution_loc != -1)
+			{
+				glUniform2f(resolution_loc, applet->width, applet->height);
+			}
+
 			glDrawArrays(GL_TRIANGLES, 0, 6);
 		}
 
