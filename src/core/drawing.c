@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include "backend.h"
 #include "core/circle_renderer.h"
-#include "core/logging.h"
 #include "core/quad_renderer.h"
 #include "core/sprite_renderer.h"
 #define ONE_OVER_255 0.0039215686
@@ -16,8 +15,12 @@ void mz_begin_drawing(mz_applet* applet)
 	// Offscreen framebuffer used, so clear it
 	if (applet->shader_passes_len > 0)
 	{
-		glBindFramebuffer(GL_FRAMEBUFFER, applet->framebuffer_buffers[0]);
+		glBindFramebuffer(GL_FRAMEBUFFER, applet->framebuffer.fbos[0]);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		glBindFramebuffer(GL_FRAMEBUFFER, applet->framebuffer.fbos[1]);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 		applet->shader_passes_len = 0;
@@ -48,16 +51,14 @@ void mz_end_drawing(mz_applet* applet)
 		MZ_TRACK_FUNCTION_STAGE("mz_end_drawing shader passes");
 
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, applet->framebuffer_buffers[1]);
-		glBindVertexArray(applet->framebuffer_buffers[3]);
-		glBindBuffer(GL_ARRAY_BUFFER, applet->framebuffer_buffers[4]);
+		glBindVertexArray(applet->framebuffer.vao);
+		glBindBuffer(GL_ARRAY_BUFFER, applet->framebuffer.vbo);
 
 		for (int i = 0; i < applet->shader_passes_len; i++)
 		{
-			if (i == applet->shader_passes_len - 1)
-			{
-				glBindFramebuffer(GL_FRAMEBUFFER, 0);
-			}
+			glBindFramebuffer(GL_FRAMEBUFFER, i == applet->shader_passes_len - 1 ? 0 : applet->framebuffer.fbos[(i + 1) % 2]);
+
+			glBindTexture(GL_TEXTURE_2D, applet->framebuffer.textures[i % 2]);
 
 			glUseProgram(applet->shader_passes[i]);
 

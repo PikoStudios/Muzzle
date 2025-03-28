@@ -9,6 +9,15 @@
 
 typedef struct mz_applet
 {
+	struct
+	{
+		GLuint fbos[2];
+		GLuint textures[2];
+		GLuint depth_buffers[2];
+		GLuint vao;
+		GLuint vbo;
+	} framebuffer;
+
 	struct mz_quad_renderer quad_renderer;
 	struct mz_sprite_renderer sprite_renderer;
 	struct mz_circle_renderer circle_renderer;
@@ -17,7 +26,6 @@ typedef struct mz_applet
 	GLFWwindow* window;
 	FT_Library font_library;
 	double delta_time;
-	GLuint framebuffer_buffers[5]; // 0 => FBO, 1 => Texture, 2 => Depth Buffer, 3 => VAO, 4 => VBO
 	GLuint shader_passes[MUZZLE_MAX_SHADER_PASSES];
 	size_t shader_passes_len;
 	GLint render_order;

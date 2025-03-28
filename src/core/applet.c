@@ -13,6 +13,29 @@
 #include "internals/glfw_callbacks.h"
 #include "internals/glfw_error_helper.h"
 
+static inline void create_framebuffer(mz_applet* applet, int i)
+{
+	glGenFramebuffers(1, &applet->framebuffer.fbos[i]);
+	glBindFramebuffer(GL_FRAMEBUFFER, applet->framebuffer.fbos[i]);
+
+	glGenTextures(1, &applet->framebuffer.textures[i]);
+	glBindTexture(GL_TEXTURE_2D, applet->framebuffer.textures[i]);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, applet->width, applet->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, applet->framebuffer.textures[i], 0);
+
+	glGenRenderbuffers(1, &applet->framebuffer.depth_buffers[i]);
+	glBindRenderbuffer(GL_RENDERBUFFER, applet->framebuffer.depth_buffers[i]);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, applet->width, applet->height);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, applet->framebuffer.depth_buffers[i]);
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	{
+		mz_log_status(LOG_STATUS_FATAL_ERROR, "Could not create framebuffer");
+	}
+}
+
 mz_applet mz_initialize_applet(const char* window_title, int width, int height, mz_applet_flags flags)
 {
 	MZ_TRACK_FUNCTION();
@@ -91,33 +114,16 @@ mz_applet mz_initialize_applet(const char* window_title, int width, int height, 
 	glDepthFunc(GL_LESS);
 
 	// Initialize off-screen framebuffer (used by shader passes)
-	glGenFramebuffers(1, &applet.framebuffer_buffers[0]);
-	glBindFramebuffer(GL_FRAMEBUFFER, applet.framebuffer_buffers[0]);
-
-	glGenTextures(1, &applet.framebuffer_buffers[1]);
-	glBindTexture(GL_TEXTURE_2D, applet.framebuffer_buffers[1]);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, applet.framebuffer_buffers[1], 0);
-
-	glGenRenderbuffers(1, &applet.framebuffer_buffers[2]);
-	glBindRenderbuffer(GL_RENDERBUFFER, applet.framebuffer_buffers[2]);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, applet.framebuffer_buffers[2]);
-
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-	{
-		mz_log_status(LOG_STATUS_FATAL_ERROR, "Could not create framebuffer");
-	}
+	create_framebuffer(&applet, 0);
+	create_framebuffer(&applet, 1);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	glGenVertexArrays(1, &applet.framebuffer_buffers[3]);
-	glGenBuffers(1, &applet.framebuffer_buffers[4]);
+	glGenVertexArrays(1, &applet.framebuffer.vao);
+	glGenBuffers(1, &applet.framebuffer.vbo);
 
-	glBindVertexArray(applet.framebuffer_buffers[3]);
-	glBindBuffer(GL_ARRAY_BUFFER, applet.framebuffer_buffers[4]);
+	glBindVertexArray(applet.framebuffer.vao);
+	glBindBuffer(GL_ARRAY_BUFFER, applet.framebuffer.vbo);
 
 	GLfloat shader_pass_vertices[] =
 	{
@@ -132,7 +138,7 @@ mz_applet mz_initialize_applet(const char* window_title, int width, int height, 
 
 	glBufferData(GL_ARRAY_BUFFER, sizeof(shader_pass_vertices), shader_pass_vertices, GL_STATIC_DRAW);
 
-	glEnableVertexArrayAttrib(applet.framebuffer_buffers[3], 0);
+	glEnableVertexArrayAttrib(applet.framebuffer.vao, 0);
 	glVertexAttribPointer(
 		0,
 		2,
@@ -142,7 +148,7 @@ mz_applet mz_initialize_applet(const char* window_title, int width, int height, 
 		0
 	);
 
-	glEnableVertexArrayAttrib(applet.framebuffer_buffers[3], 1);
+	glEnableVertexArrayAttrib(applet.framebuffer.vao, 1);
 	glVertexAttribPointer(
 		1,
 		2,
@@ -203,11 +209,11 @@ void mz_terminate_applet(mz_applet* applet)
 
 	mz_log_status(LOG_STATUS_INFO, "Cleaning up resources");
 	
-	glDeleteFramebuffers(1, &applet->framebuffer_buffers[0]);
-	glDeleteTextures(1, &applet->framebuffer_buffers[1]);
-	glDeleteRenderbuffers(1, &applet->framebuffer_buffers[2]);
-	glDeleteVertexArrays(1, &applet->framebuffer_buffers[3]);
-	glDeleteBuffers(1, &applet->framebuffer_buffers[4]);
+	glDeleteFramebuffers(2, applet->framebuffer.fbos);
+	glDeleteTextures(2, applet->framebuffer.textures);
+	glDeleteRenderbuffers(2, applet->framebuffer.depth_buffers);
+	glDeleteVertexArrays(1, &applet->framebuffer.vao);
+	glDeleteBuffers(1, &applet->framebuffer.vbo);
 
 	mz_quad_renderer_destroy(&applet->quad_renderer);
 	mz_sprite_renderer_destroy(&applet->sprite_renderer);

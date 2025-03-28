@@ -107,7 +107,7 @@ MZ_API void mz_use_shader_pass(mz_applet* applet, mz_shader shader)
 
 	glUseProgram(shader.pid);
 
-	glBindFramebuffer(GL_FRAMEBUFFER, applet->framebuffer_buffers[0]);
+	glBindFramebuffer(GL_FRAMEBUFFER, applet->framebuffer.fbos[0]);
 }
 
 void mz_begin_shader(mz_applet* applet, mz_shader shader)
