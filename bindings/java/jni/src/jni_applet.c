@@ -6,13 +6,14 @@
 
 static JNIEnv* __applet_start_jnienv;
 static jobject __applet_start_callback;
+static jobject __applet_start_applet;
 
 static void applet_dispatch(mz_applet* applet)
 {
     jclass callback_class = (*__applet_start_jnienv)->GetObjectClass(__applet_start_jnienv, __applet_start_callback);
     jmethodID callback_method = (*__applet_start_jnienv)->GetMethodID(__applet_start_jnienv, callback_class, "invoke", "(Ldev/pikostudios/muzzle/bridge/Applet;)V");
 
-    (*__applet_start_jnienv)->CallVoidMethod(__applet_start_jnienv, __applet_start_callback, callback_method);
+    (*__applet_start_jnienv)->CallVoidMethod(__applet_start_jnienv, __applet_start_callback, callback_method, __applet_start_applet);
 }
 
 JNIEXPORT jobject JNICALL Java_dev_pikostudios_muzzle_bridge_Applet_initialize(JNIEnv* env, jclass class, jstring window_title, jint width, jint height, jint flags)
@@ -39,6 +40,7 @@ JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Applet_start(JNIEnv* e
     mz_applet* applet = get_applet(env, object);
     __applet_start_jnienv = env;
     __applet_start_callback = callback;
+    __applet_start_applet = object;
     
     mz_start_applet(applet, applet_dispatch);
 }

@@ -23,6 +23,14 @@ JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Drawing_startDrawing
 JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Drawing_endDrawing
   (JNIEnv *, jclass, jobject);
 
+/*
+ * Class:     dev_pikostudios_muzzle_bridge_Drawing
+ * Method:    clearScreen
+ * Signature: (Ldev/pikostudios/muzzle/bridge/Tint;)V
+ */
+JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Drawing_clearScreen
+  (JNIEnv *, jclass, jobject);
+
 #ifdef __cplusplus
 }
 #endif

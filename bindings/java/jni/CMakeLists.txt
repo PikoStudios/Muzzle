@@ -11,7 +11,7 @@ set(target_name muzzlejni)
 find_package(JNI REQUIRED)
 
 include_directories(${MUZZLE_ROOT}/include ${MUZZLE_DEPS_FOLDER}/freetype/include ${JNI_INCLUDE_DIRS})
-link_directories(${MUZZLE_LIB_FOLDER} ${MUZZLE_DEPS_FOLDER}/glfw/lib ${MUZZLE_DEPS_FOLDER}/freetype/lib)
+link_directories(${MUZZLE_LIB_FOLDER} ${MUZZLE_DEPS_FOLDER}/glfw/lib ${MUZZLE_DEPS_FOLDER}/freetype/lib_pic)
 
 set(source
 src/common.c
@@ -19,11 +19,11 @@ src/jni_applet.c
 src/jni_circle.c
 src/jni_drawing.c
 src/jni_font.c
-src/jni_key.c
-src/jni_mouse.c
+src/jni_input.c
 src/jni_rectangle.c
 src/jni_sprite.c
 src/jni_text.c
+src/jni_shader.c
 )
 
 add_library(muzzlejni SHARED ${source})
