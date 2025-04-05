@@ -13,6 +13,9 @@
 #include "internals/glfw_callbacks.h"
 #include "internals/glfw_error_helper.h"
 
+// TODO: Move sleep to core folder
+#include "utils/sleep.h"
+
 static inline void create_framebuffer(mz_applet* applet, int i)
 {
 	glGenFramebuffers(1, &applet->framebuffer.fbos[i]);

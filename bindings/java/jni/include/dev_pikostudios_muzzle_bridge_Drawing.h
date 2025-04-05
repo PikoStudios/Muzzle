@@ -9,10 +9,10 @@ extern "C" {
 #endif
 /*
  * Class:     dev_pikostudios_muzzle_bridge_Drawing
- * Method:    startDrawing
+ * Method:    beginDrawing
  * Signature: (Ldev/pikostudios/muzzle/bridge/Applet;)V
  */
-JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Drawing_startDrawing
+JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Drawing_beginDrawing
   (JNIEnv *, jclass, jobject);
 
 /*

@@ -1,8 +1,11 @@
 #include "utils/sleep.h"
+#include <unistd.h>
 
 #ifdef MUZZLE_SLEEP_USE_NANOSLEEP
 	#include <time.h>
 #endif
+
+// TODO: Just busy-looping will be 100% cpu
 
 void mz_sleep(float seconds)
 {
