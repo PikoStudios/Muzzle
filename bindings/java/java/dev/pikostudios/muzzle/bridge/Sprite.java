@@ -17,4 +17,14 @@ public class Sprite
     public static native void unload(Sprite sprite);
 
     public native void draw(Applet applet, float x, float y, Tint tint);
+
+    public int getWidth()
+    {
+        return this.width;
+    }
+
+    public int getHeight()
+    {
+        return this.height;
+    }
 }

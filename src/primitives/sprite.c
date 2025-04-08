@@ -1,5 +1,6 @@
 #include "backend.h"
 #include "core/logging.h"
+#include "core/memory.h"
 #include "core/sprite_renderer.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "../deps/stb/stb_image.h"
@@ -33,14 +34,55 @@ mz_sprite mz_load_sprite(const char* filepath)
 	mz_log_status_formatted(LOG_STATUS_SUCCESS, "Loaded image '%s' into GPU", filepath);
 #endif
 
-	stbi_image_free(data);
-
 	return (mz_sprite)
 	{
 		.width = w,
 		.height = h,
 		._id = id
 	};
+}
+
+MZ_API size_t mz_read_sprite_pixels(mz_sprite* data, unsigned char* out, size_t out_len)
+{
+	int size = data->width * data->height * 4;
+
+	if (out == NULL)
+	{
+		goto retsize;
+	}
+
+#ifndef MUZZLE_SPRITE_DONT_FLIP_AFTER_READ
+	unsigned char* buffer = MZ_MALLOC(size * sizeof(unsigned char));
+
+	if (buffer == NULL)
+	{
+		mz_log_status(LOG_STATUS_FATAL_ERROR, "Failed to allocate memory to read sprite pixels");
+	}
+#else
+	unsigned char* buffer = out;
+#endif
+
+	glGetTextureImage(data->_id, 0, GL_RGBA, GL_UNSIGNED_BYTE, out_len, buffer);
+
+#ifndef MUZZLE_SPRITE_DONT_FLIP_AFTER_READ
+	unsigned char* tail = buffer + ((data->height - 1) * data->width * 4);
+
+	for (int i = 0; i < data->height; i++)
+	{
+		if (i * data->width * 4 > out_len)
+		{
+			size = out_len;
+			break;
+		}
+
+		memcpy(out + (i * data->width * 4), tail - (i * data->width * 4), data->width * 4);
+	}
+
+	MZ_FREE(buffer);
+#endif
+
+retsize:
+	return size;
 }
 
 void mz_unload_sprite(mz_sprite* data)

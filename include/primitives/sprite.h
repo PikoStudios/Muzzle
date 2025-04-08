@@ -16,6 +16,8 @@ typedef struct mz_sprite
 MZ_API mz_sprite mz_load_sprite(const char* filepath);
 MZ_API void mz_unload_sprite(mz_sprite* data);
 
+MZ_API size_t mz_read_sprite_pixels(mz_sprite* data, unsigned char* out, size_t out_len);
+
 // TODO: Add scale and rotation as parameters
 MZ_API void mz_draw_sprite(mz_applet* applet, mz_sprite* data, float x, float y, mz_tint tint);
 MZ_API void mz_draw_sprite_vec2(mz_applet* applet, mz_sprite* data, mz_vec2 pos, mz_tint tint);

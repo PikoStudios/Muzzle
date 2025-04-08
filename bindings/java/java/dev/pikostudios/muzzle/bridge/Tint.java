@@ -48,4 +48,11 @@ public class Tint
     {
         return this.a;
     }
+
+    public Tint darker(float scale)
+    {
+        float s = 1.0f - scale;
+
+        return new Tint((int)(this.r * s), (int)(this.g * s), (int)(this.b * s), this.a);
+    }
 }
