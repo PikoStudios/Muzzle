@@ -31,6 +31,14 @@ JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Sprite_unload
 JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Sprite_draw
   (JNIEnv *, jobject, jobject, jfloat, jfloat, jobject);
 
+/*
+ * Class:     dev_pikostudios_muzzle_bridge_Sprite
+ * Method:    getPixels
+ * Signature: ()[B
+ */
+JNIEXPORT jbyteArray JNICALL Java_dev_pikostudios_muzzle_bridge_Sprite_getPixels
+  (JNIEnv *, jobject);
+
 #ifdef __cplusplus
 }
 #endif
