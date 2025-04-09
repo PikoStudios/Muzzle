@@ -262,3 +262,34 @@ void mz_upload_uniform_mat4(mz_shader shader, const char* uniform, const float* 
 
 	glUniformMatrix4fv(loc, 1, GL_FALSE, matrix);
 }
+
+mz_shader_buffer mz_create_shader_buffer(int index, void* data, size_t size)
+{
+	GLuint ssbo;
+
+	glGenBuffers(1, &ssbo);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, size, data, GL_DYNAMIC_STORAGE_BIT);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, index, ssbo);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+
+	return (mz_shader_buffer)
+	{
+		.id = ssbo,
+		.index = index
+	};
+}
+
+void mz_upload_shader_buffer(mz_shader_buffer buffer, intptr_t offset, void* data, size_t size)
+{
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, buffer.id);
+	glBufferSubData(GL_SHADER_STORAGE_BUFFER, offset, size, data);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+}
+
+void mz_unload_shader_buffer(mz_shader_buffer buffer)
+{
+	glDeleteBuffers(1, &buffer.id);
+	buffer.id = 0;
+	buffer.index = 0;
+}

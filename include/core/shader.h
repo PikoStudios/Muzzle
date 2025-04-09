@@ -3,6 +3,7 @@
 
 #include "../backend.h"
 #include "applet.h"
+#include <stdint.h>
 
 typedef enum
 {
@@ -18,6 +19,12 @@ typedef struct mz_shader
     GLuint pid;
     mz_shader_type type;
 } mz_shader;
+
+typedef struct mz_shader_buffer
+{
+    GLuint id;
+    GLuint index;
+} mz_shader_buffer;
 
 MZ_API mz_shader mz_create_shader(const char* vertex, const char* fragment, mz_shader_type type);
 MZ_API mz_shader mz_load_shader(const char* vertex_filepath, const char* fragment_filepath, mz_shader_type type);
@@ -37,5 +44,9 @@ MZ_API void mz_upload_uniform_vec4(mz_shader shader, const char* uniform, mz_vec
 // TODO: Make matrix type
 MZ_API void mz_upload_uniform_mat3(mz_shader shader, const char* uniform, const float* matrix);
 MZ_API void mz_upload_uniform_mat4(mz_shader shader, const char* uniform, const float* matrix);
+
+MZ_API mz_shader_buffer mz_create_shader_buffer(int index, void* data, size_t size);
+MZ_API void mz_upload_shader_buffer(mz_shader_buffer buffer, intptr_t offset, void* data, size_t size);
+MZ_API void mz_unload_shader_buffer(mz_shader_buffer buffer);
 
 #endif // MUZZLE_CORE_SHADER_H
