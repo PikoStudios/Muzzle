@@ -174,6 +174,8 @@ void mz_unload_shader(mz_shader shader)
 
 void mz_upload_uniform_int(mz_shader shader, const char* uniform, int value)
 {
+	MZ_TRACK_FUNCTION();
+
 	GLuint loc = glGetUniformLocation(shader.pid, uniform);
 	glUseProgram(shader.pid);
 
@@ -187,6 +189,8 @@ void mz_upload_uniform_int(mz_shader shader, const char* uniform, int value)
 
 void mz_upload_uniform_float(mz_shader shader, const char* uniform, float value)
 {
+	MZ_TRACK_FUNCTION();
+
 	GLuint loc = glGetUniformLocation(shader.pid, uniform);
 	glUseProgram(shader.pid);
 
@@ -200,6 +204,8 @@ void mz_upload_uniform_float(mz_shader shader, const char* uniform, float value)
 
 void mz_upload_uniform_vec2(mz_shader shader, const char* uniform, mz_vec2 value)
 {
+	MZ_TRACK_FUNCTION();
+
 	GLuint loc = glGetUniformLocation(shader.pid, uniform);
 	glUseProgram(shader.pid);
 
@@ -213,6 +219,8 @@ void mz_upload_uniform_vec2(mz_shader shader, const char* uniform, mz_vec2 value
 
 void mz_upload_uniform_vec3(mz_shader shader, const char* uniform, mz_vec3 value)
 {
+	MZ_TRACK_FUNCTION();
+
 	GLuint loc = glGetUniformLocation(shader.pid, uniform);
 	glUseProgram(shader.pid);
 
@@ -226,6 +234,8 @@ void mz_upload_uniform_vec3(mz_shader shader, const char* uniform, mz_vec3 value
 
 void mz_upload_uniform_vec4(mz_shader shader, const char* uniform, mz_vec4 value)
 {
+	MZ_TRACK_FUNCTION();
+
 	GLuint loc = glGetUniformLocation(shader.pid, uniform);
 	glUseProgram(shader.pid);
 
@@ -239,6 +249,8 @@ void mz_upload_uniform_vec4(mz_shader shader, const char* uniform, mz_vec4 value
 
 void mz_upload_uniform_mat3(mz_shader shader, const char* uniform, const float* matrix)
 {
+	MZ_TRACK_FUNCTION();
+
 	GLuint loc = glGetUniformLocation(shader.pid, uniform);
 	glUseProgram(shader.pid);
 
@@ -252,6 +264,8 @@ void mz_upload_uniform_mat3(mz_shader shader, const char* uniform, const float* 
 
 void mz_upload_uniform_mat4(mz_shader shader, const char* uniform, const float* matrix)
 {
+	MZ_TRACK_FUNCTION();
+
 	GLuint loc = glGetUniformLocation(shader.pid, uniform);
 	glUseProgram(shader.pid);
 
@@ -265,11 +279,13 @@ void mz_upload_uniform_mat4(mz_shader shader, const char* uniform, const float* 
 
 mz_shader_buffer mz_create_shader_buffer(int index, void* data, size_t size)
 {
+	MZ_TRACK_FUNCTION();
+
 	GLuint ssbo;
 
 	glGenBuffers(1, &ssbo);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
-	glBufferData(GL_SHADER_STORAGE_BUFFER, size, data, GL_DYNAMIC_STORAGE_BIT);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, size, data, GL_DYNAMIC_DRAW);
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, index, ssbo);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 
@@ -282,13 +298,27 @@ mz_shader_buffer mz_create_shader_buffer(int index, void* data, size_t size)
 
 void mz_upload_shader_buffer(mz_shader_buffer buffer, intptr_t offset, void* data, size_t size)
 {
+	MZ_TRACK_FUNCTION();
+
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, buffer.id);
 	glBufferSubData(GL_SHADER_STORAGE_BUFFER, offset, size, data);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 }
 
+void mz_realloc_shader_buffer(mz_shader_buffer buffer, void* data, size_t size)
+{
+	MZ_TRACK_FUNCTION();
+
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, buffer.id);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, size, data, GL_DYNAMIC_DRAW);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, buffer.index, buffer.id);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+}
+
 void mz_unload_shader_buffer(mz_shader_buffer buffer)
 {
+	MZ_TRACK_FUNCTION();
+
 	glDeleteBuffers(1, &buffer.id);
 	buffer.id = 0;
 	buffer.index = 0;

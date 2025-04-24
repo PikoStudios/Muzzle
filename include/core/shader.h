@@ -46,6 +46,7 @@ MZ_API void mz_upload_uniform_mat3(mz_shader shader, const char* uniform, const 
 MZ_API void mz_upload_uniform_mat4(mz_shader shader, const char* uniform, const float* matrix);
 
 MZ_API mz_shader_buffer mz_create_shader_buffer(int index, void* data, size_t size);
+MZ_API void mz_realloc_shader_buffer(mz_shader_buffer buffer, void* data, size_t size);
 MZ_API void mz_upload_shader_buffer(mz_shader_buffer buffer, intptr_t offset, void* data, size_t size);
 MZ_API void mz_unload_shader_buffer(mz_shader_buffer buffer);
 

@@ -25,6 +25,46 @@ JNIEXPORT jobject JNICALL Java_dev_pikostudios_muzzle_bridge_Shader_load
 
 /*
  * Class:     dev_pikostudios_muzzle_bridge_Shader
+ * Method:    uploadUniform
+ * Signature: (Ljava/lang/String;I)V
+ */
+JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Shader_uploadUniform__Ljava_lang_String_2I
+  (JNIEnv *, jobject, jstring, jint);
+
+/*
+ * Class:     dev_pikostudios_muzzle_bridge_Shader
+ * Method:    uploadUniform
+ * Signature: (Ljava/lang/String;F)V
+ */
+JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Shader_uploadUniform__Ljava_lang_String_2F
+  (JNIEnv *, jobject, jstring, jfloat);
+
+/*
+ * Class:     dev_pikostudios_muzzle_bridge_Shader
+ * Method:    uploadUniform
+ * Signature: (Ljava/lang/String;FF)V
+ */
+JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Shader_uploadUniform__Ljava_lang_String_2FF
+  (JNIEnv *, jobject, jstring, jfloat, jfloat);
+
+/*
+ * Class:     dev_pikostudios_muzzle_bridge_Shader
+ * Method:    uploadUniform
+ * Signature: (Ljava/lang/String;FFF)V
+ */
+JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Shader_uploadUniform__Ljava_lang_String_2FFF
+  (JNIEnv *, jobject, jstring, jfloat, jfloat, jfloat);
+
+/*
+ * Class:     dev_pikostudios_muzzle_bridge_Shader
+ * Method:    uploadUniform
+ * Signature: (Ljava/lang/String;FFFF)V
+ */
+JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Shader_uploadUniform__Ljava_lang_String_2FFFF
+  (JNIEnv *, jobject, jstring, jfloat, jfloat, jfloat, jfloat);
+
+/*
+ * Class:     dev_pikostudios_muzzle_bridge_Shader
  * Method:    unload
  * Signature: ()V
  */
@@ -54,6 +94,22 @@ JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Shader__1beginShader
  */
 JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Shader__1endShader
   (JNIEnv *, jobject, jobject);
+
+/*
+ * Class:     dev_pikostudios_muzzle_bridge_Shader
+ * Method:    uploadUniformMat3
+ * Signature: (Ljava/lang/String;[F)V
+ */
+JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Shader_uploadUniformMat3
+  (JNIEnv *, jobject, jstring, jfloatArray);
+
+/*
+ * Class:     dev_pikostudios_muzzle_bridge_Shader
+ * Method:    uploadUniformMat4
+ * Signature: (Ljava/lang/String;[F)V
+ */
+JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Shader_uploadUniformMat4
+  (JNIEnv *, jobject, jstring, jfloatArray);
 
 #ifdef __cplusplus
 }
