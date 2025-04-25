@@ -161,6 +161,12 @@ mz_applet mz_initialize_applet(const char* window_title, int width, int height, 
 		(void*)(sizeof(GLfloat) * 2)
 	);
 
+	glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &applet.texture_units);
+
+#ifdef MUZZLE_DEBUG_BUILD
+	mz_log_status_formatted(LOG_STATUS_INFO, "%d texture units supported", applet.max_texture_units);
+#endif
+
 	mz_shader default_quad_shader = mz_create_shader((char*)(quad_vertex_glsl), (char*)(quad_fragment_glsl), SHADER_TYPE_DIRECT_QUAD);
 	mz_shader default_sprite_shader = mz_create_shader((char*)(sprite_vertex_glsl), (char*)(sprite_fragment_glsl), SHADER_TYPE_DIRECT_SPRITE);
 	mz_shader default_circle_shader = mz_create_shader((char*)(circle_vertex_glsl), (char*)(circle_fragment_glsl), SHADER_TYPE_DIRECT_CIRCLE);
@@ -171,7 +177,7 @@ mz_applet mz_initialize_applet(const char* window_title, int width, int height, 
 	applet.render_order = 0;
 
 	applet.quad_renderer = mz_quad_renderer_initialize(MUZZLE_QUAD_BUFFER_CAPACITY);
-	applet.sprite_renderer = mz_sprite_renderer_initialize(MUZZLE_SPRITE_BUFFER_CAPACITY);
+	applet.sprite_renderer = mz_sprite_renderer_initialize(MUZZLE_SPRITE_BUFFER_CAPACITY, applet.texture_units);
 	applet.circle_renderer = mz_circle_renderer_initialize(MUZZLE_CIRCLE_BUFFER_CAPACITY);
 	applet.text_renderer = mz_text_renderer_initialize(MUZZLE_TEXT_BUFFER_CAPACITY);
 	

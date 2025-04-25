@@ -29,6 +29,7 @@ typedef struct mz_applet
 	GLuint shader_passes[MUZZLE_MAX_SHADER_PASSES];
 	size_t shader_passes_len;
 	GLint render_order;
+	GLint texture_units;
 	int width;
 	int height;
 } mz_applet;

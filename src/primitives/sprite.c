@@ -1,4 +1,5 @@
 #include "backend.h"
+#include "core/applet.h"
 #include "core/logging.h"
 #include "core/memory.h"
 #include "core/sprite_renderer.h"
@@ -29,6 +30,8 @@ mz_sprite mz_load_sprite(const char* filepath)
 	glTextureParameteri(id, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 	glTextureSubImage2D(id, 0, 0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, data);
+
+	stbi_image_free(data);
 
 #ifdef MUZZLE_DEBUG_BUILD
 	mz_log_status_formatted(LOG_STATUS_SUCCESS, "Loaded image '%s' into GPU", filepath);
@@ -89,6 +92,85 @@ void mz_unload_sprite(mz_sprite* data)
 {
 	MZ_TRACK_FUNCTION();
 	glDeleteTextures(1, &data->_id);
+}
+
+#define MIN(a, b) ((a) < (b) ? (a) : (b))
+
+mz_sprite_batch mz_load_sprite_batch(const char** filepaths, size_t size)
+{
+	MZ_TRACK_FUNCTION();
+
+	if (filepaths == NULL || size == 0)
+	{
+		return (mz_sprite_batch){0};
+	}
+
+	int w1, h1;
+	unsigned char* data1 = stbi_load(filepaths[0], &w1, &h1, NULL, 4);
+
+	if (data1 == NULL)
+	{
+		mz_log_status_formatted(LOG_STATUS_FATAL_ERROR, "Failed to load image '%s'", filepaths[0]);
+	}
+
+	GLuint id;
+	glCreateTextures(GL_TEXTURE_2D_ARRAY, 1, &id);
+	glTextureStorage3D(id, 1, GL_RGBA8, w1, h1, size);
+
+	glTextureParameteri(id, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTextureParameteri(id, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTextureParameteri(id, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTextureParameteri(id, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	glTextureSubImage3D(id, 0, 0, 0, 0, w1, h1, 1, GL_RGBA, GL_UNSIGNED_BYTE, data1);
+
+	stbi_image_free(data1);
+
+	for (int i = 1; i < size; i++)
+	{
+		int w, h;
+		unsigned char* data = stbi_load(filepaths[i], &w, &h, NULL, 4);
+
+		w = MIN(w, w1);
+		h = MIN(h, h1);
+
+		if (data == NULL)
+		{
+			mz_log_status_formatted(LOG_STATUS_FATAL_ERROR, "Failed to load image '%s'", filepaths[i]);
+		}
+
+		glTextureSubImage3D(id, 0, 0, 0, i, w, h, 1, GL_RGBA, GL_UNSIGNED_BYTE, data);
+
+		stbi_image_free(data);
+	}
+
+	return (mz_sprite_batch)
+	{
+		.width = w1,
+		.height = h1,
+		.size = size,
+		.id = id
+	};
+}
+
+void mz_unload_sprite_batch(mz_sprite_batch* batch)
+{
+	glDeleteTextures(1, &batch->id);
+	batch->id = 0;
+	batch->width = 0;
+	batch->height = 0;
+	batch->size = 0;
+}
+
+void mz_bind_sprite_batch(mz_applet* applet, mz_sprite_batch* batch, uint8_t texture_unit)
+{
+	if (texture_unit >= applet->texture_units)
+	{
+		mz_log_status_formatted(LOG_STATUS_FATAL_ERROR, "Cannot bind sprite batch to texture unit %d, exceeds amount of texture units supported on this GPU (%d)", texture_unit, applet->texture_units);
+	}
+
+	glActiveTexture(GL_TEXTURE0 + texture_unit);
+	glBindTexture(GL_TEXTURE_2D_ARRAY, batch->id);
 }
 
 #define TINT_TO_VEC4(t) (mz_vec4){(float)(t.r),(float)(t.g),(float)(t.b), (float)(t.a)}

@@ -9,14 +9,15 @@
 #define VBO 1
 #define EBO 2
 
-struct mz_sprite_renderer mz_sprite_renderer_initialize(uint32_t max_sprites)
+#define MIN(a, b) ((a) < (b) ? (a) : (b))
+
+struct mz_sprite_renderer mz_sprite_renderer_initialize(uint32_t max_sprites, GLint max_texture_units)
 {
 	MZ_TRACK_FUNCTION();
 
 	struct mz_sprite_renderer sprite_renderer = (struct mz_sprite_renderer){0};
-	
-	glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &sprite_renderer.max_textures); 
-	sprite_renderer.max_textures = (sprite_renderer.max_textures <= 32) ? sprite_renderer.max_textures : 32;
+
+	sprite_renderer.max_textures = MIN(max_texture_units, MUZZLE_SPRITE_TEXTURE_BUFFER_CAPACITY);
 
 	sprite_renderer.vertices = MZ_CALLOC(max_sprites * 4, sizeof(struct mz_sprite_vertex));
 	sprite_renderer.vertex_index = 0;
