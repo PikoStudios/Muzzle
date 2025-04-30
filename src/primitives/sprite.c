@@ -164,6 +164,8 @@ void mz_unload_sprite_batch(mz_sprite_batch* batch)
 
 void mz_bind_sprite_batch(mz_applet* applet, mz_sprite_batch* batch, uint8_t texture_unit)
 {
+	MZ_TRACK_FUNCTION();
+
 	if (texture_unit >= applet->texture_units)
 	{
 		mz_log_status_formatted(LOG_STATUS_FATAL_ERROR, "Cannot bind sprite batch to texture unit %d, exceeds amount of texture units supported on this GPU (%d)", texture_unit, applet->texture_units);

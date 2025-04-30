@@ -164,7 +164,7 @@ mz_applet mz_initialize_applet(const char* window_title, int width, int height, 
 	glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &applet.texture_units);
 
 #ifdef MUZZLE_DEBUG_BUILD
-	mz_log_status_formatted(LOG_STATUS_INFO, "%d texture units supported", applet.max_texture_units);
+	mz_log_status_formatted(LOG_STATUS_INFO, "%d texture units supported", applet.texture_units);
 #endif
 
 	mz_shader default_quad_shader = mz_create_shader((char*)(quad_vertex_glsl), (char*)(quad_fragment_glsl), SHADER_TYPE_DIRECT_QUAD);

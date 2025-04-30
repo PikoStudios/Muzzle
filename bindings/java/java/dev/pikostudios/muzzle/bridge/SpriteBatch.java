@@ -17,8 +17,8 @@ public class SpriteBatch
 
     public static native SpriteBatch load(String[] filepaths);
 
-    public native bind();
-    public native unload();
+    public native void bind(Applet applet, byte textureUnit);
+    public native void unload();
 
     public int getWidth()
     {

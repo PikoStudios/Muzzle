@@ -70,7 +70,7 @@ typedef uint8_t mz_boolean;
 	#endif
 	
 	#define MZ_ASSERT_DETAILED(expression, error_msg) if (!(expression)) { printf("\nAssertion " #expression " failed: " #error_msg "\n"); exit(-1); MZ_TRIGGER_BREAKPOINT(); }
-	#define MZ_TRACK_FUNCTION() __mz_debug_current_function_name = (char*)__func__
+	#define MZ_TRACK_FUNCTION() __mz_debug_current_function_name = (char*)(__func__)
 	#define MZ_TRACK_FUNCTION_STAGE(s) __mz_debug_current_function_name = s
 	#define MZ_GET_CURRENT_FUNCTION() __mz_debug_current_function_name
 #else
