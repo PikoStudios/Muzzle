@@ -10,8 +10,8 @@ set(target_name muzzlejni)
 
 find_package(JNI REQUIRED)
 
-include_directories(${MUZZLE_ROOT}/include ${MUZZLE_DEPS_FOLDER}/freetype/include ${JNI_INCLUDE_DIRS})
-link_directories(${MUZZLE_LIB_FOLDER} ${MUZZLE_DEPS_FOLDER}/glfw/lib ${MUZZLE_DEPS_FOLDER}/freetype/lib_pic)
+include_directories(${MUZZLE_ROOT}/include ${FREETYPE}/include ${JNI_INCLUDE_DIRS})
+link_directories(${MUZZLE_LIB_FOLDER} ${MUZZLE_DEPS_FOLDER}/glfw/lib ${FREETYPE}lib_pic ${FREETYPE}/lib)
 
 set(source
 src/common.c

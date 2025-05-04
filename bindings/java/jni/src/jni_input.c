@@ -39,3 +39,9 @@ JNIEXPORT jdouble JNICALL Java_dev_pikostudios_muzzle_bridge_Input_getMouseY(JNI
     mz_applet* _applet = get_applet(env, applet);
     return (jdouble)(mz_get_mouse_y(_applet));
 }
+
+JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Input_setCursorState(JNIEnv* env, jclass class, jobject applet, jint state)
+{
+    mz_applet* _applet = get_applet(env, applet);
+    mz_set_cursor_state(_applet, state);
+}

@@ -96,6 +96,10 @@ public class Input
     public static final int MOUSE_BUTTON_RIGHT = 1;
     public static final int MOUSE_BUTTON_MIDDLE = 2;
 
+    public static final int CURSOR_STATE_NORMAL = 0x00034001;
+    public static final int CURSOR_STATE_HIDDEN = 0x00034002;
+    public static final int CURSOR_STATE_DISABLED = 0x00034003;
+
     public static native boolean keyPressed(Applet applet, int key);
     public static native boolean keyReleased(Applet applet, int key);
 
@@ -104,4 +108,6 @@ public class Input
 
     public static native double getMouseX(Applet applet);
     public static native double getMouseY(Applet applet);
+
+    public static native void setCursorState(Applet applet, int state);
 }

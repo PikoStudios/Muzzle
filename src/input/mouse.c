@@ -51,3 +51,8 @@ float mz_get_mouse_yf(mz_applet* applet)
 {
 	return (float)(mz_get_mouse_y(applet));
 }
+
+void mz_set_cursor_state(mz_applet* applet, mz_cursor_state state)
+{
+	glfwSetInputMode(applet->window, GLFW_CURSOR, state);
+}

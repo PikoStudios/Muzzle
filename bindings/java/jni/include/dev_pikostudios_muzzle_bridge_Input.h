@@ -191,6 +191,12 @@ extern "C" {
 #define dev_pikostudios_muzzle_bridge_Input_MOUSE_BUTTON_RIGHT 1L
 #undef dev_pikostudios_muzzle_bridge_Input_MOUSE_BUTTON_MIDDLE
 #define dev_pikostudios_muzzle_bridge_Input_MOUSE_BUTTON_MIDDLE 2L
+#undef dev_pikostudios_muzzle_bridge_Input_CURSOR_STATE_NORMAL
+#define dev_pikostudios_muzzle_bridge_Input_CURSOR_STATE_NORMAL 212993L
+#undef dev_pikostudios_muzzle_bridge_Input_CURSOR_STATE_HIDDEN
+#define dev_pikostudios_muzzle_bridge_Input_CURSOR_STATE_HIDDEN 212994L
+#undef dev_pikostudios_muzzle_bridge_Input_CURSOR_STATE_DISABLED
+#define dev_pikostudios_muzzle_bridge_Input_CURSOR_STATE_DISABLED 212995L
 /*
  * Class:     dev_pikostudios_muzzle_bridge_Input
  * Method:    keyPressed
@@ -238,6 +244,14 @@ JNIEXPORT jdouble JNICALL Java_dev_pikostudios_muzzle_bridge_Input_getMouseX
  */
 JNIEXPORT jdouble JNICALL Java_dev_pikostudios_muzzle_bridge_Input_getMouseY
   (JNIEnv *, jclass, jobject);
+
+/*
+ * Class:     dev_pikostudios_muzzle_bridge_Input
+ * Method:    setCursorState
+ * Signature: (Ldev/pikostudios/muzzle/bridge/Applet;I)V
+ */
+JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Input_setCursorState
+  (JNIEnv *, jclass, jobject, jint);
 
 #ifdef __cplusplus
 }
