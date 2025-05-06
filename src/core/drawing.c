@@ -50,6 +50,7 @@ void mz_end_drawing(mz_applet* applet)
 	{
 		MZ_TRACK_FUNCTION_STAGE("mz_end_drawing shader passes");
 
+
 		glActiveTexture(GL_TEXTURE0);
 		glBindVertexArray(applet->framebuffer.vao);
 		glBindBuffer(GL_ARRAY_BUFFER, applet->framebuffer.vbo);
@@ -61,6 +62,21 @@ void mz_end_drawing(mz_applet* applet)
 			glBindTexture(GL_TEXTURE_2D, applet->framebuffer.textures[i % 2]);
 
 			glUseProgram(applet->shader_passes[i]);
+
+			// Depth Buffer Texture
+			if (applet->framebuffer.depth_buffers_type == 1)
+			{
+				GLuint depth_loc = glGetUniformLocation(applet->shader_passes[i], "uDepthTexture");
+				
+				if (depth_loc != -1)
+				{
+					glActiveTexture(GL_TEXTURE1);
+					glBindTexture(GL_TEXTURE_2D, applet->framebuffer.depth_buffers[i % 2]);
+					glActiveTexture(GL_TEXTURE0);
+					
+					glUniform1i(depth_loc, 1);
+				}
+			}
 
 			GLuint texture_loc = glGetUniformLocation(applet->shader_passes[i], "uScreenTexture");
 			GLuint resolution_loc = glGetUniformLocation(applet->shader_passes[i], "uScreenResolution");

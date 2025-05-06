@@ -16,7 +16,10 @@
 // TODO: Move sleep to core folder
 #include "utils/sleep.h"
 
-static inline void create_framebuffer(mz_applet* applet, int i)
+#define DEPTH_BUFFER_TYPE_RENDERBUFFER 0
+#define DEPTH_BUFFER_TYPE_TEXTURE 1
+
+static inline void create_framebuffer(mz_applet_flags flags, mz_applet* applet, int i)
 {
 	glGenFramebuffers(1, &applet->framebuffer.fbos[i]);
 	glBindFramebuffer(GL_FRAMEBUFFER, applet->framebuffer.fbos[i]);
@@ -28,10 +31,29 @@ static inline void create_framebuffer(mz_applet* applet, int i)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, applet->framebuffer.textures[i], 0);
 
-	glGenRenderbuffers(1, &applet->framebuffer.depth_buffers[i]);
-	glBindRenderbuffer(GL_RENDERBUFFER, applet->framebuffer.depth_buffers[i]);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, applet->width, applet->height);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, applet->framebuffer.depth_buffers[i]);
+	if (flags & APPLET_FLAG_ENABLE_SHADER_PASS_DEPTH_TEXTURE)
+	{
+		glGenTextures(1, &applet->framebuffer.depth_buffers[i]);
+		glBindTexture(GL_TEXTURE_2D, applet->framebuffer.depth_buffers[i]);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, applet->width, applet->height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, applet->framebuffer.depth_buffers[i], 0);
+
+		applet->framebuffer.depth_buffers_type = DEPTH_BUFFER_TYPE_TEXTURE;
+	}
+
+	else
+	{
+		glGenRenderbuffers(1, &applet->framebuffer.depth_buffers[i]);
+		glBindRenderbuffer(GL_RENDERBUFFER, applet->framebuffer.depth_buffers[i]);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, applet->width, applet->height);
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, applet->framebuffer.depth_buffers[i]);
+
+		applet->framebuffer.depth_buffers_type = DEPTH_BUFFER_TYPE_RENDERBUFFER;
+	}
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 	{
@@ -117,8 +139,8 @@ mz_applet mz_initialize_applet(const char* window_title, int width, int height, 
 	glDepthFunc(GL_LESS);
 
 	// Initialize off-screen framebuffer (used by shader passes)
-	create_framebuffer(&applet, 0);
-	create_framebuffer(&applet, 1);
+	create_framebuffer(flags, &applet, 0);
+	create_framebuffer(flags, &applet, 1);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -220,9 +242,18 @@ void mz_terminate_applet(mz_applet* applet)
 	
 	glDeleteFramebuffers(2, applet->framebuffer.fbos);
 	glDeleteTextures(2, applet->framebuffer.textures);
-	glDeleteRenderbuffers(2, applet->framebuffer.depth_buffers);
 	glDeleteVertexArrays(1, &applet->framebuffer.vao);
 	glDeleteBuffers(1, &applet->framebuffer.vbo);
+
+	if (applet->framebuffer.depth_buffers_type == DEPTH_BUFFER_TYPE_TEXTURE)
+	{
+		glDeleteTextures(2, applet->framebuffer.depth_buffers);
+	}
+
+	else
+	{
+		glDeleteRenderbuffers(2, applet->framebuffer.depth_buffers);
+	}
 
 	mz_quad_renderer_destroy(&applet->quad_renderer);
 	mz_sprite_renderer_destroy(&applet->sprite_renderer);
