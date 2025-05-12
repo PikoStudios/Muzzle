@@ -91,6 +91,18 @@ mz_shader mz_load_shader(const char* vertex_filepath, const char* fragment_filep
 	return id;
 }
 
+MZ_API mz_shader mz_create_shader_from_pipeline(mz_shader_pipeline pipeline)
+{
+	MZ_TRACK_FUNCTION();
+
+	GLuint ids[pipeline.size];
+
+	for (int i = 0; i < pipeline.size; i++)
+	{
+		ids[0] = glCreateShader(pipeline.)
+	}
+}
+
 MZ_API void mz_use_shader_pass(mz_applet* applet, mz_shader shader)
 {
 	MZ_TRACK_FUNCTION();
