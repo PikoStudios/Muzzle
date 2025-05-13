@@ -1,6 +1,7 @@
 ![Muzzle Logo](https://github.com/PikoStudios/Muzzle/blob/main/.github/assests/muzzle.png?raw=true)
 
-
+**⚠️ STILL IN ACTIVE DEVELOPMENT (2025), See the [`dev`](https://github.com/PikoStudios/muzzle/tree/dev) branch ⚠️**
+***
 
 [Discord Server](https://discord.gg/Rw2FdYw5dK) | [Twitter](https://twitter.com/piko_studios)
 
