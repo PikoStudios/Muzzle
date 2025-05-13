@@ -5,6 +5,7 @@
 [Discord Server](https://discord.gg/Rw2FdYw5dK) | [Twitter](https://twitter.com/piko_studios)
 
 ![Discord](https://img.shields.io/discord/784899614410670090?color=%23AAA62C&label=PikoStudios%20Discord%20Server&style=flat-square)
+<a href='https://ko-fi.com/E1E6MX8G1' target='_blank'><img height='36' style='border:0px;height:18px;' src='https://storage.ko-fi.com/cdn/kofi1.png?v=6' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
 ***
 Muzzle is an open-source C11 game framework that is easy-to-use and lightweight, but still exposes lower-level APIs.
 
