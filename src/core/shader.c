@@ -91,19 +91,164 @@ mz_shader mz_load_shader(const char* vertex_filepath, const char* fragment_filep
 	return id;
 }
 
-MZ_API mz_shader mz_create_shader_from_pipeline(mz_shader_pipeline pipeline)
+mz_shader_pipeline mz_create_shader_pipeline(mz_shader_pipeline_descriptor* descriptor)
 {
 	MZ_TRACK_FUNCTION();
 
-	GLuint ids[pipeline.size];
+	GLuint vid = glCreateShader(GL_VERTEX_SHADER);
+	GLuint fid = glCreateShader(GL_FRAGMENT_SHADER);
+	GLuint gid = 0;
 
-	for (int i = 0; i < pipeline.size; i++)
+	if (vid == 0 || fid == 0)
 	{
-		ids[0] = glCreateShader(pipeline.)
+		mz_log_status(LOG_STATUS_FATAL_ERROR, "Could not create shader");
 	}
+
+	char* vertex_source = (char*)(descriptor->vertex.source);
+	char* fragment_source = (char*)(descriptor->fragment.source);
+	char* geometry_source = (char*)(descriptor->geometry.source);
+
+	if (descriptor->vertex.source_type == SHADER_COMPONENT_SOURCE_TYPE_FILEPATH)
+	{
+		FILE* file;
+		vertex_source = internals_read_file(&file, vertex_source, "Failed to open vertex shader file", "Failed to allocate vertex shader string buffer");
+	}
+
+	if (descriptor->fragment.source_type == SHADER_COMPONENT_SOURCE_TYPE_FILEPATH)
+	{
+		FILE* file;
+		fragment_source = internals_read_file(&file, fragment_source, "Failed to open fragment shader file", "Failed to allocate fragment shader string buffer");
+	}
+
+	if (geometry_source != NULL)
+	{
+		gid = glCreateShader(GL_GEOMETRY_SHADER);
+
+		if (gid == 0)
+		{
+			mz_log_status(LOG_STATUS_FATAL_ERROR, "Could not create shader");
+		}
+
+		if (descriptor->geometry.source_type == SHADER_COMPONENT_SOURCE_TYPE_FILEPATH)
+		{
+			FILE* file;
+			geometry_source = internals_read_file(&file, geometry_source, "Failed to open geometry shader file", "Failed to allocate geometry shader string buffer");
+		}
+	}
+
+	// Qualifer warning so this is necessary
+	const char* vertex = vertex_source;
+	const char* fragment = fragment_source;
+	const char* geometry = geometry_source;
+
+	glShaderSource(vid, 1, &vertex, NULL);
+	glCompileShader(vid);
+	verify_compile_status("Vertex shader failed to compile, more info:\n\t%s", vid);
+
+	glShaderSource(fid, 1, &fragment, NULL);
+	glCompileShader(fid);
+	verify_compile_status("Fragment shader failed to compile, more info:\n\t%s", fid);
+
+	GLuint pid = glCreateProgram();
+	glAttachShader(pid, vid);
+	glAttachShader(pid, fid);
+
+	if (gid != 0)
+	{
+		glShaderSource(gid, 1, &geometry, NULL);
+		glCompileShader(gid);
+		verify_compile_status("Geometry shader failed to compile, more info:\n\t%s", gid);
+		
+		glAttachShader(pid, gid);
+	}
+
+	glLinkProgram(pid);
+
+	GLint status = 0;
+	glGetProgramiv(pid, GL_LINK_STATUS, &status);
+
+	if (status != GL_TRUE)
+	{
+		GLsizei length = 0;
+		glGetProgramiv(pid, GL_INFO_LOG_LENGTH, &length);
+
+		GLchar log[length];
+		glGetProgramInfoLog(pid, length, NULL, log);
+
+		glDeleteShader(vid);
+		glDeleteShader(fid);
+
+		if (gid != 0)
+		{
+			glDeleteShader(gid);
+		}
+
+		mz_log_status_formatted(LOG_STATUS_FATAL_ERROR, "Shader failed to link, more info:\n\t%s", log);
+	}
+
+	glDetachShader(pid, vid);
+	glDetachShader(pid, fid);
+	glDeleteShader(vid);
+	glDeleteShader(fid);
+
+	if (gid != 0)
+	{
+		glDetachShader(pid, gid);
+		glDeleteShader(gid);
+	}
+
+	// Create Vertex buffers
+	GLuint vao;
+	GLuint vbo;
+
+	glGenVertexArrays(1, &vao);
+	glGenBuffers(1, &vbo);
+
+	glBindVertexArray(vao);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * descriptor->vertex.vertices_size, descriptor->vertex.vertices, GL_DYNAMIC_DRAW);
+
+	for (mz_shader_component_vertex_attribute* attr = descriptor->vertex.attributes; attr != NULL; attr = attr->next)
+	{
+		glEnableVertexArrayAttrib(vao, attr->index);
+		glVertexAttribPointer(attr->index, attr->size, GL_FLOAT, attr->normalized, attr->stride, (GLvoid*)(attr->offset));
+	}
+
+	return (mz_shader_pipeline)
+	{
+		.pid = pid,
+		.vao = vao,
+		.vbo = vbo,
+		.primitive_type = descriptor->vertex.primitive_type
+	};
 }
 
-MZ_API void mz_use_shader_pass(mz_applet* applet, mz_shader shader)
+void mz_draw_shader_pipeline(mz_shader_pipeline pipeline, float* vertices, size_t vertices_size, int start, int end)
+{
+	glUseProgram(pipeline.pid);
+	glBindVertexArray(pipeline.vao);
+	glBindBuffer(GL_ARRAY_BUFFER, pipeline.vbo);
+
+	if (vertices != NULL)
+	{
+		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(GLfloat) * vertices_size, vertices);
+	}
+
+	glDrawArrays(pipeline.primitive_type, start, end);
+}
+
+void mz_unload_shader_pipeline(mz_shader_pipeline* pipeline)
+{
+	glDeleteProgram(pipeline->pid);
+	glDeleteBuffers(1, &pipeline->vbo);
+	glDeleteVertexArrays(1, &pipeline->vao);
+
+	pipeline->pid = 0;
+	pipeline->vao = 0;
+	pipeline->vbo = 0;
+}
+
+void mz_use_shader_pass(mz_applet* applet, mz_shader shader)
 {
 	MZ_TRACK_FUNCTION();
 

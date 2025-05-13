@@ -16,14 +16,6 @@ typedef enum
 
 typedef enum
 {
-    SHADER_COMPONENT_TYPE_VERTEX = GL_VERTEX_SHADER,
-    SHADER_COMPONENT_TYPE_FRAGMENT = GL_FRAGMENT_SHADER,
-    SHADER_COMPONENT_TYPE_GEOMETRY = GL_GEOMETRY_SHADER,
-} mz_shader_component_type;
-
-
-typedef enum
-{
     SHADER_COMPONENT_VERTEX_PRIMITIVE_TYPE_TRIANGLE = GL_TRIANGLES,
     SHADER_COMPONENT_VERTEX_PRIMITIVE_TYPE_TRIANGLE_STRIP = GL_TRIANGLE_STRIP,
     SHADER_COMPONENT_VERTEX_PRIMITIVE_TYPE_POINT = GL_POINTS
@@ -43,66 +35,40 @@ typedef struct mz_shader
 
 typedef struct mz_shader_component_vertex_attribute
 {
-
+    struct mz_shader_component_vertex_attribute* next;
+    uint8_t index;
+    uint8_t size;
+    mz_boolean normalized;
+    int stride;
+    intptr_t offset;
 } mz_shader_component_vertex_attribute;
 
-
-typedef struct mz_shader_component
+typedef struct mz_shader_pipeline_descriptor
 {
-    mz_shader_component_type component_type;
-    mz_shader_component_source_type source_type;
-    const char* source;
-
     struct
     {
         mz_shader_component_vertex_primitive_type primitive_type;
+        mz_shader_component_source_type source_type;
         mz_shader_component_vertex_attribute* attributes;
         float* vertices;
-        size_t attributes_size;
+        const char* source;
         size_t vertices_size;
-    } vertex_metadata;
-} mz_shader_component;
+    } vertex;
+
+    struct
+    {
+        mz_shader_component_source_type source_type;
+        const char* source;
+    } fragment, geometry;
+} mz_shader_pipeline_descriptor;
 
 typedef struct mz_shader_pipeline
 {
-    mz_shader_component* components;
-    size_t size;
+    GLuint pid;
+    GLuint vao;
+    GLuint vbo;
+    mz_shader_component_vertex_primitive_type primitive_type;
 } mz_shader_pipeline;
-
-/*
- *
- * mz_shader_component vertex_shader = (mz_shader_component)
- * {
- *      .component_type = SHADER_COMPONENT_TYPE_VERTEX,
- *      .metadata.vertex =
- *      {
- *          .primitive_type = SHADER_COMPONENT_PRIMITIVE_TYPE_POINT,
- *          .attributes = attr;
- *          .attributes_size = attr_size;
- *          .vertices = data;
- *          .vertices_size = vertices_size;
- *      },
- *      .source_type = SHADER_COMPONENT_SOURCE_TYPE_FILEPATH,
- *      .source = "vert.glsl"
- * };
- *
- * mz_shader_component fragment_shader = (mz_shader_component)
- * {
- *      .component_type = SHADER_COMPONENT_TYPE_FRAGMENT,
- *      .source_type = SHADER_COMPONENT_SOURCE_TYPE_FILEPATH,
- *      .source = "frag.glsl"
- * };
- *
- * mz_shader_component components[] = {vertex_shader, fragment_shader};
- *
- * mz_shader_pipeline pipeline = (mz_shader_pipeline)
- * {
- *      .components = components,
- *      .size = ARRSIZE(components)
- * };
- *
- * mz_shader shader = mz_create_shader_from_pipeline(pipeline);
- */
 
 typedef struct mz_shader_buffer
 {
@@ -113,7 +79,9 @@ typedef struct mz_shader_buffer
 MZ_API mz_shader mz_create_shader(const char* vertex, const char* fragment, mz_shader_type type);
 MZ_API mz_shader mz_load_shader(const char* vertex_filepath, const char* fragment_filepath, mz_shader_type type);
 
-MZ_API mz_shader mz_create_shader_from_pipeline(mz_shader_pipeline pipeline);
+MZ_API mz_shader_pipeline mz_create_shader_pipeline(mz_shader_pipeline_descriptor* descriptor);
+MZ_API void mz_draw_shader_pipeline(mz_shader_pipeline pipeline, float* vertices, size_t vertices_size, int start, int end);
+MZ_API void mz_unload_shader_pipeline(mz_shader_pipeline* pipeline);
 
 MZ_API void mz_use_shader_pass(mz_applet* applet, mz_shader shader);
 MZ_API void mz_begin_shader(mz_applet* applet, mz_shader shader);
