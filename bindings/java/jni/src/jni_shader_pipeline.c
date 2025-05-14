@@ -10,6 +10,8 @@
 	#define STACKALLOC(s) alloca(s)
 #endif
 
+#define NOP()
+
 static mz_shader_pipeline get_pipeline(JNIEnv* env, jobject object)
 {
 	jclass cls = (*env)->GetObjectClass(env, object);
@@ -20,7 +22,7 @@ static mz_shader_pipeline get_pipeline(JNIEnv* env, jobject object)
 	jfieldID primitive_type_field = (*env)->GetFieldID(env, cls, "primitiveType", "I");
 
 	mz_shader_pipeline p = (mz_shader_pipeline){0};
-	p.pid = (*env)->GetIntField(env, object, pid_field);
+	p.shader.pid = (*env)->GetIntField(env, object, pid_field);
 	p.vao = (*env)->GetIntField(env, object, vao_field);
 	p.vbo = (*env)->GetIntField(env, object, vbo_field);
 	p.primitive_type = (*env)->GetIntField(env, object, primitive_type_field);
@@ -102,18 +104,23 @@ JNIEXPORT jobject JNICALL Java_dev_pikostudios_muzzle_bridge_ShaderPipeline_crea
 		attr->normalized = (*env)->GetBooleanField(env, attribute, normalized_field);
 		attr->stride = (*env)->GetIntField(env, attribute, stride_field);
 		attr->offset = (*env)->GetIntField(env, attribute, offset_field);
+		attr->next = NULL;
 
-		attr->next = STACKALLOC(sizeof(mz_shader_component_vertex_attribute));
-		attr = attr->next;
-		
+		if (i < attrs_len - 1)
+		{
+			attr->next = STACKALLOC(sizeof(mz_shader_component_vertex_attribute));
+			attr = attr->next;
+		}
+
 		(*env)->DeleteLocalRef(env, attribute);
 	}
 
 skip_attrs:
+	NOP(); // Decl. after label is only a C23 extension
 	mz_shader_pipeline pipeline = mz_create_shader_pipeline(&d);
 
 	jmethodID ctor = (*env)->GetMethodID(env, class, "<init>", "(IIII)V");
-	jobject jpipeline = (*env)->NewObject(env, class, ctor, pipeline.pid, pipeline.vao, pipeline.vbo, pipeline.primitive_type);
+	jobject jpipeline = (*env)->NewObject(env, class, ctor, pipeline.shader.pid, pipeline.vao, pipeline.vbo, pipeline.primitive_type);
 	
 	(*env)->ReleaseFloatArrayElements(env, v_vertices, d.vertex.vertices, JNI_ABORT);
 	(*env)->ReleaseStringUTFChars(env, v_source, d.vertex.source);
@@ -158,7 +165,7 @@ JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_ShaderPipeline_unload(
 	jfieldID primitive_type_field = (*env)->GetFieldID(env, cls, "primitiveType", "I");
 
 	mz_shader_pipeline p = (mz_shader_pipeline){0};
-	p.pid = (*env)->GetIntField(env, object, pid_field);
+	p.shader.pid = (*env)->GetIntField(env, object, pid_field);
 	p.vao = (*env)->GetIntField(env, object, vao_field);
 	p.vbo = (*env)->GetIntField(env, object, vbo_field);
 	p.primitive_type = (*env)->GetIntField(env, object, primitive_type_field);

@@ -101,6 +101,11 @@ public class ShaderPipeline
 		return this.pid;
 	}
 
+	public Shader getShader()
+	{
+		return new Shader(this.pid);
+	}
+
 	public void draw(int start, int end)
 	{
 		this.draw(null, start, end);

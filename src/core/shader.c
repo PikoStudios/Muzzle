@@ -155,6 +155,7 @@ mz_shader_pipeline mz_create_shader_pipeline(mz_shader_pipeline_descriptor* desc
 
 	if (gid != 0)
 	{
+		printf("6:1");
 		glShaderSource(gid, 1, &geometry, NULL);
 		glCompileShader(gid);
 		verify_compile_status("Geometry shader failed to compile, more info:\n\t%s", gid);
@@ -208,15 +209,17 @@ mz_shader_pipeline mz_create_shader_pipeline(mz_shader_pipeline_descriptor* desc
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * descriptor->vertex.vertices_size, descriptor->vertex.vertices, GL_DYNAMIC_DRAW);
 
+	int i = 0;
 	for (mz_shader_component_vertex_attribute* attr = descriptor->vertex.attributes; attr != NULL; attr = attr->next)
 	{
+		printf("%d\n", i++);
 		glEnableVertexArrayAttrib(vao, attr->index);
 		glVertexAttribPointer(attr->index, attr->size, GL_FLOAT, attr->normalized, attr->stride, (GLvoid*)(attr->offset));
 	}
 
 	return (mz_shader_pipeline)
 	{
-		.pid = pid,
+		.shader = (mz_shader){.pid = pid, .type = SHADER_TYPE_PIPELINE},
 		.vao = vao,
 		.vbo = vbo,
 		.primitive_type = descriptor->vertex.primitive_type
@@ -225,7 +228,7 @@ mz_shader_pipeline mz_create_shader_pipeline(mz_shader_pipeline_descriptor* desc
 
 void mz_draw_shader_pipeline(mz_shader_pipeline pipeline, float* vertices, size_t vertices_size, int start, int end)
 {
-	glUseProgram(pipeline.pid);
+	glUseProgram(pipeline.shader.pid);
 	glBindVertexArray(pipeline.vao);
 	glBindBuffer(GL_ARRAY_BUFFER, pipeline.vbo);
 
@@ -239,11 +242,11 @@ void mz_draw_shader_pipeline(mz_shader_pipeline pipeline, float* vertices, size_
 
 void mz_unload_shader_pipeline(mz_shader_pipeline* pipeline)
 {
-	glDeleteProgram(pipeline->pid);
+	glDeleteProgram(pipeline->shader.pid);
 	glDeleteBuffers(1, &pipeline->vbo);
 	glDeleteVertexArrays(1, &pipeline->vao);
 
-	pipeline->pid = 0;
+	pipeline->shader.pid = 0;
 	pipeline->vao = 0;
 	pipeline->vbo = 0;
 }
@@ -292,6 +295,10 @@ void mz_begin_shader(mz_applet* applet, mz_shader shader)
 		case SHADER_TYPE_DIRECT_TEXT:
 			applet->text_renderer.shader_id = shader.pid;
 			break;
+
+		case SHADER_TYPE_PIPELINE:
+			mz_log_status_formatted(LOG_STATUS_ERROR, "mz_begin_shader called on shader pipeline, please use mz_draw_shader_pipeline");
+			break;
 	}
 }
 
@@ -320,6 +327,11 @@ void mz_end_shader(mz_applet* applet, mz_shader shader)
 
 		case SHADER_TYPE_DIRECT_TEXT:
 			applet->text_renderer.shader_id = applet->text_renderer.default_shader_id;
+			break;
+
+
+		case SHADER_TYPE_PIPELINE:
+			mz_log_status_formatted(LOG_STATUS_ERROR, "mz_end_shader called on shader pipeline, please use mz_draw_shader_pipeline");
 			break;
 	}
 }

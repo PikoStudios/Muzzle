@@ -11,7 +11,8 @@ typedef enum
     SHADER_TYPE_DIRECT_QUAD = 1,
     SHADER_TYPE_DIRECT_CIRCLE = 2,
     SHADER_TYPE_DIRECT_SPRITE = 3,
-    SHADER_TYPE_DIRECT_TEXT = 4
+    SHADER_TYPE_DIRECT_TEXT = 4,
+    SHADER_TYPE_PIPELINE = 5 // Should never be directly set by user
 } mz_shader_type;
 
 typedef enum
@@ -64,7 +65,7 @@ typedef struct mz_shader_pipeline_descriptor
 
 typedef struct mz_shader_pipeline
 {
-    GLuint pid;
+    mz_shader shader;
     GLuint vao;
     GLuint vbo;
     mz_shader_component_vertex_primitive_type primitive_type;

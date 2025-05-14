@@ -20,6 +20,13 @@ public class Shader
         this.type = type;
     }
 
+    // For ShaderPipeline only
+    protected Shader(int id)
+    {
+        this.id = id;
+        this.type = 5;
+    }
+
     public static Shader create(String vertexSource, String fragmentSource, ShaderType type)
     {
         return create(vertexSource, fragmentSource, type.ordinal());
@@ -34,6 +41,7 @@ public class Shader
 
     private static native Shader load(String vertexFilepath, String fragmentFilepath, int type);
 
+    // TODO: Add error checking if type is pipeline
     public void use(Applet applet) throws IllegalStateException
     {
         if (this.type != ShaderType.PASS.ordinal())
