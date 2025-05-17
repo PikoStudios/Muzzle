@@ -209,10 +209,8 @@ mz_shader_pipeline mz_create_shader_pipeline(mz_shader_pipeline_descriptor* desc
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * descriptor->vertex.vertices_size, descriptor->vertex.vertices, GL_DYNAMIC_DRAW);
 
-	int i = 0;
 	for (mz_shader_component_vertex_attribute* attr = descriptor->vertex.attributes; attr != NULL; attr = attr->next)
 	{
-		printf("%d\n", i++);
 		glEnableVertexArrayAttrib(vao, attr->index);
 		glVertexAttribPointer(attr->index, attr->size, GL_FLOAT, attr->normalized, attr->stride, (GLvoid*)(attr->offset));
 	}
@@ -228,6 +226,10 @@ mz_shader_pipeline mz_create_shader_pipeline(mz_shader_pipeline_descriptor* desc
 
 void mz_draw_shader_pipeline(mz_shader_pipeline pipeline, float* vertices, size_t vertices_size, int start, int end)
 {
+	MZ_TRACK_FUNCTION();
+
+	
+	
 	glUseProgram(pipeline.shader.pid);
 	glBindVertexArray(pipeline.vao);
 	glBindBuffer(GL_ARRAY_BUFFER, pipeline.vbo);
@@ -242,6 +244,8 @@ void mz_draw_shader_pipeline(mz_shader_pipeline pipeline, float* vertices, size_
 
 void mz_unload_shader_pipeline(mz_shader_pipeline* pipeline)
 {
+	MZ_TRACK_FUNCTION();
+	
 	glDeleteProgram(pipeline->shader.pid);
 	glDeleteBuffers(1, &pipeline->vbo);
 	glDeleteVertexArrays(1, &pipeline->vao);

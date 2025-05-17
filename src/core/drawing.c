@@ -50,7 +50,6 @@ void mz_end_drawing(mz_applet* applet)
 	{
 		MZ_TRACK_FUNCTION_STAGE("mz_end_drawing shader passes");
 
-
 		glActiveTexture(GL_TEXTURE0);
 		glBindVertexArray(applet->framebuffer.vao);
 		glBindBuffer(GL_ARRAY_BUFFER, applet->framebuffer.vbo);
@@ -96,8 +95,8 @@ void mz_end_drawing(mz_applet* applet)
 
 		MZ_TRACK_FUNCTION();
 	}
+	
 	applet->render_order = 0;
-
 	glfwPollEvents();
 }
 
