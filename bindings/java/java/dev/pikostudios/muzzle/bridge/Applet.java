@@ -11,6 +11,7 @@ public class Applet extends NativeStruct
 	public static final int APPLET_FLAG_VSYNC = 1 << 1;
 	public static final int APPLET_FLAG_TRACK_DELTA_TIME = 1 << 2;
 	public static final int APPLET_FLAG_ENABLE_SHADER_PASS_DEPTH_TEXTURE = 1 << 3;
+	public static final int APPLET_FLAG_FULLSCREEN = 1 << 4;
 
 	private final long titlePointer;
 	private String title;

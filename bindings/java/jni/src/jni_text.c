@@ -8,6 +8,13 @@ JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Text_draw(JNIEnv* env,
     mz_applet* _applet = get_applet(env, applet);
     mz_tint _tint = get_tint(env, tint);
 
+    if (font == NULL)
+    {
+        jclass nullptrexcpt = (*env)->FindClass(env, "java/lang/NullPointerException");
+        (*env)->ThrowNew(env, nullptrexcpt, "font is null");
+        return;
+    }
+
     jclass font_class = (*env)->GetObjectClass(env, font);
     jfieldID font_native_pointer_field = (*env)->GetFieldID(env, font_class, "nativePointer", "J");
 

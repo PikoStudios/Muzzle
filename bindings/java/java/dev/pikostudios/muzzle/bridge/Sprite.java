@@ -28,4 +28,9 @@ public class Sprite
     {
         return this.height;
     }
+
+    public int getID()
+    {
+        return this.id;
+    }
 }

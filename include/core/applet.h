@@ -37,10 +37,11 @@ typedef struct mz_applet
 
 typedef enum mz_applet_flags
 {
-	APPLET_FLAG_RESIZBALE			= 1 << 0,
-	APPLET_FLAG_VSYNC				= 1 << 1,
-	APPLET_FLAG_TRACK_DELTA_TIME	= 1 << 2,
-	APPLET_FLAG_ENABLE_SHADER_PASS_DEPTH_TEXTURE = 1 << 3
+	APPLET_FLAG_RESIZBALE							= 1 << 0,
+	APPLET_FLAG_VSYNC								= 1 << 1,
+	APPLET_FLAG_TRACK_DELTA_TIME					= 1 << 2,
+	APPLET_FLAG_ENABLE_SHADER_PASS_DEPTH_TEXTURE	= 1 << 3,
+	APPLET_FLAG_FULLSCREEN 							= 1 << 4
 } mz_applet_flags;
 
 typedef void (*mz_applet_main_dispatch_fn)(mz_applet*);

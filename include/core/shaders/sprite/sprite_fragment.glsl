@@ -7,7 +7,7 @@ layout (location = 3) in float vTilingFactor;
 layout (location = 0) out vec4 fFragColor;
 uniform vec2 uViewportResolution;
 uniform int uRenderOrderMax;
-uniform sampler2D uTextures[32];
+layout (binding = 0) uniform sampler2D uTextures[32];
 
 void main()
 {

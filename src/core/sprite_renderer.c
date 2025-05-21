@@ -151,7 +151,7 @@ void mz_sprite_renderer_flush(struct mz_sprite_renderer* sprite_renderer, float 
 	}
 
 	glUniform2f(sprite_renderer->loc_uViewportResolution, width, height);
-	glUniform1uiv(sprite_renderer->loc_uTextures, sprite_renderer->max_textures, sprite_renderer->textures);
+	//glUniform1uiv(sprite_renderer->loc_uTextures, sprite_renderer->max_textures, sprite_renderer->textures);
 
 	glDrawElements(GL_TRIANGLES, sprite_renderer->sprite_count * 6, GL_UNSIGNED_INT, NULL);
 

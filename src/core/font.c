@@ -1,4 +1,5 @@
 #include "core/font.h"
+#include "backend.h"
 #include "core/logging.h"
 #include "core/applet.h"
 
@@ -23,7 +24,7 @@ mz_font mz_load_font(mz_applet* applet, const char* filepath)
 	{
 		mz_log_status(LOG_STATUS_FATAL_ERROR, "Could not allocate memory for glyphs");
 	}
-
+	
 	glCreateTextures(GL_TEXTURE_2D_ARRAY, 1, &font.texture_array_id);
 	glTextureStorage3D(font.texture_array_id, 1, GL_R8, MUZZLE_TEXT_SOURCE_FONT_SIZE, MUZZLE_TEXT_SOURCE_FONT_SIZE, 256 /*font.glyph_count*/);
 	

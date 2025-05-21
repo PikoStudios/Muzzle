@@ -25,7 +25,6 @@ def generate(name: str, vertex: Path, fragment: Path) -> t.Tuple[str, str]:
 	elif not fragment.is_file():
 		print(f"Error, fragment path {fragment} not file")
 		exit(-1)
-
 	
 	vertex_code: str = subprocess.run([XXD_BINARY, "-i", str(vertex)], stdout=subprocess.PIPE, text=True).stdout
 	fragment_code: str = subprocess.run([XXD_BINARY, "-i", str(fragment)], stdout=subprocess.PIPE, text=True).stdout

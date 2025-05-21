@@ -66,8 +66,6 @@ mz_applet mz_initialize_applet(const char* window_title, int width, int height, 
 	MZ_TRACK_FUNCTION();
 
 	mz_applet applet;
-	applet.width = width;
-	applet.height = height;
 	applet.shader_passes_len = 0;
 
 	if (!glfwInit())
@@ -90,8 +88,19 @@ mz_applet mz_initialize_applet(const char* window_title, int width, int height, 
 
 	glfwSetErrorCallback(internals_glfw_callback_error);
 
-	applet.window = glfwCreateWindow(width, height, window_title, NULL, NULL);
+	GLFWmonitor* monitor = (flags & APPLET_FLAG_FULLSCREEN) ? glfwGetPrimaryMonitor() : NULL;
 
+	if ((width == 0 || height == 0) && monitor != NULL)
+	{
+		const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+		width = mode->width;
+		height = mode->height;
+	}
+	
+	applet.window = glfwCreateWindow(width, height, window_title, monitor, NULL);
+	applet.width = width;
+	applet.height = height;
+	
 	if (applet.window == NULL)
 	{
 		const char* error_description = internals_get_error_description();

@@ -155,7 +155,6 @@ mz_shader_pipeline mz_create_shader_pipeline(mz_shader_pipeline_descriptor* desc
 
 	if (gid != 0)
 	{
-		printf("6:1");
 		glShaderSource(gid, 1, &geometry, NULL);
 		glCompileShader(gid);
 		verify_compile_status("Geometry shader failed to compile, more info:\n\t%s", gid);
@@ -227,8 +226,6 @@ mz_shader_pipeline mz_create_shader_pipeline(mz_shader_pipeline_descriptor* desc
 void mz_draw_shader_pipeline(mz_shader_pipeline pipeline, float* vertices, size_t vertices_size, int start, int end)
 {
 	MZ_TRACK_FUNCTION();
-
-	
 	
 	glUseProgram(pipeline.shader.pid);
 	glBindVertexArray(pipeline.vao);

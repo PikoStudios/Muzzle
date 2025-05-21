@@ -6,6 +6,8 @@
 
 JNIEXPORT jobject JNICALL Java_dev_pikostudios_muzzle_bridge_Font_load(JNIEnv* env, jclass class, jobject applet, jstring filepath)
 {
+    static int i = 0;
+    
     mz_applet* _applet = get_applet(env, applet);
 
     const char* fontpath = (*env)->GetStringUTFChars(env, filepath, NULL);
