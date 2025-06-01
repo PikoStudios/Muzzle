@@ -180,7 +180,19 @@ void mz_bind_sprite_batch(mz_applet* applet, mz_sprite_batch* batch, uint8_t tex
 
 void mz_draw_sprite(mz_applet* applet, mz_sprite* data, float x, float y, mz_tint tint)
 {
+	mz_draw_sprite_scaled(applet, data, x, y, 1.0f, tint);
+}
+
+void mz_draw_sprite_vec2(mz_applet* applet, mz_sprite* data, mz_vec2 pos, mz_tint tint)
+{
+	mz_draw_sprite_scaled(applet, data, pos.x, pos.y, 1.0f, tint);
+}
+
+void mz_draw_sprite_scaled(mz_applet* applet, mz_sprite* data, float x, float y, float scale, mz_tint tint)
+{
 	MZ_TRACK_FUNCTION();
+	
+	MZ_ASSERT_DETAILED(scale > 0, "Scale should be greater than 0");
 
 	applet->render_order++;
 
@@ -195,10 +207,14 @@ void mz_draw_sprite(mz_applet* applet, mz_sprite* data, float x, float y, mz_tin
 	}
 
 	mz_vec4 color = TINT_TO_VEC4(tint);
+
+	float width = data->width * scale;
+	float height = data->height * scale;
+	
 	struct mz_sprite_vertex v1 = VERTEX(x, y, color, 0, 0, texture_id, 1.0f, applet->render_order);
-	struct mz_sprite_vertex v2 = VERTEX(x + data->width, y, color, 1, 0, texture_id, 1.0f, applet->render_order);
-	struct mz_sprite_vertex v3 = VERTEX(x, y + data->height, color, 0, 1, texture_id, 1.0f, applet->render_order);
-	struct mz_sprite_vertex v4 = VERTEX(x + data->width, y + data->height, color, 1, 1, texture_id, 1.0f, applet->render_order);
+	struct mz_sprite_vertex v2 = VERTEX(x + width, y, color, 1, 0, texture_id, 1.0f, applet->render_order);
+	struct mz_sprite_vertex v3 = VERTEX(x, y + height, color, 0, 1, texture_id, 1.0f, applet->render_order);
+	struct mz_sprite_vertex v4 = VERTEX(x + width, y + height, color, 1, 1, texture_id, 1.0f, applet->render_order);
 
 	if (mz_sprite_renderer_push_sprite(&applet->sprite_renderer, v1, v2, v3, v4) == MUZZLE_FALSE)
 	{
@@ -209,9 +225,4 @@ void mz_draw_sprite(mz_applet* applet, mz_sprite* data, float x, float y, mz_tin
 		mz_sprite_renderer_push_sprite(&applet->sprite_renderer, v1, v2, v3, v4);
 #endif
 	}
-}
-
-void mz_draw_sprite_vec2(mz_applet* applet, mz_sprite* data, mz_vec2 pos, mz_tint tint)
-{
-	mz_draw_sprite(applet, data, pos.x, pos.y, tint);
 }
