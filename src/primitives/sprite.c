@@ -180,20 +180,38 @@ void mz_bind_sprite_batch(mz_applet* applet, mz_sprite_batch* batch, uint8_t tex
 
 void mz_draw_sprite(mz_applet* applet, mz_sprite* data, float x, float y, mz_tint tint)
 {
-	mz_draw_sprite_scaled(applet, data, x, y, 1.0f, tint);
+	mz_draw_sprite_resized(applet, data, x, y, data->width, data->height, tint);
 }
 
 void mz_draw_sprite_vec2(mz_applet* applet, mz_sprite* data, mz_vec2 pos, mz_tint tint)
 {
-	mz_draw_sprite_scaled(applet, data, pos.x, pos.y, 1.0f, tint);
+	mz_draw_sprite_resized(applet, data, pos.x, pos.y, data->width, data->height, tint);
 }
 
 void mz_draw_sprite_scaled(mz_applet* applet, mz_sprite* data, float x, float y, float scale, mz_tint tint)
 {
-	MZ_TRACK_FUNCTION();
-	
 	MZ_ASSERT_DETAILED(scale > 0, "Scale should be greater than 0");
 
+	float width = data->width * scale;
+	float height = data->height * scale;
+
+	mz_draw_sprite_resized(applet, data, x, y, width, height, tint);
+}
+
+void mz_draw_sprite_scaled_vec2(mz_applet* applet, mz_sprite* data, mz_vec2 pos, float scale, mz_tint tint)
+{
+	MZ_ASSERT_DETAILED(scale > 0, "Scale should be greater than 0");
+
+	float width = data->width * scale;
+	float height = data->height * scale;
+
+	mz_draw_sprite_resized(applet, data, pos.x, pos.y, width, height, tint);
+}
+
+void mz_draw_sprite_resized(mz_applet* applet, mz_sprite* data, float x, float y, uint32_t width, uint32_t height, mz_tint tint)
+{
+	MZ_TRACK_FUNCTION();
+	
 	applet->render_order++;
 
 	int texture_id = mz_sprite_renderer_push_texture(&applet->sprite_renderer, data->_id);
@@ -208,9 +226,6 @@ void mz_draw_sprite_scaled(mz_applet* applet, mz_sprite* data, float x, float y,
 
 	mz_vec4 color = TINT_TO_VEC4(tint);
 
-	float width = data->width * scale;
-	float height = data->height * scale;
-	
 	struct mz_sprite_vertex v1 = VERTEX(x, y, color, 0, 0, texture_id, 1.0f, applet->render_order);
 	struct mz_sprite_vertex v2 = VERTEX(x + width, y, color, 1, 0, texture_id, 1.0f, applet->render_order);
 	struct mz_sprite_vertex v3 = VERTEX(x, y + height, color, 0, 1, texture_id, 1.0f, applet->render_order);
@@ -225,4 +240,9 @@ void mz_draw_sprite_scaled(mz_applet* applet, mz_sprite* data, float x, float y,
 		mz_sprite_renderer_push_sprite(&applet->sprite_renderer, v1, v2, v3, v4);
 #endif
 	}
+}
+
+void mz_draw_sprite_resized_vec2(mz_applet* applet, mz_sprite* data, mz_vec2 pos, uint32_t width, uint32_t height, mz_tint tint)
+{
+	mz_draw_sprite_resized(applet, data, pos.x, pos.y, width, height, tint);
 }

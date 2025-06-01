@@ -38,4 +38,7 @@ MZ_API void mz_draw_sprite_vec2(mz_applet* applet, mz_sprite* data, mz_vec2 pos,
 MZ_API void mz_draw_sprite_scaled(mz_applet* applet, mz_sprite* data, float x, float y, float scale, mz_tint tint);
 MZ_API void mz_draw_sprite_scaled_vec2(mz_applet* applet, mz_sprite* data, mz_vec2 pos, float scale, mz_tint tint);
 
+MZ_API void mz_draw_sprite_resized(mz_applet* applet, mz_sprite* data, float x, float y, uint32_t width, uint32_t height, mz_tint tint);
+MZ_API void mz_draw_sprite_resized_vec2(mz_applet* applet, mz_sprite* data, mz_vec2 pos, uint32_t width, uint32_t height, mz_tint tint);
+
 #endif // MUZZLE_PRIMITIVE_SPRITE_H
