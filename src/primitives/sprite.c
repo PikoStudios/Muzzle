@@ -185,7 +185,7 @@ void mz_bind_sprite(mz_applet* applet, mz_sprite* data, uint8_t texture_unit)
 	}
 
 	glActiveTexture(GL_TEXTURE0 + texture_unit);
-	glBindTexture(GL_TEXTURE_2D_ARRAY, data->_id);
+	glBindTexture(GL_TEXTURE_2D, data->_id);
 }
 
 #define TINT_TO_VEC4(t) (mz_vec4){(float)(t.r),(float)(t.g),(float)(t.b), (float)(t.a)}
