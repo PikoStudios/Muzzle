@@ -19,6 +19,8 @@ public class Sprite
     public native void draw(Applet applet, float x, float y, Tint tint);
     public native void drawScaled(Applet applet, float x, float y, float scale, Tint tint);
     public native void drawResized(Applet applet, float x, float y, int width, int height, Tint tint);
+
+    public native void bind(Applet applet, byte textureUnit);
     
     public native byte[] getPixels();
 

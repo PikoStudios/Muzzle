@@ -68,8 +68,12 @@ JNIEXPORT jobject JNICALL Java_dev_pikostudios_muzzle_bridge_ShaderPipeline_crea
 	d.vertex.source = (*env)->GetStringUTFChars(env, v_source, NULL);
 	d.fragment.source_type = (f_sourcefilepath) ? SHADER_COMPONENT_SOURCE_TYPE_FILEPATH : SHADER_COMPONENT_SOURCE_TYPE_SOURCE_CODE;
 	d.fragment.source = (*env)->GetStringUTFChars(env, f_source, NULL);
-	d.geometry.source_type = (g_sourcefilepath) ? SHADER_COMPONENT_SOURCE_TYPE_FILEPATH : SHADER_COMPONENT_SOURCE_TYPE_SOURCE_CODE;
-	d.geometry.source = (*env)->GetStringUTFChars(env, g_source, NULL);
+
+	if (g_source != NULL)
+	{
+		d.geometry.source_type = (g_sourcefilepath) ? SHADER_COMPONENT_SOURCE_TYPE_FILEPATH : SHADER_COMPONENT_SOURCE_TYPE_SOURCE_CODE;
+		d.geometry.source = (*env)->GetStringUTFChars(env, g_source, NULL);
+	}
 
 	d.vertex.vertices = (*env)->GetFloatArrayElements(env, v_vertices, NULL);
 	d.vertex.vertices_size = (*env)->GetArrayLength(env, v_vertices);

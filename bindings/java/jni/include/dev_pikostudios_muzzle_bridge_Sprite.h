@@ -49,6 +49,14 @@ JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Sprite_drawResized
             
 /*
  * Class:     dev_pikostudios_muzzle_bridge_Sprite
+* Method:    bind
+* Signature: (Ldev/pikostudios/muzzle/bridge/Applet;B)V
+*/
+JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Sprite_bind
+  (JNIEnv *, jobject, jobject, jbyte);
+      
+/*
+ * Class:     dev_pikostudios_muzzle_bridge_Sprite
  * Method:    getPixels
  * Signature: ()[B
  */
