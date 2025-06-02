@@ -29,6 +29,8 @@ MZ_API mz_sprite_batch mz_load_sprite_batch(const char** filepaths, size_t size)
 MZ_API void mz_unload_sprite_batch(mz_sprite_batch* batch);
 MZ_API void mz_bind_sprite_batch(mz_applet* applet, mz_sprite_batch* batch, uint8_t texture_unit);
 
+MZ_API void mz_bind_sprite(mz_applet* applet, mz_sprite* data, uint8_t texture_unit);
+
 MZ_API size_t mz_read_sprite_pixels(mz_sprite* data, unsigned char* out, size_t out_len);
 
 // TODO: Add scale and rotation as parameters

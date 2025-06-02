@@ -175,6 +175,19 @@ void mz_bind_sprite_batch(mz_applet* applet, mz_sprite_batch* batch, uint8_t tex
 	glBindTexture(GL_TEXTURE_2D_ARRAY, batch->id);
 }
 
+void mz_bind_sprite(mz_applet* applet, mz_sprite* data, uint8_t texture_unit)
+{
+	MZ_TRACK_FUNCTION();
+
+	if (texture_unit >= applet->texture_units)
+	{
+		mz_log_status_formatted(LOG_STATUS_FATAL_ERROR, "Cannot bind sprite to texture unit %d, exceeds amount of texture units supported on this GPU (%d)", texture_unit, applet->texture_units);
+	}
+
+	glActiveTexture(GL_TEXTURE0 + texture_unit);
+	glBindTexture(GL_TEXTURE_2D_ARRAY, data->_id);
+}
+
 #define TINT_TO_VEC4(t) (mz_vec4){(float)(t.r),(float)(t.g),(float)(t.b), (float)(t.a)}
 #define VERTEX(x,y,t,tcx,tcy,tid,tf,ro) (struct mz_sprite_vertex){(mz_vec2){x,y}, t, (mz_vec2){tcx, tcy}, tid, tf, ro}
 
