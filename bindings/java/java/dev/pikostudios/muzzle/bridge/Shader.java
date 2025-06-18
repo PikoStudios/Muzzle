@@ -20,11 +20,14 @@ public class Shader
         this.type = type;
     }
 
-    // For ShaderPipeline only
-    protected Shader(int id)
+    protected static Shader fromShaderPipeline(int id)
     {
-        this.id = id;
-        this.type = 5;
+        return new Shader(id, 5);
+    }
+
+    protected static Shader fromComputePipeline(int id)
+    {
+        return new Shader(id, 6);
     }
 
     public static Shader create(String vertexSource, String fragmentSource, ShaderType type)

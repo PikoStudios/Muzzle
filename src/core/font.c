@@ -2,6 +2,7 @@
 #include "backend.h"
 #include "core/logging.h"
 #include "core/applet.h"
+#include <math.h>
 
 mz_font mz_load_font(mz_applet* applet, const char* filepath)
 {
@@ -15,7 +16,10 @@ mz_font mz_load_font(mz_applet* applet, const char* filepath)
 		mz_log_status_formatted(LOG_STATUS_FATAL_ERROR, "Could not load font '%s'", filepath);
 	}
 
-	FT_Set_Pixel_Sizes(face, MUZZLE_TEXT_SOURCE_FONT_SIZE, MUZZLE_TEXT_SOURCE_FONT_SIZE);
+	if (FT_Set_Pixel_Sizes(face, MUZZLE_TEXT_SOURCE_FONT_SIZE, MUZZLE_TEXT_SOURCE_FONT_SIZE) != 0)
+	{
+		mz_log_status_formatted(LOG_STATUS_FATAL_ERROR, "Could not set pixel sizes");
+	}
 
 	font.glyph_count = face->num_glyphs;
 	font.glyphs = MZ_CALLOC(font.glyph_count, sizeof(mz_font_glyph));
@@ -24,20 +28,27 @@ mz_font mz_load_font(mz_applet* applet, const char* filepath)
 	{
 		mz_log_status(LOG_STATUS_FATAL_ERROR, "Could not allocate memory for glyphs");
 	}
+
+#if defined(MUZZLE_TEXT_AVOID_LOG2_OPTIMIZATION) || ((MUZZLE_TEXT_SOURCE_FONT_SIZE & (MUZZLE_TEXT_SOURCE_FONT_SIZE - 1)) != 0) // If source font size is not a power of two
+	int levels = 1 + (int)floorf(log2f(MUZZLE_TEXT_SOURCE_FONT_SIZE));
+#else
+	int levels = 1 + (31 - __builtin_clz(MUZZLE_TEXT_SOURCE_FONT_SIZE));
+#endif
 	
 	glCreateTextures(GL_TEXTURE_2D_ARRAY, 1, &font.texture_array_id);
-	glTextureStorage3D(font.texture_array_id, 1, GL_R8, MUZZLE_TEXT_SOURCE_FONT_SIZE, MUZZLE_TEXT_SOURCE_FONT_SIZE, 256 /*font.glyph_count*/);
+	glTextureStorage3D(font.texture_array_id, levels, GL_R8, MUZZLE_TEXT_SOURCE_FONT_SIZE, MUZZLE_TEXT_SOURCE_FONT_SIZE, 256 /*font.glyph_count*/);
 	
 	glTextureParameteri(font.texture_array_id, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTextureParameteri(font.texture_array_id, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTextureParameteri(font.texture_array_id, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTextureParameteri(font.texture_array_id, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTextureParameteri(font.texture_array_id, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 	// TODO: i < font.glyph_count to load unicode characters
-	for (int i = 0; i < 256; i++)
+	int max_glyphs = font.glyph_count < 256 ? font.glyph_count : 256;
+	for (int i = 0; i < max_glyphs; i++)
 	{
 		if (FT_Load_Char(face, i, FT_LOAD_RENDER))
 		{
@@ -70,6 +81,8 @@ mz_font mz_load_font(mz_applet* applet, const char* filepath)
 
 	glPixelStorei(GL_PACK_ALIGNMENT, 4);
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+
+	glGenerateTextureMipmap(font.texture_array_id);
 
 	FT_Done_Face(face);
 	

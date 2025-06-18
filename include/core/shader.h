@@ -2,6 +2,7 @@
 #define MUZZLE_CORE_SHADER_H
 
 #include "../backend.h"
+#include "../primitives/sprite.h"
 #include "applet.h"
 #include <stdint.h>
 
@@ -12,7 +13,8 @@ typedef enum
     SHADER_TYPE_DIRECT_CIRCLE = 2,
     SHADER_TYPE_DIRECT_SPRITE = 3,
     SHADER_TYPE_DIRECT_TEXT = 4,
-    SHADER_TYPE_PIPELINE = 5 // Should never be directly set by user
+    SHADER_TYPE_PIPELINE = 5, // Should never be directly set by user
+    SHADER_TYPE_COMPUTE = 6 // Should never be directly set by user
 } mz_shader_type;
 
 typedef enum
@@ -71,6 +73,13 @@ typedef struct mz_shader_pipeline
     mz_shader_component_vertex_primitive_type primitive_type;
 } mz_shader_pipeline;
 
+typedef struct mz_compute_pipeline
+{
+    mz_shader shader;
+    mz_sprite texture; // Copied because it's a very small struct but should of be thought as a reference in the sense that the compute pipeline does not take ownership of the texture and texture memory must be managed by the caller
+    uint8_t texture_unit;
+} mz_compute_pipeline;
+
 typedef struct mz_shader_buffer
 {
     GLuint id;
@@ -83,6 +92,10 @@ MZ_API mz_shader mz_load_shader(const char* vertex_filepath, const char* fragmen
 MZ_API mz_shader_pipeline mz_create_shader_pipeline(mz_shader_pipeline_descriptor* descriptor);
 MZ_API void mz_draw_shader_pipeline(mz_shader_pipeline pipeline, float* vertices, size_t vertices_size, int start, int end);
 MZ_API void mz_unload_shader_pipeline(mz_shader_pipeline* pipeline);
+
+MZ_API mz_compute_pipeline mz_create_compute_pipeline(const char* compute_shader, mz_boolean is_filepath, mz_sprite* texture, uint8_t texture_unit);
+MZ_API void mz_dispatch_compute_pipeline(mz_compute_pipeline* pipeline, uint32_t work_groups_x, uint32_t work_groups_y, uint32_t work_groups_z);
+MZ_API void mz_unload_compute_pipeline(mz_compute_pipeline* pipeline);
 
 MZ_API void mz_use_shader_pass(mz_applet* applet, mz_shader shader);
 MZ_API void mz_begin_shader(mz_applet* applet, mz_shader shader);

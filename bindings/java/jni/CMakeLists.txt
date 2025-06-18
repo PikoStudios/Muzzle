@@ -27,6 +27,7 @@ src/jni_shader.c
 src/jni_shader_buffer.c
 src/jni_shader_pipeline.c
 src/jni_sprite_batch.c
+src/jni_compute_pipeline.c
 )
 
 add_library(muzzlejni SHARED ${source})

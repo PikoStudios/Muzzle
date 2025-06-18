@@ -103,7 +103,7 @@ public class ShaderPipeline
 
 	public Shader getShader()
 	{
-		return new Shader(this.pid);
+		return Shader.fromShaderPipeline(this.pid);
 	}
 
 	public void draw(int start, int end)

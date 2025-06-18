@@ -6,6 +6,26 @@
 #include "core/tint.h"
 #include "core/vector.h"
 
+// TODO: More formats, but for now the basics are good enough
+typedef enum
+{
+	SPRITE_FORMAT_RGBA8 = GL_RGBA8,
+	SPRITE_FORMAT_RGBA32F = GL_RGBA32F
+} mz_sprite_format;
+
+typedef enum
+{
+	SPRITE_WRAPPING_MODE_REPEAT = GL_REPEAT,
+	SPRITE_WRAPPING_MODE_MIRRORED_REPEAT = GL_MIRRORED_REPEAT,
+	SPRITE_WRAPPING_MODE_CLAMP_TO_EDGE = GL_CLAMP_TO_EDGE
+} mz_sprite_wrapping_mode;
+
+typedef enum
+{
+	SPRITE_FILTER_MODE_NEAREST = GL_NEAREST,
+	SPRITE_FILTER_MODE_LINEAR = GL_LINEAR
+} mz_sprite_filter_mode;
+
 typedef struct mz_sprite
 {
 	uint32_t width;
@@ -23,6 +43,7 @@ typedef struct mz_sprite_batch
 } mz_sprite_batch;
 
 MZ_API mz_sprite mz_load_sprite(const char* filepath);
+MZ_API mz_sprite mz_create_sprite(uint32_t width, uint32_t height, mz_sprite_wrapping_mode wrapping_mode, mz_sprite_filter_mode min_filter, mz_sprite_filter_mode mag_filter, mz_sprite_format format, void* data);
 MZ_API void mz_unload_sprite(mz_sprite* data);
 
 MZ_API mz_sprite_batch mz_load_sprite_batch(const char** filepaths, size_t size);

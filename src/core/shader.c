@@ -108,6 +108,8 @@ mz_shader_pipeline mz_create_shader_pipeline(mz_shader_pipeline_descriptor* desc
 	char* fragment_source = (char*)(descriptor->fragment.source);
 	char* geometry_source = (char*)(descriptor->geometry.source);
 
+	// TODO: We forget to free the source if read
+
 	if (descriptor->vertex.source_type == SHADER_COMPONENT_SOURCE_TYPE_FILEPATH)
 	{
 		FILE* file;
@@ -252,6 +254,95 @@ void mz_unload_shader_pipeline(mz_shader_pipeline* pipeline)
 	pipeline->vbo = 0;
 }
 
+mz_compute_pipeline mz_create_compute_pipeline(const char* compute_shader, mz_boolean is_filepath, mz_sprite* texture, uint8_t texture_unit)
+{
+	MZ_TRACK_FUNCTION();
+
+	GLuint cid = glCreateShader(GL_COMPUTE_SHADER);
+
+	if (cid == 0)
+	{
+		mz_log_status(LOG_STATUS_FATAL_ERROR, "Could not create compute shader");
+	}
+
+	char* compute_source = (char*)(compute_shader);
+
+	if (is_filepath)
+	{
+		FILE* file;
+		compute_source = internals_read_file(&file, compute_shader, "Failed to open compute shader file", "Failed to allocate compute shader string buffer");
+	}
+
+	glShaderSource(cid, 1, &compute_shader, NULL);
+	glCompileShader(cid);
+	verify_compile_status("Compute shader failed to compile, more info:\n\t", cid);
+
+	if (is_filepath)
+	{
+		MZ_FREE(compute_source);
+	}
+
+	GLuint pid = glCreateProgram();
+	glAttachShader(pid, cid);
+	glLinkProgram(pid);
+
+	GLint s = 0;
+	glGetProgramiv(pid, GL_LINK_STATUS, &s);
+
+	if (s != GL_TRUE)
+	{
+		GLsizei length = 0;
+		glGetProgramiv(pid, GL_INFO_LOG_LENGTH, &length);
+
+		GLchar log[length];
+		glGetProgramInfoLog(pid, length, NULL, log);
+
+		glDeleteShader(cid);
+		mz_log_status_formatted(LOG_STATUS_FATAL_ERROR, "Compute pipeline failed to link, more info:\n\t%s", log);
+	}
+
+	glDetachShader(pid, cid);
+	glDeleteShader(cid);
+
+	mz_sprite tex = (texture == NULL) ? (mz_sprite){0} : *texture;
+
+	return (mz_compute_pipeline)
+	{
+		.shader = (mz_shader)
+		{
+			.pid = pid,
+			.type = SHADER_TYPE_COMPUTE
+		},
+		.texture = tex,
+		.texture_unit = texture_unit
+	};
+}
+
+void mz_dispatch_compute_pipeline(mz_compute_pipeline* pipeline, uint32_t work_groups_x, uint32_t work_groups_y, uint32_t work_groups_z)
+{
+	MZ_TRACK_FUNCTION();
+
+	glUseProgram(pipeline->shader.pid);
+	
+	if (pipeline->texture._id > 0)
+	{
+		glActiveTexture(GL_TEXTURE0 + pipeline->texture_unit);
+		glBindTexture(GL_TEXTURE_2D, pipeline->texture._id);
+	}
+	
+	glDispatchCompute(work_groups_x, work_groups_y, work_groups_z);
+	glMemoryBarrier(GL_ALL_BARRIER_BITS); // TODO: We might not NEED to barrier everything must is it worth giving the caller a choice? More complexity
+}
+
+void mz_unload_compute_pipeline(mz_compute_pipeline* pipeline)
+{
+	mz_unload_shader(pipeline->shader);
+	pipeline->shader.pid = 0;
+	pipeline->texture._id = 0;
+
+	// We do not actually take ownership of texture memory so caller must handle the unloading of texture
+}
+
 void mz_use_shader_pass(mz_applet* applet, mz_shader shader)
 {
 	MZ_TRACK_FUNCTION();
@@ -298,7 +389,11 @@ void mz_begin_shader(mz_applet* applet, mz_shader shader)
 			break;
 
 		case SHADER_TYPE_PIPELINE:
-			mz_log_status_formatted(LOG_STATUS_ERROR, "mz_begin_shader called on shader pipeline, please use mz_draw_shader_pipeline");
+			mz_log_status(LOG_STATUS_ERROR, "mz_begin_shader called on shader pipeline, please use mz_draw_shader_pipeline");
+			break;
+
+		case SHADER_TYPE_COMPUTE:
+			mz_log_status(LOG_STATUS_ERROR, "mz_begin_shader called on compute pipeline, please use mz_dispatch_compute_pipeline");
 			break;
 	}
 }
@@ -333,6 +428,10 @@ void mz_end_shader(mz_applet* applet, mz_shader shader)
 
 		case SHADER_TYPE_PIPELINE:
 			mz_log_status_formatted(LOG_STATUS_ERROR, "mz_end_shader called on shader pipeline, please use mz_draw_shader_pipeline");
+			break;
+
+		case SHADER_TYPE_COMPUTE:
+			mz_log_status(LOG_STATUS_ERROR, "mz_end_shader called on compute pipeline, please use mz_dispatch_compute_pipeline");
 			break;
 	}
 }

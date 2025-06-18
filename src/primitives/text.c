@@ -34,7 +34,7 @@ load_char:
 
 		UNLIKELY_IF(glyph._loaded == MUZZLE_FALSE)
 		{
-			mz_log_status_formatted(LOG_STATUS_WARNING, "Unloaded character: '%c'", text[i]);
+			mz_log_status_formatted(LOG_STATUS_WARNING, "Unloaded character: '%c'", text[i], text[i]);
 
 			if (c == ' ')
 			{

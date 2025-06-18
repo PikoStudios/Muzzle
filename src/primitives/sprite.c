@@ -45,8 +45,38 @@ mz_sprite mz_load_sprite(const char* filepath)
 	};
 }
 
-MZ_API size_t mz_read_sprite_pixels(mz_sprite* data, unsigned char* out, size_t out_len)
+
+mz_sprite mz_create_sprite(uint32_t width, uint32_t height, mz_sprite_wrapping_mode wrapping_mode, mz_sprite_filter_mode min_filter, mz_sprite_filter_mode mag_filter, mz_sprite_format format, void* data)
 {
+	MZ_TRACK_FUNCTION();
+
+	GLuint id;
+	glCreateTextures(GL_TEXTURE_2D, 1, &id);
+	glTextureStorage2D(id, 1, format, width, height);
+
+	glTextureParameteri(id, GL_TEXTURE_WRAP_S, wrapping_mode);
+	glTextureParameteri(id, GL_TEXTURE_WRAP_T, wrapping_mode);
+	glTextureParameteri(id, GL_TEXTURE_MIN_FILTER, min_filter);
+	glTextureParameteri(id, GL_TEXTURE_MAG_FILTER, mag_filter);
+
+	glTextureSubImage2D(id, 0, 0, 0, width, height, GL_RGBA, format == SPRITE_FORMAT_RGBA8 ? GL_UNSIGNED_BYTE : GL_FLOAT, data);
+
+#ifdef MUZZLE_DEBUG_BUILD
+	mz_log_status_formatted(LOG_STATUS_SUCCESS, "Created texture of size (%d, %d) into GPU", width, height);
+#endif
+
+	return (mz_sprite)
+	{
+		.width = width,
+		.height = height,
+		._id = id
+	};
+}
+
+size_t mz_read_sprite_pixels(mz_sprite* data, unsigned char* out, size_t out_len)
+{
+	MZ_TRACK_FUNCTION();
+	
 	int size = data->width * data->height * 4;
 
 	if (out == NULL)

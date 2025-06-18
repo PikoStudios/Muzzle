@@ -30,6 +30,79 @@ JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Sprite_unload(JNIEnv* 
     (*env)->SetIntField(env, sprite, id_field, -1);
 }
 
+
+JNIEXPORT jobject JNICALL Java_dev_pikostudios_muzzle_bridge_Sprite_create(JNIEnv* env, jclass class, jint width, jint height, jint wrapping_mode, jint min_filter, jint mag_filter, jint format, jbyteArray data)
+{
+    mz_sprite_wrapping_mode wm = 0;
+    mz_sprite_filter_mode minf = 0, magf = 0;
+    mz_sprite_format fm = 0;
+
+    // TODO: wow lots of switch statements oh well
+    switch (wrapping_mode)
+    {
+    case 0:
+        wm = SPRITE_WRAPPING_MODE_REPEAT;
+        break;
+
+    case 1:
+        wm = SPRITE_WRAPPING_MODE_MIRRORED_REPEAT;
+        break;
+
+    case 2:
+        wm = SPRITE_WRAPPING_MODE_CLAMP_TO_EDGE;
+        break;
+    }
+
+    switch (min_filter)
+    {
+    case 0:
+        minf = SPRITE_FILTER_MODE_NEAREST;
+        break;
+
+    case 1:
+        minf = SPRITE_FILTER_MODE_LINEAR;
+        break;
+    }
+    
+    switch (mag_filter)
+    {
+    case 0:
+        magf = SPRITE_FILTER_MODE_NEAREST;
+        break;
+
+    case 1:
+        magf = SPRITE_FILTER_MODE_LINEAR;
+        break;
+    }
+
+    switch (format)
+    {
+    case 0:
+        fm = SPRITE_FORMAT_RGBA8;
+        break;
+
+    case 1:
+        fm = SPRITE_FORMAT_RGBA32F;
+        break;
+    }
+
+    // TODO: this is really dumb but i can't be bothered to fix rn, why are we only allowing bytes to be passed if RGBA32F is an option lol. ill fix later
+    jbyte* bytes = NULL;
+    
+    if (data != NULL)
+    {
+        bytes = (*env)->GetByteArrayElements(env, data, NULL);
+    }
+    
+    mz_sprite sprite = mz_create_sprite(width, height, wm, minf, magf, fm, bytes);
+    (*env)->ReleaseByteArrayElements(env, data, bytes, JNI_ABORT);
+
+    jmethodID ctor = (*env)->GetMethodID(env, class, "<init>", "(III)V");
+    jobject jsprite = (*env)->NewObject(env, class, ctor, sprite.width, sprite.height, sprite._id);
+
+    return jsprite;
+}
+
 JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Sprite_draw(JNIEnv* env, jobject object, jobject applet, jfloat x, jfloat y, jobject tint)
 {
     jclass class = (*env)->GetObjectClass(env, object);
