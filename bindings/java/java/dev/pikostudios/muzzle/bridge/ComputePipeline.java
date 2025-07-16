@@ -28,6 +28,11 @@ public class ComputePipeline
 		return this.shader;
 	}
 
+	public void setSprite(Sprite texture)
+	{
+		this.texture = texture;
+	}
+
 	public Sprite getSprite()
 	{
 		return this.texture;

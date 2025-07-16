@@ -18,7 +18,7 @@ public class Sprite
     public enum FilterMode
     {
         NEAREST,
-        FILTER
+        LINEAR
     }
     
     private final int width;

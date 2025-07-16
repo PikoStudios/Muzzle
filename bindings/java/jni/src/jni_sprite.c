@@ -88,15 +88,19 @@ JNIEXPORT jobject JNICALL Java_dev_pikostudios_muzzle_bridge_Sprite_create(JNIEn
 
     // TODO: this is really dumb but i can't be bothered to fix rn, why are we only allowing bytes to be passed if RGBA32F is an option lol. ill fix later
     jbyte* bytes = NULL;
-    
+
     if (data != NULL)
     {
         bytes = (*env)->GetByteArrayElements(env, data, NULL);
     }
-    
-    mz_sprite sprite = mz_create_sprite(width, height, wm, minf, magf, fm, bytes);
-    (*env)->ReleaseByteArrayElements(env, data, bytes, JNI_ABORT);
 
+    mz_sprite sprite = mz_create_sprite(width, height, wm, minf, magf, fm, bytes);
+    
+    if (bytes != NULL)
+    {
+        (*env)->ReleaseByteArrayElements(env, data, bytes, JNI_ABORT);
+    }
+    
     jmethodID ctor = (*env)->GetMethodID(env, class, "<init>", "(III)V");
     jobject jsprite = (*env)->NewObject(env, class, ctor, sprite.width, sprite.height, sprite._id);
 

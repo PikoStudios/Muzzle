@@ -31,6 +31,7 @@ typedef struct mz_sprite
 	uint32_t width;
 	uint32_t height;
 	GLuint _id;
+	GLuint _format;
 } mz_sprite;
 
 // Sprite Batches are Muzzle's interface for sampler2DArray, only use this if you are using a custom shader that requires sampler2DArray

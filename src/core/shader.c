@@ -75,6 +75,7 @@ mz_shader mz_create_shader(const char* vertex, const char* fragment, mz_shader_t
 		.type = type
 	};
 }
+
 mz_shader mz_load_shader(const char* vertex_filepath, const char* fragment_filepath, mz_shader_type type)
 {
 	MZ_TRACK_FUNCTION();
@@ -83,6 +84,9 @@ mz_shader mz_load_shader(const char* vertex_filepath, const char* fragment_filep
 
 	char* vertex_source = internals_read_file(&file, vertex_filepath, "Could not read vertex shader file", "Could not allocate memory for vertex shader string buffer");
 	char* fragment_source = internals_read_file(&file, fragment_filepath, "Could not read fragment shader file", "Could not allocate memory for fragment shader string buffer");
+
+	// TODO: Replace CRLF to LF
+	
 	mz_shader id = mz_create_shader(vertex_source, fragment_source, type);
 
 	MZ_FREE(vertex_source);
@@ -273,7 +277,9 @@ mz_compute_pipeline mz_create_compute_pipeline(const char* compute_shader, mz_bo
 		compute_source = internals_read_file(&file, compute_shader, "Failed to open compute shader file", "Failed to allocate compute shader string buffer");
 	}
 
-	glShaderSource(cid, 1, &compute_shader, NULL);
+	const char* compute = compute_source;
+
+	glShaderSource(cid, 1, &compute, NULL);
 	glCompileShader(cid);
 	verify_compile_status("Compute shader failed to compile, more info:\n\t", cid);
 
@@ -326,8 +332,7 @@ void mz_dispatch_compute_pipeline(mz_compute_pipeline* pipeline, uint32_t work_g
 	
 	if (pipeline->texture._id > 0)
 	{
-		glActiveTexture(GL_TEXTURE0 + pipeline->texture_unit);
-		glBindTexture(GL_TEXTURE_2D, pipeline->texture._id);
+		glBindImageTexture(pipeline->texture_unit, pipeline->texture._id, 0, GL_FALSE, 0, GL_READ_WRITE, pipeline->texture._format);
 	}
 	
 	glDispatchCompute(work_groups_x, work_groups_y, work_groups_z);
@@ -336,6 +341,8 @@ void mz_dispatch_compute_pipeline(mz_compute_pipeline* pipeline, uint32_t work_g
 
 void mz_unload_compute_pipeline(mz_compute_pipeline* pipeline)
 {
+	MZ_TRACK_FUNCTION();
+	
 	mz_unload_shader(pipeline->shader);
 	pipeline->shader.pid = 0;
 	pipeline->texture._id = 0;
@@ -374,18 +381,22 @@ void mz_begin_shader(mz_applet* applet, mz_shader shader)
 
 		case SHADER_TYPE_DIRECT_CIRCLE:
 			applet->circle_renderer.shader_id = shader.pid;
+			applet->circle_renderer.locs_valid = MUZZLE_FALSE;
 			break;
 
 		case SHADER_TYPE_DIRECT_QUAD:
 			applet->quad_renderer.shader_id = shader.pid;
+			applet->quad_renderer.locs_valid = MUZZLE_FALSE;
 			break;
 
 		case SHADER_TYPE_DIRECT_SPRITE:
 			applet->sprite_renderer.shader_id = shader.pid;
+			applet->sprite_renderer.locs_valid = MUZZLE_FALSE;
 			break;
 
 		case SHADER_TYPE_DIRECT_TEXT:
 			applet->text_renderer.shader_id = shader.pid;
+			applet->text_renderer.locs_valid = MUZZLE_FALSE;
 			break;
 
 		case SHADER_TYPE_PIPELINE:
@@ -400,6 +411,8 @@ void mz_begin_shader(mz_applet* applet, mz_shader shader)
 
 void mz_end_shader(mz_applet* applet, mz_shader shader)
 {
+	MZ_TRACK_FUNCTION();
+	
 	switch (shader.type)
 	{
 		case SHADER_TYPE_PASS:
@@ -408,21 +421,25 @@ void mz_end_shader(mz_applet* applet, mz_shader shader)
 
 		case SHADER_TYPE_DIRECT_CIRCLE:
 			applet->circle_renderer.shader_id = applet->circle_renderer.default_shader_id;
+			applet->circle_renderer.locs_valid = MUZZLE_FALSE;
 			break;
 
 
 		case SHADER_TYPE_DIRECT_QUAD:
 			applet->quad_renderer.shader_id = applet->quad_renderer.default_shader_id;
+			applet->quad_renderer.locs_valid = MUZZLE_FALSE;
 			break;
 
 
 		case SHADER_TYPE_DIRECT_SPRITE:
 			applet->sprite_renderer.shader_id = applet->sprite_renderer.default_shader_id;
+			applet->sprite_renderer.locs_valid = MUZZLE_FALSE;
 			break;
 
 
 		case SHADER_TYPE_DIRECT_TEXT:
 			applet->text_renderer.shader_id = applet->text_renderer.default_shader_id;
+			applet->text_renderer.locs_valid = MUZZLE_FALSE;
 			break;
 
 
@@ -438,6 +455,7 @@ void mz_end_shader(mz_applet* applet, mz_shader shader)
 
 void mz_unload_shader(mz_shader shader)
 {
+	MZ_TRACK_FUNCTION();
 	glDeleteProgram(shader.pid);
 }
 

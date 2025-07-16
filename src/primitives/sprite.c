@@ -41,6 +41,7 @@ mz_sprite mz_load_sprite(const char* filepath)
 	{
 		.width = w,
 		.height = h,
+		._format = GL_RGBA8,
 		._id = id
 	};
 }
@@ -59,8 +60,11 @@ mz_sprite mz_create_sprite(uint32_t width, uint32_t height, mz_sprite_wrapping_m
 	glTextureParameteri(id, GL_TEXTURE_MIN_FILTER, min_filter);
 	glTextureParameteri(id, GL_TEXTURE_MAG_FILTER, mag_filter);
 
-	glTextureSubImage2D(id, 0, 0, 0, width, height, GL_RGBA, format == SPRITE_FORMAT_RGBA8 ? GL_UNSIGNED_BYTE : GL_FLOAT, data);
-
+	if (data != NULL)
+	{
+		glTextureSubImage2D(id, 0, 0, 0, width, height, GL_RGBA, format == SPRITE_FORMAT_RGBA8 ? GL_UNSIGNED_BYTE : GL_FLOAT, data);
+	}
+	
 #ifdef MUZZLE_DEBUG_BUILD
 	mz_log_status_formatted(LOG_STATUS_SUCCESS, "Created texture of size (%d, %d) into GPU", width, height);
 #endif
@@ -69,6 +73,7 @@ mz_sprite mz_create_sprite(uint32_t width, uint32_t height, mz_sprite_wrapping_m
 	{
 		.width = width,
 		.height = height,
+		._format = format,
 		._id = id
 	};
 }
@@ -277,11 +282,13 @@ void mz_draw_sprite_resized(mz_applet* applet, mz_sprite* data, float x, float y
 	if (mz_sprite_renderer_push_sprite(&applet->sprite_renderer, v1, v2, v3, v4) == MUZZLE_FALSE)
 	{
 		mz_sprite_renderer_flush(&applet->sprite_renderer, applet->width, applet->height);
-#ifdef MUZZLE_DEBUG_BUILD
-		MZ_ASSERT_DETAILED(mz_sprite_renderer_push_sprite(&applet->sprite_renderer, v1, v2, v3, v4) == MUZZLE_TRUE, "Quad renderer should not still be full")
-#else
-		mz_sprite_renderer_push_sprite(&applet->sprite_renderer, v1, v2, v3, v4);
-#endif
+		mz_draw_sprite_resized(applet, data, x, y, width, height, tint); // Just recursing because after flush we need to do the entire texture pushing procedure
+		
+//#ifdef MUZZLE_DEBUG_BUILD
+//		MZ_ASSERT_DETAILED(mz_sprite_renderer_push_sprite(&applet->sprite_renderer, v1, v2, v3, v4) == MUZZLE_TRUE, "Quad renderer should not still be full")
+//#else
+//		mz_sprite_renderer_push_sprite(&applet->sprite_renderer, v1, v2, v3, v4);
+//#endif
 	}
 }
 

@@ -16,6 +16,10 @@
 // TODO: Move sleep to core folder
 #include "utils/sleep.h"
 
+#ifdef MUZZLE_DEBUG_BUILD
+    char* __mz_debug_current_function_name = "unknown";
+#endif
+
 #define DEPTH_BUFFER_TYPE_RENDERBUFFER 0
 #define DEPTH_BUFFER_TYPE_TEXTURE 1
 

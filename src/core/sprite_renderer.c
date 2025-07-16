@@ -140,6 +140,15 @@ void mz_sprite_renderer_flush(struct mz_sprite_renderer* sprite_renderer, float 
 		// TODO: Fix that it cannot find uniform when uniform isnt used
 		LOC_VERIFY(uViewportResolution);
 		LOC_VERIFY(uTextures);
+
+		GLint samplers[sprite_renderer->max_textures];
+
+		for (int i = 0; i < sprite_renderer->max_textures; i++)
+		{
+			samplers[i] = i;
+		}
+		
+		glUniform1iv(sprite_renderer->loc_uTextures, sprite_renderer->max_textures, samplers);
 	}
 
 	// TODO: Convert texture to texture array for a lot more textures GL_TEXTURE_2D_ARRAY
