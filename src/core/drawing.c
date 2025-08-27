@@ -10,10 +10,9 @@ void mz_begin_drawing(mz_applet* applet)
 {
 	MZ_TRACK_FUNCTION();
 	glfwSwapBuffers(applet->window);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+	
 	// Offscreen framebuffer used, so clear it
-	if (applet->shader_passes_len > 0)
+	if (applet->framebuffer.dirty == MUZZLE_TRUE)
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, applet->framebuffer.fbos[0]);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -23,11 +22,13 @@ void mz_begin_drawing(mz_applet* applet)
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-		applet->shader_passes_len = 0;
+		applet->framebuffer.dirty = MUZZLE_FALSE;
 	}
+	
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void mz_end_drawing(mz_applet* applet)
+void mz_flush_drawing(mz_applet* applet)
 {
 	MZ_TRACK_FUNCTION();
 
@@ -45,7 +46,12 @@ void mz_end_drawing(mz_applet* applet)
 	{
 		mz_circle_renderer_flush(&applet->circle_renderer, applet->width, applet->height);
 	}
+}
 
+void mz_flush_shader_passes(mz_applet* applet, mz_boolean retain_shader_passes)
+{
+	MZ_TRACK_FUNCTION();
+	
 	if (applet->shader_passes_len > 0)
 	{
 		MZ_TRACK_FUNCTION_STAGE("mz_end_drawing shader passes");
@@ -93,8 +99,22 @@ void mz_end_drawing(mz_applet* applet)
 			glDrawArrays(GL_TRIANGLES, 0, 6);
 		}
 
+		if (retain_shader_passes == MUZZLE_FALSE)
+		{
+			applet->shader_passes_len = 0;
+		}
+		
+		applet->framebuffer.dirty = MUZZLE_TRUE;
 		MZ_TRACK_FUNCTION();
 	}
+}
+
+void mz_end_drawing(mz_applet* applet)
+{
+	MZ_TRACK_FUNCTION();
+	
+	mz_flush_drawing(applet);
+	mz_flush_shader_passes(applet, MUZZLE_FALSE);
 	
 	applet->render_order = 0;
 	glfwPollEvents();

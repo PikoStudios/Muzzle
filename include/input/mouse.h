@@ -4,6 +4,7 @@
 #include "backend.h"
 #include "core/applet.h"
 #include "core/vector.h"
+
 typedef enum
 {
 	MOUSE_BUTTON_LEFT = 0,

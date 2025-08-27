@@ -1,4 +1,5 @@
 #include "primitives/text.h"
+#include "core/drawing.h"
 #include "core/font.h"
 #include "core/logging.h"
 #include "core/text_renderer.h"
@@ -18,6 +19,8 @@ static inline mz_font_glyph safe_index_glyphs(mz_font* font, unsigned int index)
 void mz_draw_text(mz_applet* applet, const char* text, float x, float y, float font_size, mz_font* font, mz_tint tint)
 {
 	MZ_TRACK_FUNCTION();
+
+	mz_flush_drawing(applet); // TODO: I don't like this, but **FOR NOW** it's a temporary solution to: https://github.com/PikoStudios/Muzzle/issues/45
 	
 	applet->render_order++;
 	mz_vec4 color = TINT_TO_VEC4(tint);

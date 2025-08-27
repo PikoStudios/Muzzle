@@ -154,6 +154,7 @@ mz_applet mz_initialize_applet(const char* window_title, int width, int height, 
 	// Initialize off-screen framebuffer (used by shader passes)
 	create_framebuffer(flags, &applet, 0);
 	create_framebuffer(flags, &applet, 1);
+	applet.framebuffer.dirty = MUZZLE_FALSE;
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -282,4 +283,54 @@ void mz_terminate_applet(mz_applet* applet)
 void mz_update_window_title(mz_applet* applet, const char* title)
 {
 	glfwSetWindowTitle(applet->window, title);
+}
+
+void mz_set_callback(mz_applet* applet, mz_callback_type type, mz_callback callback)
+{
+	switch (type)
+	{
+	case CALLBACK_MOUSE_SCROLL:
+		glfwSetScrollCallback(applet->window, callback.mouse_scroll);
+		break;
+
+	case CALLBACK_MOUSE_POSITION:
+		glfwSetCursorPosCallback(applet->window, callback.mouse_position);
+		break;
+
+	case CALLBACK_MOUSE_CROSSED_WINDOW_BOUNDARY:
+		glfwSetCursorEnterCallback(applet->window, callback.mouse_crossed_window_boundary);
+		break;
+
+	case CALLBACK_MOUSE_BUTTON_INPUT:
+		glfwSetMouseButtonCallback(applet->window, callback.mouse_button_input);
+		break;
+
+	case CALLBACK_KEY_INPUT:
+		glfwSetKeyCallback(applet->window, callback.key_input);
+		break;
+
+	case CALLBACK_CHARACTER_INPUT:
+		glfwSetCharCallback(applet->window, callback.character_input);
+		break;
+
+	case CALLBACK_FILE_DROPPED:
+		glfwSetDropCallback(applet->window, callback.file_dropped);
+		break;
+
+	case CALLBACK_WINDOW_POSITION:
+		glfwSetWindowPosCallback(applet->window, callback.window_position);
+		break;
+
+	case CALLBACK_WINDOW_SIZE_CHANGED:
+		glfwSetWindowSizeCallback(applet->window, callback.window_size_changed);
+		break;
+
+	case CALLBACK_WINDOW_FOCUS_CHANGED:
+		glfwSetWindowFocusCallback(applet->window, callback.window_focus_changed);
+		break;
+
+	case CALLBACK_WINDOW_MIN_MAXIMIZED:
+		glfwSetWindowIconifyCallback(applet->window, callback.window_min_maximized);
+		break;
+	}
 }
