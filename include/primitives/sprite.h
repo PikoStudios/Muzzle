@@ -26,6 +26,12 @@ typedef enum
 	SPRITE_FILTER_MODE_LINEAR = GL_LINEAR
 } mz_sprite_filter_mode;
 
+typedef enum
+{
+	SPRITE_FLIP_ORIENTATION_VERTICAL = 0,
+	SPRITE_FLIP_ORIENTATION_HORIZONTAL
+} mz_sprite_flip_orientation;
+
 typedef struct mz_sprite
 {
 	uint32_t width;
@@ -64,5 +70,25 @@ MZ_API void mz_draw_sprite_scaled_vec2(mz_applet* applet, mz_sprite* data, mz_ve
 
 MZ_API void mz_draw_sprite_resized(mz_applet* applet, mz_sprite* data, float x, float y, uint32_t width, uint32_t height, mz_tint tint);
 MZ_API void mz_draw_sprite_resized_vec2(mz_applet* applet, mz_sprite* data, mz_vec2 pos, uint32_t width, uint32_t height, mz_tint tint);
+
+MZ_API void mz_draw_sprite_flipped(mz_applet* applet, mz_sprite* data, float x, float y, mz_sprite_flip_orientation orientation, mz_tint tint);
+MZ_API void mz_draw_sprite_flipped_vec2(mz_applet* applet, mz_sprite* data, mz_vec2 pos, mz_sprite_flip_orientation orientation, mz_tint tint);
+
+MZ_API void mz_draw_sprite_flipped_scaled(mz_applet* applet, mz_sprite* data, float x, float y, float scale, mz_sprite_flip_orientation orientation, mz_tint tint);
+MZ_API void mz_draw_sprite_flipped_scaled_vec2(mz_applet* applet, mz_sprite* data, mz_vec2 pos, float scale, mz_sprite_flip_orientation orientation, mz_tint tint);
+
+
+MZ_API void mz_draw_sprite_flipped_resized(mz_applet* applet, mz_sprite* data, float x, float y, uint32_t width, uint32_t height, mz_sprite_flip_orientation orientation, mz_tint tint);
+MZ_API void mz_draw_sprite_flipped_resized_vec2(mz_applet* applet, mz_sprite* data, mz_vec2 pos, uint32_t width, uint32_t height, mz_sprite_flip_orientation orientation, mz_tint tint);
+
+MZ_API void mz_draw_sprite_rotated(mz_applet* applet, mz_sprite* data, float x, float y, float rotation, mz_tint tint);
+MZ_API void mz_draw_sprite_rotated_vec2(mz_applet* applet, mz_sprite* data, mz_vec2 pos, float rotation, mz_tint tint);
+
+MZ_API void mz_draw_sprite_rotated_scaled(mz_applet* applet, mz_sprite* data, float x, float y, float scale, float rotation, mz_tint tint);
+MZ_API void mz_draw_sprite_rotated_scaled_vec2(mz_applet* applet, mz_sprite* data, mz_vec2 pos, float scale, float rotation, mz_tint tint);
+
+MZ_API void mz_draw_sprite_rotated_resized(mz_applet* applet, mz_sprite* data, float x, float y, uint32_t width, uint32_t height, float rotation, mz_tint tint);
+MZ_API void mz_draw_sprite_rotated_resized_vec2(mz_applet* applet, mz_sprite* data, mz_vec2 pos, uint32_t width, uint32_t height, float rotation, mz_tint tint);
+
 
 #endif // MUZZLE_PRIMITIVE_SPRITE_H

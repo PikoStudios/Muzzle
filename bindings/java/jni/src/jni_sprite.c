@@ -6,6 +6,22 @@
 #include "../include/common.h"
 #include <string.h>
 
+static mz_sprite get_sprite(JNIEnv* env, jobject object)
+{
+    jclass class = (*env)->GetObjectClass(env, object);
+    jfieldID width_field = (*env)->GetFieldID(env, class, "width", "I");
+    jfieldID height_field = (*env)->GetFieldID(env, class, "height", "I");
+    jfieldID id_field = (*env)->GetFieldID(env, class, "id", "I");
+
+    jint width = (*env)->GetIntField(env, object, width_field);
+    jint height = (*env)->GetIntField(env, object, height_field);
+    jint id = (*env)->GetIntField(env, object, id_field);
+
+    mz_sprite sprite = (mz_sprite){width, height, id};
+
+    return sprite;
+}
+
 JNIEXPORT jobject JNICALL Java_dev_pikostudios_muzzle_bridge_Sprite_load(JNIEnv* env, jclass class, jstring filepath)
 {
     const char* spritepath = (*env)->GetStringUTFChars(env, filepath, NULL);
@@ -109,17 +125,7 @@ JNIEXPORT jobject JNICALL Java_dev_pikostudios_muzzle_bridge_Sprite_create(JNIEn
 
 JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Sprite_draw(JNIEnv* env, jobject object, jobject applet, jfloat x, jfloat y, jobject tint)
 {
-    jclass class = (*env)->GetObjectClass(env, object);
-    jfieldID width_field = (*env)->GetFieldID(env, class, "width", "I");
-    jfieldID height_field = (*env)->GetFieldID(env, class, "height", "I");
-    jfieldID id_field = (*env)->GetFieldID(env, class, "id", "I");
-
-    jint width = (*env)->GetIntField(env, object, width_field);
-    jint height = (*env)->GetIntField(env, object, height_field);
-    jint id = (*env)->GetIntField(env, object, id_field);
-
-    mz_sprite sprite = (mz_sprite){width, height, id};
-
+    mz_sprite sprite = get_sprite(env, object);
     mz_applet* _applet = get_applet(env, applet);
     mz_tint _tint = get_tint(env, tint);
 
@@ -128,17 +134,7 @@ JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Sprite_draw(JNIEnv* en
 
 JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Sprite_drawScaled(JNIEnv* env, jobject object, jobject applet, jfloat x, jfloat y, jfloat scale, jobject tint)
 {
-    jclass class = (*env)->GetObjectClass(env, object);
-    jfieldID width_field = (*env)->GetFieldID(env, class, "width", "I");
-    jfieldID height_field = (*env)->GetFieldID(env, class, "height", "I");
-    jfieldID id_field = (*env)->GetFieldID(env, class, "id", "I");
-
-    jint width = (*env)->GetIntField(env, object, width_field);
-    jint height = (*env)->GetIntField(env, object, height_field);
-    jint id = (*env)->GetIntField(env, object, id_field);
-
-    mz_sprite sprite = (mz_sprite){width, height, id};
-
+    mz_sprite sprite = get_sprite(env, object);
     mz_applet* _applet = get_applet(env, applet);
     mz_tint _tint = get_tint(env, tint);
 
@@ -147,36 +143,70 @@ JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Sprite_drawScaled(JNIE
 
 JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Sprite_drawResized(JNIEnv* env, jobject object, jobject applet, jfloat x, jfloat y, jint w, jint h, jobject tint)
 {
-    jclass class = (*env)->GetObjectClass(env, object);
-    jfieldID width_field = (*env)->GetFieldID(env, class, "width", "I");
-    jfieldID height_field = (*env)->GetFieldID(env, class, "height", "I");
-    jfieldID id_field = (*env)->GetFieldID(env, class, "id", "I");
-
-    jint width = (*env)->GetIntField(env, object, width_field);
-    jint height = (*env)->GetIntField(env, object, height_field);
-    jint id = (*env)->GetIntField(env, object, id_field);
-
-    mz_sprite sprite = (mz_sprite){width, height, id};
-
+    mz_sprite sprite = get_sprite(env, object);
     mz_applet* _applet = get_applet(env, applet);
     mz_tint _tint = get_tint(env, tint);
 
     mz_draw_sprite_resized(_applet, &sprite, x, y, w, h, _tint);
 }
 
+JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Sprite_drawFlipped(JNIEnv* env, jobject object, jobject applet, jfloat x, jfloat y, jint orientation, jobject tint)
+{
+    mz_sprite sprite = get_sprite(env, object);
+    mz_applet* _applet = get_applet(env, applet);
+    mz_tint _tint = get_tint(env, tint);
+
+    mz_draw_sprite_flipped(_applet, &sprite, x, y, orientation, _tint);
+}
+
+JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Sprite_drawFlippedScaled(JNIEnv* env, jobject object, jobject applet, jfloat x, jfloat y, jfloat scale, jint orientation, jobject tint)
+{
+    mz_sprite sprite = get_sprite(env, object);
+    mz_applet* _applet = get_applet(env, applet);
+    mz_tint _tint = get_tint(env, tint);
+
+    mz_draw_sprite_flipped_scaled(_applet, &sprite, x, y, scale, orientation, _tint);
+}
+
+JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Sprite_drawFlippedResized(JNIEnv* env, jobject object, jobject applet, jfloat x, jfloat y, jint width, jint height, jint orientation, jobject tint)
+{
+    mz_sprite sprite = get_sprite(env, object);
+    mz_applet* _applet = get_applet(env, applet);
+    mz_tint _tint = get_tint(env, tint);
+
+    mz_draw_sprite_flipped_resized(_applet, &sprite, x, y, width, height, orientation, _tint);
+}
+
+JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Sprite_drawRotated(JNIEnv* env, jobject object, jobject applet, jfloat x, jfloat y, jfloat rotation, jobject tint)
+{
+    mz_sprite sprite = get_sprite(env, object);
+    mz_applet* _applet = get_applet(env, applet);
+    mz_tint _tint = get_tint(env, tint);
+
+    mz_draw_sprite_rotated(_applet, &sprite, x, y, rotation, _tint);
+}
+
+JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Sprite_drawRotatedScaled(JNIEnv* env, jobject object, jobject applet, jfloat x, jfloat y, jfloat scale, jfloat rotation, jobject tint)
+{
+    mz_sprite sprite = get_sprite(env, object);
+    mz_applet* _applet = get_applet(env, applet);
+    mz_tint _tint = get_tint(env, tint);
+
+    mz_draw_sprite_rotated_scaled(_applet, &sprite, x, y, scale, rotation, _tint);
+}
+
+JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Sprite_drawRotatedResized(JNIEnv* env, jobject object, jobject applet, jfloat x, jfloat y, jint width, jint height, jfloat rotation, jobject tint)
+{
+    mz_sprite sprite = get_sprite(env, object);
+    mz_applet* _applet = get_applet(env, applet);
+    mz_tint _tint = get_tint(env, tint);
+
+    mz_draw_sprite_rotated_resized(_applet, &sprite, x, y, width, height, rotation, _tint);
+}
+
 JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Sprite_bind(JNIEnv* env, jobject object, jobject applet, jbyte unit)
 {
-    jclass class = (*env)->GetObjectClass(env, object);
-    jfieldID width_field = (*env)->GetFieldID(env, class, "width", "I");
-    jfieldID height_field = (*env)->GetFieldID(env, class, "height", "I");
-    jfieldID id_field = (*env)->GetFieldID(env, class, "id", "I");
-
-    jint width = (*env)->GetIntField(env, object, width_field);
-    jint height = (*env)->GetIntField(env, object, height_field);
-    jint id = (*env)->GetIntField(env, object, id_field);
-
-    mz_sprite sprite = (mz_sprite){width, height, id};
-
+    mz_sprite sprite = get_sprite(env, object);
     mz_applet* _applet = get_applet(env, applet);
 
     mz_bind_sprite(_applet, &sprite, unit);
@@ -184,16 +214,7 @@ JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Sprite_bind(JNIEnv* en
 
 JNIEXPORT jbyteArray JNICALL Java_dev_pikostudios_muzzle_bridge_Sprite_getPixels(JNIEnv* env, jobject object)
 {
-    jclass class = (*env)->GetObjectClass(env, object);
-    jfieldID width_field = (*env)->GetFieldID(env, class, "width", "I");
-    jfieldID height_field = (*env)->GetFieldID(env, class, "height", "I");
-    jfieldID id_field = (*env)->GetFieldID(env, class, "id", "I");
-
-    jint width = (*env)->GetIntField(env, object, width_field);
-    jint height = (*env)->GetIntField(env, object, height_field);
-    jint id = (*env)->GetIntField(env, object, id_field);
-
-    mz_sprite sprite = (mz_sprite){width, height, id};
+    mz_sprite sprite = get_sprite(env, object);
 
     size_t size = mz_read_sprite_pixels(&sprite, NULL, 0);
     unsigned char* data = MZ_MALLOC(size * sizeof(unsigned char));

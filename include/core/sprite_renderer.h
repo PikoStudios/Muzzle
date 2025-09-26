@@ -9,8 +9,9 @@ struct mz_sprite_vertex
 	mz_vec2 position;
 	mz_vec4 tint;
 	mz_vec2 tex_coord;
+	mz_vec2 pivot;
 	GLint tex_id;
-	float tiling_factor;
+	float rotation;
 	GLint render_order; // TODO: just include render order in position as Z
 };
 

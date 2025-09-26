@@ -57,6 +57,54 @@ JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Sprite_drawResized
 
 /*
  * Class:     dev_pikostudios_muzzle_bridge_Sprite
+ * Method:    drawFlipped
+ * Signature: (Ldev/pikostudios/muzzle/bridge/Applet;FFILdev/pikostudios/muzzle/bridge/Tint;)V
+ */
+JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Sprite_drawFlipped
+  (JNIEnv *, jobject, jobject, jfloat, jfloat, jint, jobject);
+
+/*
+ * Class:     dev_pikostudios_muzzle_bridge_Sprite
+ * Method:    drawFlippedScaled
+ * Signature: (Ldev/pikostudios/muzzle/bridge/Applet;FFFILdev/pikostudios/muzzle/bridge/Tint;)V
+ */
+JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Sprite_drawFlippedScaled
+  (JNIEnv *, jobject, jobject, jfloat, jfloat, jfloat, jint, jobject);
+
+/*
+ * Class:     dev_pikostudios_muzzle_bridge_Sprite
+ * Method:    drawFlippedResized
+ * Signature: (Ldev/pikostudios/muzzle/bridge/Applet;FFIIILdev/pikostudios/muzzle/bridge/Tint;)V
+ */
+JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Sprite_drawFlippedResized
+  (JNIEnv *, jobject, jobject, jfloat, jfloat, jint, jint, jint, jobject);
+
+/*
+ * Class:     dev_pikostudios_muzzle_bridge_Sprite
+ * Method:    drawRotated
+ * Signature: (Ldev/pikostudios/muzzle/bridge/Applet;FFFLdev/pikostudios/muzzle/bridge/Tint;)V
+ */
+JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Sprite_drawRotated
+  (JNIEnv *, jobject, jobject, jfloat, jfloat, jfloat, jobject);
+
+/*
+ * Class:     dev_pikostudios_muzzle_bridge_Sprite
+ * Method:    drawRotatedScaled
+ * Signature: (Ldev/pikostudios/muzzle/bridge/Applet;FFFFLdev/pikostudios/muzzle/bridge/Tint;)V
+ */
+JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Sprite_drawRotatedScaled
+  (JNIEnv *, jobject, jobject, jfloat, jfloat, jfloat, jfloat, jobject);
+
+/*
+ * Class:     dev_pikostudios_muzzle_bridge_Sprite
+ * Method:    drawRotatedResized
+ * Signature: (Ldev/pikostudios/muzzle/bridge/Applet;FFIIFLdev/pikostudios/muzzle/bridge/Tint;)V
+ */
+JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Sprite_drawRotatedResized
+  (JNIEnv *, jobject, jobject, jfloat, jfloat, jint, jint, jfloat, jobject);
+
+/*
+ * Class:     dev_pikostudios_muzzle_bridge_Sprite
  * Method:    bind
  * Signature: (Ldev/pikostudios/muzzle/bridge/Applet;B)V
  */

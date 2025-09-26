@@ -20,6 +20,12 @@ public class Sprite
         NEAREST,
         LINEAR
     }
+
+    public enum FlipOrientation
+    {
+        VERTICAL,
+        HORIZONTAL
+    }
     
     private final int width;
     private final int height;
@@ -42,9 +48,32 @@ public class Sprite
 
     private static native Sprite create(int width, int height, int wrappingMode, int minFilter, int magFilter, int filter, byte[] data);
 
+    public void drawFlipped(Applet applet, float x, float y, FlipOrientation orientation, Tint tint)
+    {
+        this.drawFlipped(applet, x, y, orientation.ordinal(), tint);
+    }
+
+    public void drawFlippedScaled(Applet applet, float x, float y, float scale, FlipOrientation orientation, Tint tint)
+    {
+        this.drawFlippedScaled(applet, x, y, scale, orientation.ordinal(), tint);
+    }
+
+    public void drawFlippedResized(Applet applet, float x, float y, int width, int height, FlipOrientation orientation, Tint tint)
+    {
+        this.drawFlippedResized(applet, x, y, width, height, orientation.ordinal(), tint);
+    }
+
     public native void draw(Applet applet, float x, float y, Tint tint);
     public native void drawScaled(Applet applet, float x, float y, float scale, Tint tint);
     public native void drawResized(Applet applet, float x, float y, int width, int height, Tint tint);
+
+    private native void drawFlipped(Applet applet, float x, float y, int orientation, Tint tint);
+    private native void drawFlippedScaled(Applet applet, float x, float y, float scale, int orientation, Tint tint);
+    private native void drawFlippedResized(Applet applet, float x, float y, int width, int height, int orientation, Tint tint);
+
+    public native void drawRotated(Applet applet, float x, float y, float rotation, Tint tint);
+    public native void drawRotatedScaled(Applet applet, float x, float y, float scale, float rotation, Tint tint);
+    public native void drawRotatedResized(Applet applet, float x, float y, int width, int height, float rotation, Tint tint);
 
     public native void bind(Applet applet, byte textureUnit);
     

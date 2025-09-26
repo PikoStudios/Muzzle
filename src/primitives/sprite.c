@@ -224,7 +224,7 @@ void mz_bind_sprite(mz_applet* applet, mz_sprite* data, uint8_t texture_unit)
 }
 
 #define TINT_TO_VEC4(t) (mz_vec4){(float)(t.r),(float)(t.g),(float)(t.b), (float)(t.a)}
-#define VERTEX(x,y,t,tcx,tcy,tid,tf,ro) (struct mz_sprite_vertex){(mz_vec2){x,y}, t, (mz_vec2){tcx, tcy}, tid, tf, ro}
+#define VERTEX(x,y,t,tcx,tcy,px,py,tid,rt,ro) (struct mz_sprite_vertex){(mz_vec2){x,y}, t, (mz_vec2){tcx, tcy}, (mz_vec2){px,py}, tid, rt, ro}
 
 void mz_draw_sprite(mz_applet* applet, mz_sprite* data, float x, float y, mz_tint tint)
 {
@@ -274,25 +274,143 @@ void mz_draw_sprite_resized(mz_applet* applet, mz_sprite* data, float x, float y
 
 	mz_vec4 color = TINT_TO_VEC4(tint);
 
-	struct mz_sprite_vertex v1 = VERTEX(x, y, color, 0, 0, texture_id, 1.0f, applet->render_order);
-	struct mz_sprite_vertex v2 = VERTEX(x + width, y, color, 1, 0, texture_id, 1.0f, applet->render_order);
-	struct mz_sprite_vertex v3 = VERTEX(x, y + height, color, 0, 1, texture_id, 1.0f, applet->render_order);
-	struct mz_sprite_vertex v4 = VERTEX(x + width, y + height, color, 1, 1, texture_id, 1.0f, applet->render_order);
+	struct mz_sprite_vertex v1 = VERTEX(x, y, color, 0, 0, x, y, texture_id, 0.0f, applet->render_order);
+	struct mz_sprite_vertex v2 = VERTEX(x + width, y, color, 1, 0, x, y, texture_id, 0.0f, applet->render_order);
+	struct mz_sprite_vertex v3 = VERTEX(x, y + height, color, 0, 1, x, y, texture_id, 0.0f, applet->render_order);
+	struct mz_sprite_vertex v4 = VERTEX(x + width, y + height, color, 1, 1, x, y, texture_id, 0.0f, applet->render_order);
 
 	if (mz_sprite_renderer_push_sprite(&applet->sprite_renderer, v1, v2, v3, v4) == MUZZLE_FALSE)
 	{
 		mz_sprite_renderer_flush(&applet->sprite_renderer, applet->width, applet->height);
 		mz_draw_sprite_resized(applet, data, x, y, width, height, tint); // Just recursing because after flush we need to do the entire texture pushing procedure
-		
-//#ifdef MUZZLE_DEBUG_BUILD
-//		MZ_ASSERT_DETAILED(mz_sprite_renderer_push_sprite(&applet->sprite_renderer, v1, v2, v3, v4) == MUZZLE_TRUE, "Quad renderer should not still be full")
-//#else
-//		mz_sprite_renderer_push_sprite(&applet->sprite_renderer, v1, v2, v3, v4);
-//#endif
 	}
 }
 
 void mz_draw_sprite_resized_vec2(mz_applet* applet, mz_sprite* data, mz_vec2 pos, uint32_t width, uint32_t height, mz_tint tint)
 {
 	mz_draw_sprite_resized(applet, data, pos.x, pos.y, width, height, tint);
+}
+
+MZ_API void mz_draw_sprite_flipped(mz_applet* applet, mz_sprite* data, float x, float y, mz_sprite_flip_orientation orientation, mz_tint tint)
+{
+	mz_draw_sprite_flipped_resized(applet, data, x, y, data->width, data->height, orientation, tint);
+}
+
+MZ_API void mz_draw_sprite_flipped_vec2(mz_applet* applet, mz_sprite* data, mz_vec2 pos, mz_sprite_flip_orientation orientation, mz_tint tint)
+{
+	mz_draw_sprite_flipped_resized(applet, data, pos.x, pos.y, data->width, data->height, orientation, tint);
+}
+
+MZ_API void mz_draw_sprite_flipped_scaled(mz_applet* applet, mz_sprite* data, float x, float y, float scale, mz_sprite_flip_orientation orientation, mz_tint tint)
+{
+	mz_draw_sprite_flipped_resized(applet, data, x, y, data->width * scale, data->height * scale, orientation, tint);
+}
+
+MZ_API void mz_draw_sprite_flipped_scaled_vec2(mz_applet* applet, mz_sprite* data, mz_vec2 pos, float scale, mz_sprite_flip_orientation orientation, mz_tint tint)
+{
+	mz_draw_sprite_flipped_resized(applet, data, pos.x, pos.y, data->width * scale, data->height * scale, orientation, tint);
+}
+
+MZ_API void mz_draw_sprite_flipped_resized(mz_applet* applet, mz_sprite* data, float x, float y, uint32_t width, uint32_t height, mz_sprite_flip_orientation orientation, mz_tint tint)
+{
+	MZ_TRACK_FUNCTION();
+
+	applet->render_order++;
+
+	int texture_id = mz_sprite_renderer_push_texture(&applet->sprite_renderer, data->_id);
+
+	if (texture_id == -1)
+	{
+		mz_sprite_renderer_flush(&applet->sprite_renderer, applet->width, applet->height);
+		texture_id = mz_sprite_renderer_push_texture(&applet->sprite_renderer, data->_id);
+
+		MZ_ASSERT_DETAILED(texture_id > -1, "Texture Buffer should not be full");
+	}
+
+	mz_vec4 color = TINT_TO_VEC4(tint);
+
+	struct mz_sprite_vertex v1, v2, v3, v4;
+
+	switch (orientation)
+	{
+		case SPRITE_FLIP_ORIENTATION_HORIZONTAL:
+			v1 = VERTEX(x, y, color, 1, 0, x, y, texture_id, 0.0f, applet->render_order);
+			v2 = VERTEX(x + width, y, color, 0, 0, x, y, texture_id, 0.0f, applet->render_order);
+			v3 = VERTEX(x, y + height, color, 1, 1, x, y, texture_id, 0.0f, applet->render_order);
+			v4 = VERTEX(x + width, y + height, color, 0, 1, x, y, texture_id, 0.0f, applet->render_order);
+			break;
+
+		case SPRITE_FLIP_ORIENTATION_VERTICAL:
+			v1 = VERTEX(x, y, color, 0, 1, x, y, texture_id, 0.0f, applet->render_order);
+			v2 = VERTEX(x + width, y, color, 1, 1, x, y, texture_id, 0.0f, applet->render_order);
+			v3 = VERTEX(x, y + height, color, 0, 0, x, y, texture_id, 0.0f, applet->render_order);
+			v4 = VERTEX(x + width, y + height, color, 1, 0, x, y, texture_id, 0.0f, applet->render_order);
+			break;
+	}
+
+	if (mz_sprite_renderer_push_sprite(&applet->sprite_renderer, v1, v2, v3, v4) == MUZZLE_FALSE)
+	{
+		mz_sprite_renderer_flush(&applet->sprite_renderer, applet->width, applet->height);
+		mz_draw_sprite_flipped_resized(applet, data, x, y, width, height, orientation, tint);
+	}
+}
+
+MZ_API void mz_draw_sprite_flipped_resized_vec2(mz_applet* applet, mz_sprite* data, mz_vec2 pos, uint32_t width, uint32_t height, mz_sprite_flip_orientation orientation, mz_tint tint)
+{
+	mz_draw_sprite_flipped_resized(applet, data, pos.x, pos.y, width, height, orientation, tint);
+}
+
+MZ_API void mz_draw_sprite_rotated(mz_applet* applet, mz_sprite* data, float x, float y, float rotation, mz_tint tint)
+{
+	mz_draw_sprite_rotated_resized(applet, data, x, y, data->width, data->height, rotation, tint);
+}
+
+MZ_API void mz_draw_sprite_rotated_vec2(mz_applet* applet, mz_sprite* data, mz_vec2 pos, float rotation, mz_tint tint)
+{
+	mz_draw_sprite_rotated_resized(applet, data, pos.x, pos.y, data->width, data->height, rotation, tint);
+}
+
+MZ_API void mz_draw_sprite_rotated_scaled(mz_applet* applet, mz_sprite* data, float x, float y, float scale, float rotation, mz_tint tint)
+{
+	mz_draw_sprite_rotated_resized(applet, data, x, y, data->width * scale, data->height * scale, rotation, tint);
+}
+
+MZ_API void mz_draw_sprite_rotated_scaled_vec2(mz_applet* applet, mz_sprite* data, mz_vec2 pos, float scale, float rotation, mz_tint tint)
+{
+	mz_draw_sprite_rotated_resized(applet, data, pos.x, pos.y, data->width * scale, data->height * scale, rotation, tint);
+}
+
+MZ_API void mz_draw_sprite_rotated_resized(mz_applet* applet, mz_sprite* data, float x, float y, uint32_t width, uint32_t height, float rotation, mz_tint tint)
+{
+	MZ_TRACK_FUNCTION();
+
+	applet->render_order++;
+
+	int texture_id = mz_sprite_renderer_push_texture(&applet->sprite_renderer, data->_id);
+
+	if (texture_id == -1)
+	{
+		mz_sprite_renderer_flush(&applet->sprite_renderer, applet->width, applet->height);
+		texture_id = mz_sprite_renderer_push_texture(&applet->sprite_renderer, data->_id);
+
+		MZ_ASSERT_DETAILED(texture_id > -1, "Texture Buffer should not be full");
+	}
+
+	mz_vec4 color = TINT_TO_VEC4(tint);
+
+	struct mz_sprite_vertex v1 = VERTEX(x, y, color, 0, 0, x, y, texture_id, rotation, applet->render_order);
+	struct mz_sprite_vertex v2 = VERTEX(x + width, y, color, 1, 0, x, y, texture_id, rotation, applet->render_order);
+	struct mz_sprite_vertex v3 = VERTEX(x, y + height, color, 0, 1, x, y, texture_id, rotation, applet->render_order);
+	struct mz_sprite_vertex v4 = VERTEX(x + width, y + height, color, 1, 1, x, y, texture_id, rotation, applet->render_order);
+
+	if (mz_sprite_renderer_push_sprite(&applet->sprite_renderer, v1, v2, v3, v4) == MUZZLE_FALSE)
+	{
+		mz_sprite_renderer_flush(&applet->sprite_renderer, applet->width, applet->height);
+		mz_draw_sprite_rotated_resized(applet, data, x, y, width, height, rotation, tint);
+	}
+}
+
+MZ_API void mz_draw_sprite_rotated_resized_vec2(mz_applet* applet, mz_sprite* data, mz_vec2 pos, uint32_t width, uint32_t height, float rotation, mz_tint tint)
+{
+	mz_draw_sprite_rotated_resized(applet, data, pos.x, pos.y, width, height, rotation, tint);
 }

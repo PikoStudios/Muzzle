@@ -2,6 +2,7 @@
 #include "core/logging.h"
 #include "core/memory.h"
 #include "internals/quad_indices.h"
+#include <string.h>
 
 #define LOC_UNINITIALIZED_VALUE -404
 
@@ -83,27 +84,37 @@ struct mz_sprite_renderer mz_sprite_renderer_initialize(uint32_t max_sprites, GL
 	);
 
 	glEnableVertexArrayAttrib(sprite_renderer.buffers[VAO], 3);
-	glVertexAttribIPointer(
+	glVertexAttribPointer(
 		3,
+		2,
+		GL_FLOAT,
+		GL_FALSE,
+		sizeof(struct mz_sprite_vertex),
+		(GLvoid*)(offsetof(struct mz_sprite_vertex, pivot))
+	);
+
+	glEnableVertexArrayAttrib(sprite_renderer.buffers[VAO], 4);
+	glVertexAttribIPointer(
+		4,
 		1,
 		GL_INT,
 		sizeof(struct mz_sprite_vertex),
 		(GLvoid*)(offsetof(struct mz_sprite_vertex, tex_id))
 	);
 
-	glEnableVertexArrayAttrib(sprite_renderer.buffers[VAO], 4);
+	glEnableVertexArrayAttrib(sprite_renderer.buffers[VAO], 5);
 	glVertexAttribPointer(
-		4,
+		5,
 		1,
 		GL_FLOAT,
 		GL_FALSE,
 		sizeof(struct mz_sprite_vertex),
-		(GLvoid*)(offsetof(struct mz_sprite_vertex, tiling_factor))
+		(GLvoid*)(offsetof(struct mz_sprite_vertex, rotation))
 	);
 	
-	glEnableVertexArrayAttrib(sprite_renderer.buffers[VAO], 5);
+	glEnableVertexArrayAttrib(sprite_renderer.buffers[VAO], 6);
 	glVertexAttribIPointer(
-		5,
+		6,
 		1,
 		GL_INT,
 		sizeof(struct mz_sprite_vertex),
