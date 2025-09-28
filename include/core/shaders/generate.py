@@ -39,8 +39,8 @@ def generate(name: str, vertex: Path, fragment: Path) -> t.Tuple[str, str]:
 	fragment_var: str = str(fragment).translate(path_trans)
 	
 	return (
-		vertex_code.replace(vertex_var, f"{name}_vertex_glsl").replace(vertex_var + "_len", f"{name}_vertex_glsl_len"),
-		fragment_code.replace(fragment_var, f"{name}_fragment_glsl").replace(fragment_var + "_len", f"{name}_fragment_glsl_len"),
+		vertex_code.replace(vertex_var, f"{name}_vertex_glsl").replace(vertex_var + "_len", f"{name}_vertex_glsl_len").replace("};", ",0x00};"),
+		fragment_code.replace(fragment_var, f"{name}_fragment_glsl").replace(fragment_var + "_len", f"{name}_fragment_glsl_len").replace("};", ",0x00};"),
 	)
 
 def build() -> None:
