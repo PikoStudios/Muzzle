@@ -55,4 +55,10 @@ public class Tint
 
         return new Tint((int)(this.r * s), (int)(this.g * s), (int)(this.b * s), this.a);
     }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        return obj instanceof Tint tint && (this == tint || (this.r == tint.r && this.g == tint.g && this.b == tint.b && this.a == tint.a));
+    }
 }

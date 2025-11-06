@@ -25,6 +25,8 @@
 
 static inline void create_framebuffer(mz_applet_flags flags, mz_applet* applet, int i)
 {
+	MZ_TRACK_FUNCTION_STAGE("mz_initialize_applet -> create_framebuffer");
+	
 	glGenFramebuffers(1, &applet->framebuffer.fbos[i]);
 	glBindFramebuffer(GL_FRAMEBUFFER, applet->framebuffer.fbos[i]);
 

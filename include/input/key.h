@@ -3,6 +3,7 @@
 
 #include "backend.h"
 #include "core/applet.h"
+#include <stdint.h>
 
 typedef enum
 {
@@ -95,6 +96,8 @@ typedef enum
     KEY_RIGHT_ALT       = 346,
     KEY_RIGHT_SUPER     = 347,
     KEY_KB_MENU         = 348,
+    KEY_MAX_VALUE       = 348,
+    KEY_COUNT           = 89
 } mz_key;
 
 MZ_API mz_boolean mz_key_pressed(mz_applet* applet, mz_key key);
