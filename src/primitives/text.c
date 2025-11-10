@@ -98,7 +98,23 @@ void mz_draw_text_vec3(mz_applet* applet, const char* text, mz_vec3 position_and
 	mz_draw_text(applet, text, position_and_font_size.x, position_and_font_size.y, position_and_font_size.z, font, tint);
 }
 
-mz_vec2 mz_measure_text(mz_applet* applet, const char* text, float font_size, mz_font* font)
+MZ_API void mz_draw_text_centered(mz_applet* applet, const char* text, float x, float y, float font_size, mz_font* font, mz_tint tint)
+{
+	mz_vec2 dimensions = mz_measure_text(text, font_size, font);
+	mz_draw_text(applet, text, x - (dimensions.x * 0.5f), y - (dimensions.y * 0.5f), font_size, font, tint);
+}
+
+MZ_API void mz_draw_text_centered_vec2(mz_applet* applet, const char* text, mz_vec2 position, float font_size, mz_font* font, mz_tint tint)
+{
+	mz_draw_text_centered(applet, text, position.x, position.y, font_size, font, tint);
+}
+
+MZ_API void mz_draw_text_centered_vec3(mz_applet* applet, const char* text, mz_vec3 position_and_font_size, mz_font* font, mz_tint tint)
+{
+	mz_draw_text_centered(applet, text, position_and_font_size.x, position_and_font_size.y, position_and_font_size.z, font, tint);
+}
+
+mz_vec2 mz_measure_text(const char* text, float font_size, mz_font* font)
 {
 	mz_vec2 dimensions = (mz_vec2){0.0f, MUZZLE_TEXT_SOURCE_FONT_SIZE};
 	float scale = font_size / MUZZLE_TEXT_SOURCE_FONT_SIZE;
@@ -128,12 +144,7 @@ load_char:
 
 		if (text[i] == '\n')
 		{
-			if (width > dimensions.x)
-			{
-				dimensions.x = width;
-			}
-
-			// MUZZLE_TEXT_SOURCE_FONT_SIZE * scale = font_size
+			dimensions.x = (width > dimensions.x) ? width : dimensions.x;
 			dimensions.y += MUZZLE_TEXT_SOURCE_FONT_SIZE;
 			width = 0;
 			continue;
@@ -141,6 +152,8 @@ load_char:
 
 		width += glyph.advance >> 6;
 	}
+
+	dimensions.x = (width > dimensions.x) ? width : dimensions.x;
 
 	dimensions.x *= scale;
 	dimensions.y *= scale;

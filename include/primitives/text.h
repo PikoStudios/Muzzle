@@ -13,7 +13,11 @@ MZ_API void mz_draw_text(mz_applet* applet, const char* text, float x, float y, 
 MZ_API void mz_draw_text_vec2(mz_applet* applet, const char* text, mz_vec2 position, float font_size, mz_font* font, mz_tint tint);
 MZ_API void mz_draw_text_vec3(mz_applet* applet, const char* text, mz_vec3 position_and_font_size, mz_font* font, mz_tint tint);
 
-// NOTE: This function does not produce perfectly accurate dimensions. This needs to be fixed
-MZ_API mz_vec2 mz_measure_text(mz_applet* applet, const char* text, float font_size, mz_font* font);
+MZ_API void mz_draw_text_centered(mz_applet* applet, const char* text, float x, float y, float font_size, mz_font* font, mz_tint tint);
+MZ_API void mz_draw_text_centered_vec2(mz_applet* applet, const char* text, mz_vec2 position, float font_size, mz_font* font, mz_tint tint);
+MZ_API void mz_draw_text_centered_vec3(mz_applet* applet, const char* text, mz_vec3 position_and_font_size, mz_font* font, mz_tint tint);
+
+// TODO: Test accuracy of results
+MZ_API mz_vec2 mz_measure_text(const char* text, float font_size, mz_font* font);
 
 #endif // MUZZLE_PRIMITIVES_TEXT_H

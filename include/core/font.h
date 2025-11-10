@@ -10,10 +10,11 @@ typedef struct mz_applet mz_applet;
 
 typedef struct mz_font_glyph
 {
-	GLuint texture_idx;
+	
 	mz_vec2_i size;
 	mz_vec2_i bearing;
 	uint32_t advance;
+	GLuint texture_idx;
 	mz_boolean _loaded;
 } mz_font_glyph;
 

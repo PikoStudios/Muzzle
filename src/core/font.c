@@ -29,6 +29,8 @@ mz_font mz_load_font(mz_applet* applet, const char* filepath)
 		mz_log_status(LOG_STATUS_FATAL_ERROR, "Could not allocate memory for glyphs");
 	}
 
+	int max_glyphs = font.glyph_count < 256 ? font.glyph_count : 256;
+
 #if defined(MUZZLE_TEXT_AVOID_LOG2_OPTIMIZATION) || ((MUZZLE_TEXT_SOURCE_FONT_SIZE & (MUZZLE_TEXT_SOURCE_FONT_SIZE - 1)) != 0) // If source font size is not a power of two
 	int levels = 1 + (int)floorf(log2f(MUZZLE_TEXT_SOURCE_FONT_SIZE));
 #else
@@ -46,30 +48,43 @@ mz_font mz_load_font(mz_applet* applet, const char* filepath)
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-	// TODO: i < font.glyph_count to load unicode characters
-	int max_glyphs = font.glyph_count < 256 ? font.glyph_count : 256;
+	FT_Select_Charmap(face, FT_ENCODING_UNICODE);
+
+	unsigned char* temp_rescaling_buffer = MZ_CALLOC(MUZZLE_TEXT_SOURCE_FONT_SIZE * MUZZLE_TEXT_SOURCE_FONT_SIZE, sizeof(unsigned char));
+
+	if (temp_rescaling_buffer == NULL)
+	{
+		mz_log_status(LOG_STATUS_FATAL_ERROR, "Could not allocate memory for glyph rescaling buffer");
+	}
+
 	for (int i = 0; i < max_glyphs; i++)
 	{
-		if (FT_Load_Char(face, i, FT_LOAD_RENDER))
+		if (FT_Get_Char_Index(face, i) == 0 || FT_Load_Char(face, i, FT_LOAD_RENDER))
 		{
 			mz_log_status_formatted(LOG_STATUS_ERROR, "Failed to load glyph #%d from '%s'", i, filepath);
 			font.glyphs[i]._loaded = MUZZLE_FALSE;
 			continue;
 		}
 
+		int glyph_width = (face->glyph->bitmap.width < MUZZLE_TEXT_SOURCE_FONT_SIZE) ? face->glyph->bitmap.width : MUZZLE_TEXT_SOURCE_FONT_SIZE;
+		int glyph_height = (face->glyph->bitmap.rows < MUZZLE_TEXT_SOURCE_FONT_SIZE) ? face->glyph->bitmap.rows : MUZZLE_TEXT_SOURCE_FONT_SIZE;
+
+		unsigned char* buffer = face->glyph->bitmap.buffer;
+
+		// rescale glpyh
+		
 		glTextureSubImage3D(
 		        font.texture_array_id,
 		        0,
 		        0,
 		        0,
 		        i,
-		        face->glyph->bitmap.width,
-		        face->glyph->bitmap.rows,
+		        glyph_width,
+		        glyph_height,
 		        1,
 		        GL_RED,
 		        GL_UNSIGNED_BYTE,
-		        face->glyph->bitmap.buffer
-		        
+		        buffer
 		);
 
 		font.glyphs[i].texture_idx = i;
@@ -85,6 +100,7 @@ mz_font mz_load_font(mz_applet* applet, const char* filepath)
 	glGenerateTextureMipmap(font.texture_array_id);
 
 	FT_Done_Face(face);
+	MZ_FREE(temp_rescaling_buffer);
 	
 	return font;
 }
