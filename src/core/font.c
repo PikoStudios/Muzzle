@@ -2,7 +2,54 @@
 #include "backend.h"
 #include "core/logging.h"
 #include "core/applet.h"
+#include "core/vector.h"
 #include <math.h>
+
+#define MIN(a, b) ((a) < (b) ? (a) : (b))
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+
+#ifndef MUZZLE_TEXT_DONT_RESCALE_LARGE_GLYPHS
+// Rescale bitmap using Area Average
+static inline void rescale_bitmap(unsigned char* src, int src_width, int src_height, unsigned char* out, int out_width, int out_height)
+{
+	mz_vec2 scale = (mz_vec2){(float)(src_width) / out_width, (float)(src_height) / out_height};
+
+	for (int y = 0; y < out_height; y++)
+	{
+		for (int x = 0; x < out_width; x++)
+		{
+			float src_start_x = x * scale.x;
+			float src_start_y = y * scale.y;
+			float src_end_x = (x + 1) * scale.x;
+			float src_end_y = (y + 1) * scale.y;
+
+			int sum_color = 0;
+			int pixel_count = 0;
+
+			for (int src_y = (int)(src_start_y); y < src_end_y; y++)
+			{
+				for (int src_x = (int)(src_start_x); x < src_end_x; x++)
+				{
+					mz_vec2 overlap = (mz_vec2)
+					{
+						MIN(src_x + 1, src_end_x) - MAX(src_x, src_start_x),
+						MIN(src_y + 1, src_end_y) - MAX(src_y, src_end_y)
+					};
+
+					float overlap_area = overlap.x * overlap.y;
+					sum_color += src[src_y * src_width + src_x] * overlap_area;
+					pixel_count += overlap_area;
+				}
+			}
+
+			if (pixel_count > 0)
+			{
+				out[y * src_width + x] = sum_color / pixel_count;
+			}
+		}
+	}
+}
+#endif
 
 mz_font mz_load_font(mz_applet* applet, const char* filepath)
 {
@@ -50,7 +97,9 @@ mz_font mz_load_font(mz_applet* applet, const char* filepath)
 
 	FT_Select_Charmap(face, FT_ENCODING_UNICODE);
 
+#ifndef MUZZLE_TEXT_DONT_RESCALE_LARGE_GLYPHS
 	unsigned char* temp_rescaling_buffer = MZ_CALLOC(MUZZLE_TEXT_SOURCE_FONT_SIZE * MUZZLE_TEXT_SOURCE_FONT_SIZE, sizeof(unsigned char));
+#endif
 
 	if (temp_rescaling_buffer == NULL)
 	{
@@ -65,14 +114,33 @@ mz_font mz_load_font(mz_applet* applet, const char* filepath)
 			font.glyphs[i]._loaded = MUZZLE_FALSE;
 			continue;
 		}
-
-		int glyph_width = (face->glyph->bitmap.width < MUZZLE_TEXT_SOURCE_FONT_SIZE) ? face->glyph->bitmap.width : MUZZLE_TEXT_SOURCE_FONT_SIZE;
-		int glyph_height = (face->glyph->bitmap.rows < MUZZLE_TEXT_SOURCE_FONT_SIZE) ? face->glyph->bitmap.rows : MUZZLE_TEXT_SOURCE_FONT_SIZE;
-
+#ifndef MUZZLE_TEXT_DONT_RESCALE_LARGE_GLYPHS
 		unsigned char* buffer = face->glyph->bitmap.buffer;
+#else
+	// no need to store it in a variable, let's just make it a macro in this scenario
+	#define buffer face->glyph->bitmap.buffer
+#endif
 
-		// rescale glpyh
-		
+#ifdef MUZZLE_TEXT_DONT_RESCALE_LARGE_GLYPHS
+		int glyph_width = MIN(face->glyph->bitmap.width, MUZZLE_TEXT_SOURCE_FONT_SIZE);
+		int glyph_height = MIN(face->glyph->bitmap.rows, MUZZLE_TEXT_SOURCE_FONT_SIZE);
+#else
+		int glyph_width = face->glyph->bitmap.width;
+		int glyph_height = face->glyph->bitmap.rows;
+
+		const mz_boolean width_exceeds = (face->glyph->bitmap.width > MUZZLE_TEXT_SOURCE_FONT_SIZE);
+		const mz_boolean height_exceeds = (face->glyph->bitmap.rows > MUZZLE_TEXT_SOURCE_FONT_SIZE);
+
+		if (width_exceeds || height_exceeds)
+		{
+			glyph_width = (width_exceeds) ? MUZZLE_TEXT_SOURCE_FONT_SIZE : glyph_width;
+			glyph_height = (height_exceeds) ? MUZZLE_TEXT_SOURCE_FONT_SIZE : glyph_height;
+
+			buffer = temp_rescaling_buffer;
+			rescale_bitmap(face->glyph->bitmap.buffer, face->glyph->bitmap.width, face->glyph->bitmap.rows, buffer, glyph_width, glyph_height);
+		}
+#endif
+
 		glTextureSubImage3D(
 		        font.texture_array_id,
 		        0,
