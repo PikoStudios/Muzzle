@@ -32,13 +32,20 @@ void mz_draw_text(mz_applet* applet, const char* text, float x, float y, float f
 		int c = text[i];
 		mz_font_glyph glyph;
 		
+		if (c == '\n')
+		{
+			y += font_size;
+			x = newline_x;
+			continue;
+		}
+		
 load_char:
 		glyph = safe_index_glyphs(font, c); // NOTE: Reason we do this is because we can't declare a variable, goto, declare it again.
-
+		
 		UNLIKELY_IF(glyph._loaded == MUZZLE_FALSE)
 		{
 #ifdef MUZZLE_DEBUG_BUILD
-			mz_log_status_formatted(LOG_STATUS_WARNING, "Unloaded character: '%c'", text[i], text[i]);
+			mz_log_status_formatted(LOG_STATUS_WARNING, "Unloaded character: '%c' (%d)", text[i], text[i]);
 #endif
 
 			if (c == ' ')
@@ -52,14 +59,7 @@ load_char:
 			goto load_char;
 		}
 
-		if (text[i] == '\n')
-		{
-			y += font_size;
-			x = newline_x;
-			continue;
-		}
-
-		if (text[i] == ' ')
+		if (c == ' ')
 		{
 			// No need to render a space. Just advance to next character
 			goto advance;
