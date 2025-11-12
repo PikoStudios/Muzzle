@@ -8,6 +8,7 @@
 #define PTR_TO_JLONG(p) ((jlong)(((intptr_t)(p))))
 #define JLONG_TO_PTR(p) ((intptr_t)(p))
 #define JBOOLEAN(b) ((b) ? JNI_TRUE : JNI_FALSE)
+#define UNUSED(a) ((void)(a))
 
 mz_applet* get_applet(JNIEnv* env, jobject obj);
 mz_tint get_tint(JNIEnv* env, jobject obj);

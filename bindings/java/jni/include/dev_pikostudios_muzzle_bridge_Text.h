@@ -9,10 +9,34 @@ extern "C" {
 #endif
 /*
  * Class:     dev_pikostudios_muzzle_bridge_Text
+ * Method:    measureWidth
+ * Signature: (Ljava/lang/String;FLdev/pikostudios/muzzle/bridge/Font;)F
+ */
+JNIEXPORT jfloat JNICALL Java_dev_pikostudios_muzzle_bridge_Text_measureWidth
+  (JNIEnv *, jclass, jstring, jfloat, jobject);
+
+/*
+ * Class:     dev_pikostudios_muzzle_bridge_Text
+ * Method:    measureHeight
+ * Signature: (Ljava/lang/String;FLdev/pikostudios/muzzle/bridge/Font;)F
+ */
+JNIEXPORT jfloat JNICALL Java_dev_pikostudios_muzzle_bridge_Text_measureHeight
+  (JNIEnv *, jclass, jstring, jfloat, jobject);
+
+/*
+ * Class:     dev_pikostudios_muzzle_bridge_Text
  * Method:    draw
  * Signature: (Ldev/pikostudios/muzzle/bridge/Applet;Ljava/lang/String;FFFLdev/pikostudios/muzzle/bridge/Font;Ldev/pikostudios/muzzle/bridge/Tint;)V
  */
 JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Text_draw
+  (JNIEnv *, jclass, jobject, jstring, jfloat, jfloat, jfloat, jobject, jobject);
+
+/*
+ * Class:     dev_pikostudios_muzzle_bridge_Text
+ * Method:    drawCentered
+ * Signature: (Ldev/pikostudios/muzzle/bridge/Applet;Ljava/lang/String;FFFLdev/pikostudios/muzzle/bridge/Font;Ldev/pikostudios/muzzle/bridge/Tint;)V
+ */
+JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Text_drawCentered
   (JNIEnv *, jclass, jobject, jstring, jfloat, jfloat, jfloat, jobject, jobject);
 
 #ifdef __cplusplus
