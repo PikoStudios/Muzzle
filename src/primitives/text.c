@@ -103,7 +103,9 @@ void mz_draw_text_vec3(mz_applet* applet, const char* text, mz_vec3 position_and
 MZ_API void mz_draw_text_centered(mz_applet* applet, const char* text, float x, float y, float font_size, mz_font* font, mz_tint tint)
 {
 	mz_vec2 dimensions = mz_measure_text(text, font_size, font);
-	mz_draw_text(applet, text, x - (dimensions.x * 0.5f), y - (dimensions.y * 0.5f), font_size, font, tint);
+
+	// TODO: Explore why I need to divide dimensions.y by 4 to get accurate positioning (especially with large font sizes)
+	mz_draw_text(applet, text, x - (dimensions.x * 0.5f), y + (dimensions.y * 0.25f), font_size, font, tint);
 }
 
 MZ_API void mz_draw_text_centered_vec2(mz_applet* applet, const char* text, mz_vec2 position, float font_size, mz_font* font, mz_tint tint)
