@@ -37,7 +37,9 @@ load_char:
 
 		UNLIKELY_IF(glyph._loaded == MUZZLE_FALSE)
 		{
+#ifdef MUZZLE_DEBUG_BUILD
 			mz_log_status_formatted(LOG_STATUS_WARNING, "Unloaded character: '%c'", text[i], text[i]);
+#endif
 
 			if (c == ' ')
 			{
@@ -130,8 +132,6 @@ load_char:
 
 		UNLIKELY_IF(glyph._loaded == MUZZLE_FALSE)
 		{
-			mz_log_status_formatted(LOG_STATUS_WARNING, "Unloaded character: '%c'", text[i]);
-
 			if (c == ' ')
 			{
 				width += MUZZLE_TEXT_DEFAULT_SPACE_WIDTH;

@@ -10,7 +10,7 @@
 
 #ifndef MUZZLE_TEXT_DONT_RESCALE_LARGE_GLYPHS
 // Rescale bitmap using Area Average
-static inline void rescale_bitmap(unsigned char* src, int src_width, int src_height, unsigned char* out, int out_width, int out_height)
+static inline mz_vec2 rescale_bitmap(unsigned char* src, int src_width, int src_height, unsigned char* out, int out_width, int out_height)
 {
 	mz_vec2 scale = (mz_vec2){(float)(src_width) / out_width, (float)(src_height) / out_height};
 
@@ -24,16 +24,16 @@ static inline void rescale_bitmap(unsigned char* src, int src_width, int src_hei
 			float src_end_y = (y + 1) * scale.y;
 
 			int sum_color = 0;
-			int pixel_count = 0;
+			float pixel_count = 0;
 
-			for (int src_y = (int)(src_start_y); y < src_end_y; y++)
+			for (int src_y = (int)(src_start_y); src_y < src_end_y; src_y++)
 			{
-				for (int src_x = (int)(src_start_x); x < src_end_x; x++)
+				for (int src_x = (int)(src_start_x); src_x < src_end_x; src_x++)
 				{
 					mz_vec2 overlap = (mz_vec2)
 					{
 						MIN(src_x + 1, src_end_x) - MAX(src_x, src_start_x),
-						MIN(src_y + 1, src_end_y) - MAX(src_y, src_end_y)
+						MIN(src_y + 1, src_end_y) - MAX(src_y, src_start_y)
 					};
 
 					float overlap_area = overlap.x * overlap.y;
@@ -44,10 +44,12 @@ static inline void rescale_bitmap(unsigned char* src, int src_width, int src_hei
 
 			if (pixel_count > 0)
 			{
-				out[y * src_width + x] = sum_color / pixel_count;
+				out[y * out_width + x] = sum_color / pixel_count;
 			}
 		}
 	}
+
+	return scale;
 }
 #endif
 
@@ -99,18 +101,20 @@ mz_font mz_load_font(mz_applet* applet, const char* filepath)
 
 #ifndef MUZZLE_TEXT_DONT_RESCALE_LARGE_GLYPHS
 	unsigned char* temp_rescaling_buffer = MZ_CALLOC(MUZZLE_TEXT_SOURCE_FONT_SIZE * MUZZLE_TEXT_SOURCE_FONT_SIZE, sizeof(unsigned char));
-#endif
 
 	if (temp_rescaling_buffer == NULL)
 	{
 		mz_log_status(LOG_STATUS_FATAL_ERROR, "Could not allocate memory for glyph rescaling buffer");
 	}
+#endif
 
 	for (int i = 0; i < max_glyphs; i++)
 	{
 		if (FT_Get_Char_Index(face, i) == 0 || FT_Load_Char(face, i, FT_LOAD_RENDER))
 		{
+#ifdef MUZZLE_DEBUG_BUILD
 			mz_log_status_formatted(LOG_STATUS_ERROR, "Failed to load glyph #%d from '%s'", i, filepath);
+#endif
 			font.glyphs[i]._loaded = MUZZLE_FALSE;
 			continue;
 		}
@@ -122,8 +126,16 @@ mz_font mz_load_font(mz_applet* applet, const char* filepath)
 #endif
 
 #ifdef MUZZLE_TEXT_DONT_RESCALE_LARGE_GLYPHS
-		int glyph_width = MIN(face->glyph->bitmap.width, MUZZLE_TEXT_SOURCE_FONT_SIZE);
-		int glyph_height = MIN(face->glyph->bitmap.rows, MUZZLE_TEXT_SOURCE_FONT_SIZE);
+	#define POSSIBLE_CONST const
+#else
+	#define POSSIBLE_CONST
+#endif
+
+		POSSIBLE_CONST mz_vec2 glyph_scale = (mz_vec2){1, 1};
+		
+#ifdef MUZZLE_TEXT_DONT_RESCALE_LARGE_GLYPHS
+		const int glyph_width = MIN(face->glyph->bitmap.width, MUZZLE_TEXT_SOURCE_FONT_SIZE);
+		const int glyph_height = MIN(face->glyph->bitmap.rows, MUZZLE_TEXT_SOURCE_FONT_SIZE);
 #else
 		int glyph_width = face->glyph->bitmap.width;
 		int glyph_height = face->glyph->bitmap.rows;
@@ -137,7 +149,7 @@ mz_font mz_load_font(mz_applet* applet, const char* filepath)
 			glyph_height = (height_exceeds) ? MUZZLE_TEXT_SOURCE_FONT_SIZE : glyph_height;
 
 			buffer = temp_rescaling_buffer;
-			rescale_bitmap(face->glyph->bitmap.buffer, face->glyph->bitmap.width, face->glyph->bitmap.rows, buffer, glyph_width, glyph_height);
+			glyph_scale = rescale_bitmap(face->glyph->bitmap.buffer, face->glyph->bitmap.width, face->glyph->bitmap.rows, buffer, glyph_width, glyph_height);
 		}
 #endif
 
@@ -157,7 +169,7 @@ mz_font mz_load_font(mz_applet* applet, const char* filepath)
 
 		font.glyphs[i].texture_idx = i;
 		font.glyphs[i].size = (mz_vec2_i){face->glyph->bitmap.width, face->glyph->bitmap.rows};
-		font.glyphs[i].bearing = (mz_vec2_i){face->glyph->bitmap_left, face->glyph->bitmap_top};
+		font.glyphs[i].bearing = (mz_vec2_i){face->glyph->bitmap_left / glyph_scale.x, face->glyph->bitmap_top / glyph_scale.y};
 		font.glyphs[i].advance = face->glyph->advance.x;
 		font.glyphs[i]._loaded = MUZZLE_TRUE;
 	}
@@ -168,7 +180,10 @@ mz_font mz_load_font(mz_applet* applet, const char* filepath)
 	glGenerateTextureMipmap(font.texture_array_id);
 
 	FT_Done_Face(face);
+
+#ifndef MUZZLE_TEXT_DONT_RESCALE_LARGE_GLYPHS
 	MZ_FREE(temp_rescaling_buffer);
+#endif
 	
 	return font;
 }
