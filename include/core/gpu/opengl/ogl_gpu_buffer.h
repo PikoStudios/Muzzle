@@ -3,9 +3,12 @@
 
 #include "../../../backend.h"
 #include "../gpu_device.h"
+#include "../gpu_buffer.h"
 #include <stdint.h>
 
-MZ_API uintptr_t mz_gpu_ogl_create_buffer(mz_gpu_device* gpu, size_t size, mz_gpu_buffer_usage usage);
-MZ_API void mz_gpu_ogl_destroy_buffer(mz_gpu_device* gpu, uintptr_t handle);
+MZ_API mz_gpu_buffer mz_gpu_ogl_create_buffer(mz_gpu_device* gpu, size_t size, mz_gpu_buffer_usage usage);
+MZ_API void mz_gpu_ogl_destroy_buffer(mz_gpu_device* gpu, mz_gpu_buffer* buffer);
+MZ_API void mz_gpu_ogl_allocate_buffer(mz_gpu_device* gpu, mz_gpu_buffer* buffer, const void* data);
+MZ_API void* mz_gpu_ogl_update_buffer(mz_gpu_device* gpu, mz_gpu_buffer* buffer, size_t offset, size_t size, const void* data);
 
 #endif // MUZZLE_OPENGL_GPU_BUFFER_H
