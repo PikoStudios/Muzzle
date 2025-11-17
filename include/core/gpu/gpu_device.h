@@ -31,9 +31,9 @@ typedef struct mz_gpu_device
     void (*destroy_buffer)(struct mz_gpu_device* gpu, mz_gpu_buffer* buffer);
 
     // Allocates memory to a buffer
-    void (*allocate_buffer)(struct mz_gpu_device* gpu, mz_gpu_buffer* buffer, const void* data);
+    void (*allocate_buffer)(struct mz_gpu_device* gpu, mz_gpu_buffer* buffer);
 
-    // Writes to a specified portion of a buffer
+    // Writes to a specified portion of a buffer. Buffer must first be allocated
     void (*write_buffer)(struct mz_gpu_device* gpu, mz_gpu_buffer* buffer, size_t offset, size_t size, const void* data);
 
     // Lock the buffer (prevents any subsequent CPU writes to the buffer)

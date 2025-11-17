@@ -44,14 +44,14 @@ static inline GLenum buffer_usage_as_gl_enum(mz_gpu_buffer_usage usage)
     }
 }
 
-void mz_gpu_ogl_allocate_buffer(mz_gpu_device* gpu, mz_gpu_buffer* buffer, const void* data)
+void mz_gpu_ogl_allocate_buffer(mz_gpu_device* gpu, mz_gpu_buffer* buffer)
 {
     MZ_TRACK_FUNCTION();
 
     GLuint gpu_handle = (GLuint)(gpu->handles[buffer->handle]);
     GLenum usage = buffer_usage_as_gl_enum(buffer->usage);
     
-    glNamedBufferData(gpu_handle, buffer->size, data, usage);
+    glNamedBufferData(gpu_handle, buffer->size, NULL, usage);
 }
 
 void mz_gpu_ogl_write_buffer(mz_gpu_device* gpu, mz_gpu_buffer* buffer, size_t offset, size_t size, const void* data)
