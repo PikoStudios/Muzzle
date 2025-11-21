@@ -14,9 +14,18 @@ mz_gpu_device mz_gpu_create_device(void)
     device.handles_size = 0;
     device.handles = MZ_MALLOC(sizeof(uintptr_t) * device.handles_capacity);
 
-    if (device.handles == NULL)
+    device.handles_free_list = MZ_MALLOC(sizeof(uintptr_t) * device.handles_capacity);
+
+    if (device.handles == NULL || device.handles_free_list == NULL)
     {
         mz_log_status(LOG_STATUS_FATAL_ERROR, "Failed to allocate GPU device handles buffer");
+    }
+
+    // Initialize free list (LIFO order so populate the list in reverse order in a way the smallest indices come last)
+
+    for (int i = 0; i < device.handles_capacity; i++)
+    {
+        device.handles_free_list[i] = device.handles_capacity - i - 1;
     }
 
     return device;
@@ -29,11 +38,12 @@ void mz_gpu_destroy_device(mz_gpu_device* gpu)
     gpu->_destroy_impl(gpu);
 
     MZ_FREE(gpu->handles);
+    MZ_FREE(gpu->handles_free_list);
 
     gpu->handles = NULL;
+    gpu->handles_free_list = NULL;
     gpu->handles_size = 0;
     gpu->handles_capacity = 0;
-
 }
 
 uintptr_t mz_gpu_append_handle(mz_gpu_device* gpu, uintptr_t handle)

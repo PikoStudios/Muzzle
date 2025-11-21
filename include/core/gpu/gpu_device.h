@@ -22,6 +22,8 @@ typedef struct mz_gpu_device
     size_t handles_size;
     size_t handles_capacity;
 
+    uint32_t* handles_free_list;
+
     // BUFFERS //
 
     // Creates a buffer with size and usage hints
@@ -65,5 +67,6 @@ MZ_API mz_gpu_device mz_gpu_create_device(void);
 MZ_API void mz_gpu_destroy_device(mz_gpu_device* gpu);
 
 MZ_API uintptr_t mz_gpu_append_handle(mz_gpu_device* gpu, uintptr_t handle);
+MZ_API void mz_gpu_remove_handle(mz_gpu_device* gpu, uintptr_t handle);
 
 #endif // MUZZLE_GPU_DEVICE_H
