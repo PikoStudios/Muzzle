@@ -14,7 +14,8 @@ mz_gpu_device mz_gpu_create_device(void)
     device.handles_size = 0;
     device.handles = MZ_MALLOC(sizeof(uintptr_t) * device.handles_capacity);
 
-    device.handles_free_list = MZ_MALLOC(sizeof(uintptr_t) * device.handles_capacity);
+    device.handles_free_list = MZ_MALLOC(sizeof(uint32_t) * device.handles_capacity);
+    device.handles_free_list_size = device.handles_capacity;
 
     if (device.handles == NULL || device.handles_free_list == NULL)
     {
@@ -41,9 +42,11 @@ void mz_gpu_destroy_device(mz_gpu_device* gpu)
     MZ_FREE(gpu->handles_free_list);
 
     gpu->handles = NULL;
-    gpu->handles_free_list = NULL;
     gpu->handles_size = 0;
     gpu->handles_capacity = 0;
+
+    gpu->handles_free_list = NULL;
+    gpu->handles_free_list_size = 0;
 }
 
 uintptr_t mz_gpu_append_handle(mz_gpu_device* gpu, uintptr_t handle)
@@ -54,15 +57,21 @@ uintptr_t mz_gpu_append_handle(mz_gpu_device* gpu, uintptr_t handle)
     {
         gpu->handles_capacity *= MUZZLE_GPU_DEVICE_HANDLES_GROWTH_FACTOR;
         gpu->handles = MZ_REALLOC(gpu->handles, gpu->handles_capacity * sizeof(uintptr_t));
+        gpu->handles_free_list = MZ_REALLOC(gpu->handles_free_list, gpu->handles_capacity * sizeof(uint32_t));
 
-        if (gpu->handles == NULL)
+        if (gpu->handles == NULL || gpu->handles_free_list == NULL)
         {
             mz_log_status(LOG_STATUS_FATAL_ERROR, "Failed to reallocate GPU device handles buffer");
         }
     }
 
-    uintptr_t idx = gpu->handles_size;
+    uintptr_t idx = gpu->handles_free_list[--gpu->handles_free_list_size];//gpu->handles_size;
     gpu->handles[gpu->handles_size++] = handle;
 
     return idx;
+}
+
+void mz_gpu_remove_handle(mz_gpu_device* gpu, uintptr_t handle)
+{
+    
 }

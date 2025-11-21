@@ -23,6 +23,7 @@ typedef struct mz_gpu_device
     size_t handles_capacity;
 
     uint32_t* handles_free_list;
+    size_t handles_free_list_size;
 
     // BUFFERS //
 
