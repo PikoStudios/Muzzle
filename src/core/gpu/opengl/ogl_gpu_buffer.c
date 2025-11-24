@@ -27,6 +27,8 @@ void mz_gpu_ogl_destroy_buffer(mz_gpu_device* gpu, mz_gpu_buffer* buffer)
     GLuint gpu_handle = (GLuint)(gpu->handles[buffer->handle]);
     glDeleteBuffers(1, &gpu_handle);
     buffer->size = 0;
+
+    mz_gpu_remove_handle(gpu, buffer->handle);
 }
 
 static inline GLenum buffer_usage_as_gl_enum(mz_gpu_buffer_usage usage)
@@ -65,4 +67,6 @@ void mz_gpu_ogl_write_buffer(mz_gpu_device* gpu, mz_gpu_buffer* buffer, size_t o
 void mz_gpu_ogl_lock_buffer(mz_gpu_device* gpu, mz_gpu_buffer* buffer)
 {
     // Empty implementation
+    MZ_UNUSED(gpu);
+    MZ_UNUSED(buffer);
 }

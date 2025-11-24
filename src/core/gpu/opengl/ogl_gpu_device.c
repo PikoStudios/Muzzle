@@ -2,7 +2,6 @@
 #include "core/gpu/gpu_device.h"
 #include "core/gpu/opengl/ogl_gpu_buffer.h"
 #include "core/gpu/opengl/ogl_gpu_texture.h"
-#include <stdint.h>
 
 void mz_gpu_ogl_init_device(mz_gpu_device* gpu)
 {

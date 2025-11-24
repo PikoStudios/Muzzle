@@ -12,6 +12,8 @@
 typedef uint8_t mz_boolean;
 #define MZ_BOOLEAN_CAST(x) (((x)) ? 1 : 0)
 
+#define MZ_UNUSED(x) ((void)((x)))
+
 #define MUZZLE_FALSE 0
 #define MUZZLE_TRUE 1
 

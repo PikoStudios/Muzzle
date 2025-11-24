@@ -3,6 +3,7 @@
 #include "core/logging.h"
 #include "core/memory.h"
 #include <stdint.h>
+#include <string.h>
 
 mz_gpu_device mz_gpu_create_device(void)
 {
@@ -55,23 +56,41 @@ uintptr_t mz_gpu_append_handle(mz_gpu_device* gpu, uintptr_t handle)
 
     if (gpu->handles_size == gpu->handles_capacity)
     {
+        const size_t old_capacity = gpu->handles_capacity;
         gpu->handles_capacity *= MUZZLE_GPU_DEVICE_HANDLES_GROWTH_FACTOR;
+        const size_t capacity_diff = gpu->handles_capacity - old_capacity;
+         
         gpu->handles = MZ_REALLOC(gpu->handles, gpu->handles_capacity * sizeof(uintptr_t));
         gpu->handles_free_list = MZ_REALLOC(gpu->handles_free_list, gpu->handles_capacity * sizeof(uint32_t));
+        gpu->handles_free_list_size += capacity_diff; // Preparing to shift existing data to the right, so we increase our size by how much we added
 
         if (gpu->handles == NULL || gpu->handles_free_list == NULL)
         {
             mz_log_status(LOG_STATUS_FATAL_ERROR, "Failed to reallocate GPU device handles buffer");
         }
+
+        // TODO: is this doing what i want it to? Test!
+        memmove(gpu->handles_free_list + capacity_diff, gpu->handles_free_list, old_capacity * sizeof(uint32_t));
+
+        for (int i = 0; i < capacity_diff; i++)
+        {
+            gpu->handles_free_list[i] = gpu->handles_capacity - i - 1;
+        }
     }
 
-    uintptr_t idx = gpu->handles_free_list[--gpu->handles_free_list_size];//gpu->handles_size;
-    gpu->handles[gpu->handles_size++] = handle;
+    const uintptr_t idx = gpu->handles_free_list[--gpu->handles_free_list_size];
+    gpu->handles[idx] = handle;
 
     return idx;
 }
 
 void mz_gpu_remove_handle(mz_gpu_device* gpu, uintptr_t handle)
 {
-    
+    MZ_TRACK_FUNCTION();
+
+    gpu->handles[handle] = 0;
+    gpu->handles_free_list[gpu->handles_free_list_size++] = handle;
+
+    // TODO: Test!!!!
+    MZ_ASSERT_DETAILED(gpu->handles_free_list_size + 1 < gpu->handles_capacity, "Handles free list size should never exceed handles capacity");
 }

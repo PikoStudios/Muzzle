@@ -63,7 +63,8 @@ static inline GLenum texture_internal_format_as_gl_enum(mz_gpu_texture_internal_
         TEXTURE_INTERNAL_FORMAT_AS_GL_ENUM_CASE(RGBA16F);
         TEXTURE_INTERNAL_FORMAT_AS_GL_ENUM_CASE(R32F);
         TEXTURE_INTERNAL_FORMAT_AS_GL_ENUM_CASE(RG32F);
-        TEXTURE_INTERNAL_FORMAT_AS_GL_ENUM_CASE(RGB32F);        TEXTURE_INTERNAL_FORMAT_AS_GL_ENUM_CASE(RGBA32F);
+        TEXTURE_INTERNAL_FORMAT_AS_GL_ENUM_CASE(RGB32F);
+        TEXTURE_INTERNAL_FORMAT_AS_GL_ENUM_CASE(RGBA32F);
         TEXTURE_INTERNAL_FORMAT_AS_GL_ENUM_CASE(R11F_G11F_B10F);
         TEXTURE_INTERNAL_FORMAT_AS_GL_ENUM_CASE(RGB9_E5);
         TEXTURE_INTERNAL_FORMAT_AS_GL_ENUM_CASE(R8I);
@@ -134,6 +135,8 @@ void mz_gpu_ogl_destroy_texture(mz_gpu_device* gpu, uintptr_t handle)
 
     GLuint gpu_handle = (GLuint)(gpu->handles[handle]);
     glDeleteTextures(1, &gpu_handle);
+
+    mz_gpu_remove_handle(gpu, handle);
 }
 
 void mz_gpu_ogl_write_texture(mz_gpu_device* gpu, uintptr_t handle, uint32_t level, uint32_t x, uint32_t y, uint32_t width, uint32_t height, mz_gpu_texture_format format, mz_gpu_texture_data_type data_type, const void* data)
