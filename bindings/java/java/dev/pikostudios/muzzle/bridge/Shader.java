@@ -44,6 +44,11 @@ public class Shader
 
     private static native Shader load(String vertexFilepath, String fragmentFilepath, int type);
 
+    public int getID()
+    {
+        return this.id;
+    }
+
     // TODO: Add error checking if type is pipeline
     public void use(Applet applet) throws IllegalStateException
     {
