@@ -90,7 +90,7 @@ MZ_API mz_shader mz_create_shader(const char* vertex, const char* fragment, mz_s
 MZ_API mz_shader mz_load_shader(const char* vertex_filepath, const char* fragment_filepath, mz_shader_type type);
 
 MZ_API mz_shader_pipeline mz_create_shader_pipeline(mz_shader_pipeline_descriptor* descriptor);
-MZ_API void mz_draw_shader_pipeline(mz_shader_pipeline pipeline, float* vertices, size_t vertices_size, int start, int end);
+MZ_API void mz_draw_shader_pipeline(mz_shader_pipeline* pipeline, float* vertices, size_t vertices_size, int start, int end);
 MZ_API void mz_unload_shader_pipeline(mz_shader_pipeline* pipeline);
 
 MZ_API mz_compute_pipeline mz_create_compute_pipeline(const char* compute_shader, mz_boolean is_filepath, mz_sprite* texture, uint8_t texture_unit);

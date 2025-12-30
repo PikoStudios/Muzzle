@@ -229,20 +229,20 @@ mz_shader_pipeline mz_create_shader_pipeline(mz_shader_pipeline_descriptor* desc
 	};
 }
 
-void mz_draw_shader_pipeline(mz_shader_pipeline pipeline, float* vertices, size_t vertices_size, int start, int end)
+void mz_draw_shader_pipeline(mz_shader_pipeline* pipeline, float* vertices, size_t vertices_size, int start, int end)
 {
 	MZ_TRACK_FUNCTION();
-	
-	glUseProgram(pipeline.shader.pid);
-	glBindVertexArray(pipeline.vao);
-	glBindBuffer(GL_ARRAY_BUFFER, pipeline.vbo);
+
+	glUseProgram(pipeline->shader.pid);
+	glBindVertexArray(pipeline->vao);
+	glBindBuffer(GL_ARRAY_BUFFER, pipeline->vbo);
 
 	if (vertices != NULL)
 	{
 		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(GLfloat) * vertices_size, vertices);
 	}
 
-	glDrawArrays(pipeline.primitive_type, start, end);
+	glDrawArrays(pipeline->primitive_type, start, end);
 }
 
 void mz_unload_shader_pipeline(mz_shader_pipeline* pipeline)
