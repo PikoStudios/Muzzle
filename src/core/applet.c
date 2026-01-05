@@ -30,6 +30,8 @@ static inline void create_framebuffer(mz_applet_flags flags, mz_applet* applet, 
 	glGenFramebuffers(1, &applet->framebuffer.fbos[i]);
 	glBindFramebuffer(GL_FRAMEBUFFER, applet->framebuffer.fbos[i]);
 
+	// TODO: This should all be DSA
+
 	glGenTextures(1, &applet->framebuffer.textures[i]);
 	glBindTexture(GL_TEXTURE_2D, applet->framebuffer.textures[i]);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, applet->width, applet->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);

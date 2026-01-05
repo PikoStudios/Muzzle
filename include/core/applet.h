@@ -28,7 +28,7 @@ typedef struct mz_applet
 	GLFWwindow* window;
 	FT_Library font_library;
 	double delta_time;
-	GLuint shader_passes[MUZZLE_MAX_SHADER_PASSES];
+	GLuint shader_passes[MUZZLE_MAX_SHADER_PASSES]; // TODO: this should not be here. move to ideal order
 	size_t shader_passes_len;
 	GLint render_order;
 	GLint texture_units;
