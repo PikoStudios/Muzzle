@@ -1,4 +1,6 @@
 #include "core/pipeline.h"
+#include "backend.h"
+#include "core/logging.h"
 
 #define TYPE_SIZE_BYTE				sizeof(GLbyte)
 #define TYPE_SIZE_UNSIGNED_BYTE		sizeof(GLubyte)
@@ -12,6 +14,8 @@
 
 mz_vertex_buffer mz_create_vertex_buffer(mz_vertex_primitive_topology_type topology_type, const mz_vertex_attribute_descriptor* attributes, const void* data, size_t size_in_bytes)
 {
+	MZ_TRACK_FUNCTION();
+	
 	GLuint vao;
 	GLuint vbo;
 
@@ -128,6 +132,126 @@ NEXT_ATTR:
 
 void mz_unload_vertex_buffer(mz_vertex_buffer* buffer)
 {
+	MZ_TRACK_FUNCTION();
+	
 	glDeleteBuffers(1, &buffer->vbo);
 	glDeleteVertexArrays(1, &buffer->vao);
+
+	buffer->vao = 0;
+	buffer->vbo = 0;
+}
+
+mz_graphics_pipeline mz_create_graphics_pipeline(const mz_graphics_pipeline_descriptor* descriptor)
+{
+	MZ_TRACK_FUNCTION();
+	
+	mz_graphics_pipeline pipeline = (mz_graphics_pipeline){0};
+
+	if (descriptor->framebuffer_width == 0 || descriptor->framebuffer_height == 0)
+	{
+		mz_log_status(LOG_STATUS_FATAL_ERROR, "Framebuffer width and height must be greater than zero");
+	}
+	
+	glCreateFramebuffers(1, &pipeline.fbo);
+
+	if (descriptor->create_depth_buffer == MUZZLE_TRUE)
+	{
+		if (descriptor->depth_buffer_as_texture == MUZZLE_TRUE)
+		{
+			glCreateTextures(GL_TEXTURE_2D, 1, &pipeline.depth_buffer);
+			glTextureStorage2D(pipeline.depth_buffer, 1, GL_DEPTH_COMPONENT24, descriptor->framebuffer_width, descriptor->framebuffer_height);
+
+			glTextureParameteri(pipeline.depth_buffer, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			glTextureParameteri(pipeline.depth_buffer, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			glTextureParameteri(pipeline.depth_buffer, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTextureParameteri(pipeline.depth_buffer, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+			glTextureSubImage2D(pipeline.depth_buffer, 0, 0, 0, descriptor->framebuffer_width, descriptor->framebuffer_height, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+			
+			glNamedFramebufferTexture(pipeline.fbo, GL_DEPTH_ATTACHMENT, pipeline.depth_buffer, 0);
+
+			pipeline.depth_buffer_type = MUZZLE_TRUE;
+		}
+
+		else
+		{
+			glCreateRenderbuffers(1, &pipeline.depth_buffer);
+			glNamedRenderbufferStorage(pipeline.depth_buffer, GL_DEPTH_COMPONENT, descriptor->framebuffer_width, descriptor->framebuffer_height);
+			glNamedFramebufferRenderbuffer(pipeline.fbo, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, pipeline.depth_buffer);
+
+			pipeline.depth_buffer_type = MUZZLE_FALSE; // Already zero, but just to be clear
+		}
+	}
+
+	MZ_ASSERT_DETAILED(descriptor->color_attachment_formats != NULL, "Color attachments must be non-null");
+
+	if (descriptor->color_attachment_count == 0)
+	{
+		mz_log_status_formatted(LOG_STATUS_FATAL_ERROR, "Graphics pipeline requires at least one color attachment");
+	}
+
+	for (int i = 0; i < descriptor->color_attachment_count; i++)
+	{
+		if (i >= MUZZLE_PIPELINE_MAX_COLOR_ATTACHMENTS)
+		{
+			mz_log_status_formatted(LOG_STATUS_FATAL_ERROR, "Graphics pipeline requesting more than max color attachments (%d)", MUZZLE_PIPELINE_MAX_COLOR_ATTACHMENTS);
+		}
+
+		pipeline.color_attachments[i] = GL_COLOR_ATTACHMENT0 + i;
+
+		GLuint texture = 0;
+
+		glCreateTextures(1, GL_TEXTURE_2D, &texture);
+		glTextureStorage2D(texture, 1, descriptor->color_attachment_formats[i], descriptor->framebuffer_width, descriptor->framebuffer_height);
+
+		glTextureParameteri(texture, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTextureParameteri(texture, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTextureParameteri(texture, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTextureParameteri(texture, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+		glTextureSubImage2D(texture, 0, 0, 0, descriptor->framebuffer_width, descriptor->framebuffer_height, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+
+		glNamedFramebufferTexture(pipeline.fbo, GL_COLOR_ATTACHMENT0 + i, texture, 0);
+
+		pipeline.color_attachment_handles[i] = texture;
+	}
+	
+	pipeline.color_attachments_len = descriptor->color_attachment_count;
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	{
+		mz_log_status(LOG_STATUS_FATAL_ERROR, "Could not create framebuffer"); // TODO: More in-depth error
+	}
+
+	return pipeline;
+}
+
+void mz_unload_graphics_pipeline(mz_graphics_pipeline* pipeline)
+{
+	MZ_TRACK_FUNCTION();
+
+	if (pipeline->depth_buffer != 0)
+	{
+		switch (pipeline->depth_buffer_type)
+		{
+			case MUZZLE_TRUE: // Texture
+				glDeleteTextures(1, &pipeline->depth_buffer);
+				break;
+
+			case MUZZLE_FALSE: // Renderbuffer
+				glDeleteRenderbuffers(1, &pipeline->depth_buffer);
+				break;
+		}
+
+		pipeline->depth_buffer = 0;
+	}
+
+	glDeleteTextures(pipeline->color_attachments_len, pipeline->color_attachment_handles);
+	memset(pipeline->color_attachments, 0, pipeline->color_attachments_len * sizeof(mz_sprite_format));
+
+	pipeline->color_attachments_len = 0;
+
+	glDeleteFramebuffers(1, &pipeline->fbo);
+
+	pipeline->fbo = 0;
 }

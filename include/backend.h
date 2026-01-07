@@ -92,6 +92,14 @@ typedef uint8_t mz_boolean;
 	#define MZ_GET_CURRENT_FUNCTION() "debug features disabled"
 #endif
 
+#if defined(__GNUC__) || defined(__clang__)
+	#define MZ_DEPRECATED(m) __attribute__((deprecated(m)))
+#elif defined(_MSC_VER)
+	#define MZ_DEPRECATED(m) __declspec(deprecated(m))
+#else
+	#define MZ_DEPRECATED(m)
+#endif
+
 #ifndef MUZZLE_EXIT_KEY
 	#define MUZZLE_EXIT_KEY GLFW_KEY_ESCAPE
 #endif
@@ -138,6 +146,10 @@ typedef uint8_t mz_boolean;
 
 #ifndef MUZZLE_TEXT_BUFFER_CAPACITY
 	#define MUZZLE_TEXT_BUFFER_CAPACITY 200
+#endif
+
+#ifndef MUZZLE_PIPELINE_MAX_COLOR_ATTACHMENTS
+	#define MUZZLE_PIPELINE_MAX_COLOR_ATTACHMENTS 8 /* OpenGL spec mandates that the GPU will allow at least 8, so it is a safe default */
 #endif
 
 #endif // MUZZLE_BACKEND_H

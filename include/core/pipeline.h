@@ -56,23 +56,24 @@ typedef struct mz_graphics_pipeline
 	mz_boolean depth_buffer_type; // 0 for Renderbuffer 1 for Texture
 } mz_graphics_pipeline;
 
-typedef struct mz_color_attachment_descriptor
-{
-	struct mz_color_attachment_descriptor* next;
-	uint32_t width;
-	uint32_t height;
-	mz_sprite_format internal_format;
-} mz_color_attachment_descriptor;
-
 typedef struct mz_graphics_pipeline_descriptor
 {
-	mz_vertex_buffer buffer;
-	mz_color_attachment_descriptor* color_attachments;
-	mz_boolean create_framebuffer; // Implicitly forced to true if color_attachments != NULL
+	mz_sprite_format* color_attachment_formats;
+	size_t color_attachment_count;
+	uint32_t framebuffer_width;
+	uint32_t framebuffer_height;
+	// NOTE: For **now**, all graphics pipelines will create a framebuffer
+	//mz_boolean create_framebuffer; // Implicitly forced to true if color_attachments != NULL or if depth_buffer_as_texture is true
+
+	mz_boolean create_depth_buffer; // TODO: Add a way to pass in a depth buffer texture from a different pipeline
 	mz_boolean depth_buffer_as_texture;
+	
 } mz_graphics_pipeline_descriptor;
 
 MZ_API mz_vertex_buffer mz_create_vertex_buffer(mz_vertex_primitive_topology_type topology_type, const mz_vertex_attribute_descriptor* attributes, const void* data, size_t size_in_bytes);
 MZ_API void mz_unload_vertex_buffer(mz_vertex_buffer* buffer);
+
+MZ_API mz_graphics_pipeline mz_create_graphics_pipeline(const mz_graphics_pipeline_descriptor* descriptor);
+MZ_API void mz_unload_graphics_pipeline(mz_graphics_pipeline* pipeline);
 
 #endif // MUZZLE_CORE_PIPELINE_H
