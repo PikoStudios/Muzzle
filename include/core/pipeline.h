@@ -30,10 +30,20 @@ typedef enum
 	VERTEX_ATTRIBUTE_TYPE_DOUBLE = GL_DOUBLE,
 } mz_vertex_attribute_type;
 
-// NOTE: Implicitly dyanmic draw buffers
+enum
+{
+	DEPTH_BUFFER_TYPE_RENDERBUFFER = 0,
+	DEPTH_BUFFER_TYPE_TEXTURE
+};
+
+// We want this to be the same size of a boolean as it is basically a boolean
+typedef mz_boolean mz_depth_buffer_type;
+
+// NOTE: Implicitly dynamic draw buffers
 typedef struct mz_vertex_buffer
 {
-	GLsizeiptr size;
+	size_t size;
+	uint32_t stride;
 	GLuint vao;
 	GLuint vbo;
 	mz_vertex_primitive_topology_type topology_type;
@@ -53,7 +63,7 @@ typedef struct mz_graphics_pipeline
 	uint8_t color_attachments_len;
 	GLuint fbo;
 	GLuint depth_buffer;
-	mz_boolean depth_buffer_type; // 0 for Renderbuffer 1 for Texture
+	mz_depth_buffer_type depth_buffer_type;
 } mz_graphics_pipeline;
 
 typedef struct mz_graphics_pipeline_descriptor
@@ -66,14 +76,16 @@ typedef struct mz_graphics_pipeline_descriptor
 	//mz_boolean create_framebuffer; // Implicitly forced to true if color_attachments != NULL or if depth_buffer_as_texture is true
 
 	mz_boolean create_depth_buffer; // TODO: Add a way to pass in a depth buffer texture from a different pipeline
-	mz_boolean depth_buffer_as_texture;
-	
+	mz_depth_buffer_type depth_buffer_type;
 } mz_graphics_pipeline_descriptor;
 
-MZ_API mz_vertex_buffer mz_create_vertex_buffer(mz_vertex_primitive_topology_type topology_type, const mz_vertex_attribute_descriptor* attributes, const void* data, size_t size_in_bytes);
+MZ_API mz_vertex_buffer mz_create_vertex_buffer(mz_vertex_primitive_topology_type topology_type, const mz_vertex_attribute_descriptor* attributes);
+MZ_API void mz_allocate_vertex_buffer(mz_vertex_buffer* buffer, const void* data, size_t size_in_bytes);
+MZ_API void mz_write_vertex_buffer(mz_vertex_buffer* buffer, const void* data, intptr_t offset, size_t size);
 MZ_API void mz_unload_vertex_buffer(mz_vertex_buffer* buffer);
 
 MZ_API mz_graphics_pipeline mz_create_graphics_pipeline(const mz_graphics_pipeline_descriptor* descriptor);
+MZ_API void mz_dispatch_graphics_pipeline(mz_graphics_pipeline* pipeline, mz_vertex_buffer* buffer, );
 MZ_API void mz_unload_graphics_pipeline(mz_graphics_pipeline* pipeline);
 
 #endif // MUZZLE_CORE_PIPELINE_H

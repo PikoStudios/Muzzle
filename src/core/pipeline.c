@@ -12,51 +12,15 @@
 #define TYPE_SIZE_FLOAT				sizeof(GLfloat)
 #define TYPE_SIZE_DOUBLE			sizeof(GLdouble)
 
-mz_vertex_buffer mz_create_vertex_buffer(mz_vertex_primitive_topology_type topology_type, const mz_vertex_attribute_descriptor* attributes, const void* data, size_t size_in_bytes)
+mz_vertex_buffer mz_create_vertex_buffer(mz_vertex_primitive_topology_type topology_type, const mz_vertex_attribute_descriptor* attributes)
 {
 	MZ_TRACK_FUNCTION();
 	
 	GLuint vao;
-	GLuint vbo;
 
 	glGenVertexArrays(1, &vao);
-	glGenBuffers(1, &vbo);
-
-	// NOTE: Cast to GLsizeiptr is unsafe, but should be fine
-	glNamedBufferData(vbo, (GLsizeiptr)(size_in_bytes), data, GL_DYNAMIC_DRAW);
 
 	const mz_vertex_attribute_descriptor* attr = attributes;
-
-	GLsizei stride = 0;
-
-	// First pass: compute stride
-	while (attr != NULL)
-	{
-
-// It is ugly being defined here, but it makes it clear what each case is doing
-#define VERTEX_ATTRIBUTE_TYPE_STRIDE_CASE(T) case VERTEX_ATTRIBUTE_TYPE_##T: stride += TYPE_SIZE_##T; break
-
-		switch (attr->type)
-		{
-			VERTEX_ATTRIBUTE_TYPE_STRIDE_CASE(BYTE);
-			VERTEX_ATTRIBUTE_TYPE_STRIDE_CASE(UNSIGNED_BYTE);
-			VERTEX_ATTRIBUTE_TYPE_STRIDE_CASE(SHORT);
-			VERTEX_ATTRIBUTE_TYPE_STRIDE_CASE(UNSIGNED_SHORT);
-			VERTEX_ATTRIBUTE_TYPE_STRIDE_CASE(INT);
-			VERTEX_ATTRIBUTE_TYPE_STRIDE_CASE(UNSIGNED_INT);
-			VERTEX_ATTRIBUTE_TYPE_STRIDE_CASE(HALF_FLOAT);
-			VERTEX_ATTRIBUTE_TYPE_STRIDE_CASE(FLOAT);
-			VERTEX_ATTRIBUTE_TYPE_STRIDE_CASE(DOUBLE);
-		}
-		
-		attr = attr->next;
-	}
-
-	glVertexArrayVertexBuffer(vao, 0, vbo, 0, stride);
-
-	// Second pass
-	attr = attributes;
-	
 	GLuint index = 0;
 	GLuint offset = 0;
 	
@@ -124,10 +88,36 @@ NEXT_ATTR:
 	return (mz_vertex_buffer)
 	{
 		.topology_type = topology_type,
-		.size = size_in_bytes,
 		.vao = vao,
-		.vbo = vbo
+		.stride = offset,
+		.vbo = 0,
+		.size = 0
 	};
+}
+
+void mz_allocate_vertex_buffer(mz_vertex_buffer* buffer, const void* data, size_t size_in_bytes)
+{
+	MZ_TRACK_FUNCTION();
+
+	glGenBuffers(1, &buffer->vbo);
+
+	// NOTE: Cast to GLsizeiptr is unsafe, but should be fine
+	glNamedBufferData(buffer->vbo, (GLsizeiptr)(size_in_bytes), data, GL_DYNAMIC_DRAW);
+
+	glVertexArrayVertexBuffer(buffer->vao, 0, buffer->vbo, 0, buffer->stride);
+
+	buffer->size = size_in_bytes;
+}
+
+void mz_write_vertex_buffer(mz_vertex_buffer* buffer, const void* data, intptr_t offset, size_t size)
+{
+	MZ_TRACK_FUNCTION();
+
+	MZ_ASSERT_DETAILED(size <= buffer->size, "Size cannot be larger than buffer size");
+	MZ_ASSERT_DETAILED(offset <= buffer->size, "Offset cannot be past buffer end");
+	MZ_ASSERT_DETAILED(offset + size <= buffer->size, "Offset+size cannot be past buffer end");
+
+	glNamedBufferSubData(buffer->vbo, offset, size, data);
 }
 
 void mz_unload_vertex_buffer(mz_vertex_buffer* buffer)
@@ -156,30 +146,31 @@ mz_graphics_pipeline mz_create_graphics_pipeline(const mz_graphics_pipeline_desc
 
 	if (descriptor->create_depth_buffer == MUZZLE_TRUE)
 	{
-		if (descriptor->depth_buffer_as_texture == MUZZLE_TRUE)
+		switch (descriptor->depth_buffer_type)
 		{
-			glCreateTextures(GL_TEXTURE_2D, 1, &pipeline.depth_buffer);
-			glTextureStorage2D(pipeline.depth_buffer, 1, GL_DEPTH_COMPONENT24, descriptor->framebuffer_width, descriptor->framebuffer_height);
+			case DEPTH_BUFFER_TYPE_RENDERBUFFER:
+				glCreateRenderbuffers(1, &pipeline.depth_buffer);
+				glNamedRenderbufferStorage(pipeline.depth_buffer, GL_DEPTH_COMPONENT, descriptor->framebuffer_width, descriptor->framebuffer_height);
+				glNamedFramebufferRenderbuffer(pipeline.fbo, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, pipeline.depth_buffer);
 
-			glTextureParameteri(pipeline.depth_buffer, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-			glTextureParameteri(pipeline.depth_buffer, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-			glTextureParameteri(pipeline.depth_buffer, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-			glTextureParameteri(pipeline.depth_buffer, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+				pipeline.depth_buffer_type = MUZZLE_FALSE; // Already zero, but just to be clear
+				break;
 
-			glTextureSubImage2D(pipeline.depth_buffer, 0, 0, 0, descriptor->framebuffer_width, descriptor->framebuffer_height, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+			case DEPTH_BUFFER_TYPE_TEXTURE:
+				glCreateTextures(GL_TEXTURE_2D, 1, &pipeline.depth_buffer);
+				glTextureStorage2D(pipeline.depth_buffer, 1, GL_DEPTH_COMPONENT24, descriptor->framebuffer_width, descriptor->framebuffer_height);
+
+				glTextureParameteri(pipeline.depth_buffer, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+				glTextureParameteri(pipeline.depth_buffer, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+				glTextureParameteri(pipeline.depth_buffer, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+				glTextureParameteri(pipeline.depth_buffer, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+				glTextureSubImage2D(pipeline.depth_buffer, 0, 0, 0, descriptor->framebuffer_width, descriptor->framebuffer_height, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 			
-			glNamedFramebufferTexture(pipeline.fbo, GL_DEPTH_ATTACHMENT, pipeline.depth_buffer, 0);
+				glNamedFramebufferTexture(pipeline.fbo, GL_DEPTH_ATTACHMENT, pipeline.depth_buffer, 0);
 
-			pipeline.depth_buffer_type = MUZZLE_TRUE;
-		}
-
-		else
-		{
-			glCreateRenderbuffers(1, &pipeline.depth_buffer);
-			glNamedRenderbufferStorage(pipeline.depth_buffer, GL_DEPTH_COMPONENT, descriptor->framebuffer_width, descriptor->framebuffer_height);
-			glNamedFramebufferRenderbuffer(pipeline.fbo, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, pipeline.depth_buffer);
-
-			pipeline.depth_buffer_type = MUZZLE_FALSE; // Already zero, but just to be clear
+				pipeline.depth_buffer_type = MUZZLE_TRUE;
+				break;
 		}
 	}
 
@@ -234,11 +225,11 @@ void mz_unload_graphics_pipeline(mz_graphics_pipeline* pipeline)
 	{
 		switch (pipeline->depth_buffer_type)
 		{
-			case MUZZLE_TRUE: // Texture
+			case DEPTH_BUFFER_TYPE_RENDERBUFFER: // Texture
 				glDeleteTextures(1, &pipeline->depth_buffer);
 				break;
 
-			case MUZZLE_FALSE: // Renderbuffer
+			case DEPTH_BUFFER_TYPE_TEXTURE: // Renderbuffer
 				glDeleteRenderbuffers(1, &pipeline->depth_buffer);
 				break;
 		}
