@@ -68,12 +68,12 @@ void mz_flush_shader_passes(mz_applet* applet, mz_boolean retain_shader_passes)
 
 			glBindTexture(GL_TEXTURE_2D, applet->framebuffer.textures[i % 2]);
 
-			glUseProgram(applet->shader_passes[i]);
+			glUseProgram(applet->shader_passes[i].pid);
 
 			// Depth Buffer Texture
 			if (applet->framebuffer.depth_buffers_type == 1)
 			{
-				GLuint depth_loc = glGetUniformLocation(applet->shader_passes[i], "uDepthTexture");
+				GLuint depth_loc = applet->shader_passes[i].depth_texture_uniform_loc;
 				
 				if (depth_loc != -1)
 				{
@@ -85,8 +85,8 @@ void mz_flush_shader_passes(mz_applet* applet, mz_boolean retain_shader_passes)
 				}
 			}
 
-			GLuint texture_loc = glGetUniformLocation(applet->shader_passes[i], "uScreenTexture");
-			GLuint resolution_loc = glGetUniformLocation(applet->shader_passes[i], "uScreenResolution");
+			GLuint texture_loc = applet->shader_passes[i].screen_texture_uniform_loc;
+			GLuint resolution_loc = applet->shader_passes[i].resolution_uniform_loc;
 
 			if (texture_loc != -1)
 			{

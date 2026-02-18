@@ -60,7 +60,9 @@ public class GraphicsPipeline extends NativeStruct
 
 		public GraphicsPipeline build()
 		{
-			return GraphicsPipeline.create(this);
+			int[] colorAttachmentFormatsInt = /* TODO */;
+
+			return GraphicsPipeline.create(this.shader, colorAttachmentFormatsInt, this.width, this.height, this.depthBufferType.isPresent(), this.depthBufferType.orElse(0));
 		}
 	}
 	
@@ -74,7 +76,7 @@ public class GraphicsPipeline extends NativeStruct
 		return new Factory();
 	}
 
-	private static GraphicsPipeline create(Shader shader, )
+	private static GraphicsPipeline create(Shader shader, int[] colorAttachmentFormats, int framebufferWidth, int framebufferHeight, boolean createDepthBuffer, int depthBufferType);
 
 	public final void dispatch(GraphicsPipeline pipeline, VertexBuffer buffer, long start, long count)
 	{

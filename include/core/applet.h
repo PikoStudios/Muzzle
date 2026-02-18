@@ -32,8 +32,16 @@ typedef struct mz_applet
 	} framebuffer;
 	
 	GLFWwindow* window;
-	GLuint shader_passes[MUZZLE_MAX_SHADER_PASSES];
 	size_t shader_passes_len;
+
+	// TODO: This is a really large field...
+	struct
+	{
+		GLuint pid;
+		GLint depth_texture_uniform_loc;
+		GLint screen_texture_uniform_loc;
+		GLint resolution_uniform_loc;
+	} shader_passes[MUZZLE_MAX_SHADER_PASSES];
 
 	FT_Library font_library;
 } mz_applet;

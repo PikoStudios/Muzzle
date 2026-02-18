@@ -455,9 +455,12 @@ void mz_use_shader_pass(mz_applet* applet, mz_shader_pass* shader_pass)
 		return;
 	}
 
-	applet->shader_passes[applet->shader_passes_len++] = shader_pass->shader.pid;
+	applet->shader_passes[applet->shader_passes_len++].pid = shader_pass->shader.pid;
+	applet->shader_passes[applet->shader_passes_len++].depth_texture_uniform_loc = shader_pass->depth_texture_uniform_loc;
+	applet->shader_passes[applet->shader_passes_len++].screen_texture_uniform_loc = shader_pass->screen_texture_uniform_loc;
+	applet->shader_passes[applet->shader_passes_len++].resolution_uniform_loc = shader_pass->resolution_uniform_loc;
 
-	glUseProgram(shader_pass->shader.pid); // TODO: Why this call?????
+	glUseProgram(shader_pass->shader.pid); // TODO: Why this call????????
 
 	glBindFramebuffer(GL_FRAMEBUFFER, applet->framebuffer.fbos[0]);
 }
