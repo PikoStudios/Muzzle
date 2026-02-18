@@ -31,6 +31,7 @@ ${mz_source_dir}/core/circle_renderer.c
 ${mz_source_dir}/core/text_renderer.c
 ${mz_source_dir}/core/font.c
 ${mz_source_dir}/core/shader.c
+${mz_source_dir}/core/pipeline.c
 )
 
 set(mz_primitives_src

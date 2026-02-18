@@ -51,6 +51,8 @@ void mz_flush_drawing(mz_applet* applet)
 void mz_flush_shader_passes(mz_applet* applet, mz_boolean retain_shader_passes)
 {
 	MZ_TRACK_FUNCTION();
+
+	// TODO: Switch all to DSA
 	
 	if (applet->shader_passes_len > 0)
 	{

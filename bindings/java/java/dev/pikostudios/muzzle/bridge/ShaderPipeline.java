@@ -2,6 +2,7 @@ package dev.pikostudios.muzzle.bridge;
 
 import java.util.Objects;
 
+@Deprecated
 public class ShaderPipeline
 {
 	public static record Attribute(int index, int size, boolean normalized, int stride, int offset)

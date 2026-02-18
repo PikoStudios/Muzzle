@@ -14,6 +14,12 @@ typedef struct mz_applet
 	struct mz_circle_renderer circle_renderer;
 	struct mz_text_renderer text_renderer;
 
+	double delta_time;
+	GLint render_order;
+	GLint texture_units;
+	int width;
+	int height;
+	
 	struct
 	{
 		GLuint fbos[2];
@@ -24,16 +30,12 @@ typedef struct mz_applet
 		GLuint depth_buffers_type:1; // 0 for Renderbuffer 1 for Texture
 		mz_boolean dirty:1;
 	} framebuffer;
-
+	
 	GLFWwindow* window;
-	FT_Library font_library;
-	double delta_time;
-	GLuint shader_passes[MUZZLE_MAX_SHADER_PASSES]; // TODO: this should not be here. move to ideal order
+	GLuint shader_passes[MUZZLE_MAX_SHADER_PASSES];
 	size_t shader_passes_len;
-	GLint render_order;
-	GLint texture_units;
-	int width;
-	int height;
+
+	FT_Library font_library;
 } mz_applet;
 
 typedef enum mz_applet_flags

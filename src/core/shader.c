@@ -23,7 +23,7 @@ static void verify_compile_status(const char* on_error_msg, GLuint id)
 	}
 }
 
-mz_shader mz_create_shader(const char* vertex, const char* fragment, mz_shader_type type)
+mz_shader mz_create_shader(const char* vertex, const char* fragment)
 {
 	MZ_TRACK_FUNCTION();
 
@@ -71,12 +71,11 @@ mz_shader mz_create_shader(const char* vertex, const char* fragment, mz_shader_t
 
 	return (mz_shader)
 	{
-		.pid = pid,
-		.type = type
+		.pid = pid
 	};
 }
 
-mz_shader mz_load_shader(const char* vertex_filepath, const char* fragment_filepath, mz_shader_type type)
+mz_shader mz_load_shader(const char* vertex_filepath, const char* fragment_filepath)
 {
 	MZ_TRACK_FUNCTION();
 
@@ -87,12 +86,109 @@ mz_shader mz_load_shader(const char* vertex_filepath, const char* fragment_filep
 
 	// TODO: Replace CRLF to LF
 	
-	mz_shader id = mz_create_shader(vertex_source, fragment_source, type);
+	mz_shader id = mz_create_shader(vertex_source, fragment_source);
 
 	MZ_FREE(vertex_source);
 	MZ_FREE(fragment_source);
 
 	return id;
+}
+
+void mz_unload_shader(mz_shader shader)
+{
+	MZ_TRACK_FUNCTION();
+	glDeleteProgram(shader.pid);
+}
+
+mz_shader_pass mz_create_shader_pass(mz_shader shader)
+{
+	MZ_TRACK_FUNCTION();
+
+	MZ_ASSERT_DETAILED(shader.pid > 0, "Shader must exist (pid > 0)");
+
+	mz_shader_pass pass = (mz_shader_pass){.shader = shader};
+
+	pass.depth_texture_uniform_loc = glGetUniformLocation(shader.pid, "uDepthTexture");
+	pass.screen_texture_uniform_loc = glGetUniformLocation(shader.pid, "uScreenTexture");
+	pass.resolution_uniform_loc = glGetUniformLocation(shader.pid, "uScreenResolution");
+
+	return pass;
+}
+
+mz_direct_shader mz_create_direct_shader(mz_shader_target target, mz_shader shader)
+{
+	MZ_TRACK_FUNCTION();
+	
+	MZ_ASSERT_DETAILED(shader.pid > 0, "Shader must exist (pid > 0)");
+
+	// TODO: Consider making validation failure a non-fatal error or a warning
+	switch (target)
+	{
+		case SHADER_TARGET_DIRECT_QUAD:
+			if (glGetUniformLocation(shader.pid, "uViewportResolution") == -1)
+			{
+				mz_log_status(LOG_STATUS_FATAL_ERROR, "Direct Quad Shader must have uViewportResolution uniform");
+			}
+			break;
+			
+		case SHADER_TARGET_DIRECT_CIRCLE:
+			if (glGetUniformLocation(shader.pid, "uViewportResolution") == -1)
+			{
+				mz_log_status(LOG_STATUS_FATAL_ERROR, "Direct Circle Shader must have uViewportResolution uniform");
+			}
+			break;
+			
+		case SHADER_TARGET_DIRECT_SPRITE:
+			if (glGetUniformLocation(shader.pid, "uViewportResolution") == -1)
+			{
+				mz_log_status(LOG_STATUS_FATAL_ERROR, "Direct Sprite Shader must have uViewportResolution uniform");
+			}
+			
+			if (glGetUniformLocation(shader.pid, "uTextures") == -1)
+			{
+				mz_log_status(LOG_STATUS_FATAL_ERROR, "Direct Sprite Shader must have uTexture uniform");
+			}
+			break;
+			
+		case SHADER_TARGET_DIRECT_TEXT:
+			if (glGetUniformLocation(shader.pid, "uViewportResolution") == -1)
+			{
+				mz_log_status(LOG_STATUS_FATAL_ERROR, "Direct Text Shader must have uViewportResolution uniform");
+			}
+			
+			if (glGetUniformLocation(shader.pid, "uRenderOrder") == -1)
+			{
+				mz_log_status(LOG_STATUS_FATAL_ERROR, "Direct Text Shader must have uRenderOrder uniform");
+			}
+			
+			if (glGetUniformLocation(shader.pid, "uTint") == -1)
+			{
+				mz_log_status(LOG_STATUS_FATAL_ERROR, "Direct Text Shader must have uTint uniform");
+			}
+			break;
+	}
+
+	return (mz_direct_shader)
+	{
+		.shader = shader,
+		.target = target
+	};
+}
+
+void mz_unload_direct_shader(mz_direct_shader* pass)
+{
+	MZ_TRACK_FUNCTION();
+	pass->shader.pid = 0;
+}
+
+void mz_unload_shader_pass(mz_shader_pass* pass)
+{
+	MZ_TRACK_FUNCTION();
+	
+	pass->shader.pid = 0;
+	pass->screen_texture_uniform_loc = -1;
+	pass->screen_texture_uniform_loc = -1;
+	pass->resolution_uniform_loc = -1;
 }
 
 mz_shader_pipeline mz_create_shader_pipeline(mz_shader_pipeline_descriptor* descriptor)
@@ -222,7 +318,7 @@ mz_shader_pipeline mz_create_shader_pipeline(mz_shader_pipeline_descriptor* desc
 
 	return (mz_shader_pipeline)
 	{
-		.shader = (mz_shader){.pid = pid, .type = SHADER_TYPE_PIPELINE},
+		.shader = (mz_shader){.pid = pid},
 		.vao = vao,
 		.vbo = vbo,
 		.primitive_type = descriptor->vertex.primitive_type
@@ -316,8 +412,7 @@ mz_compute_pipeline mz_create_compute_pipeline(const char* compute_shader, mz_bo
 	{
 		.shader = (mz_shader)
 		{
-			.pid = pid,
-			.type = SHADER_TYPE_COMPUTE
+			.pid = pid
 		},
 		.texture = tex,
 		.texture_unit = texture_unit
@@ -350,11 +445,9 @@ void mz_unload_compute_pipeline(mz_compute_pipeline* pipeline)
 	// We do not actually take ownership of texture memory so caller must handle the unloading of texture
 }
 
-void mz_use_shader_pass(mz_applet* applet, mz_shader shader)
+void mz_use_shader_pass(mz_applet* applet, mz_shader_pass* shader_pass)
 {
 	MZ_TRACK_FUNCTION();
-
-	MZ_ASSERT_DETAILED(shader.type == SHADER_TYPE_PASS, "Passed shader should be a shader pass");
 
 	if (applet->shader_passes_len >= MUZZLE_MAX_SHADER_PASSES)
 	{
@@ -362,101 +455,67 @@ void mz_use_shader_pass(mz_applet* applet, mz_shader shader)
 		return;
 	}
 
-	applet->shader_passes[applet->shader_passes_len++] = shader.pid;
+	applet->shader_passes[applet->shader_passes_len++] = shader_pass->shader.pid;
 
-	glUseProgram(shader.pid);
+	glUseProgram(shader_pass->shader.pid); // TODO: Why this call?????
 
 	glBindFramebuffer(GL_FRAMEBUFFER, applet->framebuffer.fbos[0]);
 }
 
-void mz_begin_shader(mz_applet* applet, mz_shader shader)
+void mz_begin_direct_shader(mz_applet* applet,  mz_direct_shader direct_shader)
 {
 	MZ_TRACK_FUNCTION();
 
-	switch (shader.type)
+	switch (direct_shader.target)
 	{
-		case SHADER_TYPE_PASS:
-			mz_log_status(LOG_STATUS_ERROR, "mz_begin_shader called on shader pass, please use `mz_use_shader_pass`");
-			break;
-
-		case SHADER_TYPE_DIRECT_CIRCLE:
-			applet->circle_renderer.shader_id = shader.pid;
+		case SHADER_TARGET_DIRECT_CIRCLE:
+			applet->circle_renderer.shader_id = direct_shader.shader.pid;
 			applet->circle_renderer.locs_valid = MUZZLE_FALSE;
 			break;
 
-		case SHADER_TYPE_DIRECT_QUAD:
-			applet->quad_renderer.shader_id = shader.pid;
+		case SHADER_TARGET_DIRECT_QUAD:
+			applet->quad_renderer.shader_id = direct_shader.shader.pid;
 			applet->quad_renderer.locs_valid = MUZZLE_FALSE;
 			break;
 
-		case SHADER_TYPE_DIRECT_SPRITE:
-			applet->sprite_renderer.shader_id = shader.pid;
+		case SHADER_TARGET_DIRECT_SPRITE:
+			applet->sprite_renderer.shader_id = direct_shader.shader.pid;
 			applet->sprite_renderer.locs_valid = MUZZLE_FALSE;
 			break;
 
-		case SHADER_TYPE_DIRECT_TEXT:
-			applet->text_renderer.shader_id = shader.pid;
+		case SHADER_TARGET_DIRECT_TEXT:
+			applet->text_renderer.shader_id = direct_shader.shader.pid;
 			applet->text_renderer.locs_valid = MUZZLE_FALSE;
-			break;
-
-		case SHADER_TYPE_PIPELINE:
-			mz_log_status(LOG_STATUS_ERROR, "mz_begin_shader called on shader pipeline, please use mz_draw_shader_pipeline");
-			break;
-
-		case SHADER_TYPE_COMPUTE:
-			mz_log_status(LOG_STATUS_ERROR, "mz_begin_shader called on compute pipeline, please use mz_dispatch_compute_pipeline");
 			break;
 	}
 }
 
-void mz_end_shader(mz_applet* applet, mz_shader shader)
+void mz_end_direct_shader(mz_applet* applet, mz_direct_shader direct_shader)
 {
 	MZ_TRACK_FUNCTION();
 	
-	switch (shader.type)
+	switch (direct_shader.target)
 	{
-		case SHADER_TYPE_PASS:
-			mz_log_status(LOG_STATUS_ERROR, "mz_end_shader called on a shader pass");
-			break;
-
-		case SHADER_TYPE_DIRECT_CIRCLE:
+		case SHADER_TARGET_DIRECT_CIRCLE:
 			applet->circle_renderer.shader_id = applet->circle_renderer.default_shader_id;
 			applet->circle_renderer.locs_valid = MUZZLE_FALSE;
 			break;
-
-
-		case SHADER_TYPE_DIRECT_QUAD:
+			
+		case SHADER_TARGET_DIRECT_QUAD:
 			applet->quad_renderer.shader_id = applet->quad_renderer.default_shader_id;
 			applet->quad_renderer.locs_valid = MUZZLE_FALSE;
 			break;
-
-
-		case SHADER_TYPE_DIRECT_SPRITE:
+			
+		case SHADER_TARGET_DIRECT_SPRITE:
 			applet->sprite_renderer.shader_id = applet->sprite_renderer.default_shader_id;
 			applet->sprite_renderer.locs_valid = MUZZLE_FALSE;
 			break;
-
-
-		case SHADER_TYPE_DIRECT_TEXT:
+			
+		case SHADER_TARGET_DIRECT_TEXT:
 			applet->text_renderer.shader_id = applet->text_renderer.default_shader_id;
 			applet->text_renderer.locs_valid = MUZZLE_FALSE;
 			break;
-
-
-		case SHADER_TYPE_PIPELINE:
-			mz_log_status_formatted(LOG_STATUS_ERROR, "mz_end_shader called on shader pipeline, please use mz_draw_shader_pipeline");
-			break;
-
-		case SHADER_TYPE_COMPUTE:
-			mz_log_status(LOG_STATUS_ERROR, "mz_end_shader called on compute pipeline, please use mz_dispatch_compute_pipeline");
-			break;
 	}
-}
-
-void mz_unload_shader(mz_shader shader)
-{
-	MZ_TRACK_FUNCTION();
-	glDeleteProgram(shader.pid);
 }
 
 void mz_upload_uniform_int(mz_shader shader, const char* uniform, int value)

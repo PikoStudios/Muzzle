@@ -12,29 +12,29 @@
 #define TYPE_SIZE_FLOAT				sizeof(GLfloat)
 #define TYPE_SIZE_DOUBLE			sizeof(GLdouble)
 
-mz_vertex_buffer mz_create_vertex_buffer(mz_vertex_primitive_topology_type topology_type, const mz_vertex_attribute_descriptor* attributes)
+mz_vertex_buffer mz_create_vertex_buffer(mz_vertex_primitive_topology_type topology_type, const mz_vertex_attribute_descriptor* attributes, size_t attributes_count)
 {
 	MZ_TRACK_FUNCTION();
 	
 	GLuint vao;
 
-	glGenVertexArrays(1, &vao);
-
-	const mz_vertex_attribute_descriptor* attr = attributes;
-	GLuint index = 0;
+	glCreateVertexArrays(1, &vao);
+	
 	GLuint offset = 0;
 	
-	while (attr != NULL)
+	for (int i = 0; i < attributes_count; i++)
 	{
+		// Small 8-byte struct, better to copy it into 
+		const mz_vertex_attribute_descriptor attr = attributes[i];
 		GLuint curr_offset = offset;
 		
-		glEnableVertexArrayAttrib(vao, index);
+		glEnableVertexArrayAttrib(vao, i);
 
-#define VERTEX_ATTRIBUTE_TYPE_ATTRIB_I_CASE(T) case VERTEX_ATTRIBUTE_TYPE_##T: offset += TYPE_SIZE_##T * attr->size; goto ATTRIB_I_FORMAT
-#define VERTEX_ATTRIBUTE_TYPE_ATTRIB_F_CASE(T) case VERTEX_ATTRIBUTE_TYPE_##T: offset += TYPE_SIZE_##T * attr->size; goto ATTRIB_F_FORMAT
-#define VERTEX_ATTRIBUTE_TYPE_ATTRIB_L_CASE(T) case VERTEX_ATTRIBUTE_TYPE_##T: offset += TYPE_SIZE_##T * attr->size; goto ATTRIB_L_FORMAT
+#define VERTEX_ATTRIBUTE_TYPE_ATTRIB_I_CASE(T) case VERTEX_ATTRIBUTE_TYPE_##T: offset += TYPE_SIZE_##T * attr.size; goto ATTRIB_I_FORMAT
+#define VERTEX_ATTRIBUTE_TYPE_ATTRIB_F_CASE(T) case VERTEX_ATTRIBUTE_TYPE_##T: offset += TYPE_SIZE_##T * attr.size; goto ATTRIB_F_FORMAT
+#define VERTEX_ATTRIBUTE_TYPE_ATTRIB_L_CASE(T) case VERTEX_ATTRIBUTE_TYPE_##T: offset += TYPE_SIZE_##T * attr.size; goto ATTRIB_L_FORMAT
 
-		switch (attr->type)
+		switch (attr.type)
 		{
 			VERTEX_ATTRIBUTE_TYPE_ATTRIB_I_CASE(BYTE);
 			VERTEX_ATTRIBUTE_TYPE_ATTRIB_I_CASE(UNSIGNED_BYTE);
@@ -50,9 +50,9 @@ mz_vertex_buffer mz_create_vertex_buffer(mz_vertex_primitive_topology_type topol
 ATTRIB_I_FORMAT:
 		glVertexArrayAttribIFormat(
 			vao,
-			index,
-			attr->size,
-			attr->type,
+			i,
+			attr.size,
+			attr.type,
 			curr_offset
 		);
 		goto NEXT_ATTR;
@@ -60,9 +60,9 @@ ATTRIB_I_FORMAT:
 ATTRIB_F_FORMAT:
 		glVertexArrayAttribFormat(
 			vao,
-			index,
-			attr->size,
-			attr->type,
+			i,
+			attr.size,
+			attr.type,
 			MUZZLE_FALSE,
 			curr_offset
 		);
@@ -71,18 +71,15 @@ ATTRIB_F_FORMAT:
 ATTRIB_L_FORMAT:
 		glVertexArrayAttribLFormat(
 			vao,
-			index,
-			attr->size,
+			i,
+			attr.size,
 			GL_DOUBLE,
 			curr_offset
 		);
 
 NEXT_ATTR:
-		glVertexArrayAttribBinding(vao, index, 0);
+		glVertexArrayAttribBinding(vao, i, 0);
 		curr_offset = offset;
-		index++;
-		
-		attr = attr->next;
 	}
 	
 	return (mz_vertex_buffer)
@@ -99,7 +96,7 @@ void mz_allocate_vertex_buffer(mz_vertex_buffer* buffer, const void* data, size_
 {
 	MZ_TRACK_FUNCTION();
 
-	glGenBuffers(1, &buffer->vbo);
+	glCreateBuffers(1, &buffer->vbo);
 
 	// NOTE: Cast to GLsizeiptr is unsafe, but should be fine
 	glNamedBufferData(buffer->vbo, (GLsizeiptr)(size_in_bytes), data, GL_DYNAMIC_DRAW);
@@ -129,18 +126,24 @@ void mz_unload_vertex_buffer(mz_vertex_buffer* buffer)
 
 	buffer->vao = 0;
 	buffer->vbo = 0;
+	buffer->size = 0;
+	buffer->stride = 0;
 }
 
 mz_graphics_pipeline mz_create_graphics_pipeline(const mz_graphics_pipeline_descriptor* descriptor)
 {
 	MZ_TRACK_FUNCTION();
+
+	MZ_ASSERT_DETAILED(descriptor->shader != NULL && descriptor->shader->pid > 0, "Graphics Pipeline must have valid shader attached");
 	
-	mz_graphics_pipeline pipeline = (mz_graphics_pipeline){0};
+	mz_graphics_pipeline pipeline = (mz_graphics_pipeline){.shader = descriptor->shader};
 
 	if (descriptor->framebuffer_width == 0 || descriptor->framebuffer_height == 0)
 	{
 		mz_log_status(LOG_STATUS_FATAL_ERROR, "Framebuffer width and height must be greater than zero");
 	}
+	
+	MZ_TRACK_FUNCTION_STAGE("mz_create_graphics_pipeline -> framebuffer init");
 	
 	glCreateFramebuffers(1, &pipeline.fbo);
 
@@ -152,8 +155,6 @@ mz_graphics_pipeline mz_create_graphics_pipeline(const mz_graphics_pipeline_desc
 				glCreateRenderbuffers(1, &pipeline.depth_buffer);
 				glNamedRenderbufferStorage(pipeline.depth_buffer, GL_DEPTH_COMPONENT, descriptor->framebuffer_width, descriptor->framebuffer_height);
 				glNamedFramebufferRenderbuffer(pipeline.fbo, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, pipeline.depth_buffer);
-
-				pipeline.depth_buffer_type = MUZZLE_FALSE; // Already zero, but just to be clear
 				break;
 
 			case DEPTH_BUFFER_TYPE_TEXTURE:
@@ -164,14 +165,12 @@ mz_graphics_pipeline mz_create_graphics_pipeline(const mz_graphics_pipeline_desc
 				glTextureParameteri(pipeline.depth_buffer, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 				glTextureParameteri(pipeline.depth_buffer, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 				glTextureParameteri(pipeline.depth_buffer, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-				glTextureSubImage2D(pipeline.depth_buffer, 0, 0, 0, descriptor->framebuffer_width, descriptor->framebuffer_height, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-			
+				
 				glNamedFramebufferTexture(pipeline.fbo, GL_DEPTH_ATTACHMENT, pipeline.depth_buffer, 0);
-
-				pipeline.depth_buffer_type = MUZZLE_TRUE;
 				break;
 		}
+
+		pipeline.depth_buffer_type = descriptor->depth_buffer_type;
 	}
 
 	MZ_ASSERT_DETAILED(descriptor->color_attachment_formats != NULL, "Color attachments must be non-null");
@@ -181,6 +180,10 @@ mz_graphics_pipeline mz_create_graphics_pipeline(const mz_graphics_pipeline_desc
 		mz_log_status_formatted(LOG_STATUS_FATAL_ERROR, "Graphics pipeline requires at least one color attachment");
 	}
 
+	MZ_TRACK_FUNCTION_STAGE("mz_create_graphics_pipeline -> color attachment init");
+	
+	GLenum color_attachments[MUZZLE_PIPELINE_MAX_COLOR_ATTACHMENTS];
+
 	for (int i = 0; i < descriptor->color_attachment_count; i++)
 	{
 		if (i >= MUZZLE_PIPELINE_MAX_COLOR_ATTACHMENTS)
@@ -188,11 +191,11 @@ mz_graphics_pipeline mz_create_graphics_pipeline(const mz_graphics_pipeline_desc
 			mz_log_status_formatted(LOG_STATUS_FATAL_ERROR, "Graphics pipeline requesting more than max color attachments (%d)", MUZZLE_PIPELINE_MAX_COLOR_ATTACHMENTS);
 		}
 
-		pipeline.color_attachments[i] = GL_COLOR_ATTACHMENT0 + i;
+		color_attachments[i] = GL_COLOR_ATTACHMENT0 + i;
 
 		GLuint texture = 0;
 
-		glCreateTextures(1, GL_TEXTURE_2D, &texture);
+		glCreateTextures(GL_TEXTURE_2D, 1, &texture);
 		glTextureStorage2D(texture, 1, descriptor->color_attachment_formats[i], descriptor->framebuffer_width, descriptor->framebuffer_height);
 
 		glTextureParameteri(texture, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -200,21 +203,96 @@ mz_graphics_pipeline mz_create_graphics_pipeline(const mz_graphics_pipeline_desc
 		glTextureParameteri(texture, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTextureParameteri(texture, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-		glTextureSubImage2D(texture, 0, 0, 0, descriptor->framebuffer_width, descriptor->framebuffer_height, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-
 		glNamedFramebufferTexture(pipeline.fbo, GL_COLOR_ATTACHMENT0 + i, texture, 0);
 
 		pipeline.color_attachment_handles[i] = texture;
+		pipeline.color_attachment_formats[i] = descriptor->color_attachment_formats[i];
 	}
 	
 	pipeline.color_attachments_len = descriptor->color_attachment_count;
 
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	if (glCheckNamedFramebufferStatus(pipeline.fbo, GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 	{
 		mz_log_status(LOG_STATUS_FATAL_ERROR, "Could not create framebuffer"); // TODO: More in-depth error
 	}
+	
+	MZ_TRACK_FUNCTION_STAGE("mz_create_graphics_pipeline -> framebuffer draw buffers init");
+
+	glNamedFramebufferDrawBuffers(pipeline.fbo, pipeline.color_attachments_len, color_attachments);
+
+	pipeline.framebuffer_width = descriptor->framebuffer_width;
+	pipeline.framebuffer_height = descriptor->framebuffer_height;
 
 	return pipeline;
+}
+
+void mz_dispatch_graphics_pipeline(mz_graphics_pipeline* pipeline, mz_vertex_buffer* buffer, uint32_t start, uint32_t count)
+{
+	MZ_TRACK_FUNCTION();
+	
+	glUseProgram(pipeline->shader->pid);
+	glBindVertexArray(buffer->vao);
+	glBindFramebuffer(GL_FRAMEBUFFER, pipeline->fbo);
+
+	// TODO: Eventually add an option to have an EBO
+	glDrawArrays(buffer->topology_type, start, count);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void mz_clear_graphics_pipeline_color_attachments(mz_graphics_pipeline* pipeline, mz_tint clear_color)
+{
+	MZ_TRACK_FUNCTION();
+
+	float color[4] = { clear_color.r / 255.f, clear_color.g / 255.f, clear_color.b / 255.f, clear_color.a / 255.f };
+
+	for (int i = 0; i < pipeline->color_attachments_len; i++)
+	{
+		glClearNamedFramebufferfv(pipeline->fbo, GL_COLOR, i, color);
+	}
+}
+
+void mz_clear_graphics_pipeline_depth_buffer(mz_graphics_pipeline* pipeline, float clear_value)
+{
+	MZ_TRACK_FUNCTION();
+
+	glClearNamedFramebufferfv(pipeline->fbo, GL_DEPTH, 0, &clear_value);
+}
+
+mz_sprite mz_get_graphics_pipeline_color_attachment_texture(mz_graphics_pipeline* pipeline, uint8_t index)
+{
+	MZ_TRACK_FUNCTION();
+	
+	if (index >= pipeline->color_attachments_len)
+	{
+		mz_log_status_formatted(LOG_STATUS_FATAL_ERROR, "Color attachment index %d out of bounds", index);
+	}
+	
+	return (mz_sprite)
+	{
+		.width = pipeline->framebuffer_width,
+		.height = pipeline->framebuffer_height,
+		._format = pipeline->color_attachment_formats[index],
+		._id = pipeline->color_attachment_handles[index]
+	};
+}
+
+mz_sprite mz_get_graphics_pipeline_depth_buffer_texture(mz_graphics_pipeline* pipeline)
+{
+	MZ_TRACK_FUNCTION();
+	
+	if (pipeline->depth_buffer_type == DEPTH_BUFFER_TYPE_RENDERBUFFER)
+	{
+		mz_log_status_formatted(LOG_STATUS_FATAL_ERROR, "Depth buffer is of type renderbuffer, not texture");
+	}
+
+	return (mz_sprite)
+	{
+		.width = pipeline->framebuffer_width,
+		.height = pipeline->framebuffer_height,
+		._format = GL_DEPTH_COMPONENT24,
+		._id = pipeline->depth_buffer
+	};
 }
 
 void mz_unload_graphics_pipeline(mz_graphics_pipeline* pipeline)
@@ -225,11 +303,11 @@ void mz_unload_graphics_pipeline(mz_graphics_pipeline* pipeline)
 	{
 		switch (pipeline->depth_buffer_type)
 		{
-			case DEPTH_BUFFER_TYPE_RENDERBUFFER: // Texture
+			case DEPTH_BUFFER_TYPE_TEXTURE: // Texture
 				glDeleteTextures(1, &pipeline->depth_buffer);
 				break;
 
-			case DEPTH_BUFFER_TYPE_TEXTURE: // Renderbuffer
+			case DEPTH_BUFFER_TYPE_RENDERBUFFER: // Renderbuffer
 				glDeleteRenderbuffers(1, &pipeline->depth_buffer);
 				break;
 		}
@@ -238,7 +316,7 @@ void mz_unload_graphics_pipeline(mz_graphics_pipeline* pipeline)
 	}
 
 	glDeleteTextures(pipeline->color_attachments_len, pipeline->color_attachment_handles);
-	memset(pipeline->color_attachments, 0, pipeline->color_attachments_len * sizeof(mz_sprite_format));
+	memset(pipeline->color_attachment_handles, 0, pipeline->color_attachments_len * sizeof(GLuint));
 
 	pipeline->color_attachments_len = 0;
 

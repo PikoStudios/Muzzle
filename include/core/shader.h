@@ -8,14 +8,11 @@
 
 typedef enum
 {
-    SHADER_TYPE_PASS = 0,
-    SHADER_TYPE_DIRECT_QUAD = 1,
-    SHADER_TYPE_DIRECT_CIRCLE = 2,
-    SHADER_TYPE_DIRECT_SPRITE = 3,
-    SHADER_TYPE_DIRECT_TEXT = 4,
-    SHADER_TYPE_PIPELINE = 5, // Should never be directly set by user
-    SHADER_TYPE_COMPUTE = 6 // Should never be directly set by user
-} mz_shader_type;
+    SHADER_TARGET_DIRECT_QUAD = 0,
+    SHADER_TARGET_DIRECT_CIRCLE = 1,
+    SHADER_TARGET_DIRECT_SPRITE = 2,
+    SHADER_TARGET_DIRECT_TEXT = 3
+} mz_shader_target;
 
 typedef enum
 {
@@ -33,8 +30,21 @@ typedef enum
 typedef struct mz_shader
 {
     GLuint pid;
-    mz_shader_type type;
 } mz_shader;
+
+typedef struct mz_shader_pass
+{
+    mz_shader shader; /* shader is not owned, simply better to just copy such a small struct */
+    GLint depth_texture_uniform_loc;
+    GLint screen_texture_uniform_loc;
+    GLint resolution_uniform_loc;
+} mz_shader_pass;
+
+typedef struct mz_direct_shader
+{
+    mz_shader shader; /* non-owning */
+    const mz_shader_target target;
+} mz_direct_shader;
 
 typedef struct mz_shader_component_vertex_attribute
 {
@@ -86,8 +96,15 @@ typedef struct mz_shader_buffer
     GLuint index;
 } mz_shader_buffer;
 
-MZ_API mz_shader mz_create_shader(const char* vertex, const char* fragment, mz_shader_type type);
-MZ_API mz_shader mz_load_shader(const char* vertex_filepath, const char* fragment_filepath, mz_shader_type type);
+MZ_API mz_shader mz_create_shader(const char* vertex, const char* fragment);
+MZ_API mz_shader mz_load_shader(const char* vertex_filepath, const char* fragment_filepath);
+MZ_API void mz_unload_shader(mz_shader shader);
+
+MZ_API mz_shader_pass mz_create_shader_pass(mz_shader shader);
+MZ_API void mz_unload_shader_pass(mz_shader_pass* pass);
+
+MZ_API mz_direct_shader mz_create_direct_shader(mz_shader_target target, mz_shader shader);
+MZ_API void mz_unload_direct_shader(mz_direct_shader* pass);
 
 MZ_API MZ_DEPRECATED("Consider using the mz_graphics_pipeline API instead") mz_shader_pipeline mz_create_shader_pipeline(mz_shader_pipeline_descriptor* descriptor);
 MZ_API MZ_DEPRECATED("Consider using the mz_graphics_pipeline API instead") void mz_draw_shader_pipeline(mz_shader_pipeline* pipeline, float* vertices, size_t vertices_size, int start, int end);
@@ -97,11 +114,9 @@ MZ_API mz_compute_pipeline mz_create_compute_pipeline(const char* compute_shader
 MZ_API void mz_dispatch_compute_pipeline(mz_compute_pipeline* pipeline, uint32_t work_groups_x, uint32_t work_groups_y, uint32_t work_groups_z);
 MZ_API void mz_unload_compute_pipeline(mz_compute_pipeline* pipeline);
 
-MZ_API void mz_use_shader_pass(mz_applet* applet, mz_shader shader);
-MZ_API void mz_begin_shader(mz_applet* applet, mz_shader shader);
-MZ_API void mz_end_shader(mz_applet* applet, mz_shader shader);
-
-MZ_API void mz_unload_shader(mz_shader shader);
+MZ_API void mz_use_shader_pass(mz_applet* applet, mz_shader_pass* shader_pass);
+MZ_API void mz_begin_direct_shader(mz_applet* applet, mz_direct_shader direct_shader);
+MZ_API void mz_end_direct_shader(mz_applet* applet, mz_direct_shader direct_shader);
 
 MZ_API void mz_upload_uniform_int(mz_shader shader, const char* uniform, int value);
 MZ_API void mz_upload_uniform_float(mz_shader shader, const char* uniform, float value);

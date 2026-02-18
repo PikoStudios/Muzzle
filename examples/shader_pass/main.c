@@ -12,13 +12,16 @@ void applet_loop(mz_applet* applet)
     mz_font font = mz_load_font(applet, "../assets/OpenSans-Regular.ttf");
     mz_sprite sprite = mz_load_sprite("../assets/muzzle_logo.png");
 
-    mz_shader color_filter = mz_load_shader("../shaders/cf_vert.glsl", "../shaders/cf_frag.glsl", SHADER_TYPE_PASS);
+    mz_shader color_filter = mz_load_shader("../shaders/cf_vert.glsl", "../shaders/cf_frag.glsl");
+    mz_shader_pass color_filter_pass = mz_create_shader_pass(color_filter);
     mz_boolean color_filter_active = MUZZLE_FALSE;
 
-    mz_shader grayscale_filter = mz_load_shader("../shaders/gs_vert.glsl", "../shaders/gs_frag.glsl", SHADER_TYPE_PASS);
+    mz_shader grayscale_filter = mz_load_shader("../shaders/gs_vert.glsl", "../shaders/gs_frag.glsl");
+    mz_shader_pass grayscale_filter_pass = mz_create_shader_pass(grayscale_filter);
     mz_boolean grayscale_filter_active = MUZZLE_FALSE;
 
-    mz_shader shear_filter = mz_load_shader("../shaders/sh_vert.glsl", "../shaders/sh_frag.glsl", SHADER_TYPE_PASS);
+    mz_shader shear_filter = mz_load_shader("../shaders/sh_vert.glsl", "../shaders/sh_frag.glsl");
+    mz_shader_pass shear_filter_pass = mz_create_shader_pass(shear_filter);
     mz_boolean shear_filter_active = MUZZLE_FALSE;
 
     float time = 0.0f;
@@ -49,9 +52,9 @@ void applet_loop(mz_applet* applet)
         mz_begin_drawing(applet);
             mz_clear_screen(TINT_WHITE);
 
-            if (color_filter_active) mz_use_shader_pass(applet, color_filter);
-            if (grayscale_filter_active) mz_use_shader_pass(applet, grayscale_filter);
-            if (shear_filter_active) mz_use_shader_pass(applet, shear_filter);
+            if (color_filter_active) mz_use_shader_pass(applet, &color_filter_pass);
+            if (grayscale_filter_active) mz_use_shader_pass(applet, &grayscale_filter_pass);
+            if (shear_filter_active) mz_use_shader_pass(applet, &shear_filter_pass);
 
             mz_draw_sprite(applet, &sprite, (float)(applet->width - sprite.width) / 2, (float)(applet->height - sprite.height) / 2, TINT_WHITE);
 

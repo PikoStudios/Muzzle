@@ -207,10 +207,10 @@ mz_applet mz_initialize_applet(const char* window_title, int width, int height, 
 	mz_log_status_formatted(LOG_STATUS_INFO, "%d texture units supported", applet.texture_units);
 #endif
 
-	mz_shader default_quad_shader = mz_create_shader((char*)(quad_vertex_glsl), (char*)(quad_fragment_glsl), SHADER_TYPE_DIRECT_QUAD);
-	mz_shader default_sprite_shader = mz_create_shader((char*)(sprite_vertex_glsl), (char*)(sprite_fragment_glsl), SHADER_TYPE_DIRECT_SPRITE);
-	mz_shader default_circle_shader = mz_create_shader((char*)(circle_vertex_glsl), (char*)(circle_fragment_glsl), SHADER_TYPE_DIRECT_CIRCLE);
-	mz_shader default_text_shader = mz_create_shader((char*)(text_vertex_glsl), (char*)(text_fragment_glsl), SHADER_TYPE_DIRECT_TEXT);
+	mz_shader default_quad_shader = mz_create_shader((char*)(quad_vertex_glsl), (char*)(quad_fragment_glsl));
+	mz_shader default_sprite_shader = mz_create_shader((char*)(sprite_vertex_glsl), (char*)(sprite_fragment_glsl));
+	mz_shader default_circle_shader = mz_create_shader((char*)(circle_vertex_glsl), (char*)(circle_fragment_glsl));
+	mz_shader default_text_shader = mz_create_shader((char*)(text_vertex_glsl), (char*)(text_fragment_glsl));
 
 	mz_log_status(LOG_STATUS_SUCCESS, "Compiled default shaders");
 
@@ -225,8 +225,7 @@ mz_applet mz_initialize_applet(const char* window_title, int width, int height, 
 	applet.sprite_renderer.shader_id = default_sprite_shader.pid;
 	applet.circle_renderer.shader_id = default_circle_shader.pid;
 	applet.text_renderer.shader_id = default_text_shader.pid;
-
-
+	
 	applet.quad_renderer.default_shader_id = default_quad_shader.pid;
 	applet.sprite_renderer.default_shader_id = default_sprite_shader.pid;
 	applet.circle_renderer.default_shader_id = default_circle_shader.pid;

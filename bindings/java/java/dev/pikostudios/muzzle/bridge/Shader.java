@@ -2,9 +2,8 @@ package dev.pikostudios.muzzle.bridge;
 
 public class Shader
 {
-    public enum ShaderType
+    public enum ShaderTarget
     {
-        PASS,
         DIRECT_QUAD,
         DIRECT_CIRCLE,
         DIRECT_SPRITE,
@@ -12,37 +11,36 @@ public class Shader
     }
 
     private int id;
-    private int type;
 
-    private Shader(int id, int type)
+    private Shader(int id)
     {
         this.id = id;
-        this.type = type;
     }
 
+    @Deprecated
     protected static Shader fromShaderPipeline(int id)
     {
-        return new Shader(id, 5);
+        return new Shader(id);
     }
 
     protected static Shader fromComputePipeline(int id)
     {
-        return new Shader(id, 6);
+        return new Shader(id);
     }
 
-    public static Shader create(String vertexSource, String fragmentSource, ShaderType type)
+    public static Shader create(String vertexSource, String fragmentSource)
     {
-        return create(vertexSource, fragmentSource, type.ordinal());
+        return _create(vertexSource, fragmentSource);
     }
 
-    public static Shader load(String vertexFilepath, String fragmentFilepath, ShaderType type)
+    public static Shader load(String vertexFilepath, String fragmentFilepath)
     {
-        return load(vertexFilepath, fragmentFilepath, type.ordinal());
+        return _load(vertexFilepath, fragmentFilepath);
     }
 
-    private static native Shader create(String vertexSource, String fragmentSource, int type);
+    private static native Shader _create(String vertexSource, String fragmentSource);
 
-    private static native Shader load(String vertexFilepath, String fragmentFilepath, int type);
+    private static native Shader _load(String vertexFilepath, String fragmentFilepath);
 
     public int getID()
     {
@@ -50,7 +48,7 @@ public class Shader
     }
 
     // TODO: Add error checking if type is pipeline
-    public void use(Applet applet) throws IllegalStateException
+    public void useAsShaderPass(Applet applet) throws IllegalStateException
     {
         if (this.type != ShaderType.PASS.ordinal())
         {
