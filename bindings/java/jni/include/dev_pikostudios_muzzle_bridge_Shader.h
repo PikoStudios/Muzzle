@@ -9,19 +9,19 @@ extern "C" {
 #endif
 /*
  * Class:     dev_pikostudios_muzzle_bridge_Shader
- * Method:    create
- * Signature: (Ljava/lang/String;Ljava/lang/String;I)Ldev/pikostudios/muzzle/bridge/Shader;
+ * Method:    _create
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)Ldev/pikostudios/muzzle/bridge/Shader;
  */
-JNIEXPORT jobject JNICALL Java_dev_pikostudios_muzzle_bridge_Shader_create
-  (JNIEnv *, jclass, jstring, jstring, jint);
+JNIEXPORT jobject JNICALL Java_dev_pikostudios_muzzle_bridge_Shader__1create
+  (JNIEnv *, jclass, jstring, jstring);
 
 /*
  * Class:     dev_pikostudios_muzzle_bridge_Shader
- * Method:    load
- * Signature: (Ljava/lang/String;Ljava/lang/String;I)Ldev/pikostudios/muzzle/bridge/Shader;
+ * Method:    _load
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)Ldev/pikostudios/muzzle/bridge/Shader;
  */
-JNIEXPORT jobject JNICALL Java_dev_pikostudios_muzzle_bridge_Shader_load
-  (JNIEnv *, jclass, jstring, jstring, jint);
+JNIEXPORT jobject JNICALL Java_dev_pikostudios_muzzle_bridge_Shader__1load
+  (JNIEnv *, jclass, jstring, jstring);
 
 /*
  * Class:     dev_pikostudios_muzzle_bridge_Shader
@@ -70,30 +70,6 @@ JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Shader_uploadUniform__
  */
 JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Shader_unload
   (JNIEnv *, jobject);
-
-/*
- * Class:     dev_pikostudios_muzzle_bridge_Shader
- * Method:    _use
- * Signature: (Ldev/pikostudios/muzzle/bridge/Applet;)V
- */
-JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Shader__1use
-  (JNIEnv *, jobject, jobject);
-
-/*
- * Class:     dev_pikostudios_muzzle_bridge_Shader
- * Method:    _beginShader
- * Signature: (Ldev/pikostudios/muzzle/bridge/Applet;)V
- */
-JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Shader__1beginShader
-  (JNIEnv *, jobject, jobject);
-
-/*
- * Class:     dev_pikostudios_muzzle_bridge_Shader
- * Method:    _endShader
- * Signature: (Ldev/pikostudios/muzzle/bridge/Applet;)V
- */
-JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Shader__1endShader
-  (JNIEnv *, jobject, jobject);
 
 /*
  * Class:     dev_pikostudios_muzzle_bridge_Shader

@@ -94,10 +94,12 @@ mz_shader mz_load_shader(const char* vertex_filepath, const char* fragment_filep
 	return id;
 }
 
-void mz_unload_shader(mz_shader shader)
+void mz_unload_shader(mz_shader* shader)
 {
 	MZ_TRACK_FUNCTION();
-	glDeleteProgram(shader.pid);
+	
+	glDeleteProgram(shader->pid);
+	shader->pid = 0;
 }
 
 mz_shader_pass mz_create_shader_pass(mz_shader shader)
@@ -438,7 +440,7 @@ void mz_unload_compute_pipeline(mz_compute_pipeline* pipeline)
 {
 	MZ_TRACK_FUNCTION();
 	
-	mz_unload_shader(pipeline->shader);
+	mz_unload_shader(&pipeline->shader);
 	pipeline->shader.pid = 0;
 	pipeline->texture._id = 0;
 

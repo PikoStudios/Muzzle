@@ -98,7 +98,7 @@ typedef struct mz_shader_buffer
 
 MZ_API mz_shader mz_create_shader(const char* vertex, const char* fragment);
 MZ_API mz_shader mz_load_shader(const char* vertex_filepath, const char* fragment_filepath);
-MZ_API void mz_unload_shader(mz_shader shader);
+MZ_API void mz_unload_shader(mz_shader* shader);
 
 MZ_API mz_shader_pass mz_create_shader_pass(mz_shader shader);
 MZ_API void mz_unload_shader_pass(mz_shader_pass* pass);

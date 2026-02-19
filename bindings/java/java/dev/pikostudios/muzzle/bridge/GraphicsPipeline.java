@@ -7,6 +7,7 @@ public class GraphicsPipeline extends NativeStruct
 {
 	public enum DepthBufferType
 	{
+		NONE,
 		RENDERBUFFER,
 		TEXTURE;
 
@@ -14,8 +15,9 @@ public class GraphicsPipeline extends NativeStruct
 		{
 			return switch (ordinal)
 			{
-				case 0 -> RENDERBUFFER;
-				case 1 -> TEXTURE;
+				case 0 -> NONE;
+				case 1 -> RENDERBUFFER;
+				case 2 -> TEXTURE;
 				default -> throw new IllegalArgumentException("Unknown DepthBufferType ordinal " + ordinal);
 			};
 		}
@@ -55,14 +57,24 @@ public class GraphicsPipeline extends NativeStruct
 
 		public void depthBuffer(DepthBufferType type)
 		{
+			if (type == DepthBufferType.NONE)
+			{
+				throw new IllegalArgumentException("Cannot use depth buffer type \"NONE\"");
+			}
+			
 			this.depthBufferType = Optional.of(type);
 		}
 
 		public GraphicsPipeline build()
 		{
-			int[] colorAttachmentFormatsInt = /* TODO */;
+			int[] colorAttachmentFormatsInt = new int[this.colorAttachmentFormats.length];
 
-			return GraphicsPipeline.create(this.shader, colorAttachmentFormatsInt, this.width, this.height, this.depthBufferType.isPresent(), this.depthBufferType.orElse(0));
+			for (int i = 0; i < this.colorAttachmentFormats.length; i++)
+			{
+				colorAttachmentFormatsInt[i] = this.colorAttachmentFormats[i].ordinal();
+			}
+
+			return GraphicsPipeline.create(this.shader, colorAttachmentFormatsInt, this.width, this.height, this.depthBufferType.isPresent(), this.depthBufferType.orElse(DepthBufferType.NONE).ordinal());
 		}
 	}
 	
@@ -71,12 +83,12 @@ public class GraphicsPipeline extends NativeStruct
 		super(nativePointer);
 	}
 
-	public static Factory factory()
+	public final static Factory factory()
 	{
 		return new Factory();
 	}
 
-	private static GraphicsPipeline create(Shader shader, int[] colorAttachmentFormats, int framebufferWidth, int framebufferHeight, boolean createDepthBuffer, int depthBufferType);
+	private final static native GraphicsPipeline create(Shader shader, int[] colorAttachmentFormats, int framebufferWidth, int framebufferHeight, boolean createDepthBuffer, int depthBufferType);
 
 	public final void dispatch(GraphicsPipeline pipeline, VertexBuffer buffer, long start, long count)
 	{
@@ -101,8 +113,12 @@ public class GraphicsPipeline extends NativeStruct
 
 	public final native int getColorAttachmentsCount();
 	public final native Sprite getColorAttachmentTexture(int index);
-	public final native int getColorAttachmentFormat(int index); // TODO: Should return a Sprite.Format
 	public final native int getColorAttachmentID(int index);
+	
+	public final Sprite.Format getColorAttachmentFormat(int index)
+	{
+		return Sprite.Format.fromOrdinal(this._getColorAttachmentFormat(index));
+	}
 
 	public final native Sprite getDepthBufferTexture();
 	public final native int getDepthBufferID();
@@ -115,6 +131,7 @@ public class GraphicsPipeline extends NativeStruct
 	public final native void unload();
 
 	private final native int _getDepthBufferType();
+	private final native int _getColorAttachmentFormat(int index);
 	private final native void _clearColorAttachments(int r, int g, int b, int a);
 	private final native void _dispatch(GraphicsPipeline pipeline, VertexBuffer buffer, long start, long end);
 }

@@ -3,28 +3,17 @@
 #include "core/shader.h"
 #include "jni.h"
 
-static mz_shader get_shader(JNIEnv* env, jobject shader)
-{
-    jclass class = (*env)->GetObjectClass(env, shader);
+#define SHADER_CTOR_SIGNATURE "(I)V"
 
-    jfieldID id_field = (*env)->GetFieldID(env, class, "id", "I");
-    jfieldID type_field = (*env)->GetFieldID(env, class, "type", "I");
-
-    jint id = (*env)->GetIntField(env, shader, id_field);
-    jint type = (*env)->GetIntField(env, shader, type_field);
-
-    return (mz_shader){.pid=id, .type=type};
-}
-
-JNIEXPORT jobject JNICALL Java_dev_pikostudios_muzzle_bridge_Shader_create(JNIEnv* env, jclass class, jstring vertex_source, jstring fragment_source, jint type)
+JNIEXPORT jobject JNICALL Java_dev_pikostudios_muzzle_bridge_Shader__1create(JNIEnv* env, jclass class, jstring vertex_source, jstring fragment_source)
 {
     const char* vertex_src = (*env)->GetStringUTFChars(env, vertex_source, NULL);
     const char* fragment_src = (*env)->GetStringUTFChars(env, fragment_source, NULL);
 
-    mz_shader shader = mz_create_shader(vertex_src, fragment_src, type);
+    mz_shader shader = mz_create_shader(vertex_src, fragment_src);
 
-    jmethodID ctor = (*env)->GetMethodID(env, class, "<init>", "(II)V");
-    jobject jshader = (*env)->NewObject(env, class, ctor, shader.pid, shader.type);
+    jmethodID ctor = (*env)->GetMethodID(env, class, "<init>", SHADER_CTOR_SIGNATURE);
+    jobject jshader = (*env)->NewObject(env, class, ctor, shader.pid);
 
 
     (*env)->ReleaseStringUTFChars(env, vertex_source, vertex_src);
@@ -33,15 +22,15 @@ JNIEXPORT jobject JNICALL Java_dev_pikostudios_muzzle_bridge_Shader_create(JNIEn
     return jshader;
 }
 
-JNIEXPORT jobject JNICALL Java_dev_pikostudios_muzzle_bridge_Shader_load(JNIEnv* env, jclass class, jstring vertex_filepath, jstring fragment_filepath, jint type)
+JNIEXPORT jobject JNICALL Java_dev_pikostudios_muzzle_bridge_Shader__1load(JNIEnv* env, jclass class, jstring vertex_filepath, jstring fragment_filepath)
 {
     const char* vertex_fp = (*env)->GetStringUTFChars(env, vertex_filepath, NULL);
     const char* fragment_fp = (*env)->GetStringUTFChars(env, fragment_filepath, NULL);
 
-    mz_shader shader = mz_load_shader(vertex_fp, fragment_fp, type);
+    mz_shader shader = mz_load_shader(vertex_fp, fragment_fp);
 
-    jmethodID ctor = (*env)->GetMethodID(env, class, "<init>", "(II)V");
-    jobject jshader = (*env)->NewObject(env, class, ctor, shader.pid, shader.type);
+    jmethodID ctor = (*env)->GetMethodID(env, class, "<init>", "(I)V");
+    jobject jshader = (*env)->NewObject(env, class, ctor, shader.pid);
 
     (*env)->ReleaseStringUTFChars(env, vertex_filepath, vertex_fp);
     (*env)->ReleaseStringUTFChars(env, fragment_filepath, fragment_fp);
@@ -56,29 +45,10 @@ JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Shader_unload(JNIEnv* 
     jfieldID id_field = (*env)->GetFieldID(env, class, "id", "I");
     jint id = (*env)->GetIntField(env, object, id_field);
 
-    mz_unload_shader((mz_shader){.pid=id});
+    mz_shader shader = (mz_shader){.pid=id};
+    mz_unload_shader(&shader);
+    
     (*env)->SetIntField(env, object, id_field, 0);
-}
-
-JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Shader__1use(JNIEnv* env, jobject object, jobject applet)
-{
-    mz_applet* _applet = get_applet(env, applet);
-    mz_shader shader = get_shader(env, object);
-    mz_use_shader_pass(_applet, shader);
-}
-
-JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Shader__1beginShader(JNIEnv* env, jobject object, jobject applet)
-{
-    mz_applet* _applet = get_applet(env, applet);
-    mz_shader shader = get_shader(env, object);
-    mz_begin_shader(_applet, shader);
-}
-
-JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Shader__1endShader(JNIEnv* env, jobject object, jobject applet)
-{
-    mz_applet* _applet = get_applet(env, applet);
-    mz_shader shader = get_shader(env, object);
-    mz_end_shader(_applet, shader);
 }
 
 JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Shader_uploadUniform__Ljava_lang_String_2I(JNIEnv* env, jobject object, jstring uniform, jint value)
@@ -114,7 +84,7 @@ JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Shader_uploadUniform__
 JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_Shader_uploadUniform__Ljava_lang_String_2FFF(JNIEnv* env, jobject object, jstring uniform, jfloat x, jfloat y, jfloat z)
 {
     mz_shader shader = get_shader(env, object);
-    const char* uniform_name = (*env)->GetStringUTFChars(env, uniform, NULL);
+    const char* uniform_name = (*env)->GetStringUTFChars(env, uniform, NULL); // TODO: Look into using GetStringCritical for all of these
 
     mz_upload_uniform_vec3(shader, uniform_name, (mz_vec3){x,y,z});
 

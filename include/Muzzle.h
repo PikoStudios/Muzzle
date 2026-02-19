@@ -6,6 +6,7 @@
 #include "core/shader.h"
 #include "core/vector.h"
 #include "core/drawing.h"
+#include "core/pipeline.h"
 
 #include "primitives/rectangle.h"
 #include "primitives/sprite.h"

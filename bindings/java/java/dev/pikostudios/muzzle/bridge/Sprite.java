@@ -12,7 +12,17 @@ public class Sprite
     public enum Format
     {
         RGBA8,
-        RGBA32F
+        RGBA32F;
+
+        public static Format fromOrdinal(int ordinal)
+        {
+            return switch (ordinal)
+            {
+                case 0 -> RGBA8;
+                case 1 -> RGBA32F;
+                default -> throw new IllegalArgumentException(ordinal + " is not a valid Sprite.Format ordinal");
+            };
+        }
     }
 
     public enum FilterMode

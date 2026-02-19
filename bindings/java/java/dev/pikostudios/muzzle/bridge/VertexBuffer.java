@@ -32,7 +32,20 @@ public class VertexBuffer extends NativeStruct
 		TRIANGLE_STRIP,
 		TRIANGLE_FAN,
 		POINT,
-		LINES
+		LINES;
+
+		public static TopologyType fromOrdinal(int ordinal)
+		{
+			return switch (ordinal)
+			{
+				case 0 -> TRIANGLE;
+				case 1 -> TRIANGLE_STRIP;
+				case 2 -> TRIANGLE_FAN;
+				case 3 -> POINT;
+				case 4 -> LINES;
+				default -> throw new IllegalArgumentException("Unknown TopologyType ordinal of " + ordinal);
+			};
+		}
 	}
 	
 	private VertexBuffer(long nativePointer)
@@ -47,11 +60,17 @@ public class VertexBuffer extends NativeStruct
 
 	private static native VertexBuffer create(int topologyType, AttributeDescriptor[] attributes);
 
+	public TopologyType getTopologyType()
+	{
+		return TopologyType.fromOrdinal(this._getTopologyType());
+	}
+
 	public native long getSize();
 	public native long getStride();
 	public native int getVAO();
 	public native int getVBO();
-	public native TopologyType getTopologyType();
 
 	public native void unload();
+
+	private native int _getTopologyType();
 }

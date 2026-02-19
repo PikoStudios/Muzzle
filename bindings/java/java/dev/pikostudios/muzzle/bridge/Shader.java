@@ -7,7 +7,19 @@ public class Shader
         DIRECT_QUAD,
         DIRECT_CIRCLE,
         DIRECT_SPRITE,
-        DIRECT_TEXT
+        DIRECT_TEXT;
+
+        public static ShaderTarget fromOrdinal(int target)
+        {
+            return switch (target)
+            {
+                case 0 -> DIRECT_QUAD;
+                case 1 -> DIRECT_CIRCLE;
+                case 2 -> DIRECT_SPRITE;
+                case 3 -> DIRECT_TEXT;
+                default -> throw new IllegalArgumentException("Unknown ShaderTarget ordinal of " + target);
+            };
+        }
     }
 
     private int id;
@@ -47,52 +59,13 @@ public class Shader
         return this.id;
     }
 
-    // TODO: Add error checking if type is pipeline
-    public void useAsShaderPass(Applet applet) throws IllegalStateException
-    {
-        if (this.type != ShaderType.PASS.ordinal())
-        {
-            throw new IllegalStateException("Cannot call use() on a non-shader pass. Use beginShader instead");
-        }
-
-        this._use(applet);
-    }
-
-    public void beginShader(Applet applet) throws IllegalStateException
-    {
-        if (this.type == ShaderType.PASS.ordinal())
-        {
-            throw new IllegalStateException("Cannot call beginShader() on a shader-pass. Use use() instead");
-        }
-
-        this._beginShader(applet);
-    }
-
-    public void endShader(Applet applet) throws IllegalStateException
-    {
-        if (this.type == ShaderType.PASS.ordinal())
-        {
-            throw new IllegalStateException("Cannot call endShader() on a shader-pass.");
-        }
-
-        this._endShader(applet);
-    }
-
     public void uploadUniformMatrix(String uniform, float[] matrix) throws IllegalArgumentException
     {
-        if (matrix.length == 9)
+        switch (matrix.length)
         {
-            this.uploadUniformMat3(uniform, matrix);
-        }
-
-        else if (matrix.length == 16)
-        {
-            this.uploadUniformMat4(uniform, matrix);
-        }
-
-        else
-        {
-            throw new IllegalArgumentException("Matrix must be size 3x3 or 4x4");
+            case 9 -> this.uploadUniformMat3(uniform, matrix);
+            case 16 -> this.uploadUniformMat4(uniform, matrix);
+            default -> throw new IllegalArgumentException("Matrix must be size 3x3 or 4x4");
         }
     }
 
@@ -103,10 +76,6 @@ public class Shader
     public native void uploadUniform(String uniform, float x, float y, float z, float w);
 
     public native void unload();
-
-    private native void _use(Applet applet);
-    private native void _beginShader(Applet applet);
-    private native void _endShader(Applet applet);
 
     private native void uploadUniformMat3(String uniform, float[] matrix);
     private native void uploadUniformMat4(String uniform, float[] matrix);

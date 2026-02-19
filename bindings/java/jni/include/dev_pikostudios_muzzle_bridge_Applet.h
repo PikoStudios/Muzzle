@@ -13,6 +13,10 @@ extern "C" {
 #define dev_pikostudios_muzzle_bridge_Applet_APPLET_FLAG_VSYNC 2L
 #undef dev_pikostudios_muzzle_bridge_Applet_APPLET_FLAG_TRACK_DELTA_TIME
 #define dev_pikostudios_muzzle_bridge_Applet_APPLET_FLAG_TRACK_DELTA_TIME 4L
+#undef dev_pikostudios_muzzle_bridge_Applet_APPLET_FLAG_ENABLE_SHADER_PASS_DEPTH_TEXTURE
+#define dev_pikostudios_muzzle_bridge_Applet_APPLET_FLAG_ENABLE_SHADER_PASS_DEPTH_TEXTURE 8L
+#undef dev_pikostudios_muzzle_bridge_Applet_APPLET_FLAG_FULLSCREEN
+#define dev_pikostudios_muzzle_bridge_Applet_APPLET_FLAG_FULLSCREEN 16L
 /*
  * Class:     dev_pikostudios_muzzle_bridge_Applet
  * Method:    initialize

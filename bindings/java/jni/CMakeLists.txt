@@ -7,6 +7,10 @@ set(MUZZLE_LIB_FOLDER ${MUZZLE_ROOT}/lib)
 set(MUZZLE_DEPS_FOLDER ${MUZZLE_ROOT}/deps)
 set(FREETYPE ${MUZZLE_DEPS_FOLDER}/freetype)
 set(target_name muzzlejni)
+#set(OPTIMIZATION_LEVEL 0) # Uncomment for -O0
+#set(OPTIMIZATION_LEVEL 2) # Uncomment for -O2
+#set(OPTIMIZATION_LEVEL 3) # Uncomment for -O3
+set(OPTIMIZATION_LEVEL 3 -flto) # Uncomment for -O3 -flto
 
 find_package(JNI REQUIRED)
 
@@ -26,12 +30,17 @@ src/jni_text.c
 src/jni_shader.c
 src/jni_shader_buffer.c
 src/jni_shader_pipeline.c
+src/jni_shader_pass.c
+src/jni_direct_shader.c
+src/jni_vertex_buffer.c
 src/jni_sprite_batch.c
 src/jni_compute_pipeline.c
 )
 
 add_library(muzzlejni SHARED ${source})
 target_link_libraries(muzzlejni muzzle ${JNI_LIBRARIES})
+
+target_compile_options(muzzlejni PRIVATE -O${OPTIMIZATION_LEVEL})
 
 message(STATUS "Checking OS")
 
