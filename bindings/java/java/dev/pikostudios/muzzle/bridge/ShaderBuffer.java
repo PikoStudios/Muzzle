@@ -41,7 +41,7 @@ public class ShaderBuffer
                 this.buffer.putFloat(values[i+0]);
                 this.buffer.putFloat(values[i+1]);
                 this.buffer.putFloat(values[i+2]);
-                this.buffer.putFloat(0); // Padding
+                this.buffer.putFloat(0f); // Padding
             }
 
             return this;
