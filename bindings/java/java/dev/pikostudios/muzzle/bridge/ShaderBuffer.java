@@ -3,130 +3,45 @@ package dev.pikostudios.muzzle.bridge;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+import dev.pikostudios.muzzle.bridge.GPUBufferDescriptor;
+
 public class ShaderBuffer
 {
-    public static final int INT_SIZE = 4;
-    public static final int FLOAT_SIZE = 4;
-    public static final int VEC2_SIZE = FLOAT_SIZE * 2;
-    public static final int VEC3_SIZE = FLOAT_SIZE * 3;
-    public static final int VEC4_SIZE = FLOAT_SIZE * 4;
-    public static final int MAT3_SIZE = FLOAT_SIZE * 3 * 3;
-    public static final int MAT4_SIZE = FLOAT_SIZE * 4 * 4;
-
-    public static class Builder
+    public static class Builder extends GPUBufferDescriptor
     {
-        private static final int BUFFER_REALLOCATION_PADDING = 128;
-
         private int index;
-        private ByteBuffer buffer;
-        private boolean built;
 
         private Builder(int index)
         {
+            super();
             this.index = index;
-            this.buffer = ByteBuffer.allocateDirect(0).order(ByteOrder.nativeOrder());
-            this.built = false;
         }
 
-        private void ensureCapacity(int bytes)
+        @Override
+        public GPUBufferDescriptor vec3(float x, float y, float z)
         {
-            if (this.buffer.remaining() < bytes)
-            {
-                ByteBuffer b = ByteBuffer.allocateDirect(this.buffer.position() + bytes + BUFFER_REALLOCATION_PADDING).order(ByteOrder.nativeOrder());
-                this.buffer.flip();
-                b.put(this.buffer);
-                this.buffer = b;
-            }
-        }
-
-        public Builder intValue(int value)
-        {
-            this.ensureCapacity(INT_SIZE);
-            this.buffer.putInt(value);
+            // Shader Buffers in Muzzle are assumed to be std430
+            this.ensureCapacity(GPUTypeSizes.VEC3_STD430_SIZE);
+            this.buffer.putFloat(x).putFloat(y).putFloat(z).putFloat(0f); // 0 for padding
             return this;
         }
 
-        public Builder floatValue(float value)
-        {
-            this.ensureCapacity(FLOAT_SIZE);
-            this.buffer.putFloat(value);
-            return this;
-        }
-
-        public Builder intArray(int[] values)
-        {
-            this.ensureCapacity(INT_SIZE * values.length);
-
-            for (int v : values)
-            {
-                this.buffer.putInt(v);
-            }
-
-            return this;
-        }
-
-        public Builder floatArray(float[] values)
-        {
-            this.ensureCapacity(FLOAT_SIZE * values.length);
-
-            for (float v : values)
-            {
-                this.buffer.putFloat(v);
-            }
-
-            return this;
-        }
-
-        public Builder vec2(float x, float y)
-        {
-            this.ensureCapacity(VEC2_SIZE);
-            this.buffer.putFloat(x).putFloat(y);
-            return this;
-        }
-
-        public Builder vec3(float x, float y, float z)
-        {
-            this.ensureCapacity(VEC3_SIZE);
-            this.buffer.putFloat(x).putFloat(y).putFloat(z);
-            return this;
-        }
-
-        public Builder vec4(float x, float y, float z, float w)
-        {
-            this.ensureCapacity(VEC4_SIZE);
-            this.buffer.putFloat(x).putFloat(y).putFloat(z).putFloat(w);
-            return this;
-        }
-
-        public Builder mat3(float[] values)
+        @Override
+        public GPUBufferDescriptor mat3(float[] values) throws IllegalArgumentException
         {
             if (values.length != 9)
             {
                 throw new IllegalArgumentException("Array passed into mat3 must be of length 9");
             }
 
-            this.ensureCapacity(MAT3_SIZE);
+            this.ensureCapacity(GPUTypeSizes.MAT3_STD430_SIZE);
 
-            for (float v : values)
+            for (int i = 0; i < values.length; i += 3)
             {
-                this.buffer.putFloat(v);
-            }
-
-            return this;
-        }
-
-        public Builder mat4(float[] values)
-        {
-            if (values.length != 16)
-            {
-                throw new IllegalArgumentException("Array passed into mat4 must be of length 16");
-            }
-
-            this.ensureCapacity(MAT4_SIZE);
-
-            for (float v : values)
-            {
-                this.buffer.putFloat(v);
+                this.buffer.putFloat(values[i+0]);
+                this.buffer.putFloat(values[i+1]);
+                this.buffer.putFloat(values[i+2]);
+                this.buffer.putFloat(0); // Padding
             }
 
             return this;

@@ -1,5 +1,9 @@
 package dev.pikostudios.muzzle.bridge;
 
+import java.nio.ByteBuffer;
+
+import dev.pikostudios.muzzle.bridge.GPUBufferDescriptor;
+
 public class VertexBuffer extends NativeStruct
 {
 	public static record AttributeDescriptor(byte size, AttributeType type)
@@ -60,17 +64,33 @@ public class VertexBuffer extends NativeStruct
 
 	private static native VertexBuffer create(int topologyType, AttributeDescriptor[] attributes);
 
-	public TopologyType getTopologyType()
+	public final TopologyType getTopologyType()
 	{
 		return TopologyType.fromOrdinal(this._getTopologyType());
 	}
 
-	public native long getSize();
-	public native long getStride();
-	public native int getVAO();
-	public native int getVBO();
+	public final void allocate(GPUBufferDescriptor bufferDescriptor)
+	{
+		ByteBuffer buffer = bufferDescriptor.buildBuffer();
+		this.allocate(buffer, buffer.limit());
+	}
 
-	public native void unload();
+	public final void write(GPUBufferDescriptor bufferDescriptor, long offset)
+	{
+		ByteBuffer buffer = bufferDescriptor.buildBuffer();
+		this.write(buffer, buffer.limit(), offset);
+	}
 
-	private native int _getTopologyType();
+	public final native long getSize();
+	public final native long getStride();
+	public final native int getVAO();
+	public final native int getVBO();
+	
+	public final native void allocate(long sizeInBytes);
+	
+	public final native void unload();
+
+	private final native int _getTopologyType();
+	private final native void allocate(ByteBuffer data, long size);
+	private final native void write(ByteBuffer data, long size, long offset);
 }
