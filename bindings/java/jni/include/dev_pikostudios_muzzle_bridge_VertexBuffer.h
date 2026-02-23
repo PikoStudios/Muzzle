@@ -49,11 +49,11 @@ JNIEXPORT jint JNICALL Java_dev_pikostudios_muzzle_bridge_VertexBuffer_getVBO
 
 /*
  * Class:     dev_pikostudios_muzzle_bridge_VertexBuffer
- * Method:    getTopologyType
- * Signature: ()Ldev/pikostudios/muzzle/bridge/VertexBuffer/TopologyType;
+ * Method:    allocate
+ * Signature: (J)V
  */
-JNIEXPORT jobject JNICALL Java_dev_pikostudios_muzzle_bridge_VertexBuffer_getTopologyType
-  (JNIEnv *, jobject);
+JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_VertexBuffer_allocate__J
+  (JNIEnv *, jobject, jlong);
 
 /*
  * Class:     dev_pikostudios_muzzle_bridge_VertexBuffer
@@ -62,6 +62,46 @@ JNIEXPORT jobject JNICALL Java_dev_pikostudios_muzzle_bridge_VertexBuffer_getTop
  */
 JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_VertexBuffer_unload
   (JNIEnv *, jobject);
+
+/*
+ * Class:     dev_pikostudios_muzzle_bridge_VertexBuffer
+ * Method:    _getTopologyType
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_dev_pikostudios_muzzle_bridge_VertexBuffer__1getTopologyType
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     dev_pikostudios_muzzle_bridge_VertexBuffer
+ * Method:    allocate
+ * Signature: (Ljava/nio/ByteBuffer;J)V
+ */
+JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_VertexBuffer_allocate__Ljava_nio_ByteBuffer_2J
+  (JNIEnv *, jobject, jobject, jlong);
+
+/*
+ * Class:     dev_pikostudios_muzzle_bridge_VertexBuffer
+ * Method:    write
+ * Signature: (Ljava/nio/ByteBuffer;JJ)V
+ */
+JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_VertexBuffer_write__Ljava_nio_ByteBuffer_2JJ
+  (JNIEnv *, jobject, jobject, jlong, jlong);
+
+/*
+ * Class:     dev_pikostudios_muzzle_bridge_VertexBuffer
+ * Method:    write
+ * Signature: ([FJJ)V
+ */
+JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_VertexBuffer_write___3FJJ
+  (JNIEnv *, jobject, jfloatArray, jlong, jlong);
+
+/*
+ * Class:     dev_pikostudios_muzzle_bridge_VertexBuffer
+ * Method:    write
+ * Signature: ([IJJ)V
+ */
+JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_VertexBuffer_write___3IJJ
+  (JNIEnv *, jobject, jintArray, jlong, jlong);
 
 #ifdef __cplusplus
 }

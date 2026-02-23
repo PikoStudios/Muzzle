@@ -7,6 +7,14 @@ import dev.pikostudios.muzzle.bridge.GPUTypeSizes;
 
 public class GPUBufferDescriptor
 {
+	// TODO: We should cache the two ByteBuffer objects we need at any time
+	// TODO: and then lazy init them
+	// TODO: if one ByteBuffer gets to big drop the reference and create a new one
+	// TODO: and let the GC take care of the old one
+	// TODO: But this would not be thread-safe so we would need to add
+	// TODO: a overloaded create function that is like create(GPUBufferDescriptor.BufferPool)
+	// TODO: so a new thread can pass it's own buffer pool
+	
     private static final int BUFFER_REALLOCATION_PADDING = 128;
 
     protected ByteBuffer buffer;

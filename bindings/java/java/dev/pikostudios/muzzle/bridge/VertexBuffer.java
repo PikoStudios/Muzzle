@@ -6,7 +6,7 @@ import dev.pikostudios.muzzle.bridge.GPUBufferDescriptor;
 
 public class VertexBuffer extends NativeStruct
 {
-	public static record AttributeDescriptor(byte size, AttributeType type)
+	public static final class AttributeDescriptor
 	{
 		public enum AttributeType
 		{
@@ -21,12 +21,30 @@ public class VertexBuffer extends NativeStruct
 			DOUBLE
 		}
 
-		public AttributeDescriptor
+		private final byte size;
+		private final AttributeType type;
+		private final int typeOrdinal;
+
+		public AttributeDescriptor(byte size, AttributeType type) throws IllegalArgumentException
 		{
 			if (size < 1 || size > 4)
 			{
 				throw new IllegalArgumentException("Attribute size can only be 1 through 4");
 			}
+
+			this.size = size;
+			this.type = type;
+			this.typeOrdinal = type.ordinal();
+		}
+
+		public byte getSize()
+		{
+			return this.size;
+		}
+
+		public AttributeType getType()
+		{
+			return this.type;
 		}
 	}
 	
@@ -81,6 +99,16 @@ public class VertexBuffer extends NativeStruct
 		this.write(buffer, buffer.limit(), offset);
 	}
 
+	public final void write(float[] data, long offset)
+	{
+		this.write(data, data.length, offset);
+	}
+	
+	public final void write(int[] data, long offset)
+	{
+		this.write(data, data.length, offset);
+	}
+
 	public final native long getSize();
 	public final native long getStride();
 	public final native int getVAO();
@@ -92,5 +120,8 @@ public class VertexBuffer extends NativeStruct
 
 	private final native int _getTopologyType();
 	private final native void allocate(ByteBuffer data, long size);
+	
 	private final native void write(ByteBuffer data, long size, long offset);
+	private final native void write(float[] data, long size, long offset);
+	private final native void write(int[] data, long size, long offset);
 }
