@@ -3,6 +3,7 @@
 
 #include <jni.h>
 #include "core/applet.h"
+#include "core/pipeline.h"
 #include "core/shader.h"
 #include "core/tint.h"
 
@@ -25,5 +26,7 @@ mz_shader_pass get_shader_pass(JNIEnv* env, jobject obj);
 
 mz_tint get_tint_with_cls(JNIEnv* env, jclass class, jobject obj);
 mz_tint get_tint(JNIEnv* env, jobject obj);
+
+mz_vertex_buffer* get_vertex_buffer(JNIEnv* env, jobject obj);
 
 #endif // MUZZLE_BINDINGS_JAVA_JNI_COMMON_H

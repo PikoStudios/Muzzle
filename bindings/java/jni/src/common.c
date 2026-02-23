@@ -1,4 +1,5 @@
 #include "../include/common.h"
+#include "core/pipeline.h"
 #include "core/tint.h"
 #include "jni.h"
 
@@ -76,4 +77,15 @@ mz_tint get_tint(JNIEnv* env, jobject obj)
 {
     jclass class = (*env)->GetObjectClass(env, obj);
     return get_tint_with_cls(env, class, obj);
+}
+
+mz_vertex_buffer* get_vertex_buffer(JNIEnv* env, jobject obj)
+{
+    jclass cls = (*env)->GetObjectClass(env, obj);
+
+    jfieldID native_pointer_field = (*env)->GetFieldID(env, cls, "nativePointer", "J");
+
+    jlong native_pointer = (*env)->GetLongField(env, obj, native_pointer_field);
+
+    return (mz_vertex_buffer*)(JLONG_TO_PTR(native_pointer));
 }

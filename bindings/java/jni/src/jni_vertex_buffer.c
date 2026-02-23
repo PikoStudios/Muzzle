@@ -1,5 +1,6 @@
 #include "../include/dev_pikostudios_muzzle_bridge_VertexBuffer.h"
 #include "../include/common.h"
+#include "core/logging.h"
 #include "core/pipeline.h"
 
 #ifdef _WIN32
@@ -7,6 +8,8 @@
 #else
 	#include <alloca.h>
 #endif
+
+#define VERTEX_BUFFER_CTOR_METHOD_SIGNATURE "(J)V"
 
 JNIEXPORT jobject JNICALL Java_dev_pikostudios_muzzle_bridge_VertexBuffer_create(JNIEnv* env, jclass class, jint topology_type, jobjectArray attributes_arr)
 {
@@ -65,7 +68,84 @@ JNIEXPORT jobject JNICALL Java_dev_pikostudios_muzzle_bridge_VertexBuffer_create
 		}
 	}
 
-	mz_vertex_buffer buffer = mz_create_vertex_buffer(topology, attributes, attributes_count);
+	mz_vertex_buffer* buffer = MZ_MALLOC(sizeof(mz_vertex_buffer));
 
-	
+	if (buffer == NULL)
+	{
+		mz_log_status(LOG_STATUS_FATAL_ERROR, "[JNI] Failed to allocate vertex buffer structure");
+	}
+
+	*buffer = mz_create_vertex_buffer(topology, attributes, attributes_count);
+
+	jmethodID ctor = (*env)->GetMethodID(env, class, "<init>", VERTEX_BUFFER_CTOR_METHOD_SIGNATURE);
+
+	jobject jvertexbuffer = (*env)->NewObject(env, class, ctor, PTR_TO_JLONG(buffer));
+
+	return jvertexbuffer;
+}
+
+JNIEXPORT jlong JNICALL Java_dev_pikostudios_muzzle_bridge_VertexBuffer_getSize(JNIEnv* env, jobject vertex_buffer)
+{
+	mz_vertex_buffer* buffer = get_vertex_buffer(env, vertex_buffer);
+	return (jlong)(buffer->size);
+}
+
+JNIEXPORT jlong JNICALL Java_dev_pikostudios_muzzle_bridge_VertexBuffer_getStride(JNIEnv* env, jobject vertex_buffer)
+{
+	mz_vertex_buffer* buffer = get_vertex_buffer(env, vertex_buffer);
+	return (jlong)(buffer->stride);
+}
+
+JNIEXPORT jint JNICALL Java_dev_pikostudios_muzzle_bridge_VertexBuffer_getVAO(JNIEnv* env, jobject vertex_buffer)
+{
+	mz_vertex_buffer* buffer = get_vertex_buffer(env, vertex_buffer);
+	return buffer->vao;
+}
+
+JNIEXPORT jint JNICALL Java_dev_pikostudios_muzzle_bridge_VertexBuffer_getVBO(JNIEnv* env, jobject vertex_buffer)
+{
+	mz_vertex_buffer* buffer = get_vertex_buffer(env, vertex_buffer);
+	return buffer->vbo;
+}
+
+JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_VertexBuffer_allocate__J(JNIEnv* env, jobject vertex_buffer, jlong size_in_bytes)
+{
+	mz_vertex_buffer* buffer = get_vertex_buffer(env, vertex_buffer);
+	mz_allocate_vertex_buffer(buffer, NULL, size_in_bytes);
+}
+
+JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_VertexBuffer_allocate__Ljava_nio_ByteBuffer_2J(JNIEnv* env, jobject vertex_buffer, jobject byte_buffer, jlong size)
+{
+	mz_vertex_buffer* buffer = get_vertex_buffer(env, vertex_buffer);
+	void* data = (*env)->GetDirectBufferAddress(env, byte_buffer);
+
+	mz_allocate_vertex_buffer(buffer, data, size);
+}
+
+JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_VertexBuffer_write__Ljava_nio_ByteBuffer_2JJ(JNIEnv* env, jobject vertex_buffer, jobject byte_buffer, jlong size, jlong offset)
+{
+	mz_vertex_buffer* buffer = get_vertex_buffer(env, vertex_buffer);
+	void* data = (*env)->GetDirectBufferAddress(env, byte_buffer);
+
+	mz_write_vertex_buffer(buffer, data, offset, size);
+}
+
+JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_VertexBuffer_write___3FJJ(JNIEnv* env, jobject vertex_buffer, jfloatArray data_arr, jlong size, jlong offset)
+{
+	mz_vertex_buffer* buffer = get_vertex_buffer(env, vertex_buffer);
+	void* data = (*env)->GetPrimitiveArrayCritical(env, data_arr, NULL);
+
+	mz_write_vertex_buffer(buffer, data, offset, size);
+
+	(*env)->ReleasePrimitiveArrayCritical(env, data_arr, data, JNI_ABORT);
+}
+
+JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_VertexBuffer_write___3IJJ(JNIEnv* env, jobject vertex_buffer, jintArray data_arr, jlong size, jlong offset)
+{
+	mz_vertex_buffer* buffer = get_vertex_buffer(env, vertex_buffer);
+	void* data = (*env)->GetPrimitiveArrayCritical(env, data_arr, NULL);
+
+	mz_write_vertex_buffer(buffer, data, offset, size);
+
+	(*env)->ReleasePrimitiveArrayCritical(env, data_arr, data, JNI_ABORT);
 }
