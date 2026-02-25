@@ -2,6 +2,7 @@
 #include "../include/common.h"
 #include "core/logging.h"
 #include "core/pipeline.h"
+#include "jni.h"
 
 #ifdef _WIN32
 	#include <malloc.h>
@@ -112,6 +113,21 @@ JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_VertexBuffer_allocate_
 {
 	mz_vertex_buffer* buffer = get_vertex_buffer(env, vertex_buffer);
 	mz_allocate_vertex_buffer(buffer, NULL, size_in_bytes);
+}
+
+JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_VertexBuffer_unload(JNIEnv* env, jobject vertex_buffer)
+{
+	jclass class = (*env)->GetObjectClass(env, vertex_buffer);
+	jfieldID native_pointer_id = (*env)->GetFieldID(env, class, "nativePointer", "J");
+	jlong native_pointer = (*env)->GetLongField(env, vertex_buffer, native_pointer_id);
+
+	mz_vertex_buffer* buffer = (mz_vertex_buffer*)(JLONG_TO_PTR(native_pointer));
+
+	mz_unload_vertex_buffer(buffer);
+
+	MZ_FREE(buffer);
+
+	(*env)->SetLongField(env, vertex_buffer, native_pointer_id, 0L);
 }
 
 JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_VertexBuffer_allocate__Ljava_nio_ByteBuffer_2J(JNIEnv* env, jobject vertex_buffer, jobject byte_buffer, jlong size)

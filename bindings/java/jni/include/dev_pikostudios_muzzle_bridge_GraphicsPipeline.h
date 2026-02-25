@@ -25,14 +25,6 @@ JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_GraphicsPipeline_clear
 
 /*
  * Class:     dev_pikostudios_muzzle_bridge_GraphicsPipeline
- * Method:    getShader
- * Signature: ()Ldev/pikostudios/muzzle/bridge/Shader;
- */
-JNIEXPORT jobject JNICALL Java_dev_pikostudios_muzzle_bridge_GraphicsPipeline_getShader
-  (JNIEnv *, jobject);
-
-/*
- * Class:     dev_pikostudios_muzzle_bridge_GraphicsPipeline
  * Method:    getFramebufferID
  * Signature: ()I
  */
@@ -130,10 +122,10 @@ JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_GraphicsPipeline__1cle
 /*
  * Class:     dev_pikostudios_muzzle_bridge_GraphicsPipeline
  * Method:    _dispatch
- * Signature: (Ldev/pikostudios/muzzle/bridge/GraphicsPipeline;Ldev/pikostudios/muzzle/bridge/VertexBuffer;JJ)V
+ * Signature: (Ldev/pikostudios/muzzle/bridge/VertexBuffer;JJ)V
  */
 JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_GraphicsPipeline__1dispatch
-  (JNIEnv *, jobject, jobject, jobject, jlong, jlong);
+  (JNIEnv *, jobject, jobject, jlong, jlong);
 
 #ifdef __cplusplus
 }

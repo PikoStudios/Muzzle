@@ -78,9 +78,12 @@ public class GraphicsPipeline extends NativeStruct
 		}
 	}
 	
-	private GraphicsPipeline(long nativePointer)
+	private final Shader shader;
+
+	private GraphicsPipeline(long nativePointer, Shader shader)
 	{
 		super(nativePointer);
+		this.shader = shader;
 	}
 
 	public final static Factory factory()
@@ -102,10 +105,13 @@ public class GraphicsPipeline extends NativeStruct
 	{
 		this._clearColorAttachments(clearColor.getRed(), clearColor.getGreen(), clearColor.getBlue(), clearColor.getAlpha());
 	}
+
+	public final Shader getShader()
+	{
+		return this.shader;
+	}
 	
 	public final native void clearDepthBuffer(float clearValue);
-
-	public final native Shader getShader();
 	
 	public final native int getFramebufferID();
 	public final native int getFramebufferWidth();
@@ -133,5 +139,5 @@ public class GraphicsPipeline extends NativeStruct
 	private final native int _getDepthBufferType();
 	private final native int _getColorAttachmentFormat(int index);
 	private final native void _clearColorAttachments(int r, int g, int b, int a);
-	private final native void _dispatch(GraphicsPipeline pipeline, VertexBuffer buffer, long start, long end);
+	private final native void _dispatch(VertexBuffer buffer, long start, long count);
 }
