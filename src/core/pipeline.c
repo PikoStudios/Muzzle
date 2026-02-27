@@ -136,7 +136,7 @@ mz_graphics_pipeline mz_create_graphics_pipeline(const mz_graphics_pipeline_desc
 
 	MZ_ASSERT_DETAILED(descriptor->shader != NULL && descriptor->shader->pid > 0, "Graphics Pipeline must have valid shader attached");
 	
-	mz_graphics_pipeline pipeline = (mz_graphics_pipeline){.shader = descriptor->shader};
+	mz_graphics_pipeline pipeline = (mz_graphics_pipeline){.shader = *descriptor->shader};
 
 	if (descriptor->framebuffer_width == 0 || descriptor->framebuffer_height == 0)
 	{
@@ -230,7 +230,7 @@ void mz_dispatch_graphics_pipeline(mz_graphics_pipeline* pipeline, mz_vertex_buf
 {
 	MZ_TRACK_FUNCTION();
 	
-	glUseProgram(pipeline->shader->pid);
+	glUseProgram(pipeline->shader.pid);
 	glBindVertexArray(buffer->vao);
 	glBindFramebuffer(GL_FRAMEBUFFER, pipeline->fbo);
 
