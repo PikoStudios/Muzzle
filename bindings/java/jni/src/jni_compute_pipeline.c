@@ -51,7 +51,7 @@ JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_ComputePipeline_dispat
 	jclass shader_class = (*env)->GetObjectClass(env, shader);
 	jfieldID shader_id_field = (*env)->GetFieldID(env, shader_class, "id", "I");
 	jint shader_id = (*env)->GetIntField(env, shader, shader_id_field);
-	mz_shader _shader = (mz_shader){.pid = shader_id, .type = SHADER_TYPE_COMPUTE};
+	mz_shader _shader = (mz_shader){.pid = shader_id};
 	
    	jclass texture_class = (*env)->GetObjectClass(env, texture);
    	jfieldID width_field = (*env)->GetFieldID(env, texture_class, "width", "I");

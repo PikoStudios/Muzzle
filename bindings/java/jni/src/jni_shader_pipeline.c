@@ -151,7 +151,7 @@ JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_ShaderPipeline_draw(JN
 		verts_size = (*env)->GetArrayLength(env, vertices);
 	}
 
-	mz_draw_shader_pipeline(pipeline, verts, verts_size, start, end);
+	mz_draw_shader_pipeline(&pipeline, verts, verts_size, start, end);
 
 	if (vertices != NULL)
 	{
