@@ -58,8 +58,7 @@ typedef struct mz_vertex_attribute_descriptor
 
 typedef struct mz_graphics_pipeline
 {
-	// TODO: Switch from pointer to copying, such a small structure we shouldn't reference it
-	mz_shader* shader;
+	mz_shader shader; // non-owning copy
 	GLuint fbo;
 	GLuint depth_buffer;
 	uint16_t framebuffer_width;
@@ -72,7 +71,7 @@ typedef struct mz_graphics_pipeline
 
 typedef struct mz_graphics_pipeline_descriptor
 {
-	mz_shader* shader;
+	mz_shader* shader; // shader gets copyed so this pointer does not need to be static lifetime
 	mz_sprite_format* color_attachment_formats;
 	size_t color_attachment_count;
 	uint16_t framebuffer_width;
