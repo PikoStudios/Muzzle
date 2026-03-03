@@ -36,26 +36,30 @@ public class GraphicsPipeline extends NativeStruct
 			this.depthBufferType = Optional.empty();
 		}
 
-		public void shader(Shader shader)
+		public Factory shader(Shader shader)
 		{
 			this.shader = Objects.requireNonNull(shader);
+			return this;
 		}
 
-		public void framebufferDimensions(int width, int height)
+		public Factory framebufferDimensions(int width, int height)
 		{
 			assert width >= 0 && width <= 0xFFFFL	: "width is out of uint16 range";
 			assert height >= 0 && height <= 0xFFFFL : "height is out of uint16 range";
 			
 			this.width = width;
 			this.height = height;
+
+			return this;
 		}
 
-		public void colorAttachments(Sprite.Format... formats)
+		public Factory colorAttachments(Sprite.Format... formats)
 		{
 			this.colorAttachmentFormats = formats;
+			return this;
 		}
 
-		public void depthBuffer(DepthBufferType type)
+		public Factory depthBuffer(DepthBufferType type)
 		{
 			if (type == DepthBufferType.NONE)
 			{
@@ -63,6 +67,8 @@ public class GraphicsPipeline extends NativeStruct
 			}
 			
 			this.depthBufferType = Optional.of(type);
+
+			return this;
 		}
 
 		public GraphicsPipeline build()
