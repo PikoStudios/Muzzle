@@ -101,12 +101,12 @@ public class VertexBuffer extends NativeStruct
 
 	public final void write(float[] data, long offset)
 	{
-		this.write(data, data.length, offset);
+		this.write(data, data.length * Float.BYTES, offset * Float.BYTES);
 	}
 	
 	public final void write(int[] data, long offset)
 	{
-		this.write(data, data.length, offset);
+		this.write(data, data.length * Integer.BYTES, offset * Integer.BYTES);
 	}
 
 	public final native long getSize();
