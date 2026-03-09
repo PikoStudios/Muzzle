@@ -151,6 +151,10 @@ JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_VertexBuffer_write___3
 	mz_vertex_buffer* buffer = get_vertex_buffer(env, vertex_buffer);
 	void* data = (*env)->GetPrimitiveArrayCritical(env, data_arr, NULL);
 
+	printf("Size of vertex buffer write %d\n", size);
+	printf("Offset of vertex buffer write %d\n", offset);
+	printf("===================\n");
+
 	mz_write_vertex_buffer(buffer, data, offset, size);
 
 	(*env)->ReleasePrimitiveArrayCritical(env, data_arr, data, JNI_ABORT);

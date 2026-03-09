@@ -33,7 +33,7 @@ JNIEXPORT jobject JNICALL Java_dev_pikostudios_muzzle_bridge_GraphicsPipeline_cr
     jint formats[pipeline_descriptor.color_attachment_count];
     (*env)->GetIntArrayRegion(env, color_attachment_formats, 0, pipeline_descriptor.color_attachment_count, formats);
 
-    for (int i = 0; i <pipeline_descriptor.color_attachment_count; i++)
+    for (int i = 0; i < pipeline_descriptor.color_attachment_count; i++)
     {
         switch (formats[i])
         {
@@ -183,7 +183,7 @@ JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_GraphicsPipeline__1cle
 JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_GraphicsPipeline__1dispatch(JNIEnv* env, jobject obj, jobject vertex_buffer, jlong start, jlong count)
 {
     mz_graphics_pipeline* pipeline = get_graphics_pipeline(env, obj);
-    mz_vertex_buffer* buffer = get_vertex_buffer(env, obj);
-
+    mz_vertex_buffer* buffer = get_vertex_buffer(env, vertex_buffer);
+    
     mz_dispatch_graphics_pipeline(pipeline, buffer, start, count);
 }
