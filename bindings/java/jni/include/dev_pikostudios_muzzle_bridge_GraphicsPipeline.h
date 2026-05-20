@@ -122,10 +122,10 @@ JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_GraphicsPipeline__1cle
 /*
  * Class:     dev_pikostudios_muzzle_bridge_GraphicsPipeline
  * Method:    _dispatch
- * Signature: (Ldev/pikostudios/muzzle/bridge/VertexBuffer;JJ)V
+ * Signature: (Ldev/pikostudios/muzzle/bridge/Applet;Ldev/pikostudios/muzzle/bridge/VertexBuffer;JJ)V
  */
 JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_GraphicsPipeline__1dispatch
-  (JNIEnv *, jobject, jobject, jlong, jlong);
+  (JNIEnv *, jobject, jobject, jobject, jlong, jlong);
 
 #ifdef __cplusplus
 }

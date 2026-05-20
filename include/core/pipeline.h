@@ -8,6 +8,7 @@
 // TODO: shader.h already breaks the rule, so for now i'll keep it...
 #include "../primitives/sprite.h"
 #include "shader.h"
+#include "applet.h"
 
 typedef enum
 {
@@ -17,6 +18,12 @@ typedef enum
 	VERTEX_PRIMITIVE_TOPOLOGY_TYPE_POINT = GL_POINTS,
 	VERTEX_PRIMITIVE_TOPOLOGY_TYPE_LINES = GL_LINES
 } mz_vertex_primitive_topology_type;
+
+typedef enum
+{
+	INDEX_BUFFER_FORMAT_UINT16 = 0,
+	INDEX_BUFFER_FORMAT_UINT32 = 1
+} mz_index_buffer_format;
 
 typedef enum
 {
@@ -47,6 +54,8 @@ typedef struct mz_vertex_buffer
 	uint32_t stride;
 	GLuint vao;
 	GLuint vbo;
+	GLuint ebo;
+	mz_index_buffer_format index_buffer_format;
 	mz_vertex_primitive_topology_type topology_type;
 } mz_vertex_buffer;
 
@@ -86,11 +95,13 @@ typedef struct mz_graphics_pipeline_descriptor
 
 MZ_API mz_vertex_buffer mz_create_vertex_buffer(mz_vertex_primitive_topology_type topology_type, const mz_vertex_attribute_descriptor* attributes, size_t attributes_count);
 MZ_API void mz_allocate_vertex_buffer(mz_vertex_buffer* buffer, const void* data, size_t size_in_bytes);
+MZ_API void mz_attach_index_buffer(mz_vertex_buffer* buffer, const uint16_t* data, size_t length);
+MZ_API void mz_attach_index_buffer_long(mz_vertex_buffer* buffer, const uint32_t* data, size_t length);
 MZ_API void mz_write_vertex_buffer(mz_vertex_buffer* buffer, const void* data, intptr_t offset, size_t size);
 MZ_API void mz_unload_vertex_buffer(mz_vertex_buffer* buffer);
 
 MZ_API mz_graphics_pipeline mz_create_graphics_pipeline(const mz_graphics_pipeline_descriptor* descriptor);
-MZ_API void mz_dispatch_graphics_pipeline(mz_graphics_pipeline* pipeline, mz_vertex_buffer* buffer, uint32_t start, uint32_t count);
+MZ_API void mz_dispatch_graphics_pipeline(mz_applet* applet, mz_graphics_pipeline* pipeline, mz_vertex_buffer* buffer, uint32_t start, uint32_t count);
 MZ_API void mz_clear_graphics_pipeline_color_attachments(mz_graphics_pipeline* pipeline, mz_tint clear_color);
 MZ_API void mz_clear_graphics_pipeline_depth_buffer(mz_graphics_pipeline* pipeline, float clear_value);
 MZ_API mz_sprite mz_get_graphics_pipeline_color_attachment_texture(mz_graphics_pipeline* pipeline, uint8_t index);

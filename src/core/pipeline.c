@@ -198,8 +198,8 @@ mz_graphics_pipeline mz_create_graphics_pipeline(const mz_graphics_pipeline_desc
 		glCreateTextures(GL_TEXTURE_2D, 1, &texture);
 		glTextureStorage2D(texture, 1, descriptor->color_attachment_formats[i], descriptor->framebuffer_width, descriptor->framebuffer_height);
 
-		glTextureParameteri(texture, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTextureParameteri(texture, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTextureParameteri(texture, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTextureParameteri(texture, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTextureParameteri(texture, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTextureParameteri(texture, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
@@ -226,18 +226,20 @@ mz_graphics_pipeline mz_create_graphics_pipeline(const mz_graphics_pipeline_desc
 	return pipeline;
 }
 
-void mz_dispatch_graphics_pipeline(mz_graphics_pipeline* pipeline, mz_vertex_buffer* buffer, uint32_t start, uint32_t count)
+void mz_dispatch_graphics_pipeline(mz_applet* applet, mz_graphics_pipeline* pipeline, mz_vertex_buffer* buffer, uint32_t start, uint32_t count)
 {
 	MZ_TRACK_FUNCTION();
 	
 	glUseProgram(pipeline->shader.pid);
 	glBindVertexArray(buffer->vao);
 	glBindFramebuffer(GL_FRAMEBUFFER, pipeline->fbo);
+	glViewport(0, 0, pipeline->framebuffer_width, pipeline->framebuffer_height);
 
 	// TODO: Eventually add an option to have an EBO
 	glDrawArrays(buffer->topology_type, start, count);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glViewport(0, 0, applet->width, applet->height);
 }
 
 void mz_clear_graphics_pipeline_color_attachments(mz_graphics_pipeline* pipeline, mz_tint clear_color)

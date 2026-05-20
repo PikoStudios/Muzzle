@@ -1,6 +1,10 @@
 #ifndef MUZZLE_BACKEND_H
 #define MUZZLE_BACKEND_H
 
+#ifndef _MSC_VER
+	#define __STDC_WANT_LIB_EXT1__ 1 /* If the platform has Annex K support, enable it. */
+#endif
+
 #include <stdint.h>
 
 #include "core/memory.h"
@@ -151,5 +155,15 @@ typedef uint8_t mz_boolean;
 #ifndef MUZZLE_PIPELINE_MAX_COLOR_ATTACHMENTS
 	#define MUZZLE_PIPELINE_MAX_COLOR_ATTACHMENTS 8 /* OpenGL spec mandates that the GPU will allow at least 8, so it is a safe default */
 #endif
+
+#ifndef MUZZLE_INPUT_MAX_JOYSTICK_NAME_LENGTH
+	#define MUZZLE_INPUT_MAX_JOYSTICK_NAME_LENGTH 63 /* 63 to leave one extra room for null-terminator, hence 64 bytes */
+#endif
+
+#ifdef MUZZLE_INPUT_JOYSTICK_GUID_LENGTH
+	#error "Do not reassign MUZZLE_INPUT_JOYSTICK_GUID_LENGTH. Joysticks GUIDs are always 32 bytes"
+#endif
+
+#define MUZZLE_INPUT_JOYSTICK_GUID_LENGTH 32
 
 #endif // MUZZLE_BACKEND_H

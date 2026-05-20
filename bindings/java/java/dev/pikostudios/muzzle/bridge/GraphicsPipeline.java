@@ -99,12 +99,12 @@ public class GraphicsPipeline extends NativeStruct
 
 	private final static native GraphicsPipeline create(Shader shader, int[] colorAttachmentFormats, int framebufferWidth, int framebufferHeight, boolean createDepthBuffer, int depthBufferType);
 
-	public final void dispatch(VertexBuffer buffer, long start, long count)
+	public final void dispatch(Applet applet, VertexBuffer buffer, long start, long count)
 	{
 		assert start >= 0 && start <= 0xFFFFFFFFL : "start is out of uint32 range";
 		assert count >= 0 && count <= 0xFFFFFFFFL : "end is out of uint32 range";
 
-		this._dispatch(buffer, start, count);
+		this._dispatch(applet, buffer, start, count);
 	}
 	
 	public final void clearColorAttachments(Tint clearColor)
@@ -145,5 +145,5 @@ public class GraphicsPipeline extends NativeStruct
 	private final native int _getDepthBufferType();
 	private final native int _getColorAttachmentFormat(int index);
 	private final native void _clearColorAttachments(int r, int g, int b, int a);
-	private final native void _dispatch(VertexBuffer buffer, long start, long count);
+	private final native void _dispatch(Applet applet, VertexBuffer buffer, long start, long count);
 }

@@ -76,6 +76,8 @@ mz_applet mz_initialize_applet(const char* window_title, int width, int height, 
 	mz_applet applet;
 	applet.shader_passes_len = 0;
 
+	glfwInitHint(GLFW_JOYSTICK_HAT_BUTTONS, GLFW_FALSE);
+
 	if (!glfwInit())
 	{
 		const char* error_description = internals_get_error_description();

@@ -127,7 +127,7 @@ void applet_loop(mz_applet* applet)
 		mz_end_drawing(applet);
 	}
 
-	mz_unload_shader(shader);
+	mz_unload_shader(&shader);
 	mz_unload_vertex_buffer(&vertex_buffer);
 }
 

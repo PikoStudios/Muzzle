@@ -12,6 +12,7 @@ void varity_scene(mz_applet* applet, mz_font* font)
 	mz_draw_text(applet, "The quick brown fox jumps over the lazy dog", 0.f, 48.f, 48.f, font, TINT_BLACK);
 	mz_draw_text(applet, "abcdefghijklmnopqrstuvwxyz!@#$%^&*()_+-=1234567890`~[]:;\"',<.>/?", 20.f, 200.f, 38.f, font, TINT_BLACK);
 	mz_draw_text(applet, "Hello World from Muzzle!\nHello World from PikoStudios!!", 250.f, 250.f,48.f, font, TINT_BLUE);
+	mz_draw_text_centered(applet, "Centered Text!", applet->width * 0.5f, applet->height * 0.5f, 48.f, font, TINT_PURPLE);
 }
 
 void lorem_ipsum_scene(mz_applet* applet, mz_font* font)
@@ -21,7 +22,7 @@ void lorem_ipsum_scene(mz_applet* applet, mz_font* font)
 
 void applet_loop(mz_applet* applet)
 {
-	mz_font font = mz_load_font(applet, ASSETS_DIR "OpenSans-Regular.ttf");
+	mz_font font = mz_load_font(applet, ASSETS_DIR "pico-8.ttf");
 
 	if (font.glyph_count > 0)
 	{

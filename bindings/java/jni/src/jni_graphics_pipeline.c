@@ -180,10 +180,11 @@ JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_GraphicsPipeline__1cle
     mz_clear_graphics_pipeline_color_attachments(pipeline, (mz_tint){r,g,b,a});
 }
 
-JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_GraphicsPipeline__1dispatch(JNIEnv* env, jobject obj, jobject vertex_buffer, jlong start, jlong count)
+JNIEXPORT void JNICALL Java_dev_pikostudios_muzzle_bridge_GraphicsPipeline__1dispatch(JNIEnv* env, jobject obj, jobject applet, jobject vertex_buffer, jlong start, jlong count)
 {
+    mz_applet* _applet = get_applet(env, applet);
     mz_graphics_pipeline* pipeline = get_graphics_pipeline(env, obj);
     mz_vertex_buffer* buffer = get_vertex_buffer(env, vertex_buffer);
     
-    mz_dispatch_graphics_pipeline(pipeline, buffer, start, count);
+    mz_dispatch_graphics_pipeline(_applet, pipeline, buffer, start, count);
 }

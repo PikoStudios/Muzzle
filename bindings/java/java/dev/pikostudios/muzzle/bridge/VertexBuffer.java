@@ -120,7 +120,7 @@ public class VertexBuffer extends NativeStruct
 
 	private final native int _getTopologyType();
 	private final native void allocate(ByteBuffer data, long size);
-	
+
 	private final native void write(ByteBuffer data, long size, long offset);
 	private final native void write(float[] data, long size, long offset);
 	private final native void write(int[] data, long size, long offset);

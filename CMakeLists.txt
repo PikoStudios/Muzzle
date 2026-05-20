@@ -45,6 +45,7 @@ set(mz_input_src
 ${mz_source_dir}/input/key.c
 ${mz_source_dir}/input/mouse.c
 ${mz_source_dir}/input/input_manager.c
+${mz_source_dir}/input/joystick.c
 )
 
 set(mz_utils_src
