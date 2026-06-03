@@ -12,7 +12,7 @@ typedef struct mz_joystick
 	char guid[MUZZLE_INPUT_JOYSTICK_GUID_LENGTH + 1];
 } mz_joystick;
 
-typedef enum
+typedef enum : uint8_t
 {
 	JOYSTICK_HAT_STATE_CENTERED = 0,
 	JOYSTICK_HAT_STATE_UP = 1,
@@ -25,7 +25,7 @@ typedef enum
 	JOYSTICK_HAT_STATE_LEFT_DOWN = JOYSTICK_HAT_STATE_LEFT | JOYSTICK_HAT_STATE_DOWN,
 } mz_joystick_hat_state;
 
-typedef enum
+typedef enum : uint8_t
 {
 	GAMEPAD_BUTTON_A = 0,
 	GAMEPAD_BUTTON_B = 1,
@@ -48,7 +48,7 @@ typedef enum
 	GAMEPAD_BUTTON_TRIANGLE = GAMEPAD_BUTTON_Y
 } mz_gamepad_button;
 
-typedef enum
+typedef enum : uint8_t
 {
 	GAMEPAD_AXIS_LEFT_X = 0,
 	GAMEPAD_AXIS_LEFT_Y = 1,
@@ -80,12 +80,7 @@ _Static_assert(offsetof(mz_gamepad_state, axes) == offsetof(GLFWgamepadstate, ax
 _Static_assert(sizeof(((mz_gamepad_state*)(NULL))->buttons) == sizeof(((GLFWgamepadstate*)(NULL))->buttons), "Gamepad state buttons size mismatch");
 _Static_assert(sizeof(((mz_gamepad_state*)(NULL))->axes) == sizeof(((GLFWgamepadstate*)(NULL))->axes), "Gamepad state axes size mismatch");
 
-typedef enum
-{
-	JOYSTICK_QUERY_ERROR_DOES_NOT_EXIST = 0
-} mz_joystick_query_error;
-
-MZ_API mz_boolean mz_init_joystick(mz_joystick* joystick, uint8_t slot);
+MZ_API mz_boolean mz_open_joystick(mz_joystick* joystick, uint8_t slot);
 MZ_API mz_boolean mz_joystick_exists(uint8_t slot);
 MZ_API mz_boolean mz_query_joystick_state(mz_joystick* joystick, mz_joystick_state* state);
 MZ_API mz_boolean mz_query_gamepad_state(mz_joystick* joystick, mz_gamepad_state* state);

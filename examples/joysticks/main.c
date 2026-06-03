@@ -36,7 +36,7 @@ void applet_loop(mz_applet* applet)
 	{
 		if (!joystick_connected && mz_joystick_exists(0))
 		{
-			if (mz_init_joystick(&joystick, 0))
+			if (mz_open_joystick(&joystick, 0))
 			{
 				printf("Joystick \"%s\" connected on slot 0, is_gamepad=%s\n", joystick.name, joystick.is_gamepad ? "true" : "false");
 				joystick_connected = MUZZLE_TRUE;

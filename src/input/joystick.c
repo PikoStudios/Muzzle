@@ -2,9 +2,9 @@
 #include "core/logging.h"
 #include <string.h>
 
-mz_boolean mz_init_joystick(mz_joystick* joystick, uint8_t slot)
+mz_boolean mz_open_joystick(mz_joystick* joystick, uint8_t slot)
 {
-	if (!glfwJoystickPresent(slot))
+	if (slot > GLFW_JOYSTICK_LAST || !glfwJoystickPresent(slot))
 	{
 		return MUZZLE_FALSE;
 	}
