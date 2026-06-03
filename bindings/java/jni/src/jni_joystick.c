@@ -64,5 +64,5 @@ JNIEXPORT jboolean JNICALL Java_dev_pikostudios_muzzle_bridge_Joystick__1querySt
 
 	(*env)->CallVoidMethod(env, state, open_method, axes_buffer, buttons_buffer, hats_buffer);
 
-	return MUZZLE_FALSE;
+	return MUZZLE_TRUE;
 }
