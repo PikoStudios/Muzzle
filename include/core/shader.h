@@ -43,7 +43,7 @@ typedef struct mz_shader_pass
 typedef struct mz_direct_shader
 {
     mz_shader shader; /* non-owning */
-    const mz_shader_target target;
+    mz_shader_target target;
 } mz_direct_shader;
 
 typedef struct mz_shader_component_vertex_attribute

@@ -9,11 +9,13 @@
 
 void applet_loop(mz_applet* applet)
 {
-    mz_shader shader_pass = mz_load_shader("../vert.glsl", "../frag.glsl", SHADER_TYPE_PASS);
+    mz_shader shader = mz_load_shader("../vert.glsl", "../frag.glsl");
+    mz_shader_pass shader_pass = mz_create_shader_pass(shader);
+    
     float depth = MAX_DEPTH;
     int depth_mult = 1;
 
-    mz_upload_uniform_vec2(shader_pass, "uScreenResolution", (mz_vec2){SCREEN_WIDTH, SCREEN_HEIGHT});
+    mz_upload_uniform_vec2(shader, "uScreenResolution", (mz_vec2){SCREEN_WIDTH, SCREEN_HEIGHT});
 
     while (mz_keep_applet(applet))
     {
@@ -24,15 +26,15 @@ void applet_loop(mz_applet* applet)
 
         depth += applet->delta_time * depth_mult;
 
-        mz_upload_uniform_float(shader_pass, "uDepth", depth);
+        mz_upload_uniform_float(shader, "uDepth", depth);
 
         mz_begin_drawing(applet);
             mz_clear_screen(TINT_WHITE);
-            mz_use_shader_pass(applet, shader_pass);
+            mz_use_shader_pass(applet, &shader_pass);
         mz_end_drawing(applet);
     }
 
-    mz_unload_shader(shader_pass);
+    mz_unload_shader(&shader);
 }
 
 int main(void)

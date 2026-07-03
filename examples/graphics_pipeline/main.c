@@ -122,7 +122,7 @@ void applet_loop(mz_applet* applet)
 			mz_clear_graphics_pipeline_color_attachments(&pipeline, (mz_tint){0, 0, 0, 0});
 			mz_clear_graphics_pipeline_depth_buffer(&pipeline, 1.0f);
 			
-			mz_dispatch_graphics_pipeline(&pipeline, &vertex_buffer, 0, 36);
+			mz_dispatch_graphics_pipeline(applet, &pipeline, &vertex_buffer, 0, 36);
 			mz_draw_sprite(applet, &color_attachment, 0, 0, TINT_WHITE);
 		mz_end_drawing(applet);
 	}

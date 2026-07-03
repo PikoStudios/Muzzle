@@ -16,6 +16,7 @@
 #include "input/key.h"
 #include "input/mouse.h"
 #include "input/joystick.h"
+#include "input/input_manager.h"
 
 #include "utils/sleep.h"
 

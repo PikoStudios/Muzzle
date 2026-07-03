@@ -86,7 +86,7 @@ advance:
 		// bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels))
 		x += (glyph.advance >> 6) * scale;
 	}
-	
+
 	mz_text_renderer_flush(&applet->text_renderer, font, applet->width, applet->height, applet->render_order, color);
 }
 

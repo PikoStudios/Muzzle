@@ -111,7 +111,6 @@ void mz_circle_renderer_flush(struct mz_circle_renderer* circle_renderer, float 
 
 	glUseProgram(circle_renderer->shader_id);
 	
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, circle_renderer->buffers[EBO]);
 	glBindBuffer(GL_ARRAY_BUFFER, circle_renderer->buffers[VBO]);
 	glBindVertexArray(circle_renderer->buffers[VAO]);
 	

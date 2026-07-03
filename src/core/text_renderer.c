@@ -97,7 +97,6 @@ void mz_text_renderer_flush(struct mz_text_renderer* renderer, mz_font* font, fl
 	glUseProgram(renderer->shader_id);
 
 	glBindBuffer(GL_ARRAY_BUFFER, renderer->buffers[VBO]);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, renderer->buffers[EBO]);
 	glBindVertexArray(renderer->buffers[VAO]);
 
 	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(struct mz_text_vertex) * (renderer->char_count * 4), renderer->vertices); // Sadly glNamedBufferSubData() isn't well documented so I will stick with the binding approach

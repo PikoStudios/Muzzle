@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "backend.h"
 #include "core/circle_renderer.h"
+#include "core/logging.h"
 #include "core/quad_renderer.h"
 #include "core/sprite_renderer.h"
 #define ONE_OVER_255 0.0039215686
@@ -56,8 +57,6 @@ void mz_flush_shader_passes(mz_applet* applet, mz_boolean retain_shader_passes)
 	
 	if (applet->shader_passes_len > 0)
 	{
-		MZ_TRACK_FUNCTION_STAGE("mz_end_drawing shader passes");
-
 		glActiveTexture(GL_TEXTURE0);
 		glBindVertexArray(applet->framebuffer.vao);
 		glBindBuffer(GL_ARRAY_BUFFER, applet->framebuffer.vbo);

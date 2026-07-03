@@ -94,7 +94,7 @@ def watch() -> None:
 	running: bool = True
 
 	def worker(index: int) -> None:
-		print(f"Watching {files[index]["path"]}")
+		print(f"Watching {files[index]['path']}")
 		
 		while running:
 			currmod: float = files[index]["path"].stat().st_mtime

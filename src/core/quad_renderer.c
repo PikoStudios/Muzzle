@@ -106,7 +106,6 @@ void mz_quad_renderer_flush(struct mz_quad_renderer* quad_renderer, float width,
 	MZ_TRACK_FUNCTION();
 
 	glUseProgram(quad_renderer->shader_id);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, quad_renderer->buffers[EBO]);
 	glBindBuffer(GL_ARRAY_BUFFER, quad_renderer->buffers[VBO]);
 	glBindVertexArray(quad_renderer->buffers[VAO]);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(struct mz_quad_vertex) * (quad_renderer->quad_count * 4), quad_renderer->vertices);

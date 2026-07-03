@@ -136,7 +136,6 @@ void mz_sprite_renderer_flush(struct mz_sprite_renderer* sprite_renderer, float 
 
 	glUseProgram(sprite_renderer->shader_id);
 	
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, sprite_renderer->buffers[EBO]);
 	glBindBuffer(GL_ARRAY_BUFFER, sprite_renderer->buffers[VBO]);
 	glBindVertexArray(sprite_renderer->buffers[VAO]);
 	

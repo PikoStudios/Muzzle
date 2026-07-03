@@ -457,13 +457,13 @@ void mz_use_shader_pass(mz_applet* applet, mz_shader_pass* shader_pass)
 		return;
 	}
 
-	applet->shader_passes[applet->shader_passes_len++].pid = shader_pass->shader.pid;
-	applet->shader_passes[applet->shader_passes_len++].depth_texture_uniform_loc = shader_pass->depth_texture_uniform_loc;
-	applet->shader_passes[applet->shader_passes_len++].screen_texture_uniform_loc = shader_pass->screen_texture_uniform_loc;
-	applet->shader_passes[applet->shader_passes_len++].resolution_uniform_loc = shader_pass->resolution_uniform_loc;
-
+	applet->shader_passes[applet->shader_passes_len].pid = shader_pass->shader.pid;
+	applet->shader_passes[applet->shader_passes_len].depth_texture_uniform_loc = shader_pass->depth_texture_uniform_loc;
+	applet->shader_passes[applet->shader_passes_len].screen_texture_uniform_loc = shader_pass->screen_texture_uniform_loc;
+	applet->shader_passes[applet->shader_passes_len].resolution_uniform_loc = shader_pass->resolution_uniform_loc;
+	applet->shader_passes_len++;
+	
 	glUseProgram(shader_pass->shader.pid); // TODO: Why this call????????
-
 	glBindFramebuffer(GL_FRAMEBUFFER, applet->framebuffer.fbos[0]);
 }
 
@@ -499,6 +499,8 @@ void mz_end_direct_shader(mz_applet* applet, mz_direct_shader direct_shader)
 {
 	MZ_TRACK_FUNCTION();
 	
+    mz_flush_drawing(applet);
+
 	switch (direct_shader.target)
 	{
 		case SHADER_TARGET_DIRECT_CIRCLE:

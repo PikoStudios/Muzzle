@@ -117,6 +117,7 @@ mz_boolean mz_key_pressed_once(mz_applet* applet, mz_input_manager* input, mz_ke
 
 mz_boolean mz_mouse_pressed_once(mz_applet* applet, mz_input_manager* input, mz_mouse_button button)
 {
+    MZ_TRACK_FUNCTION();
 	MZ_ASSERT_DETAILED(button >= 0 && button < MOUSE_BUTTON_COUNT, "Invalid button value");
 	
 	if (!input->mouse_buttons[button] && mz_mouse_pressed(applet, button))
