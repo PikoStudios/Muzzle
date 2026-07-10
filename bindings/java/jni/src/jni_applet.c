@@ -10,6 +10,8 @@ static jobject __applet_start_applet;
 
 static void applet_dispatch(mz_applet* applet)
 {
+    MZ_UNUSED(applet);
+    
     jclass callback_class = (*__applet_start_jnienv)->GetObjectClass(__applet_start_jnienv, __applet_start_callback);
     jmethodID callback_method = (*__applet_start_jnienv)->GetMethodID(__applet_start_jnienv, callback_class, "invoke", "(Ldev/pikostudios/muzzle/bridge/Applet;)V");
 
@@ -26,7 +28,7 @@ JNIEXPORT jobject JNICALL Java_dev_pikostudios_muzzle_bridge_Applet_initialize(J
     {
         mz_log_status(LOG_STATUS_FATAL_ERROR, "[JNI] :: Could not initialize memory for applet object");
     }
-    
+
     *applet = mz_initialize_applet(title, width, height, flags);
 
     jmethodID ctor = (*env)->GetMethodID(env, class, "<init>", "(Ljava/lang/String;JJ)V");
