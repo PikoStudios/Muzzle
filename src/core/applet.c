@@ -132,6 +132,19 @@ mz_applet mz_initialize_applet(const char* window_title, int width, int height, 
 	glfwSwapInterval(0);
 	glfwSetWindowAttrib(applet.window, GLFW_RESIZABLE, (flags & APPLET_FLAG_RESIZBALE));
 
+	// Prevent resizing the window before applet becomes the window user pointer
+	// FAQ: (FAQ-APPLET-SET-WINDOW-SIZE-LIMITS)
+	//	Q: Why not just set the applet as the window user pointer right now?
+	//	A: This is not an opinonated library, if the user for some reasons wishes to create multiple applets, they should be able to. When the applet becomes active that's
+	//	when it becomes the window user pointer
+	//	Q: Why not just wait to make the window resizable
+	//	A: I don't want to store the resizable flag for later, it is just wasteful.
+	//	Q: But wait, the way mz_initialize_applet is written doesn't even allow for multiple applets yet!
+	//	A: Yes I know, TODO: Make mz_initialize_applet work multiple times
+	//	Q: This FAQ was a neat thing to do
+	//	A: thanks :D
+	glfwSetWindowSizeLimits(applet.window, width, height, width, height);
+
 	if (flags & APPLET_FLAG_VSYNC)
 	{
 		mz_log_status(LOG_STATUS_INFO, "Enabled VSync");
@@ -239,6 +252,7 @@ mz_applet mz_initialize_applet(const char* window_title, int width, int height, 
 void mz_start_applet(mz_applet* applet, mz_applet_main_dispatch_fn main_dispatch)
 {
 	glfwSetWindowUserPointer(applet->window, applet);
+	glfwSetWindowSizeLimits(applet->window, GLFW_DONT_CARE, GLFW_DONT_CARE, GLFW_DONT_CARE, GLFW_DONT_CARE); // Simply search for "FAQ-APPLET-SET-WINDOW-SIZE-LIMITS" in this file and you will figure out what this is for.
 	main_dispatch(applet);
 }
 
